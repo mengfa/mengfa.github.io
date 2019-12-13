@@ -258,6 +258,493 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/13/22%20%7C%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8BAsyncio/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/13/22%20%7C%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8BAsyncio/" itemprop="url">22 | 并发编程之Asyncio</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-13T21:10:07+08:00">
+                2019-12-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
+                    <span itemprop="name">python核心技术与实战</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/12/13/22%20%7C%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8BAsyncio/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/12/13/22%20%7C%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8BAsyncio/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>上节课，我们一起学习了 Python 并发编程的一种实现——多线程。今天这节课，我们继续学习 Python 并发编程的另一种实现方式——Asyncio。不同于协程那章，这节课我们更注重原理的理解。</p>
+<p>通过上节课的学习，我们知道，在处理 I/O 操作时，使用多线程与普通的单线程相比，效率得到了极大的提高。你可能会想，既然这样，为什么还需要 Asyncio？</p>
+<p>诚然，多线程有诸多优点且应用广泛，但也存在一定的局限性：</p>
+<ul>
+<li>比如，多线程运行过程容易被打断，因此有可能出现 race condition 的情况；</li>
+<li>再如，线程切换本身存在一定的损耗，线程数不能无限增加，因此，如果你的 I/O 操作非常 heavy，多线程很有可能满足不了高效率、高质量的需求。<br>正是为了解决这些问题，Asyncio 应运而生。</li>
+</ul>
+<h3 id="什么是-Asyncio"><a href="#什么是-Asyncio" class="headerlink" title="什么是 Asyncio"></a>什么是 Asyncio</h3><h3 id="Sync-VS-Async"><a href="#Sync-VS-Async" class="headerlink" title="Sync VS Async"></a>Sync VS Async</h3><p>我们首先来区分一下 Sync（同步）和 Async（异步）的概念。</p>
+<ul>
+<li>所谓 Sync，是指操作一个接一个地执行，下一个操作必须等上一个操作完成后才能执行。</li>
+<li>而 Async 是指不同操作间可以相互交替执行，如果其中的某个操作被 block 了，程序并不会等待，而是会找出可执行的操作继续执行。</li>
+</ul>
+<p>举个简单的例子，你的老板让你做一份这个季度的报表，并且邮件发给他。</p>
+<ul>
+<li>如果按照 Sync 的方式，你会先向软件输入这个季度的各项数据，接下来等待 5min，等报表明细生成后，再写邮件发给他。</li>
+<li>但如果按照 Async 的方式，再你输完这个季度的各项数据后，便会开始写邮件。等报表明细生成后，你会暂停邮件，先去查看报表，确认后继续写邮件直到发送完毕。</li>
+</ul>
+<h3 id="Asyncio-工作原理"><a href="#Asyncio-工作原理" class="headerlink" title="Asyncio 工作原理"></a>Asyncio 工作原理</h3><p>明白了 Sync 和 Async，回到我们今天的主题，到底什么是 Asyncio 呢？</p>
+<p>事实上，Asyncio 和其他 Python 程序一样，是单线程的，它只有一个主线程，但是可以进行多个不同的任务（task），这里的任务，就是特殊的 future 对象。这些不同的任务，被一个叫做 event loop 的对象所控制。你可以把这里的任务，类比成多线程版本里的多个线程。</p>
+<p>为了简化讲解这个问题，我们可以假设任务只有两个状态：一是预备状态；二是等待状态。所谓的预备状态，是指任务目前空闲，但随时待命准备运行。而等待状态，是指任务已经运行，但正在等待外部的操作完成，比如 I/O 操作。</p>
+<p>在这种情况下，event loop 会维护两个任务列表，分别对应这两种状态；并且选取预备状态的一个任务（具体选取哪个任务，和其等待的时间长短、占用的资源等等相关），使其运行，一直到这个任务把控制权交还给 event loop 为止。</p>
+<p>当任务把控制权交还给 event loop 时，event loop 会根据其是否完成，把任务放到预备或等待状态的列表，然后遍历等待状态列表的任务，查看他们是否完成。</p>
+<ul>
+<li>如果完成，则将其放到预备状态的列表；</li>
+<li>如果未完成，则继续放在等待状态的列表。<br>而原先在预备状态列表的任务位置仍旧不变，因为它们还未运行。</li>
+</ul>
+<p>这样，当所有任务被重新放置在合适的列表后，新一轮的循环又开始了：event loop 继续从预备状态的列表中选取一个任务使其执行…如此周而复始，直到所有任务完成。</p>
+<p>值得一提的是，对于 Asyncio 来说，它的任务在运行时不会被外部的一些因素打断，因此 Asyncio 内的操作不会出现 race condition 的情况，这样你就不需要担心线程安全的问题了。</p>
+<h3 id="Asyncio-用法"><a href="#Asyncio-用法" class="headerlink" title="Asyncio 用法"></a>Asyncio 用法</h3><p>讲完了 Asyncio 的原理，我们结合具体的代码来看一下它的用法。还是以上节课下载网站内容为例，用 Asyncio 的写法我放在了下面代码中（省略了异常处理的一些操作），接下来我们一起来看：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">import</span> aiohttp</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"> </span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">download_one</span><span class="params">(url)</span>:</span></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> aiohttp.ClientSession() <span class="keyword">as</span> session:</span><br><span class="line">        <span class="keyword">async</span> <span class="keyword">with</span> session.get(url) <span class="keyword">as</span> resp:</span><br><span class="line">            print(<span class="string">'Read &#123;&#125; from &#123;&#125;'</span>.format(resp.content_length, url))</span><br><span class="line"> </span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">download_all</span><span class="params">(sites)</span>:</span></span><br><span class="line">    tasks = [asyncio.create_task(download_one(site)) <span class="keyword">for</span> site <span class="keyword">in</span> sites]</span><br><span class="line">    <span class="keyword">await</span> asyncio.gather(*tasks)</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    sites = [</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Arts'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:History'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Society'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Biography'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Mathematics'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Technology'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Geography'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Science'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Computer_science'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Python_(programming_language)'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Java_(programming_language)'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/PHP'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Node.js'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/The_C_Programming_Language'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Go_(programming_language)'</span></span><br><span class="line">    ]</span><br><span class="line">    start_time = time.perf_counter()</span><br><span class="line">    asyncio.run(download_all(sites))</span><br><span class="line">    end_time = time.perf_counter()</span><br><span class="line">    print(<span class="string">'Download &#123;&#125; sites in &#123;&#125; seconds'</span>.format(len(sites), end_time - start_time))</span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+
+<pre><code>---------------------------------------------------------------------------
+
+ModuleNotFoundError                       Traceback (most recent call last)
+
+&lt;ipython-input-1-1c8dff975abc&gt; in &lt;module&gt;
+      1 import asyncio
+----&gt; 2 import aiohttp
+      3 import time
+      4 
+      5 async def download_one(url):
+
+
+ModuleNotFoundError: No module named &apos;aiohttp&apos;</code></pre><p>这里的 Async 和 await 关键字是 Asyncio 的最新写法，表示这个语句 / 函数是 non-block 的，正好对应前面所讲的 event loop 的概念。如果任务执行的过程需要等待，则将其放入等待状态的列表中，然后继续执行预备状态列表里的任务。</p>
+<p>主函数里的 asyncio.run(coro) 是 Asyncio 的 root call，表示拿到 event loop，运行输入的 coro，直到它结束，最后关闭这个 event loop。事实上，asyncio.run() 是 Python3.7+ 才引入的，相当于老版本的以下语句：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">loop = asyncio.get_event_loop()</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    loop.run_until_complete(coro)</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    loop.close()</span><br></pre></td></tr></table></figure>
+
+<p>至于 Asyncio 版本的函数 download_all()，和之前多线程版本有很大的区别：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tasks = [asyncio.create_task(download_one(site)) <span class="keyword">for</span> site <span class="keyword">in</span> sites]</span><br><span class="line"><span class="keyword">await</span> asyncio.gather(*task)</span><br></pre></td></tr></table></figure>
+
+<p>这里的asyncio.create_task(coro)，表示对输入的协程 coro 创建一个任务，安排它的执行，并返回此任务对象。这个函数也是 Python 3.7+ 新增的，如果是之前的版本，你可以用asyncio.ensure_future(coro)等效替代。可以看到，这里我们对每一个网站的下载，都创建了一个对应的任务。</p>
+<p>再往下看，asyncio.gather(*aws, loop=None, return_exception=False)，则表示在 event loop 中运行aws序列的所有任务。当然，除了例子中用到的这几个函数，Asyncio 还提供了很多其他的用法，你可以查看 相应文档 进行了解。</p>
+<p>最后，我们再来看一下最后的输出结果——用时只有 0.06s，效率比起之前的多线程版本，可以说是更上一层楼，充分体现其优势。</p>
+<h3 id="Asyncio-有缺陷吗？"><a href="#Asyncio-有缺陷吗？" class="headerlink" title="Asyncio 有缺陷吗？"></a>Asyncio 有缺陷吗？</h3><p>学了这么多内容，我们认识到了 Asyncio 的强大，但你要清楚，任何一种方案都不是完美的，都存在一定的局限性，Asyncio 同样如此。</p>
+<p>实际工作中，想用好 Asyncio，特别是发挥其强大的功能，很多情况下必须得有相应的 Python 库支持。你可能注意到了，上节课的多线程编程中，我们使用的是 requests 库，但今天我们并没有使用，而是用了 aiohttp 库，原因就是 requests 库并不兼容 Asyncio，但是 aiohttp 库兼容。</p>
+<p>Asyncio 软件库的兼容性问题，在 Python3 的早期一直是个大问题，但是随着技术的发展，这个问题正逐步得到解决。</p>
+<p>另外，使用 Asyncio 时，因为你在任务的调度方面有了更大的自主权，写代码时就得更加注意，不然很容易出错。</p>
+<p>举个例子，如果你需要 await 一系列的操作，就得使用 asyncio.gather()；如果只是单个的 future，或许只用 asyncio.wait() 就可以了。那么，对于你的 future，你是想要让它 run_until_complete() 还是 run_forever() 呢？诸如此类，都是你在面对具体问题时需要考虑的。</p>
+<h3 id="多线程还是-Asyncio"><a href="#多线程还是-Asyncio" class="headerlink" title="多线程还是 Asyncio"></a>多线程还是 Asyncio</h3><p>不知不觉，我们已经把并发编程的两种方式都给学习完了。不过，遇到实际问题时，多线程和 Asyncio 到底如何选择呢？</p>
+<p>总的来说，你可以遵循以下伪代码的规范：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> io_bound:</span><br><span class="line">    <span class="keyword">if</span> io_slow:</span><br><span class="line">        print(<span class="string">'Use Asyncio'</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        print(<span class="string">'Use multi-threading'</span>)</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> cpu_bound:</span><br><span class="line">    print(<span class="string">'Use multi-processing'</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果是 I/O bound，并且 I/O 操作很慢，需要很多任务 / 线程协同实现，那么使用 Asyncio 更合适。</li>
+<li>如果是 I/O bound，但是 I/O 操作很快，只需要有限数量的任务 / 线程，那么使用多线程就可以了。</li>
+<li>如果是 CPU bound，则需要使用多进程来提高程序运行效率。</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>今天这节课，我们一起学习了 Asyncio 的原理和用法，并比较了 Asyncio 和多线程各自的优缺点。</p>
+<p>不同于多线程，Asyncio 是单线程的，但其内部 event loop 的机制，可以让它并发地运行多个不同的任务，并且比多线程享有更大的自主控制权。</p>
+<p>Asyncio 中的任务，在运行过程中不会被打断，因此不会出现 race condition 的情况。尤其是在 I/O 操作 heavy 的场景下，Asyncio 比多线程的运行效率更高。因为 Asyncio 内部任务切换的损耗，远比线程切换的损耗要小；并且 Asyncio 可以开启的任务数量，也比多线程中的线程数量多得多。</p>
+<p>但需要注意的是，很多情况下，使用 Asyncio 需要特定第三方库的支持，比如前面示例中的 aiohttp。而如果 I/O 操作很快，并不 heavy，那么运用多线程，也能很有效地解决问题。</p>
+<h3 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h3><p>这两节课，我们学习了并发编程的两种实现方式，也多次提到了并行编程（multi-processing），其适用于 CPU heavy 的场景。</p>
+<p>现在有这么一个需求：输入一个列表，对于列表中的每个元素，我想计算 0 到这个元素的所有整数的平方和。</p>
+<p>我把常规版本的写法放在了下面，你能通过查阅资料，写出它的多进程版本，并且比较程序的耗时吗？</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cpu_bound</span><span class="params">(number)</span>:</span></span><br><span class="line">    print(sum(i * i <span class="keyword">for</span> i <span class="keyword">in</span> range(number)))</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">calculate_sums</span><span class="params">(numbers)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> number <span class="keyword">in</span> numbers:</span><br><span class="line">        cpu_bound(number)</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    start_time = time.perf_counter()  </span><br><span class="line">    numbers = [<span class="number">10000000</span> + x <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">20</span>)]</span><br><span class="line">    calculate_sums(numbers)</span><br><span class="line">    end_time = time.perf_counter()</span><br><span class="line">    print(<span class="string">'Calculation takes &#123;&#125; seconds'</span>.format(end_time - start_time))</span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/13/21%20%7C%20Python%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8BFutures/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/13/21%20%7C%20Python%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8BFutures/" itemprop="url">21 | Python并发编程之Futures</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-13T20:50:07+08:00">
+                2019-12-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
+                    <span itemprop="name">python核心技术与实战</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/12/13/21%20%7C%20Python%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8BFutures/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/12/13/21%20%7C%20Python%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8BFutures/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Python 中的并发编程——Futures。</p>
+<h3 id="区分并发和并行"><a href="#区分并发和并行" class="headerlink" title="区分并发和并行"></a>区分并发和并行</h3><p>在我们学习并发编程时，常常同时听到并发（Concurrency）和并行（Parallelism）这两个术语，这两者经常一起使用，导致很多人以为它们是一个意思，其实不然。</p>
+<p>首先你要辨别一个误区，在 Python 中，并发并不是指同一时刻有多个操作（thread、task）同时进行。相反，某个特定的时刻，它只允许有一个操作发生，只不过线程 / 任务之间会互相切换，直到完成。我们来看下面这张图：</p>
+<p>图中出现了 thread 和 task 两种切换顺序的不同方式，分别对应 Python 中并发的两种形式——threading 和 asyncio。</p>
+<p>对于 threading，操作系统知道每个线程的所有信息，因此它会做主在适当的时候做线程切换。很显然，这样的好处是代码容易书写，因为程序员不需要做任何切换操作的处理；但是切换线程的操作，也有可能出现在一个语句执行的过程中（比如 x += 1），这样就容易出现 race condition 的情况。</p>
+<p>而对于 asyncio，主程序想要切换任务时，必须得到此任务可以被切换的通知，这样一来也就可以避免刚刚提到的 race condition 的情况。</p>
+<p>至于所谓的并行，指的才是同一时刻、同时发生。Python 中的 multi-processing 便是这个意思，对于 multi-processing，你可以简单地这么理解：比如你的电脑是 6 核处理器，那么在运行程序时，就可以强制 Python 开 6 个进程，同时执行，以加快运行速度，它的原理示意图如下：</p>
+<p>对比来看，</p>
+<ul>
+<li>并发通常应用于 I/O 操作频繁的场景，比如你要从网站上下载多个文件，I/O 操作的时间可能会比 CPU 运行处理的时间长得多。</li>
+<li>而并行则更多应用于 CPU heavy 的场景，比如 MapReduce 中的并行计算，为了加快运行速度，一般会用多台机器、多个处理器来完成。<h3 id="并发编程之-Futures"><a href="#并发编程之-Futures" class="headerlink" title="并发编程之 Futures"></a>并发编程之 Futures</h3><h3 id="单线程与多线程性能比较"><a href="#单线程与多线程性能比较" class="headerlink" title="单线程与多线程性能比较"></a>单线程与多线程性能比较</h3></li>
+</ul>
+<p>接下来，我们一起通过具体的实例，从代码的角度来理解并发编程中的 Futures，并进一步来比较其与单线程的性能区别。</p>
+<p>假设我们有一个任务，是下载一些网站的内容并打印。如果用单线程的方式，它的代码实现如下所示（为了简化代码，突出主题，此处我忽略了异常处理）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">download_one</span><span class="params">(url)</span>:</span></span><br><span class="line">    resp = requests.get(url)</span><br><span class="line">    print(<span class="string">'Read &#123;&#125; from &#123;&#125;'</span>.format(len(resp.content), url))</span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">download_all</span><span class="params">(sites)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> site <span class="keyword">in</span> sites:</span><br><span class="line">        download_one(site)</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    sites = [</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Arts'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:History'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Society'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Biography'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Mathematics'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Technology'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Geography'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Science'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Computer_science'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Python_(programming_language)'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Java_(programming_language)'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/PHP'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Node.js'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/The_C_Programming_Language'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Go_(programming_language)'</span></span><br><span class="line">    ]</span><br><span class="line">    start_time = time.perf_counter()</span><br><span class="line">    download_all(sites)</span><br><span class="line">    end_time = time.perf_counter()</span><br><span class="line">    print(<span class="string">'Download &#123;&#125; sites in &#123;&#125; seconds'</span>.format(len(sites), end_time - start_time))</span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<pre><code>Read 129166 from https://en.wikipedia.org/wiki/Portal:Arts
+Read 196790 from https://en.wikipedia.org/wiki/Portal:History
+Read 227218 from https://en.wikipedia.org/wiki/Portal:Society
+Read 315517 from https://en.wikipedia.org/wiki/Portal:Biography
+Read 139637 from https://en.wikipedia.org/wiki/Portal:Mathematics
+Read 148720 from https://en.wikipedia.org/wiki/Portal:Technology
+Read 158254 from https://en.wikipedia.org/wiki/Portal:Geography
+Read 96941 from https://en.wikipedia.org/wiki/Portal:Science
+Read 330734 from https://en.wikipedia.org/wiki/Computer_science
+Read 408460 from https://en.wikipedia.org/wiki/Python_(programming_language)
+Read 322431 from https://en.wikipedia.org/wiki/Java_(programming_language)
+Read 482127 from https://en.wikipedia.org/wiki/PHP
+Read 177540 from https://en.wikipedia.org/wiki/Node.js
+Read 56570 from https://en.wikipedia.org/wiki/The_C_Programming_Language
+Read 329485 from https://en.wikipedia.org/wiki/Go_(programming_language)
+Download 15 sites in 15.883507495999993 seconds</code></pre><p>这种方式应该是最直接也最简单的：</p>
+<ul>
+<li>先是遍历存储网站的列表；</li>
+<li>然后对当前网站执行下载操作；</li>
+<li>等到当前操作完成后，再对下一个网站进行同样的操作，一直到结束。</li>
+</ul>
+<p>我们可以看到总共耗时约 2.4s。单线程的优点是简单明了，但是明显效率低下，因为上述程序的绝大多数时间，都浪费在了 I/O 等待上。程序每次对一个网站执行下载操作，都必须等到前一个网站下载完成后才能开始。如果放在实际生产环境中，我们需要下载的网站数量至少是以万为单位的，不难想象，这种方案根本行不通。</p>
+<p>接着我们再来看，多线程版本的代码实现：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> concurrent.futures</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">download_one</span><span class="params">(url)</span>:</span></span><br><span class="line">    resp = requests.get(url)</span><br><span class="line">    print(<span class="string">'Read &#123;&#125; from &#123;&#125;'</span>.format(len(resp.content), url))</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">download_all</span><span class="params">(sites)</span>:</span></span><br><span class="line">    <span class="keyword">with</span> concurrent.futures.ThreadPoolExecutor(max_workers=<span class="number">5</span>) <span class="keyword">as</span> executor:</span><br><span class="line">        executor.map(download_one, sites)</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    sites = [</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Arts'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:History'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Society'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Biography'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Mathematics'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Technology'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Geography'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Science'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Computer_science'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Python_(programming_language)'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Java_(programming_language)'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/PHP'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Node.js'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/The_C_Programming_Language'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Go_(programming_language)'</span></span><br><span class="line">    ]</span><br><span class="line">    start_time = time.perf_counter()</span><br><span class="line">    download_all(sites)</span><br><span class="line">    end_time = time.perf_counter()</span><br><span class="line">    print(<span class="string">'Download &#123;&#125; sites in &#123;&#125; seconds'</span>.format(len(sites), end_time - start_time))</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<pre><code>Read 129166 from https://en.wikipedia.org/wiki/Portal:Arts
+Read 227218 from https://en.wikipedia.org/wiki/Portal:Society
+Read 196790 from https://en.wikipedia.org/wiki/Portal:History
+Read 315517 from https://en.wikipedia.org/wiki/Portal:Biography
+Read 139005 from https://en.wikipedia.org/wiki/Portal:Mathematics
+Read 96941 from https://en.wikipedia.org/wiki/Portal:Science
+Read 148720 from https://en.wikipedia.org/wiki/Portal:Technology
+Read 158254 from https://en.wikipedia.org/wiki/Portal:Geography
+Read 408460 from https://en.wikipedia.org/wiki/Python_(programming_language)
+Read 330734 from https://en.wikipedia.org/wiki/Computer_science
+Read 177540 from https://en.wikipedia.org/wiki/Node.js
+Read 482127 from https://en.wikipedia.org/wiki/PHP
+Read 322431 from https://en.wikipedia.org/wiki/Java_(programming_language)
+Read 329485 from https://en.wikipedia.org/wiki/Go_(programming_language)
+Read 56570 from https://en.wikipedia.org/wiki/The_C_Programming_Language
+Download 15 sites in 4.299461989000065 seconds</code></pre><p>非常明显，总耗时是 0.2s 左右，效率一下子提升了 10 倍多。</p>
+<p>我们具体来看这段代码，它是多线程版本和单线程版的主要区别所在：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> concurrent.futures.ThreadPoolExecutor(max_workers=<span class="number">5</span>) <span class="keyword">as</span> executor:</span><br><span class="line">     executor.map(download_one, sites)</span><br></pre></td></tr></table></figure>
+
+<p>这里我们创建了一个线程池，总共有 5 个线程可以分配使用。executer.map() 与前面所讲的 Python 内置的 map() 函数类似，表示对 sites 中的每一个元素，并发地调用函数 download_one()。</p>
+<p>顺便提一下，在 download_one() 函数中，我们使用的 requests.get() 方法是线程安全的（thread-safe），因此在多线程的环境下，它也可以安全使用，并不会出现 race condition 的情况。</p>
+<p>另外，虽然线程的数量可以自己定义，但是线程数并不是越多越好，因为线程的创建、维护和删除也会有一定的开销。所以如果你设置的很大，反而可能会导致速度变慢。我们往往需要根据实际的需求做一些测试，来寻找最优的线程数量。</p>
+<p>当然，我们也可以用并行的方式去提高程序运行效率。你只需要在 download_all() 函数中，做出下面的变化即可：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> futures.ThreadPoolExecutor(workers) <span class="keyword">as</span> executor</span><br><span class="line">=&gt;</span><br><span class="line"><span class="keyword">with</span> futures.ProcessPoolExecutor() <span class="keyword">as</span> executor:</span><br></pre></td></tr></table></figure>
+
+
+<pre><code>  File &quot;&lt;ipython-input-3-5f534bcae088&gt;&quot;, line 1
+    with futures.ThreadPoolExecutor(workers) as executor
+                                                        ^
+SyntaxError: invalid syntax</code></pre><p>在需要修改的这部分代码中，函数 ProcessPoolExecutor() 表示创建进程池，使用多个进程并行的执行程序。不过，这里我们通常省略参数 workers，因为系统会自动返回 CPU 的数量作为可以调用的进程数。</p>
+<p>我刚刚提到过，并行的方式一般用在 CPU heavy 的场景中，因为对于 I/O heavy 的操作，多数时间都会用于等待，相比于多线程，使用多进程并不会提升效率。反而很多时候，因为 CPU 数量的限制，会导致其执行效率不如多线程版本。</p>
+<h3 id="到底什么是-Futures-？"><a href="#到底什么是-Futures-？" class="headerlink" title="到底什么是 Futures ？"></a>到底什么是 Futures ？</h3><p>Python 中的 Futures 模块，位于 concurrent.futures 和 asyncio 中，它们都表示带有延迟的操作。Futures 会将处于等待状态的操作包裹起来放到队列中，这些操作的状态随时可以查询，当然，它们的结果或是异常，也能够在操作完成后被获取。</p>
+<p>通常来说，作为用户，我们不用考虑如何去创建 Futures，这些 Futures 底层都会帮我们处理好。我们要做的，实际上是去 schedule 这些 Futures 的执行。</p>
+<p>比如，Futures 中的 Executor 类，当我们执行 executor.submit(func) 时，它便会安排里面的 func() 函数执行，并返回创建好的 future 实例，以便你之后查询调用。</p>
+<p>这里再介绍一些常用的函数。Futures 中的方法 done()，表示相对应的操作是否完成——True 表示完成，False 表示没有完成。不过，要注意，done() 是 non-blocking 的，会立即返回结果。相对应的 add_done_callback(fn)，则表示 Futures 完成后，相对应的参数函数 fn，会被通知并执行调用。</p>
+<p>Futures 中还有一个重要的函数 result()，它表示当 future 完成后，返回其对应的结果或异常。而 as_completed(fs)，则是针对给定的 future 迭代器 fs，在其完成后，返回完成后的迭代器。</p>
+<p>所以，上述例子也可以写成下面的形式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> concurrent.futures</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">download_one</span><span class="params">(url)</span>:</span></span><br><span class="line">    resp = requests.get(url)</span><br><span class="line">    print(<span class="string">'Read &#123;&#125; from &#123;&#125;'</span>.format(len(resp.content), url))</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">download_all</span><span class="params">(sites)</span>:</span></span><br><span class="line">    <span class="keyword">with</span> concurrent.futures.ThreadPoolExecutor(max_workers=<span class="number">5</span>) <span class="keyword">as</span> executor:</span><br><span class="line">        to_do = []</span><br><span class="line">        <span class="keyword">for</span> site <span class="keyword">in</span> sites:</span><br><span class="line">            future = executor.submit(download_one, site)</span><br><span class="line">            to_do.append(future)</span><br><span class="line">            </span><br><span class="line">        <span class="keyword">for</span> future <span class="keyword">in</span> concurrent.futures.as_completed(to_do):</span><br><span class="line">            future.result()</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    sites = [</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Arts'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:History'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Society'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Biography'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Mathematics'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Technology'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Geography'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Science'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Computer_science'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Python_(programming_language)'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Java_(programming_language)'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/PHP'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Node.js'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/The_C_Programming_Language'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Go_(programming_language)'</span></span><br><span class="line">    ]</span><br><span class="line">    start_time = time.perf_counter()</span><br><span class="line">    download_all(sites)</span><br><span class="line">    end_time = time.perf_counter()</span><br><span class="line">    print(<span class="string">'Download &#123;&#125; sites in &#123;&#125; seconds'</span>.format(len(sites), end_time - start_time))</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<pre><code>Read 139637 from https://en.wikipedia.org/wiki/Portal:Mathematics
+Read 227218 from https://en.wikipedia.org/wiki/Portal:Society
+Read 196790 from https://en.wikipedia.org/wiki/Portal:History
+Read 148720 from https://en.wikipedia.org/wiki/Portal:Technology
+Read 96941 from https://en.wikipedia.org/wiki/Portal:Science
+Read 315517 from https://en.wikipedia.org/wiki/Portal:Biography
+Read 129166 from https://en.wikipedia.org/wiki/Portal:Arts
+Read 158254 from https://en.wikipedia.org/wiki/Portal:Geography
+Read 330734 from https://en.wikipedia.org/wiki/Computer_science
+Read 322431 from https://en.wikipedia.org/wiki/Java_(programming_language)
+Read 408460 from https://en.wikipedia.org/wiki/Python_(programming_language)
+Read 482127 from https://en.wikipedia.org/wiki/PHP
+Read 56570 from https://en.wikipedia.org/wiki/The_C_Programming_Language
+Read 177540 from https://en.wikipedia.org/wiki/Node.js
+Read 329485 from https://en.wikipedia.org/wiki/Go_(programming_language)
+Download 15 sites in 3.3601100109999607 seconds</code></pre><p>这里，我们首先调用 executor.submit()，将下载每一个网站的内容都放进 future 队列 to_do，等待执行。然后是 as_completed() 函数，在 future 完成后，便输出结果。</p>
+<p>不过，这里要注意，future 列表中每个 future 完成的顺序，和它在列表中的顺序并不一定完全一致。到底哪个先完成、哪个后完成，取决于系统的调度和每个 future 的执行时间。</p>
+<h3 id="为什么多线程每次只能有一个线程执行？"><a href="#为什么多线程每次只能有一个线程执行？" class="headerlink" title="为什么多线程每次只能有一个线程执行？"></a>为什么多线程每次只能有一个线程执行？</h3><p>前面我说过，同一时刻，Python 主程序只允许有一个线程执行，所以 Python 的并发，是通过多线程的切换完成的。你可能会疑惑这到底是为什么呢？</p>
+<p>这里我简单提一下全局解释器锁的概念，具体内容后面会讲到。</p>
+<p>事实上，Python 的解释器并不是线程安全的，为了解决由此带来的 race condition 等问题，Python 便引入了全局解释器锁，也就是同一时刻，只允许一个线程执行。当然，在执行 I/O 操作时，如果一个线程被 block 了，全局解释器锁便会被释放，从而让另一个线程能够继续执行。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这节课，我们首先学习了 Python 中并发和并行的概念与区别。</p>
+<ul>
+<li>并发，通过线程和任务之间互相切换的方式实现，但同一时刻，只允许有一个线程或任务执行。</li>
+<li>而并行，则是指多个进程完全同步同时的执行。<br>并发通常用于 I/O 操作频繁的场景，而并行则适用于 CPU heavy 的场景。</li>
+</ul>
+<p>随后，我们通过下载网站内容的例子，比较了单线程和运用 Futures 的多线程版本的性能差异。显而易见，合理地运用多线程，能够极大地提高程序运行效率。</p>
+<p>我们还一起学习了 Futures 的具体原理，介绍了一些常用函数比如 done()、result()、as_completed() 等的用法，并辅以实例加以理解。</p>
+<p>要注意，Python 中之所以同一时刻只允许一个线程运行，其实是由于全局解释器锁的存在。但是对 I/O 操作而言，当其被 block 的时候，全局解释器锁便会被释放，使其他线程继续执行。</p>
+<h3 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h3><p>最后给你留一道思考题。你能否通过查阅相关文档，为今天所讲的这个下载网站内容的例子，加上合理的异常处理，让程序更加稳定健壮呢？</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/12/20%20%7C%20%E6%8F%AD%E7%A7%98%20Python%20%E5%8D%8F%E7%A8%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2335,531 +2822,6 @@ SyntaxError: invalid syntax</code></pre><p>你可以看到，map() 是最快的�
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/09/09%E4%B8%A8%E4%B8%8D%E5%8F%AF%E6%88%96%E7%BC%BA%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%87%BD%E6%95%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LvYang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LvYang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/09/09%E4%B8%A8%E4%B8%8D%E5%8F%AF%E6%88%96%E7%BC%BA%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%87%BD%E6%95%B0/" itemprop="url">09丨不可或缺的自定义函数</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-09T20:13:07+08:00">
-                2019-12-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
-                    <span itemprop="name">python核心技术与实战</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/12/09/09%E4%B8%A8%E4%B8%8D%E5%8F%AF%E6%88%96%E7%BC%BA%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%87%BD%E6%95%B0/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/12/09/09%E4%B8%A8%E4%B8%8D%E5%8F%AF%E6%88%96%E7%BC%BA%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%87%BD%E6%95%B0/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="函数基础"><a href="#函数基础" class="headerlink" title="函数基础"></a>函数基础</h3><p>那么，到底什么是函数，如何在 Python 程序中定义函数呢？</p>
-<p>说白了，函数就是为了实现某一功能的代码段，只要写好以后，就可以重复利用。我们先来看下面一个简单的例子:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_func</span><span class="params">(message)</span>:</span></span><br><span class="line">    print(<span class="string">'Got a message: &#123;&#125;'</span>.format(message))</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 调用函数 my_func()</span></span><br><span class="line">my_func(<span class="string">'Hello World'</span>)</span><br></pre></td></tr></table></figure>
-
-<pre><code>Got a message: Hello World</code></pre><p>其中：</p>
-<ul>
-<li><p>def 是函数的声明；</p>
-</li>
-<li><p>my_func 是函数的名称；</p>
-</li>
-<li><p>括号里面的 message 则是函数的参数；</p>
-</li>
-<li><p>而 print 那行则是函数的主体部分，可以执行相应的语句；</p>
-</li>
-<li><p>在函数最后，你可以返回调用结果（return 或 yield），也可以不返回。</p>
-</li>
-</ul>
-<p>总结一下，大概是下面的这种形式：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">name</span><span class="params">(param1, param2, ..., paramN)</span>:</span></span><br><span class="line">    statements</span><br><span class="line">    <span class="keyword">return</span>/<span class="keyword">yield</span> value <span class="comment"># optional</span></span><br></pre></td></tr></table></figure>
-
-<p>和其他需要编译的语言（比如 C 语言）不一样的是，def 是可执行语句，这意味着函数直到被调用前，都是不存在的。当程序调用函数时，def 语句才会创建一个新的函数对象，并赋予其名字。</p>
-<p>我们一起来看几个例子，加深你对函数的印象：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_sum</span><span class="params">(a, b)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> a + b</span><br><span class="line"> </span><br><span class="line">result = my_sum(<span class="number">3</span>, <span class="number">5</span>)</span><br><span class="line">print(result)</span><br></pre></td></tr></table></figure>
-
-<pre><code>8</code></pre><p>这里，我们定义了 my_sum() 这个函数，它有两个参数 a 和 b，作用是相加；随后，调用 my_sum() 函数，分别把 3 和 5 赋于 a 和 b；最后，返回其相加的值，赋于变量 result，并输出得到 8。</p>
-<p>再来看一个例子：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">find_largest_element</span><span class="params">(l)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> isinstance(l, list):</span><br><span class="line">        print(<span class="string">'input is not type of list'</span>)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    <span class="keyword">if</span> len(l) == <span class="number">0</span>:</span><br><span class="line">        print(<span class="string">'empty input'</span>)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    largest_element = l[<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> l:</span><br><span class="line">        <span class="keyword">if</span> item &gt; largest_element:</span><br><span class="line">            largest_element = item</span><br><span class="line">    print(<span class="string">'largest element is: &#123;&#125;'</span>.format(largest_element)) </span><br><span class="line">      </span><br><span class="line">find_largest_element([<span class="number">8</span>, <span class="number">1</span>,<span class="number">-3</span>, <span class="number">2</span>, <span class="number">0</span>])</span><br></pre></td></tr></table></figure>
-
-<pre><code>largest element is: 8</code></pre><p>这个例子中，我们定义了函数 find_largest_element，作用是遍历输入的列表，找出最大的值并打印。因此，当我们调用它，并传递列表 [8, 1, -3, 2, 0] 作为参数时，程序就会输出 largest element is: 8。</p>
-<p>需要注意，主程序调用函数时，必须保证这个函数此前已经定义过，不然就会报错，比如：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">my_func(<span class="string">'hello world'</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_func</span><span class="params">(message)</span>:</span></span><br><span class="line">    print(<span class="string">'Got a message: &#123;&#125;'</span>.format(message))</span><br></pre></td></tr></table></figure>
-
-<pre><code>Got a message: hello world</code></pre><p>但是，如果我们在函数内部调用其他函数，函数间哪个声明在前、哪个在后就无所谓，因为 def 是可执行语句，函数在调用之前都不存在，我们只需保证调用时，所需的函数都已经声明定义：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_func</span><span class="params">(message)</span>:</span></span><br><span class="line">    my_sub_func(message) <span class="comment"># 调用 my_sub_func() 在其声明之前不影响程序执行</span></span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_sub_func</span><span class="params">(message)</span>:</span></span><br><span class="line">    print(<span class="string">'Got a message: &#123;&#125;'</span>.format(message))</span><br><span class="line"> </span><br><span class="line">my_func(<span class="string">'hello world'</span>)</span><br></pre></td></tr></table></figure>
-
-<pre><code>Got a message: hello world</code></pre><p>另外，Python 函数的参数可以设定默认值，比如下面这样的写法：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(param = <span class="number">0</span>)</span>:</span></span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
-
-<p>这样，在调用函数 func() 时，如果参数 param 没有传入，则参数默认为 0；而如果传入了参数 param，其就会覆盖默认值。</p>
-<p>前面说过，Python 和其他语言相比的一大特点是，Python 是 dynamically typed 的，可以接受任何数据类型（整型，浮点，字符串等等）。对函数参数来说，这一点同样适用。比如还是刚刚的 my_sum 函数，我们也可以把列表作为参数来传递，表示将两个列表相连接：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_sum</span><span class="params">(a, b)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> a + b</span><br><span class="line"> </span><br><span class="line">print(my_sum([<span class="number">1</span>, <span class="number">2</span>], [<span class="number">3</span>, <span class="number">4</span>]))</span><br></pre></td></tr></table></figure>
-
-<pre><code>[1, 2, 3, 4]</code></pre><p>同样，也可以把字符串作为参数传递，表示字符串的合并拼接：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_sum</span><span class="params">(a, b)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> a + b</span><br><span class="line">print(my_sum(<span class="string">'hello '</span>, <span class="string">'world'</span>))</span><br></pre></td></tr></table></figure>
-
-<pre><code>hello world</code></pre><p>当然，如果两个参数的数据类型不同，比如一个是列表、一个是字符串，两者无法相加，那就会报错：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_sum</span><span class="params">(a, b)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> a + b</span><br><span class="line">print(my_sum([<span class="number">1</span>, <span class="number">2</span>], <span class="string">'hello'</span>))</span><br></pre></td></tr></table></figure>
-
-
-<pre><code>---------------------------------------------------------------------------
-
-TypeError                                 Traceback (most recent call last)
-
-&lt;ipython-input-9-c00c9a9db157&gt; in &lt;module&gt;
-      1 def my_sum(a, b):
-      2     return a + b
-----&gt; 3 print(my_sum([1, 2], &apos;hello&apos;))
-
-
-&lt;ipython-input-9-c00c9a9db157&gt; in my_sum(a, b)
-      1 def my_sum(a, b):
-----&gt; 2     return a + b
-      3 print(my_sum([1, 2], &apos;hello&apos;))
-
-
-TypeError: can only concatenate list (not &quot;str&quot;) to list</code></pre><p>我们可以看到，Python 不用考虑输入的数据类型，而是将其交给具体的代码去判断执行，同样的一个函数（比如这边的相加函数 my_sum()），可以同时应用在整型、列表、字符串等等的操作中。</p>
-<p>在编程语言中，我们把这种行为称为多态。这也是 Python 和其他语言，比如 Java、C 等很大的一个不同点。当然，Python 这种方便的特性，在实际使用中也会带来诸多问题。因此，必要时请你在开头加上数据的类型检查。</p>
-<p>Python 函数的另一大特性，是 Python 支持函数的嵌套。所谓的函数嵌套，就是指函数里面又有函数，比如：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f1</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'hello'</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">f2</span><span class="params">()</span>:</span></span><br><span class="line">        print(<span class="string">'world'</span>)</span><br><span class="line">    f2()</span><br><span class="line">f1()</span><br></pre></td></tr></table></figure>
-
-<pre><code>hello
-world</code></pre><p>这里函数 f1() 的内部，又定义了函数 f2()。在调用函数 f1() 时，会先打印字符串’hello’，然后 f1() 内部再调用 f2()，打印字符串’world’。你也许会问，为什么需要函数嵌套？这样做有什么好处呢？</p>
-<p>其实，函数的嵌套，主要有下面两个方面的作用。</p>
-<p>第一，函数的嵌套能够保证内部函数的隐私。内部函数只能被外部函数所调用和访问，不会暴露在全局作用域，因此，如果你的函数内部有一些隐私数据（比如数据库的用户、密码等），不想暴露在外，那你就可以使用函数的的嵌套，将其封装在内部函数中，只通过外部函数来访问。比如：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">connect_DB</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_DB_configuration</span><span class="params">()</span>:</span></span><br><span class="line">        ...</span><br><span class="line">        <span class="keyword">return</span> host, username, password</span><br><span class="line">    conn = connector.connect(get_DB_configuration())</span><br><span class="line">    <span class="keyword">return</span> conn</span><br><span class="line">get_DB_configuration()</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 输出</span></span><br><span class="line"><span class="comment">#NameError: name 'get_DB_configuration' is not defined</span></span><br></pre></td></tr></table></figure>
-
-<p>这里的函数 get_DB_configuration，便是内部函数，它无法在 connect_DB() 函数以外被单独调用。也就是说，下面这样的外部直接调用是错误的^:<br>我们只能通过调用外部函数 connect_DB() 来访问它，这样一来，程序的安全性便有了很大的提高。</p>
-<p>第二，合理的使用函数嵌套，能够提高程序的运行效率。我们来看下面这个例子：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">factorial</span><span class="params">(input)</span>:</span></span><br><span class="line">    <span class="comment"># validation check</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> isinstance(input, int):</span><br><span class="line">        <span class="keyword">raise</span> Exception(<span class="string">'input must be an integer.'</span>)</span><br><span class="line">    <span class="keyword">if</span> input &lt; <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">raise</span> Exception(<span class="string">'input must be greater or equal to 0'</span> )</span><br><span class="line">    ...</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">inner_factorial</span><span class="params">(input)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> input &lt;= <span class="number">1</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> input * inner_factorial(input<span class="number">-1</span>)</span><br><span class="line">    <span class="keyword">return</span> inner_factorial(input)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">print(factorial(<span class="number">5</span>))</span><br></pre></td></tr></table></figure>
-
-<pre><code>120</code></pre><p>这里，我们使用递归的方式计算一个数的阶乘。因为在计算之前，需要检查输入是否合法，所以我写成了函数嵌套的形式，这样一来，输入是否合法就只用检查一次。而如果我们不使用函数嵌套，那么每调用一次递归便会检查一次，这是没有必要的，也会降低程序的运行效率。</p>
-<p>实际工作中，如果你遇到相似的情况，输入检查不是很快，还会耗费一定的资源，那么运用函数的嵌套就十分必要了。</p>
-<h3 id="函数变量作用域"><a href="#函数变量作用域" class="headerlink" title="函数变量作用域"></a>函数变量作用域</h3><p>Python 函数中变量的作用域和其他语言类似。如果变量是在函数内部定义的，就称为局部变量，只在函数内部有效。一旦函数执行完毕，局部变量就会被回收，无法访问，比如下面的例子：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">read_text_from_file</span><span class="params">(file_path)</span>:</span></span><br><span class="line">    <span class="keyword">with</span> open(file_path) <span class="keyword">as</span> file:</span><br><span class="line">        ...</span><br></pre></td></tr></table></figure>
-
-<p>我们在函数内部定义了 file 这个变量，这个变量只在 read_text_from_file 这个函数里有效，在函数外部则无法访问。</p>
-<p>相对应的，全局变量则是定义在整个文件层次上的，比如下面这段代码：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">MIN_VALUE = <span class="number">1</span></span><br><span class="line">MAX_VALUE = <span class="number">10</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">validation_check</span><span class="params">(value)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> value &lt; MIN_VALUE <span class="keyword">or</span> value &gt; MAX_VALUE:</span><br><span class="line">        <span class="keyword">raise</span> Exception(<span class="string">'validation check fails'</span>)</span><br></pre></td></tr></table></figure>
-
-<p>这里的 MIN_VALUE 和 MAX_VALUE 就是全局变量，可以在文件内的任何地方被访问，当然在函数内部也是可以的。不过，我们不能在函数内部随意改变全局变量的值。比如，下面的写法就是错误的：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">MIN_VALUE = <span class="number">1</span></span><br><span class="line">MAX_VALUE = <span class="number">10</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">validation_check</span><span class="params">(value)</span>:</span></span><br><span class="line">    ...</span><br><span class="line">    MIN_VALUE += <span class="number">1</span></span><br><span class="line">    ...</span><br><span class="line">validation_check(<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
-
-<p>如果运行这段代码，程序便会报错：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UnboundLocalError: local variable <span class="string">'MIN_VALUE'</span> referenced before assignment</span><br></pre></td></tr></table></figure>
-
-<p>这是因为，Python 的解释器会默认函数内部的变量为局部变量，但是又发现局部变量 MIN_VALUE 并没有声明，因此就无法执行相关操作。所以，如果我们一定要在函数内部改变全局变量的值，就必须加上 global 这个声明：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">MIN_VALUE = <span class="number">1</span></span><br><span class="line">MAX_VALUE = <span class="number">10</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">validation_check</span><span class="params">(value)</span>:</span></span><br><span class="line">    <span class="keyword">global</span> MIN_VALUE</span><br><span class="line">    ...</span><br><span class="line">    MIN_VALUE += <span class="number">1</span></span><br><span class="line">    ...</span><br><span class="line">validation_check(<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
-
-<p>这里的 global 关键字，并不表示重新创建了一个全局变量 MIN_VALUE，而是告诉 Python 解释器，函数内部的变量 MIN_VALUE，就是之前定义的全局变量，并不是新的全局变量，也不是局部变量。这样，程序就可以在函数内部访问全局变量，并修改它的值了。</p>
-<p>另外，如果遇到函数内部局部变量和全局变量同名的情况，那么在函数内部，局部变量会覆盖全局变量，比如下面这种：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">MIN_VALUE = <span class="number">1</span></span><br><span class="line">MAX_VALUE = <span class="number">10</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">validation_check</span><span class="params">(value)</span>:</span></span><br><span class="line">    MIN_VALUE = <span class="number">3</span></span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
-
-<p>在函数 validation_check() 内部，我们定义了和全局变量同名的局部变量 MIN_VALUE，那么，MIN_VALUE 在函数内部的值，就应该是 3 而不是 1 了。</p>
-<p>类似的，对于嵌套函数来说，内部函数可以访问外部函数定义的变量，但是无法修改，若要修改，必须加上 nonlocal 这个关键字：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">outer</span><span class="params">()</span>:</span></span><br><span class="line">    x = <span class="string">"local"</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">inner</span><span class="params">()</span>:</span></span><br><span class="line">        <span class="keyword">nonlocal</span> x <span class="comment"># nonlocal 关键字表示这里的 x 就是外部函数 outer 定义的变量 x</span></span><br><span class="line">        x = <span class="string">'nonlocal'</span></span><br><span class="line">        print(<span class="string">"inner:"</span>, x)</span><br><span class="line">    inner()</span><br><span class="line">    print(<span class="string">"outer:"</span>, x)</span><br><span class="line">outer()</span><br></pre></td></tr></table></figure>
-
-<pre><code>inner: nonlocal
-outer: nonlocal</code></pre><p>如果不加上 nonlocal 这个关键字，而内部函数的变量又和外部函数变量同名，那么同样的，内部函数变量会覆盖外部函数的变量。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">outer</span><span class="params">()</span>:</span></span><br><span class="line">    x = <span class="string">"local"</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">inner</span><span class="params">()</span>:</span></span><br><span class="line">        x = <span class="string">'nonlocal'</span> <span class="comment"># 这里的 x 是 inner 这个函数的局部变量</span></span><br><span class="line">        print(<span class="string">"inner:"</span>, x)</span><br><span class="line">    inner()</span><br><span class="line">    print(<span class="string">"outer:"</span>, x)</span><br><span class="line">outer()</span><br></pre></td></tr></table></figure>
-
-<p>闭包<br>这节课的第三个重点，我想再来介绍一下闭包（closure）。闭包其实和刚刚讲的嵌套函数类似，不同的是，这里外部函数返回的是一个函数，而不是一个具体的值。返回的函数通常赋于一个变量，这个变量可以在后面被继续执行调用。</p>
-<p>举个例子你就更容易理解了。比如，我们想计算一个数的 n 次幂，用闭包可以写成下面的代码：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">nth_power</span><span class="params">(exponent)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">exponent_of</span><span class="params">(base)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> base ** exponent</span><br><span class="line">    <span class="keyword">return</span> exponent_of <span class="comment"># 返回值是 exponent_of 函数</span></span><br><span class="line"> </span><br><span class="line">square = nth_power(<span class="number">2</span>) <span class="comment"># 计算一个数的平方</span></span><br><span class="line">cube = nth_power(<span class="number">3</span>) <span class="comment"># 计算一个数的立方 </span></span><br><span class="line"></span><br><span class="line">print(square)</span><br><span class="line">print(cube)</span><br><span class="line"> </span><br><span class="line">print(square(<span class="number">2</span>))  <span class="comment"># 计算 2 的平方</span></span><br><span class="line">print(cube(<span class="number">2</span>)) <span class="comment"># 计算 2 的立方</span></span><br></pre></td></tr></table></figure>
-
-<pre><code>&lt;function nth_power.&lt;locals&gt;.exponent_of at 0x111a8ce18&gt;
-&lt;function nth_power.&lt;locals&gt;.exponent_of at 0x111a8cea0&gt;
-4
-8</code></pre><p>这里外部函数 nth_power() 返回值，是函数 exponent_of()，而不是一个具体的数值。需要注意的是，在执行完square = nth_power(2)和cube = nth_power(3)后，外部函数 nth_power() 的参数 exponent，仍然会被内部函数 exponent_of() 记住。这样，之后我们调用 square(2) 或者 cube(2) 时，程序就能顺利地输出结果，而不会报错说参数 exponent 没有定义了。</p>
-<p>看到这里，你也许会思考，为什么要闭包呢？上面的程序，我也可以写成下面的形式啊！</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">nth_power_rewrite</span><span class="params">(base, exponent)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> base ** exponent</span><br></pre></td></tr></table></figure>
-
-<p>确实可以，不过，要知道，使用闭包的一个原因，是让程序变得更简洁易读。设想一下，比如你需要计算很多个数的平方，那么你觉得写成下面哪一种形式更好呢？</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 不适用闭包</span></span><br><span class="line">res1 = nth_power_rewrite(base1, <span class="number">2</span>)</span><br><span class="line">res2 = nth_power_rewrite(base2, <span class="number">2</span>)</span><br><span class="line">res3 = nth_power_rewrite(base3, <span class="number">2</span>)</span><br><span class="line">...</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 使用闭包</span></span><br><span class="line">square = nth_power(<span class="number">2</span>)</span><br><span class="line">res1 = square(base1)</span><br><span class="line">res2 = square(base2)</span><br><span class="line">res3 = square(base3)</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-
-<p>显然是第二种，是不是？首先直观来看，第二种形式，让你每次调用函数都可以少输入一个参数，表达更为简洁。</p>
-<p>其次，和上面讲到的嵌套函数优点类似，函数开头需要做一些额外工作，而你又需要多次调用这个函数时，将那些额外工作的代码放在外部函数，就可以减少多次调用导致的不必要的开销，提高程序的运行效率。</p>
-<p>另外还有一点，我们后面会讲到，闭包常常和装饰器（decorator）一起使用。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这节课，我们一起学习了 Python 函数的概念及其应用，有这么几点你需要注意:</p>
-<ol>
-<li><p>Python 中函数的参数可以接受任意的数据类型，使用起来需要注意，必要时请在函数开头加入数据类型的检查；</p>
-</li>
-<li><p>和其他语言不同，Python 中函数的参数可以设定默认值；</p>
-</li>
-<li><p>嵌套函数的使用，能保证数据的隐私性，提高程序运行效率；</p>
-</li>
-<li><p>合理地使用闭包，则可以简化程序的复杂度，提高可读性。</p>
-</li>
-</ol>
-<h3 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h3><p>最后给你留一道思考题。在实际的学习工作中，你遇到过哪些使用嵌套函数或者是闭包的例子呢？欢迎在下方留言，与我讨论，也欢迎你把这篇文章分享给你的同事、朋友。</p>
-<p>TODO: yield -<a href="https://blog.csdn.net/mieleizhi0522/article/details/82142856" target="_blank" rel="noopener">https://blog.csdn.net/mieleizhi0522/article/details/82142856</a></p>
-<h3 id="自我总结"><a href="#自我总结" class="headerlink" title="自我总结"></a>自我总结</h3><ul>
-<li>def 是可执行语句，函数在调用之前都不存在.</li>
-<li>Python 是 dynamically typed 的，可以接受任何数据类型（整型，浮点，字符串等等）。对函数参数来说，这一点同样适用。</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/06/08%20%7C%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%EF%BC%9A%E5%A6%82%E4%BD%95%E6%8F%90%E9%AB%98%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%A8%B3%E5%AE%9A%E6%80%A7%EF%BC%9F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LvYang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LvYang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/06/08%20%7C%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%EF%BC%9A%E5%A6%82%E4%BD%95%E6%8F%90%E9%AB%98%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%A8%B3%E5%AE%9A%E6%80%A7%EF%BC%9F/" itemprop="url">08 | 异常处理：如何提高程序的稳定性？</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-06T21:13:07+08:00">
-                2019-12-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
-                    <span itemprop="name">python核心技术与实战</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/12/06/08%20%7C%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%EF%BC%9A%E5%A6%82%E4%BD%95%E6%8F%90%E9%AB%98%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%A8%B3%E5%AE%9A%E6%80%A7%EF%BC%9F/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/12/06/08%20%7C%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%EF%BC%9A%E5%A6%82%E4%BD%95%E6%8F%90%E9%AB%98%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%A8%B3%E5%AE%9A%E6%80%A7%EF%BC%9F/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="错误与异常"><a href="#错误与异常" class="headerlink" title="错误与异常"></a>错误与异常</h3><p>首先要了解，Python 中的错误和异常是什么？两者之间又有什么联系和区别呢？</p>
-<p>通常来说，程序中的错误至少包括两种，一种是语法错误，另一种则是异常。</p>
-<p>所谓语法错误，你应该很清楚，也就是你写的代码不符合编程规范，无法被识别与执行，比如下面这个例子：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法错误少:</span></span><br><span class="line"><span class="keyword">if</span> name <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span></span><br><span class="line">    print(name)</span><br></pre></td></tr></table></figure>
-
-<p>If 语句漏掉了冒号，不符合 Python 的语法规范，所以程序就会报错invalid syntax。</p>
-<p>而异常则是指程序的语法正确，也可以被执行，但在执行过程中遇到了错误，抛出了异常，比如下面的 3 个例子：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">10</span> / <span class="number">0</span></span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">ZeroDivisionError: integer division <span class="keyword">or</span> modulo by zero</span><br><span class="line"> </span><br><span class="line">order * <span class="number">2</span></span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">NameError: name <span class="string">'order'</span> <span class="keyword">is</span> <span class="keyword">not</span> defined</span><br><span class="line"> </span><br><span class="line"><span class="number">1</span> + [<span class="number">1</span>, <span class="number">2</span>]</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">TypeError: unsupported operand type(s) <span class="keyword">for</span> +: <span class="string">'int'</span> <span class="keyword">and</span> <span class="string">'list'</span></span><br></pre></td></tr></table></figure>
-
-
-<pre><code>  File &quot;&lt;ipython-input-1-5c8a1fb0a76b&gt;&quot;, line 2
-    Traceback (most recent call last):
-                         ^
-SyntaxError: invalid syntax</code></pre><p>它们语法完全正确，但显然，我们不能做除法时让分母为 0；也不能使用未定义的变量做运算；而让一个整型和一个列表相加也是不可取的。</p>
-<p>于是，当程序运行到这些地方时，就抛出了异常，并且终止运行。例子中的ZeroDivisionError NameError和TypeError，就是三种常见的异常类型。</p>
-<p>当然，Python 中还有很多其他异常类型，比如KeyError是指字典中的键找不到；FileNotFoundError是指发送了读取文件的请求，但相应的文件不存在等等，我在此不一一赘述，你可以自行参考相应文档。</p>
-<h3 id="如何处理异常"><a href="#如何处理异常" class="headerlink" title="如何处理异常"></a>如何处理异常</h3><p>刚刚讲到，如果执行到程序中某处抛出了异常，程序就会被终止并退出。你可能会问，那有没有什么办法可以不终止程序，让其照样运行下去呢？答案当然是肯定的，这也就是我们所说的异常处理，通常使用 try 和 except 来解决，比如：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    s = input(<span class="string">'please enter two numbers separated by comma: '</span>)</span><br><span class="line">    num1 = int(s.split(<span class="string">','</span>)[<span class="number">0</span>].strip())</span><br><span class="line">    num2 = int(s.split(<span class="string">','</span>)[<span class="number">1</span>].strip())</span><br><span class="line">    ... </span><br><span class="line"><span class="keyword">except</span> ValueError <span class="keyword">as</span> err:</span><br><span class="line">    print(<span class="string">'Value Error: &#123;&#125;'</span>.format(err))</span><br><span class="line"> </span><br><span class="line">print(<span class="string">'continue'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># please enter two numbers separated by comma: a,b</span></span><br><span class="line"><span class="comment"># Value Error: invalid literal for int() with base 10: 'a'</span></span><br><span class="line"><span class="comment"># continue</span></span><br></pre></td></tr></table></figure>
-
-<p>这里默认用户输入以逗号相隔的两个整形数字，将其提取后，做后续的操作（注意 input 函数会将输入转换为字符串类型）。如果我们输入a,b，程序便会抛出异常invalid literal for int() with base 10: ‘a’，然后跳出 try 这个 block。</p>
-<p>由于程序抛出的异常类型是 ValueError，和 except block 所 catch 的异常类型相匹配，所以 except block 便会被执行，最终输出Value Error: invalid literal for int() with base 10: ‘a’，并打印出continue。</p>
-<p>我们知道，except block 只接受与它相匹配的异常类型并执行，如果程序抛出的异常并不匹配，那么程序照样会终止并退出。</p>
-<p>所以，还是刚刚这个例子，如果我们只输入1，程序抛出的异常就是IndexError: list index out of range，与 ValueError 不匹配，那么 except block 就不会被执行，程序便会终止并退出（continue 不会被打印）。</p>
-<p>please enter two numbers separated by comma: 1<br>IndexError Traceback (most recent call last)<br>IndexError: list index out of range</p>
-<p>不过，很显然，这样强调一种类型的写法有很大的局限性。那么，该怎么解决这个问题呢？</p>
-<p>其中一种解决方案，是在 except block 中加入多种异常的类型，比如下面这样的写法：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    s = input(<span class="string">'please enter two numbers separated by comma: '</span>)</span><br><span class="line">    num1 = int(s.split(<span class="string">','</span>)[<span class="number">0</span>].strip())</span><br><span class="line">    num2 = int(s.split(<span class="string">','</span>)[<span class="number">1</span>].strip())</span><br><span class="line">    ...</span><br><span class="line"><span class="keyword">except</span> (ValueError, IndexError) <span class="keyword">as</span> err:</span><br><span class="line">    print(<span class="string">'Error: &#123;&#125;'</span>.format(err))</span><br><span class="line">    </span><br><span class="line">print(<span class="string">'continue'</span>)</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-
-<p>或者第二种写法：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    s = input(<span class="string">'please enter two numbers separated by comma: '</span>)</span><br><span class="line">    num1 = int(s.split(<span class="string">','</span>)[<span class="number">0</span>].strip())</span><br><span class="line">    num2 = int(s.split(<span class="string">','</span>)[<span class="number">1</span>].strip())</span><br><span class="line">    ...</span><br><span class="line"><span class="keyword">except</span> ValueError <span class="keyword">as</span> err:</span><br><span class="line">    print(<span class="string">'Value Error: &#123;&#125;'</span>.format(err))</span><br><span class="line"><span class="keyword">except</span> IndexError <span class="keyword">as</span> err:</span><br><span class="line">    print(<span class="string">'Index Error: &#123;&#125;'</span>.format(err))</span><br><span class="line"> </span><br><span class="line">print(<span class="string">'continue'</span>)</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-
-<p>这样，每次程序执行时，except block 中只要有一个 exception 类型与实际匹配即可。</p>
-<p>不过，很多时候，我们很难保证程序覆盖所有的异常类型，所以，更通常的做法，是在最后一个 except block，声明其处理的异常类型是 Exception。Exception 是其他所有非系统异常的基类，能够匹配任意非系统异常。那么这段代码就可以写成下面这样：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    s = input(<span class="string">'please enter two numbers separated by comma: '</span>)</span><br><span class="line">    num1 = int(s.split(<span class="string">','</span>)[<span class="number">0</span>].strip())</span><br><span class="line">    num2 = int(s.split(<span class="string">','</span>)[<span class="number">1</span>].strip())</span><br><span class="line">    ...</span><br><span class="line"><span class="keyword">except</span> ValueError <span class="keyword">as</span> err:</span><br><span class="line">    print(<span class="string">'Value Error: &#123;&#125;'</span>.format(err))</span><br><span class="line"><span class="keyword">except</span> IndexError <span class="keyword">as</span> err:</span><br><span class="line">    print(<span class="string">'Index Error: &#123;&#125;'</span>.format(err))</span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> err:</span><br><span class="line">    print(<span class="string">'Other error: &#123;&#125;'</span>.format(err))</span><br><span class="line"> </span><br><span class="line">print(<span class="string">'continue'</span>)</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-
-<p>或者，你也可以在 except 后面省略异常类型，这表示与任意异常相匹配（包括系统异常等）：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    s = input(<span class="string">'please enter two numbers separated by comma: '</span>)</span><br><span class="line">    num1 = int(s.split(<span class="string">','</span>)[<span class="number">0</span>].strip())</span><br><span class="line">    num2 = int(s.split(<span class="string">','</span>)[<span class="number">1</span>].strip())</span><br><span class="line">    ...</span><br><span class="line"><span class="keyword">except</span> ValueError <span class="keyword">as</span> err:</span><br><span class="line">    print(<span class="string">'Value Error: &#123;&#125;'</span>.format(err))</span><br><span class="line"><span class="keyword">except</span> IndexError <span class="keyword">as</span> err:</span><br><span class="line">    print(<span class="string">'Index Error: &#123;&#125;'</span>.format(err))</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">    print(<span class="string">'Other error'</span>)</span><br><span class="line"> </span><br><span class="line">print(<span class="string">'continue'</span>)</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-
-<p>需要注意，当程序中存在多个 except block 时，最多只有一个 except block 会被执行。换句话说，如果多个 except 声明的异常类型都与实际相匹配，那么只有最前面的 except block 会被执行，其他则被忽略。</p>
-<p>异常处理中，还有一个很常见的用法是 finally，经常和 try、except 放在一起来用。无论发生什么情况，finally block 中的语句都会被执行，哪怕前面的 try 和 excep block 中使用了 return 语句。</p>
-<p>一个常见的应用场景，便是文件的读取：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    f = open(<span class="string">'file.txt'</span>, <span class="string">'r'</span>)</span><br><span class="line">    .... <span class="comment"># some data processing</span></span><br><span class="line"><span class="keyword">except</span> OSError <span class="keyword">as</span> err:</span><br><span class="line">    print(<span class="string">'OS error: &#123;&#125;'</span>.format(err))</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">    print(<span class="string">'Unexpected error:'</span>, sys.exc_info()[<span class="number">0</span>])</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    f.close()</span><br></pre></td></tr></table></figure>
-
-<p>这段代码中，try block 尝试读取 file.txt 这个文件，并对其中的数据进行一系列的处理，到最后，无论是读取成功还是读取失败，程序都会执行 finally 中的语句——关闭这个文件流，确保文件的完整性。因此，在 finally 中，我们通常会放一些无论如何都要执行的语句。</p>
-<p>值得一提的是，对于文件的读取，我们也常常使用 with open，你也许在前面的例子中已经看到过，with open 会在最后自动关闭文件，让语句更加简洁。</p>
-<h3 id="用户自定义异常"><a href="#用户自定义异常" class="headerlink" title="用户自定义异常"></a>用户自定义异常</h3><p>前面的例子里充斥了很多 Python 内置的异常类型，你可能会问，我可以创建自己的异常类型吗？</p>
-<p>答案是肯定是，Python 当然允许我们这么做。下面这个例子，我们创建了自定义的异常类型 MyInputError，定义并实现了初始化函数和 str 函数（直接 print 时调用）：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyInputError</span><span class="params">(Exception)</span>:</span></span><br><span class="line">    <span class="string">"""Exception raised when there're errors in input"""</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, value)</span>:</span> <span class="comment"># 自定义异常类型的初始化</span></span><br><span class="line">        self.value = value</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__str__</span><span class="params">(self)</span>:</span> <span class="comment"># 自定义异常类型的 string 表达形式</span></span><br><span class="line">        <span class="keyword">return</span> (<span class="string">"&#123;&#125; is invalid input"</span>.format(repr(self.value)))</span><br><span class="line">    </span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">raise</span> MyInputError(<span class="number">1</span>) <span class="comment"># 抛出 MyInputError 这个异常</span></span><br><span class="line"><span class="keyword">except</span> MyInputError <span class="keyword">as</span> err:</span><br><span class="line">    print(<span class="string">'error: &#123;&#125;'</span>.format(err))</span><br></pre></td></tr></table></figure>
-
-<p>如果你执行上述代码块并输出，便会得到下面的结果：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">error: <span class="number">1</span> <span class="keyword">is</span> invalid input</span><br></pre></td></tr></table></figure>
-
-<p>实际工作中，如果内置的异常类型无法满足我们的需求，或者为了让异常更加详细、可读，想增加一些异常类型的其他功能，我们可以自定义所需异常类型。不过，大多数情况下，Python 内置的异常类型就足够好了。</p>
-<h3 id="异常的使用场景与注意点"><a href="#异常的使用场景与注意点" class="headerlink" title="异常的使用场景与注意点"></a>异常的使用场景与注意点</h3><p>学完了前面的基础知识，接下来我们着重谈一下，异常的使用场景与注意点。</p>
-<p>通常来说，在程序中，如果我们不确定某段代码能否成功执行，往往这个地方就需要使用异常处理。除了上述文件读取的例子，我可以再举一个例子来说明。</p>
-<p>大型社交网站的后台，需要针对用户发送的请求返回相应记录。用户记录往往储存在 key-value 结构的数据库中，每次有请求过来后，我们拿到用户的 ID，并用 ID 查询数据库中此人的记录，就能返回相应的结果。</p>
-<p>而数据库返回的原始数据，往往是 json string 的形式，这就需要我们首先对 json string 进行 decode（解码），你可能很容易想到下面的方法：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line">raw_data = queryDB(uid) <span class="comment"># 根据用户的 id，返回相应的信息</span></span><br><span class="line">data = json.loads(raw_data)</span><br></pre></td></tr></table></figure>
-
-<p>这样的代码是不是就足够了呢？</p>
-<p>要知道，在 json.loads() 函数中，输入的字符串如果不符合其规范，那么便无法解码，就会抛出异常，因此加上异常处理十分必要。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">d = &#123;<span class="string">'name'</span>: <span class="string">'jason'</span>, <span class="string">'age'</span>: <span class="number">20</span>&#125;</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    value = d[<span class="string">'dob'</span>]</span><br><span class="line">    ...</span><br><span class="line"><span class="keyword">except</span> KeyError <span class="keyword">as</span> err:</span><br><span class="line">    print(<span class="string">'KeyError: &#123;&#125;'</span>.format(err))</span><br></pre></td></tr></table></figure>
-
-<p>诚然，这样的代码并没有 bug，但是让人看了摸不着头脑，也显得很冗余。如果你的代码中充斥着这种写法，无疑对阅读、协作来说都是障碍。因此，对于 flow-control（流程控制）的代码逻辑，我们一般不用异常处理。</p>
-<p>字典这个例子，写成下面这样就很好。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="string">'dob'</span> <span class="keyword">in</span> d:</span><br><span class="line">    value = d[<span class="string">'dob'</span>]</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
-
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这节课， 我们一起学习了 Python 的异常处理及其使用场景，你需要重点掌握下面几点。</p>
-<p>异常，通常是指程序运行的过程中遇到了错误，终止并退出。我们通常使用 try except 语句去处理异常，这样程序就不会被终止，仍能继续执行。</p>
-<p>处理异常时，如果有必须执行的语句，比如文件打开后必须关闭等等，则可以放在 finally block 中。</p>
-<p>异常处理，通常用在你不确定某段代码能否成功执行，也无法轻易判断的情况下，比如数据库的连接、读取等等。正常的 flow-control 逻辑，不要使用异常处理，直接用条件语句解决就可以了。</p>
-<h3 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h3><p>最后，给你留一个思考题。在异常处理时，如果 try block 中有多处抛出异常，需要我们使用多个 try except block 吗？以数据库的连接、读取为例，下面两种写法，你觉得哪种更好呢？</p>
-<p>第一种：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    db = DB.connect(<span class="string">'&lt;db path&gt;'</span>) <span class="comment"># 可能会抛出异常</span></span><br><span class="line">    raw_data = DB.queryData(<span class="string">'&lt;viewer_id&gt;'</span>) <span class="comment"># 可能会抛出异常</span></span><br><span class="line"><span class="keyword">except</span> (DBConnectionError, DBQueryDataError) err:</span><br><span class="line">    print(<span class="string">'Error: &#123;&#125;'</span>.format(err))</span><br></pre></td></tr></table></figure>
-
-<p>第二种：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    db = DB.connect(<span class="string">'&lt;db path&gt;'</span>) <span class="comment"># 可能会抛出异常</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        raw_data = DB.queryData(<span class="string">'&lt;viewer_id&gt;'</span>)</span><br><span class="line">    <span class="keyword">except</span> DBQueryDataError <span class="keyword">as</span> err:</span><br><span class="line">         print(<span class="string">'DB query data error: &#123;&#125;'</span>.format(err))</span><br><span class="line"><span class="keyword">except</span> DBConnectionError <span class="keyword">as</span> err:</span><br><span class="line">     print(<span class="string">'DB connection error: &#123;&#125;'</span>.format(err))</span><br></pre></td></tr></table></figure>
-
-<p>第一种写法更加简洁，易于阅读。而且except后面的错误类型先抛出数据库连接错误，之后才抛出查询错误，实现的异常处理和第二种一样。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2910,7 +2872,7 @@ SyntaxError: invalid syntax</code></pre><p>它们语法完全正确，但显然�
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-count">18</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
