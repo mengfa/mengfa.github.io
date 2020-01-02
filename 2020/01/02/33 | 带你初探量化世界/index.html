@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="极客时间,python," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="交易是什么？市场，是人类有史以来最伟大的发明之一。亚当斯在国富论中，用“看不见的手”这个概念，生动形象地阐释了市场和理性人之间是如何交互，最终让整个社会受益的。 而市场的核心，是交换。人类发展最开始是物物交换，原始的“以物易物”的方式产生于货币诞生之前。不过，这种方式非常低效，不便于流通交换，经常会出现的情况是，要走很长的交换链条才能拿到自己想要的物品。于是，一般等价物出现了，社会分工也逐渐出现了">
+<meta name="keywords" content="极客时间,python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="33 | 带你初探量化世界">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;01&#x2F;02&#x2F;33%20%7C%20%E5%B8%A6%E4%BD%A0%E5%88%9D%E6%8E%A2%E9%87%8F%E5%8C%96%E4%B8%96%E7%95%8C&#x2F;index.html">
+<meta property="og:site_name" content="LvYang">
+<meta property="og:description" content="交易是什么？市场，是人类有史以来最伟大的发明之一。亚当斯在国富论中，用“看不见的手”这个概念，生动形象地阐释了市场和理性人之间是如何交互，最终让整个社会受益的。 而市场的核心，是交换。人类发展最开始是物物交换，原始的“以物易物”的方式产生于货币诞生之前。不过，这种方式非常低效，不便于流通交换，经常会出现的情况是，要走很长的交换链条才能拿到自己想要的物品。于是，一般等价物出现了，社会分工也逐渐出现了">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-01-02T12:24:10.683Z">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/01/02/33 | 带你初探量化世界/"/>
+
+
+
+
+
+  <title>33 | 带你初探量化世界 | LvYang</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LvYang</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/02/33%20%7C%20%E5%B8%A6%E4%BD%A0%E5%88%9D%E6%8E%A2%E9%87%8F%E5%8C%96%E4%B8%96%E7%95%8C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">33 | 带你初探量化世界</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-02T20:10:07+08:00">
+                2020-01-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
+                    <span itemprop="name">python核心技术与实战</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/01/02/33%20%7C%20%E5%B8%A6%E4%BD%A0%E5%88%9D%E6%8E%A2%E9%87%8F%E5%8C%96%E4%B8%96%E7%95%8C/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2020/01/02/33%20%7C%20%E5%B8%A6%E4%BD%A0%E5%88%9D%E6%8E%A2%E9%87%8F%E5%8C%96%E4%B8%96%E7%95%8C/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="交易是什么？"><a href="#交易是什么？" class="headerlink" title="交易是什么？"></a>交易是什么？</h3><p>市场，是人类有史以来最伟大的发明之一。亚当斯在国富论中，用“看不见的手”这个概念，生动形象地阐释了市场和理性人之间是如何交互，最终让整个社会受益的。</p>
+<p>而市场的核心，是交换。人类发展最开始是物物交换，原始的“以物易物”的方式产生于货币诞生之前。不过，这种方式非常低效，不便于流通交换，经常会出现的情况是，要走很长的交换链条才能拿到自己想要的物品。于是，一般等价物出现了，社会分工也逐渐出现了。人们把自己生产的商品换成一般等价物，然后再换成自己需要的其他商品。</p>
+<p>而交换的核心，就是买和卖。当买卖双方对价格预期相等的时候，交易达成。随着金融和技术的发展，逐渐出现了股票、债券、期权、期货等越来越多的金融工具，金融衍生品也朝着复杂的方向发展。</p>
+<p>在我们经常听到的投资银行中，量化基金交易员这种角色，所做的事情，就是在这些复杂的衍生品基础上，分析投资标的的价值，然后以某种策略来管理持有仓位，进行买进和卖出。</p>
+<p>为什么交易能赚钱，是很多疑惑不解的地方。市场究竟有没有规律可循呢？可以肯定是有的，但虽有迹可循却无法可依。交易的多样性和人性的复杂性，使得金融数据的噪音极大，我们无法简单地从某一两个因子来确定地推导行情变化。</p>
+<p>所以交易员这个行业本身，对自身素质要求是极高的。除了要具备扎实的专业素养（包括金融功底、数理逻辑、分析能力、决策能力），对心理素质的要求也非常高。这种直接和钱打交道、并直面人性深处欲望的行业，也因此吸引了无数高手的参与，很多人因此暴富，也有不少人破产，一无所有。</p>
+<p>那么，有什么办法可以规避这种，因为心理素质原因带来的风险呢？</p>
+<h3 id="量化交易"><a href="#量化交易" class="headerlink" title="量化交易"></a>量化交易</h3><p>回答这个问题之前，我先插一句题外话。刚接触量化交易的朋友，都很容易被这几个词绕晕：量化交易（Quantative Trading）、程序化交易（Program Trading）、算法交易（Algo-Trading）、高频交易（High Frequency Trading）和自动化交易平台（Automated Trading System）。</p>
+<p>虽然我遇到过不少行业内的人也混用这词，但是作为初学者来说，厘清这些术语还是很有帮助的。至少，在别人说出这些高大上的词时，我们心里不用犯怵了。</p>
+<p>先来看程序化交易，它通常用计算机程序代替交易员，来具体执行金融产品的买卖。比如，一个基金经理需要卖出大量股票。如果直接挂一个大的卖单，可能会影响市场，那就用计算机程序拆分成小单慢慢执行。所以，量化交易的下层通常是程序交易。</p>
+<p>而算法交易通常用于高频交易中。它指的是，通过算法快速判定买卖的时间点，快速买卖多个产品。</p>
+<p>量化交易则通常是指使用数学、统计甚至机器学习的方法，去找寻合适的买卖时机。所以，在这个维度的定义之下，算法交易、高频交易还有统计套利（Statistical Arbitrage）都可以算作量化交易。</p>
+<p>简单而言，我们可以认为量化交易的涵盖范围最大。因此，当你不确定用哪个词的时候，用量化交易就行了。</p>
+<p>回到我们刚刚的问题，规避心理素质原因带来的风险的方法，自然就是量化交易了。量化交易的好处显而易见。最直观来看，计算机不眠不休，不需要交易员实时操盘，满足了人们“躺着挣钱”的愿景。当然，这只是美好的想象，真要这么做的话，不久之后就要回工地搬砖了。现实场景中，成熟的量化交易也需要有人蹲守，适时干预，防止算法突然失效造成巨额的交易亏损。</p>
+<p>在数字货币领域的交易，这一点更加显著。数字货币的交易在全球许多交易所进行，和股票不同，一支股票可能只在少数几个交易所交易，而一种数字货币可以在所有的交易所同时进行交易。同时，因为没有股市的开盘、收盘限制，数字货币的交易通常是 7 x 24 小时不眠不休，比前世的 “996 福报”凶残多了。要是真有交易员能在这个市场活下来，我们尊称一声“神仙”也不为过了。</p>
+<p>多交易所交易，也意味着全球数字货币市场每时每刻都是紧密相连的。一个市场、一个局部的巨大变动，都会影响所有的市场。比如，2017 年朝鲜氢弹炸了的当天，新闻还没出来，隔壁韩国、日本的比特币价格马上拉升了一波；再比如，当比特币的负面消息半夜里传出来的时候，其价格也马上跟着暴跌一波。</p>
+<p>因此，我们经常看到比特币的价格波动巨大。很有可能今天还是财富自由状态，明天的财富就没那么自由了。显然，在这种市场中交易，人力很难持久支撑，而量化交易就很合适了。</p>
+<p>通常的电子盘交易（比如股票，数字货币），是通过券商或者软件，直接把买卖请求发送给交易所；而算法交易的底层，就是让程序来自动实现这类操作。券商或者交易所，通常也会提供 API 接口给投资者。比如，盈透证券（Interactive Broker）的接口，就可以支持股票、期权的行情数据获取和交易；而 Gemini、OKCoin 等交易所，也提供了对应的接口进行数字货币行情获取和交易。</p>
+<p>Gemini 交易所的公开行情 API，就可以通过下面这种简单的 HTTP GET 请求，来获取最近的比特币（BTC）对美元（USD）的价格和最近的成交量。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">########## GEMINI 行情接口 ##########</span></span><br><span class="line"><span class="comment">## https://api.gemini.com/v1/pubticker/:symbol</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"> </span><br><span class="line">gemini_ticker = <span class="string">'https://api.gemini.com/v1/pubticker/&#123;&#125;'</span></span><br><span class="line">symbol = <span class="string">'btcusd'</span></span><br><span class="line">btc_data = requests.get(gemini_ticker.format(symbol)).json()</span><br><span class="line">print(json.dumps(btc_data, indent=<span class="number">4</span>))</span><br><span class="line"> </span><br><span class="line"><span class="comment">########## 输出 ##########</span></span><br><span class="line"> </span><br><span class="line">&#123;</span><br><span class="line">   <span class="string">"bid"</span>: <span class="string">"8825.88"</span>,</span><br><span class="line">   <span class="string">"ask"</span>: <span class="string">"8827.52"</span>,</span><br><span class="line">   <span class="string">"volume"</span>: &#123;</span><br><span class="line">       <span class="string">"BTC"</span>: <span class="string">"910.0838782726"</span>,</span><br><span class="line">       <span class="string">"USD"</span>: <span class="string">"7972904.560901317851"</span>,</span><br><span class="line">       <span class="string">"timestamp"</span>: <span class="number">1560643800000</span></span><br><span class="line">   &#125;,</span><br><span class="line">   <span class="string">"last"</span>: <span class="string">"8838.45"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<pre><code>{
+    &quot;bid&quot;: &quot;7128.73&quot;,
+    &quot;ask&quot;: &quot;7132.64&quot;,
+    &quot;volume&quot;: {
+        &quot;BTC&quot;: &quot;414.0110753682&quot;,
+        &quot;USD&quot;: &quot;2968817.768948525139&quot;,
+        &quot;timestamp&quot;: 1577966400000
+    },
+    &quot;last&quot;: &quot;7128.73&quot;
+}
+
+
+
+
+
+{&apos;bid&apos;: &apos;8825.88&apos;,
+ &apos;ask&apos;: &apos;8827.52&apos;,
+ &apos;volume&apos;: {&apos;BTC&apos;: &apos;910.0838782726&apos;,
+  &apos;USD&apos;: &apos;7972904.560901317851&apos;,
+  &apos;timestamp&apos;: 1560643800000},
+ &apos;last&apos;: &apos;8838.45&apos;}</code></pre><p>其中，</p>
+<p>行情模块的主要功能是，尝试获取市场的行情数据，通常也负责获取交易账户的状态。<br>策略模块的主要功能是，订阅市场的数据，根据设定的算法发出买、卖指令给执行模块。<br>执行模块的主要功能是，接受并把策略模块发过来的买、卖指令封装并转发到交易所；同时，监督并确保策略买卖的完整执行。</p>
+<h3 id="Python-算法交易"><a href="#Python-算法交易" class="headerlink" title="Python 算法交易"></a>Python 算法交易</h3><p>了解了这么多关于量化交易的知识，接下来我们就来说说 Python 算法交易。Python 在金融行业的许多方面都有用到，在算法交易领域，更是发挥了日益重要的作用。 Python 之所以能在这个行业这么流行，主要是因为下面四个原因。</p>
+<h3 id="数据分析能力"><a href="#数据分析能力" class="headerlink" title="数据分析能力"></a>数据分析能力</h3><p>第一个原因，是 Python 的数据分析能力。算法交易领域的一个基本需求，就是高效数据处理能力，而数据处理则是 Python 的强项。特别是 NumPy+Pandas 的组合，简直让算法交易开发者的生活质量直线上升。</p>
+<p>我们可以用一个简单的例子来展示一下，如何抓取、格式化和绘制，比特币过去一个小时在 Genimi 交易所的价格曲线。相关的代码我都附了详细注释，这里就不再多讲，你阅读了解一下即可。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 选择要获取的数据时间段</span></span><br><span class="line">periods = <span class="string">'3600'</span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># 通过 Http 抓取 btc 历史价格数据</span></span><br><span class="line">resp = requests.get(<span class="string">'https://api.cryptowat.ch/markets/gemini/btcusd/ohlc'</span>, </span><br><span class="line">  params=&#123;</span><br><span class="line">    <span class="string">'periods'</span>: periods</span><br><span class="line">  &#125;)</span><br><span class="line">data = resp.json()</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 转换成 pandas data frame</span></span><br><span class="line">df = pd.DataFrame(</span><br><span class="line">  data[<span class="string">'result'</span>][periods], </span><br><span class="line">  columns=[</span><br><span class="line">    <span class="string">'CloseTime'</span>,</span><br><span class="line">    <span class="string">'OpenPrice'</span>,</span><br><span class="line">    <span class="string">'HighPrice'</span>,</span><br><span class="line">    <span class="string">'LowPrice'</span>,</span><br><span class="line">    <span class="string">'ClosePrice'</span>,</span><br><span class="line">    <span class="string">'Volume'</span>,</span><br><span class="line">    <span class="string">'NA'</span>])</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 输出 DataFrame 的头部几行</span></span><br><span class="line">print(df.head())</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 绘制 btc 价格曲线</span></span><br><span class="line">df[<span class="string">'ClosePrice'</span>].plot(figsize=(<span class="number">14</span>, <span class="number">7</span>))</span><br></pre></td></tr></table></figure>
+
+<pre><code>    CloseTime  OpenPrice  HighPrice  LowPrice  ClosePrice     Volume  \
+0  1576166400    7159.70    7186.04   7144.03     7182.77  34.414275   
+1  1576170000    7188.04    7208.56   7172.29     7195.71  43.790080   
+2  1576173600    7195.71    7205.00   7190.00     7193.62  25.884217   
+3  1576177200    7192.38    7218.69   7183.42     7207.21  35.922896   
+4  1576180800    7210.00    7210.31   7188.56     7198.78  19.583916   
+
+              NA  
+0  246447.854569  
+1  314855.561069  
+2  186355.827725  
+3  258405.637212  
+4  140999.123537  
+
+
+
+
+
+&lt;matplotlib.axes._subplots.AxesSubplot at 0x11c942c88&gt;</code></pre><h3 id="大量专有库"><a href="#大量专有库" class="headerlink" title="大量专有库"></a>大量专有库</h3><p>除了强大的数据处理能力之外，Python 还有许许多多已经开发成熟的算法交易库可供使用。比如，你可以使用 Zipline 进行策略回测，或者用 Pyfolio 进行投资组合分析。而许多交易所也都提供了基于 Python 的 API 客户端。</p>
+<p>便利的交易平台<br>第三个原因，是因为便利的交易平台。有一些算法交易平台可以执行自定义 Python 策略，无需搭建量化交易框架。算法交易平台，实际上等效于帮用户完成了行情模块和执行模块。用户只需要在其中定义策略模块，即可进行算法交易和回测。</p>
+<p>比如，Quantopian，就提供了基于 Zipline 的标准回测环境。用户可以选择 Python 作为开发语言，并且和社区的网友分享自己的策略。此外，国内也有诸如 BigQuant、果仁网等类似平台，提供不同市场和金融产品的交易。</p>
+<p>广泛的行业应用<br>最后一个原因，则是 Python 本身广泛的行业应用了。目前，越来越多投资机构的交易部门，都开始使用 Python，因此也对优秀的 Python 开发者产生了更多的需求。自然，这也让学习 Python，成为了更有意义的“投资”。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这一节课，我们介绍了交易，以及算法交易中的基本概念，也简单介绍了为什么要学习 Python 来搭建量化交易系统。量化交易是交易行业的大趋势；同时， Python 作为最适合量化从业者的语言之一，对于初学者而言也有着非常重要的地位。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E6%9E%81%E5%AE%A2%E6%97%B6%E9%97%B4/" rel="tag"># 极客时间</a>
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/25/2-Python%20%E5%B7%A5%E5%8C%A0%EF%BC%9A%E7%BC%96%E5%86%99%E6%9D%A1%E4%BB%B6%E5%88%86%E6%94%AF%E4%BB%A3%E7%A0%81%E7%9A%84%E6%8A%80%E5%B7%A7/" rel="next" title="Python 工匠：2-编写条件分支代码的技巧">
+                <i class="fa fa-chevron-left"></i> Python 工匠：2-编写条件分支代码的技巧
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">LvYang</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">33</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#交易是什么？"><span class="nav-number">1.</span> <span class="nav-text">交易是什么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#量化交易"><span class="nav-number">2.</span> <span class="nav-text">量化交易</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Python-算法交易"><span class="nav-number">3.</span> <span class="nav-text">Python 算法交易</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据分析能力"><span class="nav-number">4.</span> <span class="nav-text">数据分析能力</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#大量专有库"><span class="nav-number">5.</span> <span class="nav-text">大量专有库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LvYang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'mengfa',
+            repo: 'blogcomments',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'b715de6e1ca56e27e404f3764f7a58cc1f3d4b22',
+            
+                client_id: 'Iv1.b0b9f79f82846ce7'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'qcq1G35cOv9sG5BrpbdXJwtJ-gzGzoHsz',
+        appKey: 'VtFEF7WhBgSXbcGzdO1GztzO',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
