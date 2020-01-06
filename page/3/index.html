@@ -258,6 +258,260 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/11/17%20%7C%20%E5%BC%BA%E5%A4%A7%E7%9A%84%E8%A3%85%E9%A5%B0%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/11/17%20%7C%20%E5%BC%BA%E5%A4%A7%E7%9A%84%E8%A3%85%E9%A5%B0%E5%99%A8/" itemprop="url">17 | 强大的装饰器</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-11T20:13:07+08:00">
+                2019-12-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
+                    <span itemprop="name">python核心技术与实战</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/12/11/17%20%7C%20%E5%BC%BA%E5%A4%A7%E7%9A%84%E8%A3%85%E9%A5%B0%E5%99%A8/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/12/11/17%20%7C%20%E5%BC%BA%E5%A4%A7%E7%9A%84%E8%A3%85%E9%A5%B0%E5%99%A8/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="函数-gt-装饰器"><a href="#函数-gt-装饰器" class="headerlink" title="函数 -&gt; 装饰器"></a>函数 -&gt; 装饰器</h2><h3 id="函数核心回顾"><a href="#函数核心回顾" class="headerlink" title="函数核心回顾"></a>函数核心回顾</h3><p>引入装饰器之前，我们首先一起来复习一下，必须掌握的函数的几个核心概念。</p>
+<p>第一点，我们要知道，在 Python 中，函数是一等公民（first-class citizen），函数也是对象。我们可以把函数赋予变量，比如下面这段代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(message)</span>:</span></span><br><span class="line">    print(<span class="string">'Got a message: &#123;&#125;'</span>.format(message))</span><br><span class="line">    </span><br><span class="line">send_message = func</span><br><span class="line">send_message(<span class="string">'hello world'</span>)</span><br></pre></td></tr></table></figure>
+
+<pre><code>Got a message: hello world</code></pre><p>这个例子中，我们把函数 func() 赋予了变量 send_message，这样之后你调用 send_message，就相当于是调用函数 func()。</p>
+<p>第二点，我们可以把函数当作参数，传入另一个函数中，比如下面这段代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_message</span><span class="params">(message)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">'Got a message: '</span> + message</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">root_call</span><span class="params">(func, message)</span>:</span></span><br><span class="line">    print(func(message))</span><br><span class="line">    </span><br><span class="line">root_call(get_message, <span class="string">'hello world'</span>)</span><br></pre></td></tr></table></figure>
+
+<pre><code>Got a message: hello world</code></pre><p>这个例子中，我们就把函数 get_message() 以参数的形式，传入了函数 root_call() 中然后调用它。</p>
+<p>第三点，我们可以在函数里定义函数，也就是函数的嵌套。这里我同样举了一个例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(message)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_message</span><span class="params">(message)</span>:</span></span><br><span class="line">        print(<span class="string">'Got a message: &#123;&#125;'</span>.format(message))</span><br><span class="line">    <span class="keyword">return</span> get_message(message)</span><br><span class="line"> </span><br><span class="line">func(<span class="string">'hello world'</span>)</span><br></pre></td></tr></table></figure>
+
+<pre><code>Got a message: hello world</code></pre><p>这段代码中，我们在函数 func() 里又定义了新的函数 get_message()，调用后作为 func() 的返回值返回。</p>
+<p>第四点，要知道，函数的返回值也可以是函数对象（闭包），比如下面这个例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func_closure</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_message</span><span class="params">(message)</span>:</span></span><br><span class="line">        print(<span class="string">'Got a message: &#123;&#125;'</span>.format(message))</span><br><span class="line">    <span class="keyword">return</span> get_message</span><br><span class="line"> </span><br><span class="line">send_message = func_closure()</span><br><span class="line">send_message(<span class="string">'hello world'</span>)</span><br></pre></td></tr></table></figure>
+
+<pre><code>Got a message: hello world</code></pre><p>这里，函数 func_closure() 的返回值是函数对象 get_message() 本身，之后，我们将其赋予变量 send_message，再调用 send_message(‘hello world’)，最后输出了’Got a message: hello world’。</p>
+<h3 id="简单的装饰器"><a href="#简单的装饰器" class="headerlink" title="简单的装饰器"></a>简单的装饰器</h3><p>简单的复习之后，我们接下来学习今天的新知识——装饰器。按照习惯，我们可以先来看一个装饰器的简单例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_decorator</span><span class="params">(func)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">()</span>:</span></span><br><span class="line">        print(<span class="string">'wrapper of decorator'</span>)</span><br><span class="line">        func()</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">greet</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'hello world'</span>)</span><br><span class="line"> </span><br><span class="line">greet = my_decorator(greet)</span><br><span class="line">greet()</span><br></pre></td></tr></table></figure>
+
+<pre><code>wrapper of decorator
+hello world</code></pre><p>这段代码中，变量 greet 指向了内部函数 wrapper()，而内部函数 wrapper() 中又会调用原函数 greet()，因此，最后调用 greet() 时，就会先打印’wrapper of decorator’，然后输出’hello world’。</p>
+<p>这里的函数 my_decorator() 就是一个装饰器，它把真正需要执行的函数 greet() 包裹在其中，并且改变了它的行为，但是原函数 greet() 不变。</p>
+<p>事实上，上述代码在 Python 中有更简单、更优雅的表示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_decorator</span><span class="params">(func)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">()</span>:</span></span><br><span class="line">        print(<span class="string">'wrapper of decorator'</span>)</span><br><span class="line">        func()</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"> </span><br><span class="line"><span class="meta">@my_decorator</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">greet</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'hello world'</span>)</span><br><span class="line"> </span><br><span class="line">greet()</span><br></pre></td></tr></table></figure>
+
+<p>这里的@，我们称之为语法糖，@my_decorator就相当于前面的greet=my_decorator(greet)语句，只不过更加简洁。因此，如果你的程序中有其它函数需要做类似的装饰，你只需在它们的上方加上@decorator就可以了，这样就大大提高了函数的重复利用和程序的可读性。</p>
+<h3 id="带有参数的装饰器"><a href="#带有参数的装饰器" class="headerlink" title="带有参数的装饰器"></a>带有参数的装饰器</h3><p>你或许会想到，如果原函数 greet() 中，有参数需要传递给装饰器怎么办？</p>
+<p>一个简单的办法，是可以在对应的装饰器函数 wrapper() 上，加上相应的参数，比如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_decorator</span><span class="params">(func)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(message)</span>:</span></span><br><span class="line">        print(<span class="string">'wrapper of decorator'</span>)</span><br><span class="line">        func(message)</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="meta">@my_decorator</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">greet</span><span class="params">(message)</span>:</span></span><br><span class="line">    print(message)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">greet(<span class="string">'hello world'</span>)</span><br></pre></td></tr></table></figure>
+
+<pre><code>wrapper of decorator
+hello world</code></pre><p>不过，新的问题来了。如果我另外还有一个函数，也需要使用 my_decorator() 装饰器，但是这个新的函数有两个参数，又该怎么办呢？比如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@my_decorator</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">celebrate</span><span class="params">(name, message)</span>:</span></span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+
+<p>事实上，通常情况下，我们会把<em>args和*</em>kwargs，作为装饰器内部函数 wrapper() 的参数。<em>args和*</em>kwargs，表示接受任意数量和类型的参数，因此装饰器就可以写成下面的形式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_decorator</span><span class="params">(func)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">        print(<span class="string">'wrapper of decorator'</span>)</span><br><span class="line">        func(*args, **kwargs)</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br></pre></td></tr></table></figure>
+
+<h3 id="带有自定义参数的装饰器"><a href="#带有自定义参数的装饰器" class="headerlink" title="带有自定义参数的装饰器"></a>带有自定义参数的装饰器</h3><p>其实，装饰器还有更大程度的灵活性。刚刚说了，装饰器可以接受原函数任意类型和数量的参数，除此之外，它还可以接受自己定义的参数。</p>
+<p>举个例子，比如我想要定义一个参数，来表示装饰器内部函数被执行的次数，那么就可以写成下面这种形式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">repeat</span><span class="params">(num)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">my_decorator</span><span class="params">(func)</span>:</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(num):</span><br><span class="line">                print(<span class="string">'wrapper of decorator'</span>)</span><br><span class="line">                func(*args, **kwargs)</span><br><span class="line">        <span class="keyword">return</span> wrapper</span><br><span class="line">    <span class="keyword">return</span> my_decorator</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="meta">@repeat(4)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">greet</span><span class="params">(message)</span>:</span></span><br><span class="line">    print(message)</span><br><span class="line"> </span><br><span class="line">greet(<span class="string">'hello world'</span>)</span><br></pre></td></tr></table></figure>
+
+<pre><code>wrapper of decorator
+hello world
+wrapper of decorator
+hello world
+wrapper of decorator
+hello world
+wrapper of decorator
+hello world</code></pre><p>你会发现，greet() 函数被装饰以后，它的元信息变了。元信息告诉我们“它不再是以前的那个 greet() 函数，而是被 wrapper() 函数取代了”。</p>
+<p>为了解决这个问题，我们通常使用内置的装饰器@functools.wrap，它会帮助保留原函数的元信息（也就是将原函数的元信息，拷贝到对应的装饰器函数里）。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> functools</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_decorator</span><span class="params">(func)</span>:</span></span><br><span class="line"><span class="meta">    @functools.wraps(func)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">        print(<span class="string">'wrapper of decorator'</span>)</span><br><span class="line">        func(*args, **kwargs)</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line">    </span><br><span class="line"><span class="meta">@my_decorator</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">greet</span><span class="params">(message)</span>:</span></span><br><span class="line">    print(message)</span><br><span class="line"> </span><br><span class="line">greet.__name__</span><br></pre></td></tr></table></figure>
+
+<h3 id="类装饰器"><a href="#类装饰器" class="headerlink" title="类装饰器"></a>类装饰器</h3><p>前面我们主要讲了函数作为装饰器的用法，实际上，类也可以作为装饰器。类装饰器主要依赖于函数<strong>call_()，每当你调用一个类的示例时，函数</strong>call__()就会被执行一次。</p>
+<p>我们来看下面这段代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Count</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, func)</span>:</span></span><br><span class="line">        self.func = func</span><br><span class="line">        self.num_calls = <span class="number">0</span></span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        self.num_calls += <span class="number">1</span></span><br><span class="line">        print(<span class="string">'num of calls is: &#123;&#125;'</span>.format(self.num_calls))</span><br><span class="line">        <span class="keyword">return</span> self.func(*args, **kwargs)</span><br><span class="line"> </span><br><span class="line"><span class="meta">@Count</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">example</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">"hello world"</span>)</span><br><span class="line"> </span><br><span class="line">example()</span><br><span class="line">example()</span><br></pre></td></tr></table></figure>
+
+<pre><code>num of calls is: 1
+hello world
+num of calls is: 2
+hello world</code></pre><p>这里，我们定义了类 Count，初始化时传入原函数 func()，而<strong>call</strong>()函数表示让变量 num_calls 自增 1，然后打印，并且调用原函数。因此，在我们第一次调用函数 example() 时，num_calls 的值是 1，而在第二次调用时，它的值变成了 2。</p>
+<h3 id="装饰器的嵌套"><a href="#装饰器的嵌套" class="headerlink" title="装饰器的嵌套"></a>装饰器的嵌套</h3><p>回顾刚刚讲的例子，基本都是一个装饰器的情况，但实际上，Python 也支持多个装饰器，比如写成下面这样的形式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@decorator1</span></span><br><span class="line"><span class="meta">@decorator2</span></span><br><span class="line"><span class="meta">@decorator3</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">()</span>:</span></span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+
+<p>它的执行顺序从里到外，所以上面的语句也等效于下面这行代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">decorator1(decorator2(decorator3(func)))</span><br></pre></td></tr></table></figure>
+
+<p>这样，’hello world’这个例子，就可以改写成下面这样：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> functools</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_decorator1</span><span class="params">(func)</span>:</span></span><br><span class="line"><span class="meta">    @functools.wraps(func)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">        print(<span class="string">'execute decorator1'</span>)</span><br><span class="line">        func(*args, **kwargs)</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_decorator2</span><span class="params">(func)</span>:</span></span><br><span class="line"><span class="meta">    @functools.wraps(func)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">        print(<span class="string">'execute decorator2'</span>)</span><br><span class="line">        func(*args, **kwargs)</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="meta">@my_decorator1</span></span><br><span class="line"><span class="meta">@my_decorator2</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">greet</span><span class="params">(message)</span>:</span></span><br><span class="line">    print(message)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">greet(<span class="string">'hello world'</span>)</span><br></pre></td></tr></table></figure>
+
+<pre><code>execute decorator1
+execute decorator2
+hello world</code></pre><h3 id="装饰器用法实例"><a href="#装饰器用法实例" class="headerlink" title="装饰器用法实例"></a>装饰器用法实例</h3><p>到此，装饰器的基本概念及用法我就讲完了，接下来，我将结合实际工作中的几个例子，带你加深对它的理解。</p>
+<h3 id="身份认证"><a href="#身份认证" class="headerlink" title="身份认证"></a>身份认证</h3><p>首先是最常见的身份认证的应用。这个很容易理解，举个最常见的例子，你登录微信，需要输入用户名密码，然后点击确认，这样，服务器端便会查询你的用户名是否存在、是否和密码匹配等等。如果认证通过，你就可以顺利登录；如果不通过，就抛出异常并提示你登录失败。</p>
+<p>再比如一些网站，你不登录也可以浏览内容，但如果你想要发布文章或留言，在点击发布时，服务器端便会查询你是否登录。如果没有登录，就不允许这项操作等等。</p>
+<p>我们来看一个大概的代码示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> functools</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">authenticate</span><span class="params">(func)</span>:</span></span><br><span class="line"><span class="meta">    @functools.wraps(func)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">        request = args[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">if</span> check_user_logged_in(request): <span class="comment"># 如果用户处于登录状态</span></span><br><span class="line">            <span class="keyword">return</span> func(*args, **kwargs) <span class="comment"># 执行函数 post_comment() </span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">raise</span> Exception(<span class="string">'Authentication failed'</span>)</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line">    </span><br><span class="line"><span class="meta">@authenticate</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">post_comment</span><span class="params">(request, ...)</span></span></span><br><span class="line"><span class="function">    ...</span></span><br></pre></td></tr></table></figure>
+
+<p>这段代码中，我们定义了装饰器 authenticate；而函数 post_comment()，则表示发表用户对某篇文章的评论。每次调用这个函数前，都会先检查用户是否处于登录状态，如果是登录状态，则允许这项操作；如果没有登录，则不允许。</p>
+<h3 id="日志记录"><a href="#日志记录" class="headerlink" title="日志记录"></a>日志记录</h3><p>日志记录同样是很常见的一个案例。在实际工作中，如果你怀疑某些函数的耗时过长，导致整个系统的 latency（延迟）增加，所以想在线上测试某些函数的执行时间，那么，装饰器就是一种很常用的手段。</p>
+<p>我们通常用下面的方法来表示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> functools</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">log_execution_time</span><span class="params">(func)</span>:</span></span><br><span class="line"><span class="meta">    @functools.wraps(func)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">        start = time.perf_counter()</span><br><span class="line">        res = func(*args, **kwargs)</span><br><span class="line">        end = time.perf_counter()</span><br><span class="line">        print(<span class="string">'&#123;&#125; took &#123;&#125; ms'</span>.format(func.__name__, (end - start) * <span class="number">1000</span>))</span><br><span class="line">        <span class="keyword">return</span> res</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line">    </span><br><span class="line"><span class="meta">@log_execution_time</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">calculate_similarity</span><span class="params">(items)</span>:</span></span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+
+<p>这里，装饰器 log_execution_time 记录某个函数的运行时间，并返回其执行结果。如果你想计算任何函数的执行时间，在这个函数上方加上@log_execution_time即可。</p>
+<h3 id="输入合理性检查"><a href="#输入合理性检查" class="headerlink" title="输入合理性检查"></a>输入合理性检查</h3><p>再来看今天要讲的第三个应用，输入合理性检查。</p>
+<p>在大型公司的机器学习框架中，我们调用机器集群进行模型训练前，往往会用装饰器对其输入（往往是很长的 json 文件）进行合理性检查。这样就可以大大避免，输入不正确对机器造成的巨大开销。</p>
+<p>它的写法往往是下面的格式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> functools</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">validation_check</span><span class="params">(input)</span>:</span></span><br><span class="line"><span class="meta">    @functools.wraps(func)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args, **kwargs)</span>:</span> </span><br><span class="line">        ... <span class="comment"># 检查输入是否合法</span></span><br><span class="line">    </span><br><span class="line"><span class="meta">@validation_check</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">neural_network_training</span><span class="params">(param1, param2, ...)</span>:</span></span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+
+<p>其实在工作中，很多情况下都会出现输入不合理的现象。因为我们调用的训练模型往往很复杂，输入的文件有成千上万行，很多时候确实也很难发现。</p>
+<p>试想一下，如果没有输入的合理性检查，很容易出现“模型训练了好几个小时后，系统却报错说输入的一个参数不对，成果付之一炬”的现象。这样的“惨案”，大大减缓了开发效率，也对机器资源造成了巨大浪费。</p>
+<h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><p>最后，我们来看缓存方面的应用。关于缓存装饰器的用法，其实十分常见，这里我以 Python 内置的 LRU cache 为例来说明（如果你不了解 LRU cache，可以点击链接自行查阅）。</p>
+<p>LRU cache，在 Python 中的表示形式是@lru_cache。@lru_cache会缓存进程中的函数参数和结果，当缓存满了以后，会删除 least recenly used 的数据。</p>
+<p>正确使用缓存装饰器，往往能极大地提高程序运行效率。为什么呢？我举一个常见的例子来说明。</p>
+<p>大型公司服务器端的代码中往往存在很多关于设备的检查，比如你使用的设备是安卓还是 iPhone，版本号是多少。这其中的一个原因，就是一些新的 feature，往往只在某些特定的手机系统或版本上才有（比如 Android v200+）。</p>
+<p>这样一来，我们通常使用缓存装饰器，来包裹这些检查函数，避免其被反复调用，进而提高程序运行效率，比如写成下面这样：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@lru_cache</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">check</span><span class="params">(param1, param2, ...)</span> # 检查用户设备类型，版本号等等</span></span><br><span class="line"><span class="function">    ...</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这节课，我们一起学习了装饰器的概念及用法。所谓的装饰器，其实就是通过装饰器函数，来修改原函数的一些功能，使得原函数不需要修改。</p>
+<blockquote>
+<p>Decorators is to modify the behavior of the function through a wrapper so we don’t have to actually modify the function.<br>而实际工作中，装饰器通常运用在身份认证、日志记录、输入合理性检查以及缓存等多个领域中。合理使用装饰器，往往能极大地提高程序的可读性以及运行效率。</p>
+</blockquote>
+<h3 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h3><p>那么，平时工作中，通常会在哪些情况下使用装饰器呢？</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/10/01%E4%B8%A8%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%85%A8%E6%99%AF%E5%9B%BE%E5%8F%8A%E4%BF%AE%E7%82%BC%E6%8C%87%E5%8D%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2448,292 +2702,6 @@ SyntaxError: invalid syntax</code></pre><p>它们语法完全正确，但显然�
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/06/7python%E6%9D%A1%E4%BB%B6%E4%B8%8E%E5%BE%AA%E7%8E%AF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LvYang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LvYang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/06/7python%E6%9D%A1%E4%BB%B6%E4%B8%8E%E5%BE%AA%E7%8E%AF/" itemprop="url">07 | 修炼基本功：条件与循环</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-06T20:15:59+08:00">
-                2019-12-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
-                    <span itemprop="name">python核心技术与实战</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/12/06/7python%E6%9D%A1%E4%BB%B6%E4%B8%8E%E5%BE%AA%E7%8E%AF/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/12/06/7python%E6%9D%A1%E4%BB%B6%E4%B8%8E%E5%BE%AA%E7%8E%AF/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="条件语句"><a href="#条件语句" class="headerlink" title="条件语句"></a>条件语句</h3><p>首先，我们一起来看一下 Python 的条件语句，用法很简单。比如，我想要表示 y=|x|这个函数，那么相应的代码便是：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># y = |x|</span></span><br><span class="line">x = <span class="number">1</span></span><br><span class="line"><span class="keyword">if</span> x &lt; <span class="number">0</span>:</span><br><span class="line">    y = -x</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    y = x</span><br><span class="line">print(y)</span><br></pre></td></tr></table></figure>
-
-<pre><code>1</code></pre><p>由于 Python 不支持 switch 语句，因此，当存在多个条件判断时，我们需要用 else if 来实现，这在 Python 中的表达是elif。语法如下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> condition_1:</span><br><span class="line">    statement_1</span><br><span class="line"><span class="keyword">elif</span> condition_2:</span><br><span class="line">    statement_2</span><br><span class="line"><span class="keyword">elif</span> condition_i:</span><br><span class="line">    statement_i</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    statement_n</span><br></pre></td></tr></table></figure>
-
-
-<pre><code>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-5-fefccca48302&gt; in &lt;module&gt;
-----&gt; 1 if condition_1:
-      2     statement_1
-      3 elif condition_2:
-      4     statement_2
-      5 elif condition_i:
-
-
-NameError: name &apos;condition_1&apos; is not defined</code></pre><p>整个条件语句是顺序执行的，如果遇到一个条件满足，比如 condition_i 满足时，在执行完 statement_i 后，便会退出整个 if、elif、else 条件语句，而不会继续向下执行。这个语句在工作中很常用，比如下面的这个例子。</p>
-<p>实际工作中，我们经常用 ID 表示一个事物的属性，然后进行条件判断并且输出。比如，在 integrity 的工作中，通常用 0、1、2 分别表示一部电影的色情暴力程度。其中，0 的程度最高，是 red 级别；1 其次，是 yellow 级别；2 代表没有质量问题，属于 green。</p>
-<p>如果给定一个 ID，要求输出某部电影的质量评级，则代码如下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> id == <span class="number">0</span>:</span><br><span class="line">    print(<span class="string">'red'</span>)</span><br><span class="line"><span class="keyword">elif</span> id == <span class="number">1</span>:</span><br><span class="line">    print(<span class="string">'yellow'</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    print(<span class="string">'green'</span>)</span><br></pre></td></tr></table></figure>
-
-<p>不过要注意，if 语句是可以单独使用的，但 elif、else 都必须和 if 成对使用。</p>
-<p>另外，在我们进行条件判断时， 不少人喜欢省略判断的条件，比如写成下面这样：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> s: <span class="comment"># s is a string</span></span><br><span class="line">    ...</span><br><span class="line"><span class="keyword">if</span> l: <span class="comment"># l is a list</span></span><br><span class="line">    ...</span><br><span class="line"><span class="keyword">if</span> i: <span class="comment"># i is an int</span></span><br><span class="line">    ...</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-
-<p>不过，切记，在实际写代码时，我们鼓励，除了 boolean 类型的数据，条件判断最好是显性的。比如，在判断一个整型数是否为 0 时，我们最好写出判断的条件：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">i = <span class="number">1</span></span><br><span class="line"><span class="keyword">if</span> i != <span class="number">0</span>:</span><br><span class="line">    print(i)</span><br><span class="line"><span class="comment"># 而不是只写出变量名：</span></span><br><span class="line"><span class="keyword">if</span> i:</span><br><span class="line">    print(i)</span><br><span class="line">s = <span class="string">"string"</span></span><br><span class="line"><span class="keyword">if</span> s != <span class="number">0</span>:</span><br><span class="line">    print(s)</span><br><span class="line"><span class="comment"># 而不是只写出变量名：</span></span><br><span class="line"><span class="keyword">if</span> s:</span><br><span class="line">    print(s)</span><br><span class="line">    </span><br><span class="line">l = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]    </span><br><span class="line"><span class="keyword">if</span> l != <span class="number">0</span>:</span><br><span class="line">    print(l)</span><br><span class="line"><span class="comment"># 而不是只写出变量名：</span></span><br><span class="line"><span class="keyword">if</span> l:</span><br><span class="line">    print(l)</span><br></pre></td></tr></table></figure>
-
-<pre><code>1
-1
-string
-string
-[1, 2, 3]
-[1, 2, 3]</code></pre><h3 id="循环语句"><a href="#循环语句" class="headerlink" title="循环语句"></a>循环语句</h3><p>讲完了条件语句，我们接着来看循环语句。所谓循环，顾名思义，本质上就是遍历集合中的元素。和其他语言一样，Python 中的循环一般通过 for 循环和 while 循环实现。</p>
-<p>比如，我们有一个列表，需要遍历列表中的所有元素并打印输出，代码如下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">l = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="keyword">for</span> item <span class="keyword">in</span> l:</span><br><span class="line">    print(item)</span><br></pre></td></tr></table></figure>
-
-<p>你看，是不是很简单呢？</p>
-<p>其实，Python 中的数据结构只要是可迭代的（iterable），比如列表、集合等等，那么都可以通过下面这种方式遍历：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> item <span class="keyword">in</span> &lt;iterable&gt;:</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
-
-<p>这里需要单独强调一下字典。字典本身只有键是可迭代的，如果我们要遍历它的值或者是键值对，就需要通过其内置的函数 values() 或者 items() 实现。其中，values() 返回字典的值的集合，items() 返回键值对的集合。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">d = &#123;<span class="string">'name'</span>: <span class="string">'jason'</span>, <span class="string">'dob'</span>: <span class="string">'2000-01-01'</span>, <span class="string">'gender'</span>: <span class="string">'male'</span>&#125;</span><br><span class="line"><span class="keyword">for</span> k <span class="keyword">in</span> d: <span class="comment"># 遍历字典的键</span></span><br><span class="line">    print(k)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">for</span> v <span class="keyword">in</span> d.values(): <span class="comment"># 遍历字典的值</span></span><br><span class="line">    print(v)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">for</span> k, v <span class="keyword">in</span> d.items(): <span class="comment"># 遍历字典的键值对</span></span><br><span class="line">    print(<span class="string">'key: &#123;&#125;, value: &#123;&#125;'</span>.format(k, v))</span><br></pre></td></tr></table></figure>
-
-<pre><code>name
-dob
-gender
-jason
-2000-01-01
-male
-key: name, value: jason
-key: dob, value: 2000-01-01
-key: gender, value: male</code></pre><p>看到这里你也许会问，有没有办法通过集合中的索引来遍历元素呢？当然可以，其实这种情况在实际工作中还是很常见的，甚至很多时候，我们还得根据索引来做一些条件判断。</p>
-<p>我们通常通过 range() 这个函数，拿到索引，再去遍历访问集合中的元素。比如下面的代码，遍历一个列表中的元素，当索引小于 5 时，打印输出：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">l = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>]</span><br><span class="line"><span class="keyword">for</span> index <span class="keyword">in</span> range(<span class="number">0</span>, len(l)):</span><br><span class="line">    <span class="keyword">if</span> index &lt; <span class="number">5</span>:</span><br><span class="line">        print(l[index])  </span><br><span class="line"><span class="comment"># enumerate 当我们同时需要索引和元素时，还有一种更简洁的方式，那就是通过 Python 内置的函数 enumerate()。</span></span><br><span class="line"><span class="comment"># 用它来遍历集合，不仅返回每个元素，并且还返回其对应的索引，这样一来，上面的例子就可以写成:       </span></span><br><span class="line">l = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>]</span><br><span class="line"><span class="keyword">for</span> index, item <span class="keyword">in</span> enumerate(l):</span><br><span class="line">    <span class="keyword">if</span> index &lt; <span class="number">5</span>:</span><br><span class="line">        print(item)</span><br></pre></td></tr></table></figure>
-
-<p>在循环语句中，我们还常常搭配 continue 和 break 一起使用。所谓 continue，就是让程序跳过当前这层循环，继续执行下面的循环；而 break 则是指完全跳出所在的整个循环体。在循环中适当加入 continue 和 break，往往能使程序更加简洁、易读。</p>
-<p>比如，给定两个字典，分别是产品名称到价格的映射，和产品名称到颜色列表的映射。我们要找出价格小于 1000，并且颜色不是红色的所有产品名称和颜色的组合。如果不用 continue，代码应该是下面这样的：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># name_price: 产品名称 (str) 到价格 (int) 的映射字典</span></span><br><span class="line"><span class="comment"># name_color: 产品名字 (str) 到颜色 (list of str) 的映射字典</span></span><br><span class="line"><span class="keyword">for</span> name, price <span class="keyword">in</span> name_price.items():</span><br><span class="line">    <span class="keyword">if</span> price &lt; <span class="number">1000</span>:</span><br><span class="line">        <span class="keyword">if</span> name <span class="keyword">in</span> name_color:</span><br><span class="line">            <span class="keyword">for</span> color <span class="keyword">in</span> name_color[name]:</span><br><span class="line">                <span class="keyword">if</span> color != <span class="string">'red'</span>:</span><br><span class="line">                    print(<span class="string">'name: &#123;&#125;, color: &#123;&#125;'</span>.format(name, color))</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            print(<span class="string">'name: &#123;&#125;, color: &#123;&#125;'</span>.format(name, <span class="string">'None'</span>))</span><br></pre></td></tr></table></figure>
-
-<p>而加入 continue 后，代码显然清晰了很多：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># name_price: 产品名称 (str) 到价格 (int) 的映射字典</span></span><br><span class="line"><span class="comment"># name_color: 产品名字 (str) 到颜色 (list of str) 的映射字典</span></span><br><span class="line"><span class="keyword">for</span> name, price <span class="keyword">in</span> name_price.items():</span><br><span class="line">    <span class="keyword">if</span> price &gt;= <span class="number">1000</span>:</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line">    <span class="keyword">if</span> name <span class="keyword">not</span> <span class="keyword">in</span> name_color:</span><br><span class="line">        print(<span class="string">'name: &#123;&#125;, color: &#123;&#125;'</span>.format(name, <span class="string">'None'</span>))</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line">    <span class="keyword">for</span> color <span class="keyword">in</span> name_color[name]:</span><br><span class="line">        <span class="keyword">if</span> color == <span class="string">'red'</span>:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        print(<span class="string">'name: &#123;&#125;, color: &#123;&#125;'</span>.format(name, color))</span><br></pre></td></tr></table></figure>
-
-<p>我们可以看到，按照第一个版本的写法，从开始一直到打印输出符合条件的产品名称和颜色，共有 5 层 for 或者 if 的嵌套；但第二个版本加入了 continue 后，只有 3 层嵌套。</p>
-<p>显然，如果代码中出现嵌套里还有嵌套的情况，代码便会变得非常冗余、难读，也不利于后续的调试、修改。因此，我们要尽量避免这种多层嵌套的情况。</p>
-<p>前面讲了 for 循环，对于 while 循环，原理也是一样的。它表示当 condition 满足时，一直重复循环内部的操作，直到 condition 不再满足，就跳出循环体。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> condition:</span><br><span class="line">    ....</span><br></pre></td></tr></table></figure>
-
-<p>很多时候，for 循环和 while 循环可以互相转换，比如要遍历一个列表，我们用 while 循环同样可以完成：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">l = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line">index = <span class="number">0</span></span><br><span class="line"><span class="keyword">while</span> index &lt; len(l):</span><br><span class="line">    print(l[index])</span><br><span class="line">    index += <span class="number">1</span></span><br></pre></td></tr></table></figure>
-
-<p>那么，两者的使用场景又有什么区别呢？</p>
-<p>通常来说，如果你只是遍历一个已知的集合，找出满足条件的元素，并进行相应的操作，那么使用 for 循环更加简洁。但如果你需要在满足某个条件前，不停地重复某些操作，并且没有特定的集合需要去遍历，那么一般则会使用 while 循环。</p>
-<p>比如，某个交互式问答系统，用户输入文字，系统会根据内容做出相应的回答。为了实现这个功能，我们一般会使用 while 循环，大致代码如下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        text = input(<span class="string">'Please enter your questions, enter "q" to exit'</span>)</span><br><span class="line">        <span class="keyword">if</span> text == <span class="string">'q'</span>:</span><br><span class="line">            print(<span class="string">'Exit system'</span>)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        ...</span><br><span class="line">        ...</span><br><span class="line">        print(response)</span><br><span class="line">    <span class="keyword">except</span> <span class="keyword">as</span> err:</span><br><span class="line">        print(<span class="string">'Encountered error: &#123;&#125;'</span>.format(err))</span><br><span class="line">        <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
-
-<p>同时需要注意的是，for 循环和 while 循环的效率问题。比如下面的 while 循环：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">i = <span class="number">0</span></span><br><span class="line"><span class="keyword">while</span> i &lt; <span class="number">1000000</span>:</span><br><span class="line">    i += <span class="number">1</span></span><br><span class="line"><span class="comment"># 将这个表达式分解开来，其实就等同于下面这样的嵌套结构：    </span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, <span class="number">1000000</span>):</span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
-
-<p>究竟哪个效率高呢？</p>
-<p>要知道，range() 函数是直接由 C 语言写的，调用它速度非常快。而 while 循环中的“i += 1”这个操作，得通过 Python 的解释器间接调用底层的 C 语言；并且这个简单的操作，又涉及到了对象的创建和删除（因为 i 是整型，是 immutable，i += 1 相当于 i = new int(i + 1)）。所以，显然，for 循环的效率更胜一筹。</p>
-<h3 id="条件与循环的复用"><a href="#条件与循环的复用" class="headerlink" title="条件与循环的复用"></a>条件与循环的复用</h3><p>前面两部分讲了条件与循环的一些基本操作，接下来，我们重点来看它们的进阶操作，让程序变得更简洁高效。</p>
-<p>在阅读代码的时候，你应该常常会发现，有很多将条件与循环并做一行的操作，例如：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">expression1 <span class="keyword">if</span> condition <span class="keyword">else</span> expression2 <span class="keyword">for</span> item <span class="keyword">in</span> iterable</span><br></pre></td></tr></table></figure>
-
-<p>将这个表达式分解开来，其实就等同于下面这样的嵌套结构：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> item <span class="keyword">in</span> iterable:</span><br><span class="line">    <span class="keyword">if</span> condition:</span><br><span class="line">        expression1</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        expression2</span><br></pre></td></tr></table></figure>
-
-<p>而如果没有 else 语句，则需要写成：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">expression <span class="keyword">for</span> item <span class="keyword">in</span> iterable <span class="keyword">if</span> condition</span><br></pre></td></tr></table></figure>
-
-<p>举个例子，比如我们要绘制 y = 2*|x| + 5 的函数图像，给定集合 x 的数据点，需要计算出 y 的数据集合，那么只用一行代码，就可以很轻松地解决问题了：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">y = [value * <span class="number">2</span> + <span class="number">5</span> <span class="keyword">if</span> value &gt; <span class="number">0</span> <span class="keyword">else</span> -value * <span class="number">2</span> + <span class="number">5</span> <span class="keyword">for</span> value <span class="keyword">in</span> x]</span><br></pre></td></tr></table></figure>
-
-<p>再比如我们在处理文件中的字符串时，常常遇到的一个场景：将文件中逐行读取的一个完整语句，按逗号分割单词，去掉首位的空字符，并过滤掉长度小于等于 3 的单词，最后返回由单词组成的列表。这同样可以简洁地表达成一行：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">text = <span class="string">' Today,  is, Sunday'</span></span><br><span class="line">text_list = [s.strip() <span class="keyword">for</span> s <span class="keyword">in</span> text.split(<span class="string">','</span>) <span class="keyword">if</span> len(s.strip()) &gt; <span class="number">3</span>]</span><br><span class="line">print(text_list)</span><br></pre></td></tr></table></figure>
-
-<pre><code>[&apos;Today&apos;, &apos;Sunday&apos;]</code></pre><p>当然，这样的复用并不仅仅局限于一个循环。比如，给定两个列表 x、y，要求返回 x、y 中所有元素对组成的元祖，相等情况除外。那么，你也可以很容易表示出来：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[(xx, yy) <span class="keyword">for</span> xx <span class="keyword">in</span> x <span class="keyword">for</span> yy <span class="keyword">in</span> y <span class="keyword">if</span> xx != yy]</span><br></pre></td></tr></table></figure>
-
-<p>这样的写法就等价于：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">l = []</span><br><span class="line"><span class="keyword">for</span> xx <span class="keyword">in</span> x:</span><br><span class="line">    <span class="keyword">for</span> yy <span class="keyword">in</span> y:</span><br><span class="line">        <span class="keyword">if</span> xx != yy:</span><br><span class="line">            l.append((xx, yy))</span><br></pre></td></tr></table></figure>
-
-<p>熟练之后，你会发现这种写法非常方便。当然，如果遇到逻辑很复杂的复用，你可能会觉得写成一行难以理解、容易出错。那种情况下，用正常的形式表达，也不失为一种好的规范和选择。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>今天这节课，我们一起学习了条件与循环的基本概念、进阶用法以及相应的应用。这里，我重点强调几个易错的地方。</p>
-<ul>
-<li><p>在条件语句中，if 可以单独使用，但是 elif 和 else 必须和 if 同时搭配使用；而 If 条件语句的判断，除了 boolean 类型外，其他的最好显示出来。</p>
-</li>
-<li><p>在 for 循环中，如果需要同时访问索引和元素，你可以使用 enumerate() 函数来简化代码。</p>
-</li>
-<li><p>写条件与循环时，合理利用 continue 或者 break 来避免复杂的嵌套，是十分重要的。</p>
-</li>
-<li><p>要注意条件与循环的复用，简单功能往往可以用一行直接完成，极大地提高代码质量与效率。</p>
-</li>
-</ul>
-<h3 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h3><p>最后给你留一个思考题。给定下面两个列表 attributes 和 values，要求针对 values 中每一组子列表 value，输出其和 attributes 中的键对应后的字典，最后返回字典组成的列表。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">attributes = [<span class="string">'name'</span>, <span class="string">'dob'</span>, <span class="string">'gender'</span>]</span><br><span class="line">values = [[<span class="string">'jason'</span>, <span class="string">'2000-01-01'</span>, <span class="string">'male'</span>], </span><br><span class="line">[<span class="string">'mike'</span>, <span class="string">'1999-01-01'</span>, <span class="string">'male'</span>],</span><br><span class="line">[<span class="string">'nancy'</span>, <span class="string">'2001-02-01'</span>, <span class="string">'female'</span>]</span><br><span class="line">]</span><br><span class="line"> </span><br><span class="line"><span class="comment"># expected outout:</span></span><br><span class="line">[&#123;<span class="string">'name'</span>: <span class="string">'jason'</span>, <span class="string">'dob'</span>: <span class="string">'2000-01-01'</span>, <span class="string">'gender'</span>: <span class="string">'male'</span>&#125;, </span><br><span class="line">&#123;<span class="string">'name'</span>: <span class="string">'mike'</span>, <span class="string">'dob'</span>: <span class="string">'1999-01-01'</span>, <span class="string">'gender'</span>: <span class="string">'male'</span>&#125;, </span><br><span class="line">&#123;<span class="string">'name'</span>: <span class="string">'nancy'</span>, <span class="string">'dob'</span>: <span class="string">'2001-02-01'</span>, <span class="string">'gender'</span>: <span class="string">'female'</span>&#125;]</span><br></pre></td></tr></table></figure>
-
-
-
-
-<pre><code>[{&apos;name&apos;: &apos;jason&apos;, &apos;dob&apos;: &apos;2000-01-01&apos;, &apos;gender&apos;: &apos;male&apos;},
- {&apos;name&apos;: &apos;mike&apos;, &apos;dob&apos;: &apos;1999-01-01&apos;, &apos;gender&apos;: &apos;male&apos;},
- {&apos;name&apos;: &apos;nancy&apos;, &apos;dob&apos;: &apos;2001-02-01&apos;, &apos;gender&apos;: &apos;female&apos;}]</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">attributes = [<span class="string">'name'</span>, <span class="string">'dob'</span>, <span class="string">'gender'</span>]</span><br><span class="line">values = [[<span class="string">'jason'</span>, <span class="string">'2000-01-01'</span>, <span class="string">'male'</span>], </span><br><span class="line">[<span class="string">'mike'</span>, <span class="string">'1999-01-01'</span>, <span class="string">'male'</span>],</span><br><span class="line">[<span class="string">'nancy'</span>, <span class="string">'2001-02-01'</span>, <span class="string">'female'</span>]</span><br><span class="line">]</span><br><span class="line">result = [&#123;attributes[index]:value[index] <span class="keyword">for</span> index <span class="keyword">in</span> range(len(attributes))&#125; <span class="keyword">for</span> value <span class="keyword">in</span> values]</span><br><span class="line">print(result)</span><br><span class="line"></span><br><span class="line">result2 = [dict(zip(attributes,value)) <span class="keyword">for</span> value <span class="keyword">in</span> values]</span><br><span class="line">print(result2)</span><br></pre></td></tr></table></figure>
-
-<pre><code>[{&apos;name&apos;: &apos;jason&apos;, &apos;dob&apos;: &apos;2000-01-01&apos;, &apos;gender&apos;: &apos;male&apos;}, {&apos;name&apos;: &apos;mike&apos;, &apos;dob&apos;: &apos;1999-01-01&apos;, &apos;gender&apos;: &apos;male&apos;}, {&apos;name&apos;: &apos;nancy&apos;, &apos;dob&apos;: &apos;2001-02-01&apos;, &apos;gender&apos;: &apos;female&apos;}]
-[{&apos;name&apos;: &apos;jason&apos;, &apos;dob&apos;: &apos;2000-01-01&apos;, &apos;gender&apos;: &apos;male&apos;}, {&apos;name&apos;: &apos;mike&apos;, &apos;dob&apos;: &apos;1999-01-01&apos;, &apos;gender&apos;: &apos;male&apos;}, {&apos;name&apos;: &apos;nancy&apos;, &apos;dob&apos;: &apos;2001-02-01&apos;, &apos;gender&apos;: &apos;female&apos;}]</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt;dict()                        <span class="comment"># 创建空字典</span></span><br><span class="line">&#123;&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>dict(a=<span class="string">'a'</span>, b=<span class="string">'b'</span>, t=<span class="string">'t'</span>)     <span class="comment"># 传入关键字</span></span><br><span class="line">&#123;<span class="string">'a'</span>: <span class="string">'a'</span>, <span class="string">'b'</span>: <span class="string">'b'</span>, <span class="string">'t'</span>: <span class="string">'t'</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>dict(zip([<span class="string">'one'</span>, <span class="string">'two'</span>, <span class="string">'three'</span>], [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]))   <span class="comment"># 映射函数方式来构造字典</span></span><br><span class="line">&#123;<span class="string">'three'</span>: <span class="number">3</span>, <span class="string">'two'</span>: <span class="number">2</span>, <span class="string">'one'</span>: <span class="number">1</span>&#125; </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>dict([(<span class="string">'one'</span>, <span class="number">1</span>), (<span class="string">'two'</span>, <span class="number">2</span>), (<span class="string">'three'</span>, <span class="number">3</span>)])    <span class="comment"># 可迭代对象方式来构造字典</span></span><br><span class="line">&#123;<span class="string">'three'</span>: <span class="number">3</span>, <span class="string">'two'</span>: <span class="number">2</span>, <span class="string">'one'</span>: <span class="number">1</span>&#125;</span><br></pre></td></tr></table></figure>
-
-
-<pre><code>  File &quot;&lt;ipython-input-31-88ea8d10853c&gt;&quot;, line 4
-    b = dict(&apos;one&apos;= 1)
-            ^
-SyntaxError: keyword can&apos;t be an expression</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2784,7 +2752,7 @@ SyntaxError: keyword can&apos;t be an expression</code></pre>
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-count">36</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
