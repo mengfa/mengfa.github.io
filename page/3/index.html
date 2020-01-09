@@ -258,6 +258,328 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/12/20%20%7C%20%E6%8F%AD%E7%A7%98%20Python%20%E5%8D%8F%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/12/20%20%7C%20%E6%8F%AD%E7%A7%98%20Python%20%E5%8D%8F%E7%A8%8B/" itemprop="url">20 | 揭秘 Python 协程</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-12T20:50:07+08:00">
+                2019-12-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
+                    <span itemprop="name">python核心技术与实战</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/12/12/20%20%7C%20%E6%8F%AD%E7%A7%98%20Python%20%E5%8D%8F%E7%A8%8B/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/12/12/20%20%7C%20%E6%8F%AD%E7%A7%98%20Python%20%E5%8D%8F%E7%A8%8B/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>那么首先你要明白，什么是协程？</p>
+<p>协程是实现并发编程的一种方式。一说并发，你肯定想到了多线程 / 多进程模型，没错，多线程 / 多进程，正是解决并发问题的经典模型之一。最初的互联网世界，多线程 / 多进程在服务器并发中，起到举足轻重的作用。</p>
+<p>随着互联网的快速发展，你逐渐遇到了 C10K 瓶颈，也就是同时连接到服务器的客户达到了一万个。于是很多代码跑崩了，进程上下文切换占用了大量的资源，线程也顶不住如此巨大的压力，这时， NGINX 带着事件循环出来拯救世界了。</p>
+<p>如果将多进程 / 多线程类比为起源于唐朝的藩镇割据，那么事件循环，就是宋朝加强的中央集权制。事件循环启动一个统一的调度器，让调度器来决定一个时刻去运行哪个任务，于是省却了多线程中启动线程、管理线程、同步锁等各种开销。同一时期的 NGINX，在高并发下能保持低资源低消耗高性能，相比 Apache 也支持更多的并发连接。</p>
+<p>再到后来，出现了一个很有名的名词，叫做回调地狱（callback hell），手撸过 JavaScript 的朋友肯定知道我在说什么。我们大家惊喜地发现，这种工具完美地继承了事件循环的优越性，同时还能提供 async / await 语法糖，解决了执行性和可读性共存的难题。于是，协程逐渐被更多人发现并看好，也有越来越多的人尝试用 Node.js 做起了后端开发。（讲个笑话，JavaScript 是一门编程语言。）</p>
+<p>回到我们的 Python。使用生成器，是 Python 2 开头的时代实现协程的老方法了，Python 3.7 提供了新的基于 asyncio 和 async / await 的方法。我们这节课，同样的，跟随时代，抛弃掉不容易理解、也不容易写的旧的基于生成器的方法，直接来讲新方法。</p>
+<p>我们先从一个爬虫实例出发，用清晰的讲解思路，带你结合实战来搞懂这个不算特别容易理解的概念。之后，我们再由浅入深，直击协程的核心。</p>
+<h3 id="从一个爬虫说起"><a href="#从一个爬虫说起" class="headerlink" title="从一个爬虫说起"></a>从一个爬虫说起</h3><p>爬虫，就是互联网的蜘蛛，在搜索引擎诞生之时，与其一同来到世上。爬虫每秒钟都会爬取大量的网页，提取关键信息后存储在数据库中，以便日后分析。爬虫有非常简单的 Python 十行代码实现，也有 Google 那样的全球分布式爬虫的上百万行代码，分布在内部上万台服务器上，对全世界的信息进行嗅探。</p>
+<p>话不多说，我们先看一个简单的爬虫例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">crawl_page</span><span class="params">(url)</span>:</span></span><br><span class="line">    print(<span class="string">'crawling &#123;&#125;'</span>.format(url))</span><br><span class="line">    sleep_time = int(url.split(<span class="string">'_'</span>)[<span class="number">-1</span>])</span><br><span class="line">    time.sleep(sleep_time)</span><br><span class="line">    print(<span class="string">'OK &#123;&#125;'</span>.format(url))</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">(urls)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> url <span class="keyword">in</span> urls:</span><br><span class="line">        crawl_page(url)</span><br><span class="line"> </span><br><span class="line">%time main([<span class="string">'url_1'</span>, <span class="string">'url_2'</span>, <span class="string">'url_3'</span>, <span class="string">'url_4'</span>])</span><br></pre></td></tr></table></figure>
+
+<pre><code>crawling url_1
+OK url_1
+crawling url_2
+OK url_2
+crawling url_3
+OK url_3
+crawling url_4
+OK url_4
+CPU times: user 9.55 ms, sys: 5.73 ms, total: 15.3 ms
+Wall time: 10 s</code></pre><p>（注意：本节的主要目的是协程的基础概念，因此我们简化爬虫的 scrawl_page 函数为休眠数秒，休眠时间取决于 url 最后的那个数字。）</p>
+<p>这是一个很简单的爬虫，main() 函数执行时，调取 crawl_page() 函数进行网络通信，经过若干秒等待后收到结果，然后执行下一个。</p>
+<p>看起来很简单，但你仔细一算，它也占用了不少时间，五个页面分别用了 1 秒到 4 秒的时间，加起来一共用了 10 秒。这显然效率低下，该怎么优化呢？</p>
+<p>于是，一个很简单的思路出现了——我们这种爬取操作，完全可以并发化。我们就来看看使用协程怎么写。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"> </span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">crawl_page</span><span class="params">(url)</span>:</span></span><br><span class="line">    print(<span class="string">'crawling &#123;&#125;'</span>.format(url))</span><br><span class="line">    sleep_time = int(url.split(<span class="string">'_'</span>)[<span class="number">-1</span>])</span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(sleep_time)</span><br><span class="line">    print(<span class="string">'OK &#123;&#125;'</span>.format(url))</span><br><span class="line"> </span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">(urls)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> url <span class="keyword">in</span> urls:</span><br><span class="line">        <span class="keyword">await</span> crawl_page(url)</span><br><span class="line"><span class="comment">#pycharm这样运行 </span></span><br><span class="line"><span class="comment"># asyncio.run(main(['url_1', 'url_2', 'url_3', 'url_4']))</span></span><br><span class="line"><span class="comment">#jupyter需要下面这样运行.</span></span><br><span class="line"><span class="keyword">await</span> main([<span class="string">'url_1'</span>, <span class="string">'url_2'</span>, <span class="string">'url_3'</span>, <span class="string">'url_4'</span>])</span><br></pre></td></tr></table></figure>
+
+<pre><code>crawling url_1
+OK url_1
+crawling url_2
+OK url_2
+crawling url_3
+OK url_3
+crawling url_4
+OK url_4</code></pre><p>看到这段代码，你应该发现了，在 Python 3.7 以上版本中，使用协程写异步程序非常简单。</p>
+<p>首先来看 import asyncio，这个库包含了大部分我们实现协程所需的魔法工具。</p>
+<p>async 修饰词声明异步函数，于是，这里的 crawl_page 和 main 都变成了异步函数。而调用异步函数，我们便可得到一个协程对象（coroutine object）。</p>
+<p>举个例子，如果你 print(crawl_page(‘’))，便会输出&lt;coroutine object crawl_page at 0x000002BEDF141148&gt;，提示你这是一个 Python 的协程对象，而并不会真正执行这个函数。</p>
+<p>再来说说协程的执行。执行协程有多种方法，这里我介绍一下常用的三种。</p>
+<p>首先，我们可以通过 await 来调用。await 执行的效果，和 Python 正常执行是一样的，也就是说程序会阻塞在这里，进入被调用的协程函数，执行完毕返回后再继续，而这也是 await 的字面意思。代码中 await asyncio.sleep(sleep_time) 会在这里休息若干秒，await crawl_page(url) 则会执行 crawl_page() 函数。</p>
+<p>其次，我们可以通过 asyncio.create_task() 来创建任务，这个我们下节课会详细讲一下，你先简单知道即可。</p>
+<p>最后，我们需要 asyncio.run 来触发运行。asyncio.run 这个函数是 Python 3.7 之后才有的特性，可以让 Python 的协程接口变得非常简单，你不用去理会事件循环怎么定义和怎么使用的问题（我们会在下面讲）。一个非常好的编程规范是，asyncio.run(main()) 作为主程序的入口函数，在程序运行周期内，只调用一次 asyncio.run。</p>
+<p>这样，你就大概看懂了协程是怎么用的吧。不妨试着跑一下代码，欸，怎么还是 10 秒？</p>
+<p>10 秒就对了，还记得上面所说的，await 是同步调用，因此， crawl_page(url) 在当前的调用结束之前，是不会触发下一次调用的。于是，这个代码效果就和上面完全一样了，相当于我们用异步接口写了个同步代码。</p>
+<p>现在又该怎么办呢？</p>
+<p>其实很简单，也正是我接下来要讲的协程中的一个重要概念，任务（Task）。老规矩，先看代码。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"> </span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">crawl_page</span><span class="params">(url)</span>:</span></span><br><span class="line">    print(<span class="string">'crawling &#123;&#125;'</span>.format(url))</span><br><span class="line">    sleep_time = int(url.split(<span class="string">'_'</span>)[<span class="number">-1</span>])</span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(sleep_time)</span><br><span class="line">    print(<span class="string">'OK &#123;&#125;'</span>.format(url))</span><br><span class="line"> </span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">(urls)</span>:</span></span><br><span class="line">    tasks = [asyncio.create_task(crawl_page(url)) <span class="keyword">for</span> url <span class="keyword">in</span> urls]</span><br><span class="line">    <span class="keyword">for</span> task <span class="keyword">in</span> tasks:</span><br><span class="line">        <span class="keyword">await</span> task</span><br><span class="line"> </span><br><span class="line"><span class="comment">#pycharm这样运行 </span></span><br><span class="line"><span class="comment"># asyncio.run(main(['url_1', 'url_2', 'url_3', 'url_4']))</span></span><br><span class="line"><span class="comment">#jupyter需要下面这样运行.</span></span><br><span class="line"><span class="keyword">await</span> main([<span class="string">'url_1'</span>, <span class="string">'url_2'</span>, <span class="string">'url_3'</span>, <span class="string">'url_4'</span>])</span><br></pre></td></tr></table></figure>
+
+<pre><code>crawling url_1
+crawling url_2
+crawling url_3
+crawling url_4
+OK url_1
+OK url_2
+OK url_3
+OK url_4</code></pre><p>你可以看到，我们有了协程对象后，便可以通过 asyncio.create_task 来创建任务。任务创建后很快就会被调度执行，这样，我们的代码也不会阻塞在任务这里。所以，我们要等所有任务都结束才行，用for task in tasks: await task 即可。</p>
+<p>这次，你就看到效果了吧，结果显示，运行总时长等于运行时间最长的爬虫。</p>
+<p>当然，你也可以想一想，这里用多线程应该怎么写？而如果需要爬取的页面有上万个又该怎么办呢？再对比下协程的写法，谁更清晰自是一目了然。</p>
+<p>其实，对于执行 tasks，还有另一种做法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"> </span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">crawl_page</span><span class="params">(url)</span>:</span></span><br><span class="line">    print(<span class="string">'crawling &#123;&#125;'</span>.format(url))</span><br><span class="line">    sleep_time = int(url.split(<span class="string">'_'</span>)[<span class="number">-1</span>])</span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(sleep_time)</span><br><span class="line">    print(<span class="string">'OK &#123;&#125;'</span>.format(url))</span><br><span class="line"> </span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">(urls)</span>:</span></span><br><span class="line">    tasks = [asyncio.create_task(crawl_page(url)) <span class="keyword">for</span> url <span class="keyword">in</span> urls]</span><br><span class="line">    <span class="keyword">await</span> asyncio.gather(*tasks)</span><br><span class="line"> </span><br><span class="line"><span class="comment">#pycharm这样运行 </span></span><br><span class="line"><span class="comment"># asyncio.run(main(['url_1', 'url_2', 'url_3', 'url_4']))</span></span><br><span class="line"><span class="comment">#jupyter需要下面这样运行.</span></span><br><span class="line"><span class="keyword">await</span> main([<span class="string">'url_1'</span>, <span class="string">'url_2'</span>, <span class="string">'url_3'</span>, <span class="string">'url_4'</span>])</span><br></pre></td></tr></table></figure>
+
+<pre><code>crawling url_1
+crawling url_2
+crawling url_3
+crawling url_4
+OK url_1
+OK url_2
+OK url_3
+OK url_4</code></pre><p>这里的代码也很好理解。唯一要注意的是，<em>tasks 解包列表，将列表变成了函数的参数；与之对应的是， *</em> dict 将字典变成了函数的参数。</p>
+<p>另外，asyncio.create_task，asyncio.run 这些函数都是 Python 3.7 以上的版本才提供的，自然，相比于旧接口它们也更容易理解和阅读。</p>
+<h3 id="解密协程运行时"><a href="#解密协程运行时" class="headerlink" title="解密协程运行时"></a>解密协程运行时</h3><p>说了这么多，现在，我们不妨来深入代码底层看看。有了前面的知识做基础，你应该很容易理解这两段代码。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"> </span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">worker_1</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'worker_1 start'</span>)</span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">1</span>)</span><br><span class="line">    print(<span class="string">'worker_1 done'</span>)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">worker_2</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'worker_2 start'</span>)</span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">2</span>)</span><br><span class="line">    print(<span class="string">'worker_2 done'</span>)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'before await'</span>)</span><br><span class="line">    <span class="keyword">await</span> worker_1()</span><br><span class="line">    print(<span class="string">'awaited worker_1'</span>)</span><br><span class="line">    <span class="keyword">await</span> worker_2()</span><br><span class="line">    print(<span class="string">'awaited worker_2'</span>)</span><br><span class="line"> </span><br><span class="line"><span class="comment"># pycharm这样运行 </span></span><br><span class="line"><span class="comment"># asyncio.run()</span></span><br><span class="line"><span class="comment"># jupyter需要下面这样运行.</span></span><br><span class="line"><span class="keyword">await</span> main()</span><br></pre></td></tr></table></figure>
+
+<pre><code>before await
+worker_1 start
+worker_1 done
+awaited worker_1
+worker_2 start
+worker_2 done
+awaited worker_2</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"> </span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">worker_1</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'worker_1 start'</span>)</span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">1</span>)</span><br><span class="line">    print(<span class="string">'worker_1 done'</span>)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">worker_2</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'worker_2 start'</span>)</span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">2</span>)</span><br><span class="line">    print(<span class="string">'worker_2 done'</span>)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    task1 = asyncio.create_task(worker_1())</span><br><span class="line">    task2 = asyncio.create_task(worker_2())</span><br><span class="line">    print(<span class="string">'before await'</span>)</span><br><span class="line">    <span class="keyword">await</span> task1</span><br><span class="line">    print(<span class="string">'awaited worker_1'</span>)</span><br><span class="line">    <span class="keyword">await</span> task2</span><br><span class="line">    print(<span class="string">'awaited worker_2'</span>)</span><br><span class="line"> </span><br><span class="line"><span class="comment"># pycharm这样运行 </span></span><br><span class="line"><span class="comment"># asyncio.run()</span></span><br><span class="line"><span class="comment"># jupyter需要下面这样运行.</span></span><br><span class="line"><span class="keyword">await</span> main()</span><br></pre></td></tr></table></figure>
+
+<pre><code>before await
+worker_1 start
+worker_2 start
+worker_1 done
+awaited worker_1
+worker_2 done
+awaited worker_2</code></pre><p>不过，第二个代码，到底发生了什么呢？为了让你更详细了解到协程和线程的具体区别，这里我详细地分析了整个过程。步骤有点多，别着急，我们慢慢来看。</p>
+<ol>
+<li>asyncio.run(main())，程序进入 main() 函数，事件循环开启；</li>
+<li>task1 和 task2 任务被创建，并进入事件循环等待运行；运行到 print，输出 ‘before await’；</li>
+<li>await task1 执行，用户选择从当前的主任务中切出，事件调度器开始调度 worker_1；</li>
+<li>worker_1 开始运行，运行 print 输出’worker_1 start’，然后运行到 await asyncio.sleep(1)， 从当前任务切出，事件调度器开始调度 worker_2；</li>
+<li>worker_2 开始运行，运行 print 输出 ‘worker_2 start’，然后运行 await asyncio.sleep(2) 从当前任务切出；</li>
+<li>以上所有事件的运行时间，都应该在 1ms 到 10ms 之间，甚至可能更短，事件调度器从这个时候开始暂停调度；</li>
+<li>一秒钟后，worker_1 的 sleep 完成，事件调度器将控制权重新传给 task_1，输出 ‘worker_1 done’，task_1 完成任务，从事件循环中退出；</li>
+<li>await task1 完成，事件调度器将控制器传给主任务，输出 ‘awaited worker_1’，·然后在 await task2 处继续等待；</li>
+<li>两秒钟后，worker_2 的 sleep 完成，事件调度器将控制权重新传给 task_2，输出 ‘worker_2 done’，task_2 完成任务，从事件循环中退出；</li>
+<li>主任务输出 ‘awaited worker_2’，协程全任务结束，事件循环结束。</li>
+</ol>
+<p>接下来，我们进阶一下。如果我们想给某些协程任务限定运行时间，一旦超时就取消，又该怎么做呢？再进一步，如果某些协程运行时出现错误，又该怎么处理呢？同样的，来看代码。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"> </span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">worker_1</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">worker_2</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">2</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="number">2</span> / <span class="number">0</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">worker_3</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">3</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="number">3</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    task_1 = asyncio.create_task(worker_1())</span><br><span class="line">    task_2 = asyncio.create_task(worker_2())</span><br><span class="line">    task_3 = asyncio.create_task(worker_3())</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">2</span>)</span><br><span class="line">    task_3.cancel()</span><br><span class="line"> </span><br><span class="line">    res = <span class="keyword">await</span> asyncio.gather(task_1, task_2, task_3, return_exceptions=<span class="literal">True</span>)</span><br><span class="line">    print(res)</span><br><span class="line"> </span><br><span class="line"><span class="comment"># pycharm这样运行 </span></span><br><span class="line"><span class="comment"># asyncio.run()</span></span><br><span class="line"><span class="comment"># jupyter需要下面这样运行.</span></span><br><span class="line"><span class="keyword">await</span> main()</span><br></pre></td></tr></table></figure>
+
+<pre><code>[1, ZeroDivisionError(&apos;division by zero&apos;), CancelledError()]</code></pre><p>你可以看到，worker_1 正常运行，worker_2 运行中出现错误，worker_3 执行时间过长被我们 cancel 掉了，这些信息会全部体现在最终的返回结果 res 中。</p>
+<p>不过要注意return_exceptions=True这行代码。如果不设置这个参数，错误就会完整地 throw 到我们这个执行层，从而需要 try except 来捕捉，这也就意味着其他还没被执行的任务会被全部取消掉。为了避免这个局面，我们将 return_exceptions 设置为 True 即可。</p>
+<p>到这里，发现了没，线程能实现的，协程都能做到。那就让我们温习一下这些知识点，用协程来实现一个经典的生产者消费者模型吧。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"> </span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">consumer</span><span class="params">(queue, id)</span>:</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        val = <span class="keyword">await</span> queue.get()</span><br><span class="line">        print(<span class="string">'&#123;&#125; get a val: &#123;&#125;'</span>.format(id, val))</span><br><span class="line">        <span class="keyword">await</span> asyncio.sleep(<span class="number">1</span>)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">producer</span><span class="params">(queue, id)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">5</span>):</span><br><span class="line">        val = random.randint(<span class="number">1</span>, <span class="number">10</span>)</span><br><span class="line">        <span class="keyword">await</span> queue.put(val)</span><br><span class="line">        print(<span class="string">'&#123;&#125; put a val: &#123;&#125;'</span>.format(id, val))</span><br><span class="line">        <span class="keyword">await</span> asyncio.sleep(<span class="number">1</span>)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    queue = asyncio.Queue()</span><br><span class="line"> </span><br><span class="line">    consumer_1 = asyncio.create_task(consumer(queue, <span class="string">'consumer_1'</span>))</span><br><span class="line">    consumer_2 = asyncio.create_task(consumer(queue, <span class="string">'consumer_2'</span>))</span><br><span class="line"> </span><br><span class="line">    producer_1 = asyncio.create_task(producer(queue, <span class="string">'producer_1'</span>))</span><br><span class="line">    producer_2 = asyncio.create_task(producer(queue, <span class="string">'producer_2'</span>))</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">10</span>)</span><br><span class="line">    consumer_1.cancel()</span><br><span class="line">    consumer_2.cancel()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">await</span> asyncio.gather(consumer_1, consumer_2, producer_1, producer_2, return_exceptions=<span class="literal">True</span>)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="comment"># pycharm这样运行 </span></span><br><span class="line"><span class="comment"># asyncio.run()</span></span><br><span class="line"><span class="comment"># jupyter需要下面这样运行.</span></span><br><span class="line"><span class="keyword">await</span> main()</span><br></pre></td></tr></table></figure>
+
+<pre><code>namedtuple_TokenInfo:1: RuntimeWarning: coroutine &apos;main&apos; was never awaited
+
+
+producer_1 put a val: 9
+producer_2 put a val: 5
+consumer_1 get a val: 9
+consumer_2 get a val: 5
+producer_1 put a val: 10
+producer_2 put a val: 5
+consumer_1 get a val: 10
+consumer_2 get a val: 5
+producer_1 put a val: 4
+producer_2 put a val: 3
+consumer_1 get a val: 4
+consumer_2 get a val: 3
+producer_1 put a val: 6
+producer_2 put a val: 3
+consumer_1 get a val: 6
+consumer_2 get a val: 3
+producer_1 put a val: 2
+producer_2 put a val: 7
+consumer_1 get a val: 2
+consumer_2 get a val: 7</code></pre><p>实战：豆瓣近日推荐电影爬虫<br>最后，进入今天的实战环节——实现一个完整的协程爬虫。</p>
+<p>任务描述：<a href="https://movie.douban.com/cinema/later/beijing/" target="_blank" rel="noopener">https://movie.douban.com/cinema/later/beijing/</a> 这个页面描述了北京最近上映的电影，你能否通过 Python 得到这些电影的名称、上映时间和海报呢？这个页面的海报是缩小版的，我希望你能从具体的电影描述页面中抓取到海报。</p>
+<p>听起来难度不是很大吧？我在下面给出了同步版本的代码和协程版本的代码，通过运行时间和代码写法的对比，希望你能对协程有更深的了解。（注意：为了突出重点、简化代码，这里我省略了异常处理。）</p>
+<p>不过，在参考我给出的代码之前，你是不是可以自己先动手写一下、跑一下呢？</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    url = <span class="string">"https://movie.douban.com/cinema/later/beijing/"</span></span><br><span class="line">    init_page = requests.get(url).content</span><br><span class="line">    init_soup = BeautifulSoup(init_page, <span class="string">'lxml'</span>)</span><br><span class="line"> </span><br><span class="line">    all_movies = init_soup.find(<span class="string">'div'</span>, id=<span class="string">"showing-soon"</span>)</span><br><span class="line">    <span class="keyword">for</span> each_movie <span class="keyword">in</span> all_movies.find_all(<span class="string">'div'</span>, class_=<span class="string">"item"</span>):</span><br><span class="line">        all_a_tag = each_movie.find_all(<span class="string">'a'</span>)</span><br><span class="line">        all_li_tag = each_movie.find_all(<span class="string">'li'</span>)</span><br><span class="line"> </span><br><span class="line">        movie_name = all_a_tag[<span class="number">1</span>].text</span><br><span class="line">        url_to_fetch = all_a_tag[<span class="number">1</span>][<span class="string">'href'</span>]</span><br><span class="line">        movie_date = all_li_tag[<span class="number">0</span>].text</span><br><span class="line"> </span><br><span class="line">        response_item = requests.get(url_to_fetch).content</span><br><span class="line">        soup_item = BeautifulSoup(response_item, <span class="string">'lxml'</span>)</span><br><span class="line">        img_tag = soup_item.find(<span class="string">'img'</span>)</span><br><span class="line"> </span><br><span class="line">        print(<span class="string">'&#123;&#125; &#123;&#125; &#123;&#125;'</span>.format(movie_name, movie_date, img_tag[<span class="string">'src'</span>]))</span><br><span class="line"> </span><br><span class="line">main()</span><br></pre></td></tr></table></figure>
+
+
+<pre><code>---------------------------------------------------------------------------
+
+AttributeError                            Traceback (most recent call last)
+
+&lt;ipython-input-16-6cadc020c5a1&gt; in &lt;module&gt;
+     22         print(&apos;{} {} {}&apos;.format(movie_name, movie_date, img_tag[&apos;src&apos;]))
+     23 
+---&gt; 24 main()
+
+
+&lt;ipython-input-16-6cadc020c5a1&gt; in main()
+      8 
+      9     all_movies = init_soup.find(&apos;div&apos;, id=&quot;showing-soon&quot;)
+---&gt; 10     for each_movie in all_movies.find_all(&apos;div&apos;, class_=&quot;item&quot;):
+     11         all_a_tag = each_movie.find_all(&apos;a&apos;)
+     12         all_li_tag = each_movie.find_all(&apos;li&apos;)
+
+
+AttributeError: &apos;NoneType&apos; object has no attribute &apos;find_all&apos;</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">import</span> aiohttp</span><br><span class="line"> </span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"> </span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">fetch_content</span><span class="params">(url)</span>:</span></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> aiohttp.ClientSession(</span><br><span class="line">        headers=header, connector=aiohttp.TCPConnector(ssl=<span class="literal">False</span>)</span><br><span class="line">    ) <span class="keyword">as</span> session:</span><br><span class="line">        <span class="keyword">async</span> <span class="keyword">with</span> session.get(url) <span class="keyword">as</span> response:</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">await</span> response.text()</span><br><span class="line"> </span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    url = <span class="string">"https://movie.douban.com/cinema/later/beijing/"</span></span><br><span class="line">    init_page = <span class="keyword">await</span> fetch_content(url)</span><br><span class="line">    init_soup = BeautifulSoup(init_page, <span class="string">'lxml'</span>)</span><br><span class="line"> </span><br><span class="line">    movie_names, urls_to_fetch, movie_dates = [], [], []</span><br><span class="line"> </span><br><span class="line">    all_movies = init_soup.find(<span class="string">'div'</span>, id=<span class="string">"showing-soon"</span>)</span><br><span class="line">    <span class="keyword">for</span> each_movie <span class="keyword">in</span> all_movies.find_all(<span class="string">'div'</span>, class_=<span class="string">"item"</span>):</span><br><span class="line">        all_a_tag = each_movie.find_all(<span class="string">'a'</span>)</span><br><span class="line">        all_li_tag = each_movie.find_all(<span class="string">'li'</span>)</span><br><span class="line"> </span><br><span class="line">        movie_names.append(all_a_tag[<span class="number">1</span>].text)</span><br><span class="line">        urls_to_fetch.append(all_a_tag[<span class="number">1</span>][<span class="string">'href'</span>])</span><br><span class="line">        movie_dates.append(all_li_tag[<span class="number">0</span>].text)</span><br><span class="line"> </span><br><span class="line">    tasks = [fetch_content(url) <span class="keyword">for</span> url <span class="keyword">in</span> urls_to_fetch]</span><br><span class="line">    pages = <span class="keyword">await</span> asyncio.gather(*tasks)</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">for</span> movie_name, movie_date, page <span class="keyword">in</span> zip(movie_names, movie_dates, pages):</span><br><span class="line">        soup_item = BeautifulSoup(page, <span class="string">'lxml'</span>)</span><br><span class="line">        img_tag = soup_item.find(<span class="string">'img'</span>)</span><br><span class="line"> </span><br><span class="line">        print(<span class="string">'&#123;&#125; &#123;&#125; &#123;&#125;'</span>.format(movie_name, movie_date, img_tag[<span class="string">'src'</span>]))</span><br><span class="line"> </span><br><span class="line"><span class="comment"># pycharm这样运行 </span></span><br><span class="line"><span class="comment"># asyncio.run()</span></span><br><span class="line"><span class="comment"># jupyter需要下面这样运行.</span></span><br><span class="line"><span class="keyword">await</span> main()</span><br></pre></td></tr></table></figure>
+
+
+<pre><code>---------------------------------------------------------------------------
+
+ModuleNotFoundError                       Traceback (most recent call last)
+
+cell_name in async-def-wrapper()
+
+
+ModuleNotFoundError: No module named &apos;aiohttp&apos;</code></pre><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>到这里，今天的主要内容就讲完了。今天我用了较长的篇幅，从一个简单的爬虫开始，到一个真正的爬虫结束，在中间穿插讲解了 Python 协程最新的基本概念和用法。这里带你简单复习一下。</p>
+<ul>
+<li>协程和多线程的区别，主要在于两点，一是协程为单线程；二是协程由用户决定，在哪些地方交出控制权，切换到下一个任务。</li>
+<li>协程的写法更加简洁清晰，把 async / await 语法和 create_task 结合来用，对于中小级别的并发需求已经毫无压力。</li>
+<li>写协程程序的时候，你的脑海中要有清晰的事件循环概念，知道程序在什么时候需要暂停、等待 I/O，什么时候需要一并执行到底。<br>最后的最后，请一定不要轻易炫技。多线程模型也一定有其优点，一个真正牛逼的程序员，应该懂得，在什么时候用什么模型能达到工程上的最优，而不是自觉某个技术非常牛逼，所有项目创造条件也要上。技术是工程，而工程则是时间、资源、人力等纷繁复杂的事情的折衷。</li>
+</ul>
+<h3 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h3><p>最后给你留一个思考题。协程怎么实现回调函数呢？</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/11/19%20%7C%20%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%92%8C%E7%94%9F%E6%88%90%E5%99%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2455,301 +2777,6 @@ SyntaxError: invalid syntax</code></pre><p>你可以看到，map() 是最快的�
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/09/09%E4%B8%A8%E4%B8%8D%E5%8F%AF%E6%88%96%E7%BC%BA%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%87%BD%E6%95%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LvYang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LvYang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/09/09%E4%B8%A8%E4%B8%8D%E5%8F%AF%E6%88%96%E7%BC%BA%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%87%BD%E6%95%B0/" itemprop="url">09丨不可或缺的自定义函数</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-09T20:13:07+08:00">
-                2019-12-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
-                    <span itemprop="name">python核心技术与实战</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/12/09/09%E4%B8%A8%E4%B8%8D%E5%8F%AF%E6%88%96%E7%BC%BA%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%87%BD%E6%95%B0/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/12/09/09%E4%B8%A8%E4%B8%8D%E5%8F%AF%E6%88%96%E7%BC%BA%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%87%BD%E6%95%B0/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="函数基础"><a href="#函数基础" class="headerlink" title="函数基础"></a>函数基础</h3><p>那么，到底什么是函数，如何在 Python 程序中定义函数呢？</p>
-<p>说白了，函数就是为了实现某一功能的代码段，只要写好以后，就可以重复利用。我们先来看下面一个简单的例子:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_func</span><span class="params">(message)</span>:</span></span><br><span class="line">    print(<span class="string">'Got a message: &#123;&#125;'</span>.format(message))</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 调用函数 my_func()</span></span><br><span class="line">my_func(<span class="string">'Hello World'</span>)</span><br></pre></td></tr></table></figure>
-
-<pre><code>Got a message: Hello World</code></pre><p>其中：</p>
-<ul>
-<li><p>def 是函数的声明；</p>
-</li>
-<li><p>my_func 是函数的名称；</p>
-</li>
-<li><p>括号里面的 message 则是函数的参数；</p>
-</li>
-<li><p>而 print 那行则是函数的主体部分，可以执行相应的语句；</p>
-</li>
-<li><p>在函数最后，你可以返回调用结果（return 或 yield），也可以不返回。</p>
-</li>
-</ul>
-<p>总结一下，大概是下面的这种形式：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">name</span><span class="params">(param1, param2, ..., paramN)</span>:</span></span><br><span class="line">    statements</span><br><span class="line">    <span class="keyword">return</span>/<span class="keyword">yield</span> value <span class="comment"># optional</span></span><br></pre></td></tr></table></figure>
-
-<p>和其他需要编译的语言（比如 C 语言）不一样的是，def 是可执行语句，这意味着函数直到被调用前，都是不存在的。当程序调用函数时，def 语句才会创建一个新的函数对象，并赋予其名字。</p>
-<p>我们一起来看几个例子，加深你对函数的印象：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_sum</span><span class="params">(a, b)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> a + b</span><br><span class="line"> </span><br><span class="line">result = my_sum(<span class="number">3</span>, <span class="number">5</span>)</span><br><span class="line">print(result)</span><br></pre></td></tr></table></figure>
-
-<pre><code>8</code></pre><p>这里，我们定义了 my_sum() 这个函数，它有两个参数 a 和 b，作用是相加；随后，调用 my_sum() 函数，分别把 3 和 5 赋于 a 和 b；最后，返回其相加的值，赋于变量 result，并输出得到 8。</p>
-<p>再来看一个例子：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">find_largest_element</span><span class="params">(l)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> isinstance(l, list):</span><br><span class="line">        print(<span class="string">'input is not type of list'</span>)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    <span class="keyword">if</span> len(l) == <span class="number">0</span>:</span><br><span class="line">        print(<span class="string">'empty input'</span>)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    largest_element = l[<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> l:</span><br><span class="line">        <span class="keyword">if</span> item &gt; largest_element:</span><br><span class="line">            largest_element = item</span><br><span class="line">    print(<span class="string">'largest element is: &#123;&#125;'</span>.format(largest_element)) </span><br><span class="line">      </span><br><span class="line">find_largest_element([<span class="number">8</span>, <span class="number">1</span>,<span class="number">-3</span>, <span class="number">2</span>, <span class="number">0</span>])</span><br></pre></td></tr></table></figure>
-
-<pre><code>largest element is: 8</code></pre><p>这个例子中，我们定义了函数 find_largest_element，作用是遍历输入的列表，找出最大的值并打印。因此，当我们调用它，并传递列表 [8, 1, -3, 2, 0] 作为参数时，程序就会输出 largest element is: 8。</p>
-<p>需要注意，主程序调用函数时，必须保证这个函数此前已经定义过，不然就会报错，比如：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">my_func(<span class="string">'hello world'</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_func</span><span class="params">(message)</span>:</span></span><br><span class="line">    print(<span class="string">'Got a message: &#123;&#125;'</span>.format(message))</span><br></pre></td></tr></table></figure>
-
-<pre><code>Got a message: hello world</code></pre><p>但是，如果我们在函数内部调用其他函数，函数间哪个声明在前、哪个在后就无所谓，因为 def 是可执行语句，函数在调用之前都不存在，我们只需保证调用时，所需的函数都已经声明定义：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_func</span><span class="params">(message)</span>:</span></span><br><span class="line">    my_sub_func(message) <span class="comment"># 调用 my_sub_func() 在其声明之前不影响程序执行</span></span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_sub_func</span><span class="params">(message)</span>:</span></span><br><span class="line">    print(<span class="string">'Got a message: &#123;&#125;'</span>.format(message))</span><br><span class="line"> </span><br><span class="line">my_func(<span class="string">'hello world'</span>)</span><br></pre></td></tr></table></figure>
-
-<pre><code>Got a message: hello world</code></pre><p>另外，Python 函数的参数可以设定默认值，比如下面这样的写法：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(param = <span class="number">0</span>)</span>:</span></span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
-
-<p>这样，在调用函数 func() 时，如果参数 param 没有传入，则参数默认为 0；而如果传入了参数 param，其就会覆盖默认值。</p>
-<p>前面说过，Python 和其他语言相比的一大特点是，Python 是 dynamically typed 的，可以接受任何数据类型（整型，浮点，字符串等等）。对函数参数来说，这一点同样适用。比如还是刚刚的 my_sum 函数，我们也可以把列表作为参数来传递，表示将两个列表相连接：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_sum</span><span class="params">(a, b)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> a + b</span><br><span class="line"> </span><br><span class="line">print(my_sum([<span class="number">1</span>, <span class="number">2</span>], [<span class="number">3</span>, <span class="number">4</span>]))</span><br></pre></td></tr></table></figure>
-
-<pre><code>[1, 2, 3, 4]</code></pre><p>同样，也可以把字符串作为参数传递，表示字符串的合并拼接：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_sum</span><span class="params">(a, b)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> a + b</span><br><span class="line">print(my_sum(<span class="string">'hello '</span>, <span class="string">'world'</span>))</span><br></pre></td></tr></table></figure>
-
-<pre><code>hello world</code></pre><p>当然，如果两个参数的数据类型不同，比如一个是列表、一个是字符串，两者无法相加，那就会报错：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_sum</span><span class="params">(a, b)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> a + b</span><br><span class="line">print(my_sum([<span class="number">1</span>, <span class="number">2</span>], <span class="string">'hello'</span>))</span><br></pre></td></tr></table></figure>
-
-
-<pre><code>---------------------------------------------------------------------------
-
-TypeError                                 Traceback (most recent call last)
-
-&lt;ipython-input-9-c00c9a9db157&gt; in &lt;module&gt;
-      1 def my_sum(a, b):
-      2     return a + b
-----&gt; 3 print(my_sum([1, 2], &apos;hello&apos;))
-
-
-&lt;ipython-input-9-c00c9a9db157&gt; in my_sum(a, b)
-      1 def my_sum(a, b):
-----&gt; 2     return a + b
-      3 print(my_sum([1, 2], &apos;hello&apos;))
-
-
-TypeError: can only concatenate list (not &quot;str&quot;) to list</code></pre><p>我们可以看到，Python 不用考虑输入的数据类型，而是将其交给具体的代码去判断执行，同样的一个函数（比如这边的相加函数 my_sum()），可以同时应用在整型、列表、字符串等等的操作中。</p>
-<p>在编程语言中，我们把这种行为称为多态。这也是 Python 和其他语言，比如 Java、C 等很大的一个不同点。当然，Python 这种方便的特性，在实际使用中也会带来诸多问题。因此，必要时请你在开头加上数据的类型检查。</p>
-<p>Python 函数的另一大特性，是 Python 支持函数的嵌套。所谓的函数嵌套，就是指函数里面又有函数，比如：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f1</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'hello'</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">f2</span><span class="params">()</span>:</span></span><br><span class="line">        print(<span class="string">'world'</span>)</span><br><span class="line">    f2()</span><br><span class="line">f1()</span><br></pre></td></tr></table></figure>
-
-<pre><code>hello
-world</code></pre><p>这里函数 f1() 的内部，又定义了函数 f2()。在调用函数 f1() 时，会先打印字符串’hello’，然后 f1() 内部再调用 f2()，打印字符串’world’。你也许会问，为什么需要函数嵌套？这样做有什么好处呢？</p>
-<p>其实，函数的嵌套，主要有下面两个方面的作用。</p>
-<p>第一，函数的嵌套能够保证内部函数的隐私。内部函数只能被外部函数所调用和访问，不会暴露在全局作用域，因此，如果你的函数内部有一些隐私数据（比如数据库的用户、密码等），不想暴露在外，那你就可以使用函数的的嵌套，将其封装在内部函数中，只通过外部函数来访问。比如：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">connect_DB</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_DB_configuration</span><span class="params">()</span>:</span></span><br><span class="line">        ...</span><br><span class="line">        <span class="keyword">return</span> host, username, password</span><br><span class="line">    conn = connector.connect(get_DB_configuration())</span><br><span class="line">    <span class="keyword">return</span> conn</span><br><span class="line">get_DB_configuration()</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 输出</span></span><br><span class="line"><span class="comment">#NameError: name 'get_DB_configuration' is not defined</span></span><br></pre></td></tr></table></figure>
-
-<p>这里的函数 get_DB_configuration，便是内部函数，它无法在 connect_DB() 函数以外被单独调用。也就是说，下面这样的外部直接调用是错误的^:<br>我们只能通过调用外部函数 connect_DB() 来访问它，这样一来，程序的安全性便有了很大的提高。</p>
-<p>第二，合理的使用函数嵌套，能够提高程序的运行效率。我们来看下面这个例子：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">factorial</span><span class="params">(input)</span>:</span></span><br><span class="line">    <span class="comment"># validation check</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> isinstance(input, int):</span><br><span class="line">        <span class="keyword">raise</span> Exception(<span class="string">'input must be an integer.'</span>)</span><br><span class="line">    <span class="keyword">if</span> input &lt; <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">raise</span> Exception(<span class="string">'input must be greater or equal to 0'</span> )</span><br><span class="line">    ...</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">inner_factorial</span><span class="params">(input)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> input &lt;= <span class="number">1</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> input * inner_factorial(input<span class="number">-1</span>)</span><br><span class="line">    <span class="keyword">return</span> inner_factorial(input)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">print(factorial(<span class="number">5</span>))</span><br></pre></td></tr></table></figure>
-
-<pre><code>120</code></pre><p>这里，我们使用递归的方式计算一个数的阶乘。因为在计算之前，需要检查输入是否合法，所以我写成了函数嵌套的形式，这样一来，输入是否合法就只用检查一次。而如果我们不使用函数嵌套，那么每调用一次递归便会检查一次，这是没有必要的，也会降低程序的运行效率。</p>
-<p>实际工作中，如果你遇到相似的情况，输入检查不是很快，还会耗费一定的资源，那么运用函数的嵌套就十分必要了。</p>
-<h3 id="函数变量作用域"><a href="#函数变量作用域" class="headerlink" title="函数变量作用域"></a>函数变量作用域</h3><p>Python 函数中变量的作用域和其他语言类似。如果变量是在函数内部定义的，就称为局部变量，只在函数内部有效。一旦函数执行完毕，局部变量就会被回收，无法访问，比如下面的例子：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">read_text_from_file</span><span class="params">(file_path)</span>:</span></span><br><span class="line">    <span class="keyword">with</span> open(file_path) <span class="keyword">as</span> file:</span><br><span class="line">        ...</span><br></pre></td></tr></table></figure>
-
-<p>我们在函数内部定义了 file 这个变量，这个变量只在 read_text_from_file 这个函数里有效，在函数外部则无法访问。</p>
-<p>相对应的，全局变量则是定义在整个文件层次上的，比如下面这段代码：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">MIN_VALUE = <span class="number">1</span></span><br><span class="line">MAX_VALUE = <span class="number">10</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">validation_check</span><span class="params">(value)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> value &lt; MIN_VALUE <span class="keyword">or</span> value &gt; MAX_VALUE:</span><br><span class="line">        <span class="keyword">raise</span> Exception(<span class="string">'validation check fails'</span>)</span><br></pre></td></tr></table></figure>
-
-<p>这里的 MIN_VALUE 和 MAX_VALUE 就是全局变量，可以在文件内的任何地方被访问，当然在函数内部也是可以的。不过，我们不能在函数内部随意改变全局变量的值。比如，下面的写法就是错误的：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">MIN_VALUE = <span class="number">1</span></span><br><span class="line">MAX_VALUE = <span class="number">10</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">validation_check</span><span class="params">(value)</span>:</span></span><br><span class="line">    ...</span><br><span class="line">    MIN_VALUE += <span class="number">1</span></span><br><span class="line">    ...</span><br><span class="line">validation_check(<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
-
-<p>如果运行这段代码，程序便会报错：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UnboundLocalError: local variable <span class="string">'MIN_VALUE'</span> referenced before assignment</span><br></pre></td></tr></table></figure>
-
-<p>这是因为，Python 的解释器会默认函数内部的变量为局部变量，但是又发现局部变量 MIN_VALUE 并没有声明，因此就无法执行相关操作。所以，如果我们一定要在函数内部改变全局变量的值，就必须加上 global 这个声明：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">MIN_VALUE = <span class="number">1</span></span><br><span class="line">MAX_VALUE = <span class="number">10</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">validation_check</span><span class="params">(value)</span>:</span></span><br><span class="line">    <span class="keyword">global</span> MIN_VALUE</span><br><span class="line">    ...</span><br><span class="line">    MIN_VALUE += <span class="number">1</span></span><br><span class="line">    ...</span><br><span class="line">validation_check(<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
-
-<p>这里的 global 关键字，并不表示重新创建了一个全局变量 MIN_VALUE，而是告诉 Python 解释器，函数内部的变量 MIN_VALUE，就是之前定义的全局变量，并不是新的全局变量，也不是局部变量。这样，程序就可以在函数内部访问全局变量，并修改它的值了。</p>
-<p>另外，如果遇到函数内部局部变量和全局变量同名的情况，那么在函数内部，局部变量会覆盖全局变量，比如下面这种：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">MIN_VALUE = <span class="number">1</span></span><br><span class="line">MAX_VALUE = <span class="number">10</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">validation_check</span><span class="params">(value)</span>:</span></span><br><span class="line">    MIN_VALUE = <span class="number">3</span></span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
-
-<p>在函数 validation_check() 内部，我们定义了和全局变量同名的局部变量 MIN_VALUE，那么，MIN_VALUE 在函数内部的值，就应该是 3 而不是 1 了。</p>
-<p>类似的，对于嵌套函数来说，内部函数可以访问外部函数定义的变量，但是无法修改，若要修改，必须加上 nonlocal 这个关键字：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">outer</span><span class="params">()</span>:</span></span><br><span class="line">    x = <span class="string">"local"</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">inner</span><span class="params">()</span>:</span></span><br><span class="line">        <span class="keyword">nonlocal</span> x <span class="comment"># nonlocal 关键字表示这里的 x 就是外部函数 outer 定义的变量 x</span></span><br><span class="line">        x = <span class="string">'nonlocal'</span></span><br><span class="line">        print(<span class="string">"inner:"</span>, x)</span><br><span class="line">    inner()</span><br><span class="line">    print(<span class="string">"outer:"</span>, x)</span><br><span class="line">outer()</span><br></pre></td></tr></table></figure>
-
-<pre><code>inner: nonlocal
-outer: nonlocal</code></pre><p>如果不加上 nonlocal 这个关键字，而内部函数的变量又和外部函数变量同名，那么同样的，内部函数变量会覆盖外部函数的变量。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">outer</span><span class="params">()</span>:</span></span><br><span class="line">    x = <span class="string">"local"</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">inner</span><span class="params">()</span>:</span></span><br><span class="line">        x = <span class="string">'nonlocal'</span> <span class="comment"># 这里的 x 是 inner 这个函数的局部变量</span></span><br><span class="line">        print(<span class="string">"inner:"</span>, x)</span><br><span class="line">    inner()</span><br><span class="line">    print(<span class="string">"outer:"</span>, x)</span><br><span class="line">outer()</span><br></pre></td></tr></table></figure>
-
-<p>闭包<br>这节课的第三个重点，我想再来介绍一下闭包（closure）。闭包其实和刚刚讲的嵌套函数类似，不同的是，这里外部函数返回的是一个函数，而不是一个具体的值。返回的函数通常赋于一个变量，这个变量可以在后面被继续执行调用。</p>
-<p>举个例子你就更容易理解了。比如，我们想计算一个数的 n 次幂，用闭包可以写成下面的代码：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">nth_power</span><span class="params">(exponent)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">exponent_of</span><span class="params">(base)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> base ** exponent</span><br><span class="line">    <span class="keyword">return</span> exponent_of <span class="comment"># 返回值是 exponent_of 函数</span></span><br><span class="line"> </span><br><span class="line">square = nth_power(<span class="number">2</span>) <span class="comment"># 计算一个数的平方</span></span><br><span class="line">cube = nth_power(<span class="number">3</span>) <span class="comment"># 计算一个数的立方 </span></span><br><span class="line"></span><br><span class="line">print(square)</span><br><span class="line">print(cube)</span><br><span class="line"> </span><br><span class="line">print(square(<span class="number">2</span>))  <span class="comment"># 计算 2 的平方</span></span><br><span class="line">print(cube(<span class="number">2</span>)) <span class="comment"># 计算 2 的立方</span></span><br></pre></td></tr></table></figure>
-
-<pre><code>&lt;function nth_power.&lt;locals&gt;.exponent_of at 0x111a8ce18&gt;
-&lt;function nth_power.&lt;locals&gt;.exponent_of at 0x111a8cea0&gt;
-4
-8</code></pre><p>这里外部函数 nth_power() 返回值，是函数 exponent_of()，而不是一个具体的数值。需要注意的是，在执行完square = nth_power(2)和cube = nth_power(3)后，外部函数 nth_power() 的参数 exponent，仍然会被内部函数 exponent_of() 记住。这样，之后我们调用 square(2) 或者 cube(2) 时，程序就能顺利地输出结果，而不会报错说参数 exponent 没有定义了。</p>
-<p>看到这里，你也许会思考，为什么要闭包呢？上面的程序，我也可以写成下面的形式啊！</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">nth_power_rewrite</span><span class="params">(base, exponent)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> base ** exponent</span><br></pre></td></tr></table></figure>
-
-<p>确实可以，不过，要知道，使用闭包的一个原因，是让程序变得更简洁易读。设想一下，比如你需要计算很多个数的平方，那么你觉得写成下面哪一种形式更好呢？</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 不适用闭包</span></span><br><span class="line">res1 = nth_power_rewrite(base1, <span class="number">2</span>)</span><br><span class="line">res2 = nth_power_rewrite(base2, <span class="number">2</span>)</span><br><span class="line">res3 = nth_power_rewrite(base3, <span class="number">2</span>)</span><br><span class="line">...</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 使用闭包</span></span><br><span class="line">square = nth_power(<span class="number">2</span>)</span><br><span class="line">res1 = square(base1)</span><br><span class="line">res2 = square(base2)</span><br><span class="line">res3 = square(base3)</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-
-<p>显然是第二种，是不是？首先直观来看，第二种形式，让你每次调用函数都可以少输入一个参数，表达更为简洁。</p>
-<p>其次，和上面讲到的嵌套函数优点类似，函数开头需要做一些额外工作，而你又需要多次调用这个函数时，将那些额外工作的代码放在外部函数，就可以减少多次调用导致的不必要的开销，提高程序的运行效率。</p>
-<p>另外还有一点，我们后面会讲到，闭包常常和装饰器（decorator）一起使用。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这节课，我们一起学习了 Python 函数的概念及其应用，有这么几点你需要注意:</p>
-<ol>
-<li><p>Python 中函数的参数可以接受任意的数据类型，使用起来需要注意，必要时请在函数开头加入数据类型的检查；</p>
-</li>
-<li><p>和其他语言不同，Python 中函数的参数可以设定默认值；</p>
-</li>
-<li><p>嵌套函数的使用，能保证数据的隐私性，提高程序运行效率；</p>
-</li>
-<li><p>合理地使用闭包，则可以简化程序的复杂度，提高可读性。</p>
-</li>
-</ol>
-<h3 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h3><p>最后给你留一道思考题。在实际的学习工作中，你遇到过哪些使用嵌套函数或者是闭包的例子呢？欢迎在下方留言，与我讨论，也欢迎你把这篇文章分享给你的同事、朋友。</p>
-<p>TODO: yield -<a href="https://blog.csdn.net/mieleizhi0522/article/details/82142856" target="_blank" rel="noopener">https://blog.csdn.net/mieleizhi0522/article/details/82142856</a></p>
-<h3 id="自我总结"><a href="#自我总结" class="headerlink" title="自我总结"></a>自我总结</h3><ul>
-<li>def 是可执行语句，函数在调用之前都不存在.</li>
-<li>Python 是 dynamically typed 的，可以接受任何数据类型（整型，浮点，字符串等等）。对函数参数来说，这一点同样适用。</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2800,7 +2827,7 @@ outer: nonlocal</code></pre><p>如果不加上 nonlocal 这个关键字，而内
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-count">38</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
