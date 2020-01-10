@@ -258,6 +258,266 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/13/21%20%7C%20Python%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8BFutures/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/13/21%20%7C%20Python%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8BFutures/" itemprop="url">21 | Python并发编程之Futures</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-13T20:50:07+08:00">
+                2019-12-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
+                    <span itemprop="name">python核心技术与实战</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/12/13/21%20%7C%20Python%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8BFutures/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/12/13/21%20%7C%20Python%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8BFutures/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Python 中的并发编程——Futures。</p>
+<h3 id="区分并发和并行"><a href="#区分并发和并行" class="headerlink" title="区分并发和并行"></a>区分并发和并行</h3><p>在我们学习并发编程时，常常同时听到并发（Concurrency）和并行（Parallelism）这两个术语，这两者经常一起使用，导致很多人以为它们是一个意思，其实不然。</p>
+<p>首先你要辨别一个误区，在 Python 中，并发并不是指同一时刻有多个操作（thread、task）同时进行。相反，某个特定的时刻，它只允许有一个操作发生，只不过线程 / 任务之间会互相切换，直到完成。我们来看下面这张图：</p>
+<p>图中出现了 thread 和 task 两种切换顺序的不同方式，分别对应 Python 中并发的两种形式——threading 和 asyncio。</p>
+<p>对于 threading，操作系统知道每个线程的所有信息，因此它会做主在适当的时候做线程切换。很显然，这样的好处是代码容易书写，因为程序员不需要做任何切换操作的处理；但是切换线程的操作，也有可能出现在一个语句执行的过程中（比如 x += 1），这样就容易出现 race condition 的情况。</p>
+<p>而对于 asyncio，主程序想要切换任务时，必须得到此任务可以被切换的通知，这样一来也就可以避免刚刚提到的 race condition 的情况。</p>
+<p>至于所谓的并行，指的才是同一时刻、同时发生。Python 中的 multi-processing 便是这个意思，对于 multi-processing，你可以简单地这么理解：比如你的电脑是 6 核处理器，那么在运行程序时，就可以强制 Python 开 6 个进程，同时执行，以加快运行速度，它的原理示意图如下：</p>
+<p>对比来看，</p>
+<ul>
+<li>并发通常应用于 I/O 操作频繁的场景，比如你要从网站上下载多个文件，I/O 操作的时间可能会比 CPU 运行处理的时间长得多。</li>
+<li>而并行则更多应用于 CPU heavy 的场景，比如 MapReduce 中的并行计算，为了加快运行速度，一般会用多台机器、多个处理器来完成。<h3 id="并发编程之-Futures"><a href="#并发编程之-Futures" class="headerlink" title="并发编程之 Futures"></a>并发编程之 Futures</h3><h3 id="单线程与多线程性能比较"><a href="#单线程与多线程性能比较" class="headerlink" title="单线程与多线程性能比较"></a>单线程与多线程性能比较</h3></li>
+</ul>
+<p>接下来，我们一起通过具体的实例，从代码的角度来理解并发编程中的 Futures，并进一步来比较其与单线程的性能区别。</p>
+<p>假设我们有一个任务，是下载一些网站的内容并打印。如果用单线程的方式，它的代码实现如下所示（为了简化代码，突出主题，此处我忽略了异常处理）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">download_one</span><span class="params">(url)</span>:</span></span><br><span class="line">    resp = requests.get(url)</span><br><span class="line">    print(<span class="string">'Read &#123;&#125; from &#123;&#125;'</span>.format(len(resp.content), url))</span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">download_all</span><span class="params">(sites)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> site <span class="keyword">in</span> sites:</span><br><span class="line">        download_one(site)</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    sites = [</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Arts'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:History'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Society'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Biography'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Mathematics'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Technology'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Geography'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Science'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Computer_science'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Python_(programming_language)'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Java_(programming_language)'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/PHP'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Node.js'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/The_C_Programming_Language'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Go_(programming_language)'</span></span><br><span class="line">    ]</span><br><span class="line">    start_time = time.perf_counter()</span><br><span class="line">    download_all(sites)</span><br><span class="line">    end_time = time.perf_counter()</span><br><span class="line">    print(<span class="string">'Download &#123;&#125; sites in &#123;&#125; seconds'</span>.format(len(sites), end_time - start_time))</span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<pre><code>Read 129166 from https://en.wikipedia.org/wiki/Portal:Arts
+Read 196790 from https://en.wikipedia.org/wiki/Portal:History
+Read 227218 from https://en.wikipedia.org/wiki/Portal:Society
+Read 315517 from https://en.wikipedia.org/wiki/Portal:Biography
+Read 139637 from https://en.wikipedia.org/wiki/Portal:Mathematics
+Read 148720 from https://en.wikipedia.org/wiki/Portal:Technology
+Read 158254 from https://en.wikipedia.org/wiki/Portal:Geography
+Read 96941 from https://en.wikipedia.org/wiki/Portal:Science
+Read 330734 from https://en.wikipedia.org/wiki/Computer_science
+Read 408460 from https://en.wikipedia.org/wiki/Python_(programming_language)
+Read 322431 from https://en.wikipedia.org/wiki/Java_(programming_language)
+Read 482127 from https://en.wikipedia.org/wiki/PHP
+Read 177540 from https://en.wikipedia.org/wiki/Node.js
+Read 56570 from https://en.wikipedia.org/wiki/The_C_Programming_Language
+Read 329485 from https://en.wikipedia.org/wiki/Go_(programming_language)
+Download 15 sites in 15.883507495999993 seconds</code></pre><p>这种方式应该是最直接也最简单的：</p>
+<ul>
+<li>先是遍历存储网站的列表；</li>
+<li>然后对当前网站执行下载操作；</li>
+<li>等到当前操作完成后，再对下一个网站进行同样的操作，一直到结束。</li>
+</ul>
+<p>我们可以看到总共耗时约 2.4s。单线程的优点是简单明了，但是明显效率低下，因为上述程序的绝大多数时间，都浪费在了 I/O 等待上。程序每次对一个网站执行下载操作，都必须等到前一个网站下载完成后才能开始。如果放在实际生产环境中，我们需要下载的网站数量至少是以万为单位的，不难想象，这种方案根本行不通。</p>
+<p>接着我们再来看，多线程版本的代码实现：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> concurrent.futures</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">download_one</span><span class="params">(url)</span>:</span></span><br><span class="line">    resp = requests.get(url)</span><br><span class="line">    print(<span class="string">'Read &#123;&#125; from &#123;&#125;'</span>.format(len(resp.content), url))</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">download_all</span><span class="params">(sites)</span>:</span></span><br><span class="line">    <span class="keyword">with</span> concurrent.futures.ThreadPoolExecutor(max_workers=<span class="number">5</span>) <span class="keyword">as</span> executor:</span><br><span class="line">        executor.map(download_one, sites)</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    sites = [</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Arts'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:History'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Society'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Biography'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Mathematics'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Technology'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Geography'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Science'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Computer_science'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Python_(programming_language)'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Java_(programming_language)'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/PHP'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Node.js'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/The_C_Programming_Language'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Go_(programming_language)'</span></span><br><span class="line">    ]</span><br><span class="line">    start_time = time.perf_counter()</span><br><span class="line">    download_all(sites)</span><br><span class="line">    end_time = time.perf_counter()</span><br><span class="line">    print(<span class="string">'Download &#123;&#125; sites in &#123;&#125; seconds'</span>.format(len(sites), end_time - start_time))</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<pre><code>Read 129166 from https://en.wikipedia.org/wiki/Portal:Arts
+Read 227218 from https://en.wikipedia.org/wiki/Portal:Society
+Read 196790 from https://en.wikipedia.org/wiki/Portal:History
+Read 315517 from https://en.wikipedia.org/wiki/Portal:Biography
+Read 139005 from https://en.wikipedia.org/wiki/Portal:Mathematics
+Read 96941 from https://en.wikipedia.org/wiki/Portal:Science
+Read 148720 from https://en.wikipedia.org/wiki/Portal:Technology
+Read 158254 from https://en.wikipedia.org/wiki/Portal:Geography
+Read 408460 from https://en.wikipedia.org/wiki/Python_(programming_language)
+Read 330734 from https://en.wikipedia.org/wiki/Computer_science
+Read 177540 from https://en.wikipedia.org/wiki/Node.js
+Read 482127 from https://en.wikipedia.org/wiki/PHP
+Read 322431 from https://en.wikipedia.org/wiki/Java_(programming_language)
+Read 329485 from https://en.wikipedia.org/wiki/Go_(programming_language)
+Read 56570 from https://en.wikipedia.org/wiki/The_C_Programming_Language
+Download 15 sites in 4.299461989000065 seconds</code></pre><p>非常明显，总耗时是 0.2s 左右，效率一下子提升了 10 倍多。</p>
+<p>我们具体来看这段代码，它是多线程版本和单线程版的主要区别所在：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> concurrent.futures.ThreadPoolExecutor(max_workers=<span class="number">5</span>) <span class="keyword">as</span> executor:</span><br><span class="line">     executor.map(download_one, sites)</span><br></pre></td></tr></table></figure>
+
+<p>这里我们创建了一个线程池，总共有 5 个线程可以分配使用。executer.map() 与前面所讲的 Python 内置的 map() 函数类似，表示对 sites 中的每一个元素，并发地调用函数 download_one()。</p>
+<p>顺便提一下，在 download_one() 函数中，我们使用的 requests.get() 方法是线程安全的（thread-safe），因此在多线程的环境下，它也可以安全使用，并不会出现 race condition 的情况。</p>
+<p>另外，虽然线程的数量可以自己定义，但是线程数并不是越多越好，因为线程的创建、维护和删除也会有一定的开销。所以如果你设置的很大，反而可能会导致速度变慢。我们往往需要根据实际的需求做一些测试，来寻找最优的线程数量。</p>
+<p>当然，我们也可以用并行的方式去提高程序运行效率。你只需要在 download_all() 函数中，做出下面的变化即可：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> futures.ThreadPoolExecutor(workers) <span class="keyword">as</span> executor</span><br><span class="line">=&gt;</span><br><span class="line"><span class="keyword">with</span> futures.ProcessPoolExecutor() <span class="keyword">as</span> executor:</span><br></pre></td></tr></table></figure>
+
+
+<pre><code>  File &quot;&lt;ipython-input-3-5f534bcae088&gt;&quot;, line 1
+    with futures.ThreadPoolExecutor(workers) as executor
+                                                        ^
+SyntaxError: invalid syntax</code></pre><p>在需要修改的这部分代码中，函数 ProcessPoolExecutor() 表示创建进程池，使用多个进程并行的执行程序。不过，这里我们通常省略参数 workers，因为系统会自动返回 CPU 的数量作为可以调用的进程数。</p>
+<p>我刚刚提到过，并行的方式一般用在 CPU heavy 的场景中，因为对于 I/O heavy 的操作，多数时间都会用于等待，相比于多线程，使用多进程并不会提升效率。反而很多时候，因为 CPU 数量的限制，会导致其执行效率不如多线程版本。</p>
+<h3 id="到底什么是-Futures-？"><a href="#到底什么是-Futures-？" class="headerlink" title="到底什么是 Futures ？"></a>到底什么是 Futures ？</h3><p>Python 中的 Futures 模块，位于 concurrent.futures 和 asyncio 中，它们都表示带有延迟的操作。Futures 会将处于等待状态的操作包裹起来放到队列中，这些操作的状态随时可以查询，当然，它们的结果或是异常，也能够在操作完成后被获取。</p>
+<p>通常来说，作为用户，我们不用考虑如何去创建 Futures，这些 Futures 底层都会帮我们处理好。我们要做的，实际上是去 schedule 这些 Futures 的执行。</p>
+<p>比如，Futures 中的 Executor 类，当我们执行 executor.submit(func) 时，它便会安排里面的 func() 函数执行，并返回创建好的 future 实例，以便你之后查询调用。</p>
+<p>这里再介绍一些常用的函数。Futures 中的方法 done()，表示相对应的操作是否完成——True 表示完成，False 表示没有完成。不过，要注意，done() 是 non-blocking 的，会立即返回结果。相对应的 add_done_callback(fn)，则表示 Futures 完成后，相对应的参数函数 fn，会被通知并执行调用。</p>
+<p>Futures 中还有一个重要的函数 result()，它表示当 future 完成后，返回其对应的结果或异常。而 as_completed(fs)，则是针对给定的 future 迭代器 fs，在其完成后，返回完成后的迭代器。</p>
+<p>所以，上述例子也可以写成下面的形式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> concurrent.futures</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">download_one</span><span class="params">(url)</span>:</span></span><br><span class="line">    resp = requests.get(url)</span><br><span class="line">    print(<span class="string">'Read &#123;&#125; from &#123;&#125;'</span>.format(len(resp.content), url))</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">download_all</span><span class="params">(sites)</span>:</span></span><br><span class="line">    <span class="keyword">with</span> concurrent.futures.ThreadPoolExecutor(max_workers=<span class="number">5</span>) <span class="keyword">as</span> executor:</span><br><span class="line">        to_do = []</span><br><span class="line">        <span class="keyword">for</span> site <span class="keyword">in</span> sites:</span><br><span class="line">            future = executor.submit(download_one, site)</span><br><span class="line">            to_do.append(future)</span><br><span class="line">            </span><br><span class="line">        <span class="keyword">for</span> future <span class="keyword">in</span> concurrent.futures.as_completed(to_do):</span><br><span class="line">            future.result()</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    sites = [</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Arts'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:History'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Society'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Biography'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Mathematics'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Technology'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Geography'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Science'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Computer_science'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Python_(programming_language)'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Java_(programming_language)'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/PHP'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Node.js'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/The_C_Programming_Language'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Go_(programming_language)'</span></span><br><span class="line">    ]</span><br><span class="line">    start_time = time.perf_counter()</span><br><span class="line">    download_all(sites)</span><br><span class="line">    end_time = time.perf_counter()</span><br><span class="line">    print(<span class="string">'Download &#123;&#125; sites in &#123;&#125; seconds'</span>.format(len(sites), end_time - start_time))</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<pre><code>Read 139637 from https://en.wikipedia.org/wiki/Portal:Mathematics
+Read 227218 from https://en.wikipedia.org/wiki/Portal:Society
+Read 196790 from https://en.wikipedia.org/wiki/Portal:History
+Read 148720 from https://en.wikipedia.org/wiki/Portal:Technology
+Read 96941 from https://en.wikipedia.org/wiki/Portal:Science
+Read 315517 from https://en.wikipedia.org/wiki/Portal:Biography
+Read 129166 from https://en.wikipedia.org/wiki/Portal:Arts
+Read 158254 from https://en.wikipedia.org/wiki/Portal:Geography
+Read 330734 from https://en.wikipedia.org/wiki/Computer_science
+Read 322431 from https://en.wikipedia.org/wiki/Java_(programming_language)
+Read 408460 from https://en.wikipedia.org/wiki/Python_(programming_language)
+Read 482127 from https://en.wikipedia.org/wiki/PHP
+Read 56570 from https://en.wikipedia.org/wiki/The_C_Programming_Language
+Read 177540 from https://en.wikipedia.org/wiki/Node.js
+Read 329485 from https://en.wikipedia.org/wiki/Go_(programming_language)
+Download 15 sites in 3.3601100109999607 seconds</code></pre><p>这里，我们首先调用 executor.submit()，将下载每一个网站的内容都放进 future 队列 to_do，等待执行。然后是 as_completed() 函数，在 future 完成后，便输出结果。</p>
+<p>不过，这里要注意，future 列表中每个 future 完成的顺序，和它在列表中的顺序并不一定完全一致。到底哪个先完成、哪个后完成，取决于系统的调度和每个 future 的执行时间。</p>
+<h3 id="为什么多线程每次只能有一个线程执行？"><a href="#为什么多线程每次只能有一个线程执行？" class="headerlink" title="为什么多线程每次只能有一个线程执行？"></a>为什么多线程每次只能有一个线程执行？</h3><p>前面我说过，同一时刻，Python 主程序只允许有一个线程执行，所以 Python 的并发，是通过多线程的切换完成的。你可能会疑惑这到底是为什么呢？</p>
+<p>这里我简单提一下全局解释器锁的概念，具体内容后面会讲到。</p>
+<p>事实上，Python 的解释器并不是线程安全的，为了解决由此带来的 race condition 等问题，Python 便引入了全局解释器锁，也就是同一时刻，只允许一个线程执行。当然，在执行 I/O 操作时，如果一个线程被 block 了，全局解释器锁便会被释放，从而让另一个线程能够继续执行。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这节课，我们首先学习了 Python 中并发和并行的概念与区别。</p>
+<ul>
+<li>并发，通过线程和任务之间互相切换的方式实现，但同一时刻，只允许有一个线程或任务执行。</li>
+<li>而并行，则是指多个进程完全同步同时的执行。<br>并发通常用于 I/O 操作频繁的场景，而并行则适用于 CPU heavy 的场景。</li>
+</ul>
+<p>随后，我们通过下载网站内容的例子，比较了单线程和运用 Futures 的多线程版本的性能差异。显而易见，合理地运用多线程，能够极大地提高程序运行效率。</p>
+<p>我们还一起学习了 Futures 的具体原理，介绍了一些常用函数比如 done()、result()、as_completed() 等的用法，并辅以实例加以理解。</p>
+<p>要注意，Python 中之所以同一时刻只允许一个线程运行，其实是由于全局解释器锁的存在。但是对 I/O 操作而言，当其被 block 的时候，全局解释器锁便会被释放，使其他线程继续执行。</p>
+<h3 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h3><p>最后给你留一道思考题。你能否通过查阅相关文档，为今天所讲的这个下载网站内容的例子，加上合理的异常处理，让程序更加稳定健壮呢？</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/12/20%20%7C%20%E6%8F%AD%E7%A7%98%20Python%20%E5%8D%8F%E7%A8%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2508,275 +2768,6 @@ Harry Potter(Movie)
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/09/10%20%7C%20%E7%AE%80%E7%BA%A6%E4%B8%8D%E7%AE%80%E5%8D%95%E7%9A%84%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LvYang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LvYang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/09/10%20%7C%20%E7%AE%80%E7%BA%A6%E4%B8%8D%E7%AE%80%E5%8D%95%E7%9A%84%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0/" itemprop="url">10 | 简约不简单的匿名函数</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-09T22:13:07+08:00">
-                2019-12-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
-                    <span itemprop="name">python核心技术与实战</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/12/09/10%20%7C%20%E7%AE%80%E7%BA%A6%E4%B8%8D%E7%AE%80%E5%8D%95%E7%9A%84%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/12/09/10%20%7C%20%E7%AE%80%E7%BA%A6%E4%B8%8D%E7%AE%80%E5%8D%95%E7%9A%84%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="匿名函数基础"><a href="#匿名函数基础" class="headerlink" title="匿名函数基础"></a>匿名函数基础</h3><p>首先，什么是匿名函数呢？以下是匿名函数的格式：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">lambda</span> argument1, argument2,... argumentN : expression</span><br></pre></td></tr></table></figure>
-
-<p>我们可以看到，匿名函数的关键字是 lambda，之后是一系列的参数，然后用冒号隔开，最后则是由这些参数组成的表达式。我们通过几个例子看一下它的用法：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">square = <span class="keyword">lambda</span> x: x**<span class="number">2</span></span><br><span class="line">square(<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
-
-
-
-
-<pre><code>9</code></pre><p>这里的匿名函数只输入一个参数 x，输出则是输入 x 的平方。因此当输入是 3 时，输出便是 9。如果把这个匿名函数写成常规函数的形式，则是下面这样：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">square</span><span class="params">(x)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> x**<span class="number">2</span></span><br><span class="line">square(<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
-
-<p>可以看到，匿名函数 lambda 和常规函数一样，返回的都是一个函数对象（function object），它们的用法也极其相似，不过还是有下面几点区别。</p>
-<p>**第一，lambda 是一个表达式（expression），并不是一个语句（statement）。</p>
-<ul>
-<li><p>所谓的表达式，就是用一系列“公式”去表达一个东西，比如x + 2、 x**2等等；</p>
-</li>
-<li><p>而所谓的语句，则一定是完成了某些功能，比如赋值语句x = 1完成了赋值，print 语句print(x)完成了打印，条件语句 if x &lt; 0:完成了选择功能等等。</p>
-</li>
-</ul>
-<p>因此，lambda 可以用在一些常规函数 def 不能用的地方，比如，lambda 可以用在列表内部，而常规函数却不能：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[(<span class="keyword">lambda</span> x: x*x)(x) <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">10</span>)]</span><br></pre></td></tr></table></figure>
-
-
-
-
-<pre><code>[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]</code></pre><p>再比如，lambda 可以被用作某些函数的参数，而常规函数 def 也不能：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">l = [(<span class="number">1</span>, <span class="number">20</span>), (<span class="number">3</span>, <span class="number">0</span>), (<span class="number">9</span>, <span class="number">10</span>), (<span class="number">2</span>, <span class="number">-1</span>)]</span><br><span class="line">l.sort(key=<span class="keyword">lambda</span> x: x[<span class="number">1</span>]) <span class="comment"># 按列表中元祖的第二个元素排序</span></span><br><span class="line">print(l)</span><br></pre></td></tr></table></figure>
-
-<pre><code>[(2, -1), (3, 0), (9, 10), (1, 20)]</code></pre><p>常规函数 def 必须通过其函数名被调用，因此必须首先被定义。但是作为一个表达式的 lambda，返回的函数对象就不需要名字了。</p>
-<p>**第二，lambda 的主体是只有一行的简单表达式，并不能扩展成一个多行的代码块。</p>
-<p>这其实是出于设计的考虑。Python 之所以发明 lambda，就是为了让它和常规函数各司其职：lambda 专注于简单的任务，而常规函数则负责更复杂的多行逻辑。关于这点，Python 之父 Guido van Rossum 曾发了一篇文章解释，你有兴趣的话可以自己阅读。</p>
-<h3 id="为什么要使用匿名函数？"><a href="#为什么要使用匿名函数？" class="headerlink" title="为什么要使用匿名函数？"></a>为什么要使用匿名函数？</h3><p>理论上来说，Python 中有匿名函数的地方，都可以被替换成等价的其他表达形式。一个 Python 程序是可以不用任何匿名函数的。不过，在一些情况下，使用匿名函数 lambda，可以帮助我们大大简化代码的复杂度，提高代码的可读性。</p>
-<p>通常，我们用函数的目的无非是这么几点：</p>
-<ol>
-<li><p>减少代码的重复性；</p>
-</li>
-<li><p>模块化代码。</p>
-</li>
-</ol>
-<p>对于第一点，如果你的程序在不同地方包含了相同的代码，那么我们就会把这部分相同的代码写成一个函数，并为它取一个名字，方便在相对应的不同地方调用。</p>
-<p>对于第二点，如果你的一块儿代码是为了实现一个功能，但内容非常多，写在一起降低了代码的可读性，那么通常我们也会把这部分代码单独写成一个函数，然后加以调用。</p>
-<p>不过，再试想一下这样的情况。你需要一个函数，但它非常简短，只需要一行就能完成；同时它在程序中只被调用一次而已。那么请问，你还需要像常规函数一样，给它一个定义和名字吗？</p>
-<p>答案当然是否定的。这种情况下，函数就可以是匿名的，你只需要在适当的地方定义并使用，就能让匿名函数发挥作用了。</p>
-<p>举个例子，如果你想对一个列表中的所有元素做平方操作，而这个操作在你的程序中只需要进行一次，用 lambda 函数可以表示成下面这样：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">squared = map(<span class="keyword">lambda</span> x: x**<span class="number">2</span>, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br></pre></td></tr></table></figure>
-
-
-<pre><code>---------------------------------------------------------------------------
-
-TypeError                                 Traceback (most recent call last)
-
-&lt;ipython-input-5-f2792dd957c5&gt; in &lt;module&gt;
-      1 squared = map(lambda x: x**2, [1, 2, 3, 4, 5])
-----&gt; 2 squared()
-
-
-TypeError: &apos;map&apos; object is not callable</code></pre><p>如果用常规函数，则表示为这几行代码：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">square</span><span class="params">(x)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> x**<span class="number">2</span></span><br><span class="line"> </span><br><span class="line">squared = map(square, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br></pre></td></tr></table></figure>
-
-<p>这里我简单解释一下。函数 map(function, iterable) 的第一个参数是函数对象，第二个参数是一个可以遍历的集合，它表示对 iterable 的每一个元素，都运用 function 这个函数。两者一对比，我们很明显地发现，lambda 函数让代码更加简洁明了。</p>
-<p>再举一个例子，在 Python 的 Tkinter GUI 应用中，我们想实现这样一个简单的功能：创建显示一个按钮，每当用户点击时，就打印出一段文字。如果使用 lambda 函数可以表示成下面这样：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> tkinter <span class="keyword">import</span> Button, mainloop</span><br><span class="line">button = Button(</span><br><span class="line">    text=<span class="string">'This is a button'</span>,</span><br><span class="line">    command=<span class="keyword">lambda</span>: print(<span class="string">'being pressed'</span>)) <span class="comment"># 点击时调用 lambda 函数</span></span><br><span class="line">button.pack()</span><br><span class="line">mainloop()</span><br></pre></td></tr></table></figure>
-
-<p>而如果我们用常规函数 def，那么需要写更多的代码：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> tkinter <span class="keyword">import</span> Button, mainloop</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">print_message</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'being pressed'</span>)</span><br><span class="line"> </span><br><span class="line">button = Button(</span><br><span class="line">    text=<span class="string">'This is a button'</span>,</span><br><span class="line">    command=print_message) <span class="comment"># 点击时调用 lambda 函数</span></span><br><span class="line">button.pack()</span><br><span class="line">mainloop()</span><br></pre></td></tr></table></figure>
-
-<p>显然，运用匿名函数的代码简洁很多，也更加符合 Python 的编程习惯。</p>
-<h3 id="Python-函数式编程"><a href="#Python-函数式编程" class="headerlink" title="Python 函数式编程"></a>Python 函数式编程</h3><p>最后，我们一起来看一下，Python 的函数式编程特性，这与我们今天所讲的匿名函数 lambda，有着密切的联系。</p>
-<p>所谓函数式编程，是指代码中每一块都是不可变的（immutable），都由纯函数（pure function）的形式组成。这里的纯函数，是指函数本身相互独立、互不影响，对于相同的输入，总会有相同的输出，没有任何副作用。</p>
-<p>举个很简单的例子，比如对于一个列表，我想让列表中的元素值都变为原来的两倍，我们可以写成下面的形式：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">multiply_2</span><span class="params">(l)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> index <span class="keyword">in</span> range(<span class="number">0</span>, len(l)):</span><br><span class="line">        l[index] *= <span class="number">2</span></span><br><span class="line">    <span class="keyword">return</span> l</span><br></pre></td></tr></table></figure>
-
-<p>这段代码就不是一个纯函数的形式，因为列表中元素的值被改变了，如果我多次调用 multiply_2() 这个函数，那么每次得到的结果都不一样。要想让它成为一个纯函数的形式，就得写成下面这种形式，重新创建一个新的列表并返回。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">multiply_2_pure</span><span class="params">(l)</span>:</span></span><br><span class="line">    new_list = []</span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> l:</span><br><span class="line">        new_list.append(item * <span class="number">2</span>)</span><br><span class="line">    <span class="keyword">return</span> new_list</span><br></pre></td></tr></table></figure>
-
-<p>函数式编程的优点，主要在于其纯函数和不可变的特性使程序更加健壮，易于调试（debug）和测试；缺点主要在于限制多，难写。当然，Python 不同于一些语言（比如 Scala），它并不是一门函数式编程语言，不过，Python 也提供了一些函数式编程的特性，值得我们了解和学习。</p>
-<p>Python 主要提供了这么几个函数：map()、filter() 和 reduce()，通常结合匿名函数 lambda 一起使用。这些都是你需要掌握的东西，接下来我逐一介绍。</p>
-<p>首先是 map(function, iterable) 函数，前面的例子提到过，它表示，对 iterable 中的每个元素，都运用 function 这个函数，最后返回一个新的可遍历的集合。比如刚才列表的例子，要对列表中的每个元素乘以 2，那么用 map 就可以表示为下面这样：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">l = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]</span><br><span class="line">new_list = map(<span class="keyword">lambda</span> x: x * <span class="number">2</span>, l) <span class="comment"># [2， 4， 6， 8， 10]</span></span><br></pre></td></tr></table></figure>
-
-<p>我们可以以 map() 函数为例，看一下 Python 提供的函数式编程接口的性能。还是同样的列表例子，它还可以用 for 循环和 list comprehension（目前没有统一中文叫法，你也可以直译为列表理解等）实现，我们来比较一下它们的速度：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">python3 -mtimeit -s<span class="string">'xs=range(1000000)'</span> <span class="string">'map(lambda x: x*2, xs)'</span></span><br><span class="line"><span class="number">2000000</span> loops, best of <span class="number">5</span>: <span class="number">171</span> nsec per loop</span><br><span class="line"> </span><br><span class="line">python3 -mtimeit -s<span class="string">'xs=range(1000000)'</span> <span class="string">'[x * 2 for x in xs]'</span></span><br><span class="line"><span class="number">5</span> loops, best of <span class="number">5</span>: <span class="number">62.9</span> msec per loop</span><br><span class="line"> </span><br><span class="line">python3 -mtimeit -s<span class="string">'xs=range(1000000)'</span> <span class="string">'l = []'</span> <span class="string">'for i in xs: l.append(i * 2)'</span></span><br><span class="line"><span class="number">5</span> loops, best of <span class="number">5</span>: <span class="number">92.7</span> msec per loop</span><br></pre></td></tr></table></figure>
-
-
-<pre><code>  File &quot;&lt;ipython-input-7-4859408d9dc8&gt;&quot;, line 1
-    python3 -mtimeit -s&apos;xs=range(1000000)&apos; &apos;map(lambda x: x*2, xs)&apos;
-                                         ^
-SyntaxError: invalid syntax</code></pre><p>你可以看到，map() 是最快的。因为 map() 函数直接由 C 语言写的，运行时不需要通过 Python 解释器间接调用，并且内部做了诸多优化，所以运行速度最快。</p>
-<p>接下来来看 filter(function, iterable) 函数，它和 map 函数类似，function 同样表示一个函数对象。filter() 函数表示对 iterable 中的每个元素，都使用 function 判断，并返回 True 或者 False，最后将返回 True 的元素组成一个新的可遍历的集合。</p>
-<p>举个例子，比如我要返回一个列表中的所有偶数，可以写成下面这样：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">l = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]</span><br><span class="line">new_list = filter(<span class="keyword">lambda</span> x: x % <span class="number">2</span> == <span class="number">0</span>, l) <span class="comment"># [2, 4]</span></span><br></pre></td></tr></table></figure>
-
-<p>最后我们来看 reduce(function, iterable) 函数，它通常用来对一个集合做一些累积操作。</p>
-<p>function 同样是一个函数对象，规定它有两个参数，表示对 iterable 中的每个元素以及上一次调用后的结果，运用 function 进行计算，所以最后返回的是一个单独的数值。</p>
-<p>举个例子，我想要计算某个列表元素的乘积，就可以用 reduce() 函数来表示：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">l = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]</span><br><span class="line">product = reduce(<span class="keyword">lambda</span> x, y: x * y, l) <span class="comment"># 1*2*3*4*5 = 120</span></span><br></pre></td></tr></table></figure>
-
-<p>最后我们来看 reduce(function, iterable) 函数，它通常用来对一个集合做一些累积操作。</p>
-<p>function 同样是一个函数对象，规定它有两个参数，表示对 iterable 中的每个元素以及上一次调用后的结果，运用 function 进行计算，所以最后返回的是一个单独的数值。</p>
-<p>举个例子，我想要计算某个列表元素的乘积，就可以用 reduce() 函数来表示：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">l = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]</span><br><span class="line">product = reduce(<span class="keyword">lambda</span> x, y: x * y, l) <span class="comment"># 1*2*3*4*5 = 120</span></span><br></pre></td></tr></table></figure>
-
-<p>当然，类似的，filter() 和 reduce() 的功能，也可以用 for 循环或者 list comprehension 来实现。</p>
-<p>通常来说，在我们想对集合中的元素进行一些操作时，如果操作非常简单，比如相加、累积这种，那么我们优先考虑 map()、filter()、reduce() 这类或者 list comprehension 的形式。至于这两种方式的选择：</p>
-<ul>
-<li><p>在数据量非常多的情况下，比如机器学习的应用，那我们一般更倾向于函数式编程的表示，因为效率更高；</p>
-</li>
-<li><p>在数据量不多的情况下，并且你想要程序更加 Pythonic 的话，那么 list comprehension 也不失为一个好选择。</p>
-</li>
-</ul>
-<p>不过，如果你要对集合中的元素，做一些比较复杂的操作，那么，考虑到代码的可读性，我们通常会使用 for 循环，这样更加清晰明了。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这节课，我们一起学习了 Python 中的匿名函数 lambda，它的主要用途是减少代码的复杂度。需要注意的是 lambda 是一个表达式，并不是一个语句；它只能写成一行的表达形式，语法上并不支持多行。匿名函数通常的使用场景是：程序中需要使用一个函数完成一个简单的功能，并且该函数只调用一次。</p>
-<p>其次，我们也入门了 Python 的函数式编程，主要了解了常见的 map()，fiilter() 和 reduce() 三个函数，并比较了它们与其他形式（for 循环，comprehension）的性能，显然，它们的性能效率是最优的。</p>
-<h3 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h3><p>最后，我想给你留下两道思考题。</p>
-<p>第一问：如果让你对一个字典，根据值进行由高到底的排序，该怎么做呢？以下面这段代码为例，你可以思考一下。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">d = &#123;<span class="string">'mike'</span>: <span class="number">10</span>, <span class="string">'lucy'</span>: <span class="number">2</span>, <span class="string">'ben'</span>: <span class="number">30</span>&#125;</span><br><span class="line">d = sorted(d.items(), key=<span class="keyword">lambda</span> x: x[<span class="number">1</span>], reverse=<span class="literal">True</span>)</span><br><span class="line">print(d)</span><br></pre></td></tr></table></figure>
-
-<pre><code>[(&apos;ben&apos;, 30), (&apos;mike&apos;, 10), (&apos;lucy&apos;, 2)]</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2827,7 +2818,7 @@ SyntaxError: invalid syntax</code></pre><p>你可以看到，map() 是最快的�
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-count">39</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
