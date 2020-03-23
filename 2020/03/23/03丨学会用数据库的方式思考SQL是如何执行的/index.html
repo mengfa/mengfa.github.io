@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="极客时间,sql," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="通过上一篇文章对不同的 DBMS 的介绍，你应该对它们有了一些基础的了解。虽然 SQL 是声明式语言，我们可以像使用英语一样使用它，不过在 RDBMS（关系型数据库管理系统）中，SQL 的实现方式还是有差别的。今天我们就从数据库的角度来思考一下 SQL 是如何被执行的。 关于今天的内容，你会从以下几个方面进行学习：  Oracle 中的 SQL 是如何执行的，什么是硬解析和软解析； MySQL 中">
+<meta name="keywords" content="极客时间,sql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="03丨学会用数据库的方式思考SQL是如何执行的">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;03&#x2F;23&#x2F;03%E4%B8%A8%E5%AD%A6%E4%BC%9A%E7%94%A8%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E6%96%B9%E5%BC%8F%E6%80%9D%E8%80%83SQL%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84&#x2F;index.html">
+<meta property="og:site_name" content="LvYang">
+<meta property="og:description" content="通过上一篇文章对不同的 DBMS 的介绍，你应该对它们有了一些基础的了解。虽然 SQL 是声明式语言，我们可以像使用英语一样使用它，不过在 RDBMS（关系型数据库管理系统）中，SQL 的实现方式还是有差别的。今天我们就从数据库的角度来思考一下 SQL 是如何被执行的。 关于今天的内容，你会从以下几个方面进行学习：  Oracle 中的 SQL 是如何执行的，什么是硬解析和软解析； MySQL 中">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-03-23T12:31:08.783Z">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/03/23/03丨学会用数据库的方式思考SQL是如何执行的/"/>
+
+
+
+
+
+  <title>03丨学会用数据库的方式思考SQL是如何执行的 | LvYang</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LvYang</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/23/03%E4%B8%A8%E5%AD%A6%E4%BC%9A%E7%94%A8%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E6%96%B9%E5%BC%8F%E6%80%9D%E8%80%83SQL%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">03丨学会用数据库的方式思考SQL是如何执行的</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-23T20:29:07+08:00">
+                2020-03-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" itemprop="url" rel="index">
+                    <span itemprop="name">SQL必知必会</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/23/03%E4%B8%A8%E5%AD%A6%E4%BC%9A%E7%94%A8%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E6%96%B9%E5%BC%8F%E6%80%9D%E8%80%83SQL%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2020/03/23/03%E4%B8%A8%E5%AD%A6%E4%BC%9A%E7%94%A8%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E6%96%B9%E5%BC%8F%E6%80%9D%E8%80%83SQL%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>通过上一篇文章对不同的 DBMS 的介绍，你应该对它们有了一些基础的了解。虽然 SQL 是声明式语言，我们可以像使用英语一样使用它，不过在 RDBMS（关系型数据库管理系统）中，SQL 的实现方式还是有差别的。今天我们就从数据库的角度来思考一下 SQL 是如何被执行的。</p>
+<p>关于今天的内容，你会从以下几个方面进行学习：</p>
+<ol>
+<li>Oracle 中的 SQL 是如何执行的，什么是硬解析和软解析；</li>
+<li>MySQL 中的 SQL 是如何执行的，MySQL 的体系结构又是怎样的；</li>
+<li>什么是存储引擎，MySQL 的存储引擎都有哪些？</li>
+</ol>
+<h3 id="Oracle-中的-SQL-是如何执行的"><a href="#Oracle-中的-SQL-是如何执行的" class="headerlink" title="Oracle 中的 SQL 是如何执行的"></a>Oracle 中的 SQL 是如何执行的</h3><p>我们先来看下 SQL 在 Oracle 中的执行过程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">                     SQL语句</span><br><span class="line">                        |</span><br><span class="line">                        |                   硬解析</span><br><span class="line">语法检查----&gt;语义检查----&gt;权限检查----&gt;共享池检查-----&gt;优化器</span><br><span class="line">                                     |             |</span><br><span class="line">                              软解析  |             |</span><br><span class="line">                                    执行-------------</span><br><span class="line">                                   </span><br><span class="line">```                                   </span><br><span class="line"></span><br><span class="line">从上面这张图中可以看出，SQL 语句在 Oracle 中经历了以下的几个步骤。</span><br><span class="line"></span><br><span class="line">1. 语法检查：检查 SQL 拼写是否正确，如果不正确，Oracle 会报语法错误。</span><br><span class="line"></span><br><span class="line">2. 语义检查：检查 SQL 中的访问对象是否存在。比如我们在写 SELECT 语句的时候，列名写错了，系统就会提示错误。语法检查和语义检查的作用是保证 SQL 语句没有错误。</span><br><span class="line"></span><br><span class="line">3. 权限检查：看用户是否具备访问该数据的权限。</span><br><span class="line"></span><br><span class="line">4. 共享池检查：共享池（Shared Pool）是一块内存池，最主要的作用是缓存 SQL 语句和该语句的执行计划。Oracle 通过检查共享池是否存在 SQL 语句的执行计划，来判断进行软解析，还是硬解析。那软解析和硬解析又该怎么理解呢？</span><br><span class="line"></span><br><span class="line">在共享池中，Oracle 首先对 SQL 语句进行 Hash 运算，然后根据 Hash 值在库缓存（Library Cache）中查找，如果存在 SQL 语句的执行计划，就直接拿来执行，直接进入“执行器”的环节，这就是软解析。</span><br><span class="line"></span><br><span class="line">如果没有找到 SQL 语句和执行计划，Oracle 就需要创建解析树进行解析，生成执行计划，进入“优化器”这个步骤，这就是硬解析。</span><br><span class="line"></span><br><span class="line">5. 优化器：优化器中就是要进行硬解析，也就是决定怎么做，比如创建解析树，生成执行计划。</span><br><span class="line"></span><br><span class="line">6. 执行器：当有了解析树和执行计划之后，就知道了 SQL 该怎么被执行，这样就可以在执行器中执行语句了。</span><br><span class="line"></span><br><span class="line">共享池是 Oracle 中的术语，包括了库缓存，数据字典缓冲区等。我们上面已经讲到了库缓存区，它主要缓存 SQL 语句和执行计划。而数据字典缓冲区存储的是 Oracle 中的对象定义，比如表、视图、索引等对象。当对 SQL 语句进行解析的时候，如果需要相关的数据，会从数据字典缓冲区中提取。</span><br><span class="line"></span><br><span class="line">库缓存这一个步骤，决定了 SQL 语句是否需要进行硬解析。为了提升 SQL 的执行效率，我们应该尽量避免硬解析，因为在 SQL 的执行过程中，创建解析树，生成执行计划是很消耗资源的。</span><br><span class="line"></span><br><span class="line">你可能会问，如何避免硬解析，尽量使用软解析呢？在 Oracle 中，绑定变量是它的一大特色。绑定变量就是在 SQL 语句中使用变量，通过不同的变量取值来改变 SQL 的执行结果。这样做的好处是能提升软解析的可能性，不足之处在于可能会导致生成的执行计划不够优化，因此是否需要绑定变量还需要视情况而定。</span><br><span class="line"></span><br><span class="line">举个例子，我们可以使用下面的查询语句：</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">```python</span><br><span class="line">SQL&gt; select * from player where player_id = 10001;</span><br></pre></td></tr></table></figure>
+
+<p>你也可以使用绑定变量，如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; select * <span class="keyword">from</span> player where player_id = :player_id;</span><br></pre></td></tr></table></figure>
+
+<p>这两个查询语句的效率在 Oracle 中是完全不同的。如果你在查询 player_id = 10001 之后，还会查询 10002、10003 之类的数据，那么每一次查询都会创建一个新的查询解析。而第二种方式使用了绑定变量，那么在第一次查询之后，在共享池中就会存在这类查询的执行计划，也就是软解析。</p>
+<p>因此我们可以通过使用绑定变量来减少硬解析，减少 Oracle 的解析工作量。但是这种方式也有缺点，使用动态 SQL 的方式，因为参数不同，会导致 SQL 的执行效率不同，同时 SQL 优化也会比较困难。</p>
+<h3 id="MySQL-中的-SQL-是如何执行的"><a href="#MySQL-中的-SQL-是如何执行的" class="headerlink" title="MySQL 中的 SQL 是如何执行的"></a>MySQL 中的 SQL 是如何执行的</h3><p>Oracle 中采用了共享池来判断 SQL 语句是否存在缓存和执行计划，通过这一步骤我们可以知道应该采用硬解析还是软解析。那么在 MySQL 中，SQL 是如何被执行的呢？</p>
+<p>首先 MySQL 是典型的 C/S 架构，即 Client/Server 架构，服务器端程序使用的 mysqld。整体的 MySQL 流程如下图所示：</p>
+<p>你能看到 MySQL 由三层组成：</p>
+<ol>
+<li>连接层：客户端和服务器端建立连接，客户端发送 SQL 至服务器端；</li>
+<li>SQL 层：对 SQL 语句进行查询处理；</li>
+<li>存储引擎层：与数据库文件打交道，负责数据的存储和读取。</li>
+</ol>
+<p>其中 SQL 层与数据库文件的存储方式无关，我们来看下 SQL 层的结构：</p>
+<p>SQL语句 —-&gt;解析器—-&gt;优化器—-&gt;执行器—|<br>    |        ^                           |-&gt;输出结果<br>    |        |没找到                      |<br>    |        |                           |<br>    |——-&gt;缓存查询&lt;——————–|找到</p>
+<ol>
+<li>询缓存：Server 如果在查询缓存中发现了这条 SQL 语句，就会直接将结果返回给客户端；如果没有，就进入到解析器阶段。需要说明的是，因为查询缓存往往效率不高，所以在 MySQL8.0 之后就抛弃了这个功能。</li>
+<li>解析器：在解析器中对 SQL 语句进行语法分析、语义分析。</li>
+<li>优化器：在优化器中会确定 SQL 语句的执行路径，比如是根据全表检索，还是根据索引来检索等。</li>
+<li>执行器：在执行之前需要判断该用户是否具备权限，如果具备权限就执行 SQL 查询并返回结果。在 MySQL8.0 以下的版本，如果设置了查询缓存，这时会将查询结果进行缓存。</li>
+</ol>
+<p>你能看到 SQL 语句在 MySQL 中的流程是：SQL 语句→缓存查询→解析器→优化器→执行器。在一部分中，MySQL 和 Oracle 执行 SQL 的原理是一样的。</p>
+<p>与 Oracle 不同的是，MySQL 的存储引擎采用了插件的形式，每个存储引擎都面向一种特定的数据库应用环境。同时开源的 MySQL 还允许开发人员设置自己的存储引擎，下面是一些常见的存储引擎：</p>
+<ol>
+<li>InnoDB 存储引擎：它是 MySQL 5.5 版本之后默认的存储引擎，最大的特点是支持事务、行级锁定、外键约束等。</li>
+<li>MyISAM 存储引擎：在 MySQL 5.5 版本之前是默认的存储引擎，不支持事务，也不支持外键，最大的特点是速度快，占用资源少。</li>
+<li>Memory 存储引擎：使用系统内存作为存储介质，以便得到更快的响应速度。不过如果 mysqld 进程崩溃，则会导致所有的数据丢失，因此我们只有当数据是临时的情况下才使用 Memory 存储引擎。</li>
+<li>NDB 存储引擎：也叫做 NDB Cluster 存储引擎，主要用于 MySQL Cluster 分布式集群环境，类似于 Oracle 的 RAC 集群。</li>
+<li>Archive 存储引擎：它有很好的压缩机制，用于文件归档，在请求写入时会进行压缩，所以也经常用来做仓库。</li>
+</ol>
+<p>需要注意的是，数据库的设计在于表的设计，而在 MySQL 中每个表的设计都可以采用不同的存储引擎，我们可以根据实际的数据处理需要来选择存储引擎，这也是 MySQL 的强大之处。</p>
+<h3 id="数据库管理系统也是一种软件"><a href="#数据库管理系统也是一种软件" class="headerlink" title="数据库管理系统也是一种软件"></a>数据库管理系统也是一种软件</h3><p>我们刚才了解了 SQL 语句在 Oracle 和 MySQL 中的执行流程，实际上完整的 Oracle 和 MySQL 结构图要复杂得多：</p>
+<p>如果你只是简单地把 MySQL 和 Oracle 看成数据库管理系统软件，从外部看难免会觉得“晦涩难懂”，毕竟组织结构太多了。我们在学习的时候，还需要具备抽象的能力，抓取最核心的部分：SQL 的执行原理。因为不同的 DBMS 的 SQL 的执行原理是相通的，只是在不同的软件中，各有各的实现路径。</p>
+<p>既然一条 SQL 语句会经历不同的模块，那我们就来看下，在不同的模块中，SQL 执行所使用的资源（时间）是怎样的。下面我来教你如何在 MySQL 中对一条 SQL 语句的执行时间进行分析。</p>
+<p>首先我们需要看下 profiling 是否开启，开启它可以让 MySQL 收集在 SQL 执行时所使用的资源情况，命令如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select @@profiling;</span><br></pre></td></tr></table></figure>
+
+<p>profiling=0 代表关闭，我们需要把 profiling 打开，即设置为 1：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; set profiling=<span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p>然后我们执行一个 SQL 查询（你可以执行任何一个 SQL 查询）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * <span class="keyword">from</span> wucai.heros;</span><br></pre></td></tr></table></figure>
+
+<p>查看当前会话所产生的所有 profiles：<br>你会发现我们刚才执行了两次查询，Query ID 分别为 1 和 2。如果我们想要获取上一次查询的执行时间，可以使用：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show profile;</span><br></pre></td></tr></table></figure>
+
+<p>starting    0.000083    6.837<br>checking permissions    0.000011    0.906  权限检查<br>Opening tables    0.000088    7.249          打开表<br>init    0.00002    1.647                      初始化<br>System lock    0.000007    0.577              锁系统<br>optimizing    0.000005    0.412              优化查询<br>statistics    0.00001    0.824<br>preparing    0.000031    2.554              准备<br>Creating tmp table    0.000046    3.789      执行<br>Sorting result    0.000006    0.494<br>executing    0.000634    52.224<br>Sending data    0.000152    12.521<br>Creating sort index    0.000036    2.965<br>end    0.000004    0.329<br>query end    0.000004    0.329<br>removing tmp table    0.000007    0.577<br>query end    0.000002    0.165<br>closing tables    0.000002    0.165<br>removing tmp table    0.000008    0.659<br>closing tables    0.000003    0.247<br>freeing items    0.000034    2.801<br>cleaning up    0.000021    1.730<br>当然你也可以查询指定的 Query ID，比如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show profile <span class="keyword">for</span> query <span class="number">2</span>;</span><br></pre></td></tr></table></figure>
+
+<p>查询 SQL 的执行时间结果和上面是一样的。</p>
+<p>在 8.0 版本之后，MySQL 不再支持缓存的查询，原因我在上文已经说过。一旦数据表有更新，缓存都将清空，因此只有数据表是静态的时候，或者数据表很少发生变化时，使用缓存查询才有价值，否则如果数据表经常更新，反而增加了 SQL 的查询时间。</p>
+<p>你可以使用 select version() 来查看 MySQL 的版本情况</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>我们在使用 SQL 的时候，往往只见树木，不见森林，不会注意到它在各种数据库软件中是如何执行的，今天我们从全貌的角度来理解这个问题。你能看到不同的 RDBMS 之间有相同的地方，也有不同的地方。</p>
+<p>相同的地方在于 Oracle 和 MySQL 都是通过解析器→优化器→执行器这样的流程来执行 SQL 的。</p>
+<p>但 Oracle 和 MySQL 在进行 SQL 的查询上面有软件实现层面的差异。Oracle 提出了共享池的概念，通过共享池来判断是进行软解析，还是硬解析。而在 MySQL 中，8.0 以后的版本不再支持查询缓存，而是直接执行解析器→优化器→执行器的流程，这一点从 MySQL 中的 show profile 里也能看到。同时 MySQL 的一大特色就是提供了各种存储引擎以供选择，不同的存储引擎有各自的使用场景，我们可以针对每张表选择适合的存储引擎。</p>
+<p>今天的内容到这里就结束了，你能说一下 Oracle 中的绑定变量是什么吗？使用它有什么优缺点吗？MySQL 的存储引擎是一大特色，其中 MyISAM 和 InnoDB 都是常用的存储引擎，这两个搜索引擎的特性和使用场景分别是什么？</p>
+<p>最后留一道选择题吧，解析后的 SQL 语句在 Oracle 的哪个区域中进行缓存？</p>
+<p>A. 数据缓冲区<br>B. 日志缓冲区<br>C. 共享池<br>D. 大池</p>
+<p>答案是:C<br>共享池检查：共享池（Shared Pool）是一块内存池，最主要的作用是缓存 SQL 语句和该语句的执行计划。Oracle 通过检查共享池是否存在 SQL 语句的执行计划，来判断进行软解析，还是硬解析。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E6%9E%81%E5%AE%A2%E6%97%B6%E9%97%B4/" rel="tag"># 极客时间</a>
+          
+            <a href="/tags/sql/" rel="tag"># sql</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/23/02%E4%B8%A8DBMS%E7%9A%84%E5%89%8D%E4%B8%96%E4%BB%8A%E7%94%9F/" rel="next" title="02丨DBMS的前世今生">
+                <i class="fa fa-chevron-left"></i> 02丨DBMS的前世今生
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">LvYang</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Oracle-中的-SQL-是如何执行的"><span class="nav-number">1.</span> <span class="nav-text">Oracle 中的 SQL 是如何执行的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL-中的-SQL-是如何执行的"><span class="nav-number">2.</span> <span class="nav-text">MySQL 中的 SQL 是如何执行的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库管理系统也是一种软件"><span class="nav-number">3.</span> <span class="nav-text">数据库管理系统也是一种软件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LvYang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'mengfa',
+            repo: 'blogcomments',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'b715de6e1ca56e27e404f3764f7a58cc1f3d4b22',
+            
+                client_id: 'Iv1.b0b9f79f82846ce7'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'qcq1G35cOv9sG5BrpbdXJwtJ-gzGzoHsz',
+        appKey: 'VtFEF7WhBgSXbcGzdO1GztzO',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
