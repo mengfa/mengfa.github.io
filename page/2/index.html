@@ -258,6 +258,460 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/24/29%20%7C%20%E5%B7%A7%E7%94%A8%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86%E5%99%A8%E5%92%8CWith%E8%AF%AD%E5%8F%A5%E7%B2%BE%E7%AE%80%E4%BB%A3%E7%A0%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/24/29%20%7C%20%E5%B7%A7%E7%94%A8%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86%E5%99%A8%E5%92%8CWith%E8%AF%AD%E5%8F%A5%E7%B2%BE%E7%AE%80%E4%BB%A3%E7%A0%81/" itemprop="url">29 | 巧用上下文管理器和With语句精简代码</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-24T20:10:07+08:00">
+                2019-12-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
+                    <span itemprop="name">python核心技术与实战</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/12/24/29%20%7C%20%E5%B7%A7%E7%94%A8%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86%E5%99%A8%E5%92%8CWith%E8%AF%AD%E5%8F%A5%E7%B2%BE%E7%AE%80%E4%BB%A3%E7%A0%81/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/12/24/29%20%7C%20%E5%B7%A7%E7%94%A8%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86%E5%99%A8%E5%92%8CWith%E8%AF%AD%E5%8F%A5%E7%B2%BE%E7%AE%80%E4%BB%A3%E7%A0%81/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>我想你对 Python 中的 with 语句一定不陌生，在专栏里它也曾多次出现，尤其是在文件的输入输出操作中，不过我想，大部分人可能习惯了它的使用，却并不知道隐藏在其背后的“秘密”。</p>
+<p>那么，究竟 with 语句要怎么用，与之相关的上下文管理器（context manager）是什么，它们之间又有着怎样的联系呢？这节课，我就带你一起揭开它们的神秘面纱。</p>
+<h3 id="什么是上下文管理器？"><a href="#什么是上下文管理器？" class="headerlink" title="什么是上下文管理器？"></a>什么是上下文管理器？</h3><p>在任何一门编程语言中，文件的输入输出、数据库的连接断开等，都是很常见的资源管理操作。但资源都是有限的，在写程序时，我们必须保证这些资源在使用过后得到释放，不然就容易造成资源泄露，轻者使得系统处理缓慢，重则会使系统崩溃。</p>
+<p>光说这些概念，你可能体会不到这一点，我们可以看看下面的例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">10000000</span>): </span><br><span class="line">    f = open(<span class="string">'test.txt'</span>, <span class="string">'w'</span>)</span><br><span class="line">    f.write(<span class="string">'hello'</span>)</span><br></pre></td></tr></table></figure>
+
+<p>这里我们一共打开了 10000000 个文件，但是用完以后都没有关闭它们，如果你运行该段代码，便会报错：</p>
+<p>这就是一个典型的资源泄露的例子。因为程序中同时打开了太多的文件，占据了太多的资源，造成系统崩溃。</p>
+<p>为了解决这个问题，不同的编程语言都引入了不同的机制。而在 Python 中，对应的解决方式便是上下文管理器（context manager）。上下文管理器，能够帮助你自动分配并且释放资源，其中最典型的应用便是 with 语句。所以，上面代码的正确写法应该如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">10000000</span>):</span><br><span class="line">    <span class="keyword">with</span> open(<span class="string">'test.txt'</span>, <span class="string">'w'</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(<span class="string">'hello'</span>)</span><br></pre></td></tr></table></figure>
+
+<p>这样，我们每次打开文件“test.txt”，并写入‘hello’之后，这个文件便会自动关闭，相应的资源也可以得到释放，防止资源泄露。当然，with 语句的代码，也可以用下面的形式表示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">f = open(<span class="string">'test.txt'</span>, <span class="string">'w'</span>)</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    f.write(<span class="string">'hello'</span>)</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    f.close()</span><br></pre></td></tr></table></figure>
+
+<p>要注意的是，最后的 finally block 尤其重要，哪怕在写入文件时发生错误异常，它也可以保证该文件最终被关闭。不过与 with 语句相比，这样的代码就显得冗余了，并且还容易漏写，因此我们一般更倾向于使用 with 语句。</p>
+<p>另外一个典型的例子，是 Python 中的 threading.lock 类。举个例子，比如我想要获取一个锁，执行相应的操作，完成后再释放，那么代码就可以写成下面这样：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">some_lock = threading.Lock()</span><br><span class="line">some_lock.acquire()</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    ...</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    some_lock.release()</span><br></pre></td></tr></table></figure>
+
+<p>而对应的 with 语句，同样非常简洁：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">some_lock = threading.Lock()</span><br><span class="line"><span class="keyword">with</span> somelock:</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+
+<p>我们可以从这两个例子中看到，with 语句的使用，可以简化了代码，有效避免资源泄露的发生。</p>
+<h3 id="上下文管理器的实现"><a href="#上下文管理器的实现" class="headerlink" title="上下文管理器的实现"></a>上下文管理器的实现</h3><h3 id="基于类的上下文管理器"><a href="#基于类的上下文管理器" class="headerlink" title="基于类的上下文管理器"></a>基于类的上下文管理器</h3><p>了解了上下文管理的概念和优点后，下面我们就通过具体的例子，一起来看看上下文管理器的原理，搞清楚它的内部实现。这里，我自定义了一个上下文管理类 FileManager，模拟 Python 的打开、关闭文件操作：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FileManager</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name, mode)</span>:</span></span><br><span class="line">        print(<span class="string">'calling __init__ method'</span>)</span><br><span class="line">        self.name = name</span><br><span class="line">        self.mode = mode </span><br><span class="line">        self.file = <span class="literal">None</span></span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__enter__</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'calling __enter__ method'</span>)</span><br><span class="line">        self.file = open(self.name, self.mode)</span><br><span class="line">        <span class="keyword">return</span> self.file</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__exit__</span><span class="params">(self, exc_type, exc_val, exc_tb)</span>:</span></span><br><span class="line">        print(<span class="string">'calling __exit__ method'</span>)</span><br><span class="line">        <span class="keyword">if</span> self.file:</span><br><span class="line">            self.file.close()</span><br><span class="line">            </span><br><span class="line"><span class="keyword">with</span> FileManager(<span class="string">'test.txt'</span>, <span class="string">'w'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    print(<span class="string">'ready to write to file'</span>)</span><br><span class="line">    f.write(<span class="string">'hello world'</span>)</span><br></pre></td></tr></table></figure>
+
+<p>需要注意的是，当我们用类来创建上下文管理器时，必须保证这个类包括方法”<strong>enter</strong>()”和方法“<strong>exit</strong>()”。其中，方法“<strong>enter</strong>()”返回需要被管理的资源，方法“<strong>exit</strong>()”里通常会存在一些释放、清理资源的操作，比如这个例子中的关闭文件等等。</p>
+<p>而当我们用 with 语句，执行这个上下文管理器时：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> FileManager(<span class="string">'test.txt'</span>, <span class="string">'w'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(<span class="string">'hello world'</span>)</span><br></pre></td></tr></table></figure>
+
+<p>下面这四步操作会依次发生：</p>
+<ol>
+<li>方法“<strong>init</strong>()”被调用，程序初始化对象 FileManager，使得文件名（name）是”test.txt”，文件模式 (mode) 是’w’；</li>
+<li>方法“<strong>enter</strong>()”被调用，文件“test.txt”以写入的模式被打开，并且返回 FileManager 对象赋予变量 f；</li>
+<li>字符串“hello world”被写入文件“test.txt”；</li>
+<li>方法“<strong>exit</strong>()”被调用，负责关闭之前打开的文件流。</li>
+</ol>
+<p>因此，这个程序的输出是：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">calling __init__ method</span><br><span class="line">calling __enter__ method</span><br><span class="line">ready to write to file</span><br><span class="line">calling __exit__ meth</span><br></pre></td></tr></table></figure>
+
+<p>另外，值得一提的是，方法“<strong>exit</strong>()”中的参数“exc_type, exc_val, exc_tb”，分别表示 exception_type、exception_value 和 traceback。当我们执行含有上下文管理器的 with 语句时，如果有异常抛出，异常的信息就会包含在这三个变量中，传入方法“<strong>exit</strong>()”。</p>
+<p>因此，如果你需要处理可能发生的异常，可以在“<strong>exit</strong>()”添加相应的代码，比如下面这样来写：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'__init__ called'</span>)        </span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__enter__</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'__enter__ called'</span>)</span><br><span class="line">        <span class="keyword">return</span> self</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__exit__</span><span class="params">(self, exc_type, exc_value, exc_tb)</span>:</span></span><br><span class="line">        print(<span class="string">'__exit__ called'</span>)</span><br><span class="line">        <span class="keyword">if</span> exc_type:</span><br><span class="line">            print(<span class="string">f'exc_type: <span class="subst">&#123;exc_type&#125;</span>'</span>)</span><br><span class="line">            print(<span class="string">f'exc_value: <span class="subst">&#123;exc_value&#125;</span>'</span>)</span><br><span class="line">            print(<span class="string">f'exc_traceback: <span class="subst">&#123;exc_tb&#125;</span>'</span>)</span><br><span class="line">            print(<span class="string">'exception handled'</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">with</span> Foo() <span class="keyword">as</span> obj:</span><br><span class="line">    <span class="keyword">raise</span> Exception(<span class="string">'exception raised'</span>).with_traceback(<span class="literal">None</span>)</span><br></pre></td></tr></table></figure>
+
+<p>这里，我们在 with 语句中手动抛出了异常“exception raised”，你可以看到，“<strong>exit</strong>()”方法中异常，被顺利捕捉并进行了处理。不过需要注意的是，如果方法“<strong>exit</strong>()”没有返回 True，异常仍然会被抛出。因此，如果你确定异常已经被处理了，请在“<strong>exit</strong>()”的最后，加上“return True”这条语句。</p>
+<p>同样的，数据库的连接操作，也常常用上下文管理器来表示，这里我给出了比较简化的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DBConnectionManager</span>:</span> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, hostname, port)</span>:</span> </span><br><span class="line">        self.hostname = hostname </span><br><span class="line">        self.port = port </span><br><span class="line">        self.connection = <span class="literal">None</span></span><br><span class="line">  </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__enter__</span><span class="params">(self)</span>:</span> </span><br><span class="line">        self.connection = DBClient(self.hostname, self.port) </span><br><span class="line">        <span class="keyword">return</span> self</span><br><span class="line">  </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__exit__</span><span class="params">(self, exc_type, exc_val, exc_tb)</span>:</span> </span><br><span class="line">        self.connection.close() </span><br><span class="line">  </span><br><span class="line"><span class="keyword">with</span> DBConnectionManager(<span class="string">'localhost'</span>, <span class="string">'8080'</span>) <span class="keyword">as</span> db_client:</span><br></pre></td></tr></table></figure>
+
+<p>与前面 FileManager 的例子类似：</p>
+<ul>
+<li>方法“<strong>init</strong>()”负责对数据库进行初始化，也就是将主机名、接口（这里是 localhost 和 8080）分别赋予变量 hostname 和 port；</li>
+<li>方法“<strong>enter</strong>()”连接数据库，并且返回对象 DBConnectionManager；</li>
+<li>方法“<strong>exit</strong>()”则负责关闭数据库的连接。<br>这样一来，只要你写完了 DBconnectionManager 这个类，那么在程序每次连接数据库时，我们都只需要简单地调用 with 语句即可，并不需要关心数据库的关闭、异常等等，显然大大提高了开发的效率。</li>
+</ul>
+<h3 id="基于生成器的上下文管理器"><a href="#基于生成器的上下文管理器" class="headerlink" title="基于生成器的上下文管理器"></a>基于生成器的上下文管理器</h3><p>诚然，基于类的上下文管理器，在 Python 中应用广泛，也是我们经常看到的形式，不过 Python 中的上下文管理器并不局限于此。除了基于类，它还可以基于生成器实现。接下来我们来看一个例子。</p>
+<p>比如，你可以使用装饰器 contextlib.contextmanager，来定义自己所需的基于生成器的上下文管理器，用以支持 with 语句。还是拿前面的类上下文管理器 FileManager 来说，我们也可以用下面形式来表示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> contextlib <span class="keyword">import</span> contextmanager</span><br><span class="line"> </span><br><span class="line"><span class="meta">@contextmanager</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">file_manager</span><span class="params">(name, mode)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        f = open(name, mode)</span><br><span class="line">        <span class="keyword">yield</span> f</span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        f.close()</span><br><span class="line">        </span><br><span class="line"><span class="keyword">with</span> file_manager(<span class="string">'test.txt'</span>, <span class="string">'w'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(<span class="string">'hello world'</span>)</span><br></pre></td></tr></table></figure>
+
+<p>这段代码中，函数 file_manager() 是一个生成器，当我们执行 with 语句时，便会打开文件，并返回文件对象 f；当 with 语句执行完后，finally block 中的关闭文件操作便会执行。</p>
+<p>你可以看到，使用基于生成器的上下文管理器时，我们不再用定义“<strong>enter</strong>()”和“<strong>exit</strong>()”方法，但请务必加上装饰器 @contextmanager，这一点新手很容易疏忽。</p>
+<p>讲完这两种不同原理的上下文管理器后，还需要强调的是，基于类的上下文管理器和基于生成器的上下文管理器，这两者在功能上是一致的。只不过，</p>
+<ul>
+<li>基于类的上下文管理器更加 flexible，适用于大型的系统开发；</li>
+<li>而基于生成器的上下文管理器更加方便、简洁，适用于中小型程序。<br>无论你使用哪一种，请不用忘记在方法“<strong>exit</strong>()”或者是 finally block 中释放资源，这一点尤其重要。</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这节课，我们先通过一个简单的例子，了解了资源泄露的易发生性，和其带来的严重后果，从而引入了应对方案——即上下文管理器的概念。上下文管理器，通常应用在文件的打开关闭和数据库的连接关闭等场景中，可以确保用过的资源得到迅速释放，有效提高了程序的安全性，</p>
+<p>接着，我们通过自定义上下文管理的实例，了解了上下文管理工作的原理，并一起学习了基于类的上下文管理器和基于生成器的上下文管理器，这两者的功能相同，具体用哪个，取决于你的具体使用场景。</p>
+<p>另外，上下文管理器通常和 with 语句一起使用，大大提高了程序的简洁度。需要注意的是，当我们用 with 语句执行上下文管理器的操作时，一旦有异常抛出，异常的类型、值等具体信息，都会通过参数传入“<strong>exit</strong>()”函数中。你可以自行定义相关的操作对异常进行处理，而处理完异常后，也别忘了加上“return True”这条语句，否则仍然会抛出异常。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/23/28%20%7C%20%E5%A6%82%E4%BD%95%E5%90%88%E7%90%86%E5%88%A9%E7%94%A8assert%EF%BC%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/23/28%20%7C%20%E5%A6%82%E4%BD%95%E5%90%88%E7%90%86%E5%88%A9%E7%94%A8assert%EF%BC%9F/" itemprop="url">28 | 如何合理利用assert？</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-23T20:10:07+08:00">
+                2019-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
+                    <span itemprop="name">python核心技术与实战</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/12/23/28%20%7C%20%E5%A6%82%E4%BD%95%E5%90%88%E7%90%86%E5%88%A9%E7%94%A8assert%EF%BC%9F/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/12/23/28%20%7C%20%E5%A6%82%E4%BD%95%E5%90%88%E7%90%86%E5%88%A9%E7%94%A8assert%EF%BC%9F/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>相信你平时在写代码时，肯定或多或少看到过 assert 的存在。我也曾在日常的 code review 中，被一些同事要求增加 assert 语句，让代码更加健壮。</p>
+<p>不过，尽管如此，我发现在很多情况下，assert 还是很容易被忽略，人们似乎对这么一个“不起眼”的东西并不关心。但事实上，这个看似“不起眼”的东西，如果能用好，对我们的程序大有裨益。</p>
+<p>说了这么多，那么究竟什么是 assert，我们又该如何合理地使用 assert 呢？今天这节课，我就带你一起来学习它的用法。</p>
+<h3 id="什么是-assert？"><a href="#什么是-assert？" class="headerlink" title="什么是 assert？"></a>什么是 assert？</h3><p>Python 的 assert 语句，可以说是一个 debug 的好工具，主要用于测试一个条件是否满足。如果测试的条件满足，则什么也不做，相当于执行了 pass 语句；如果测试条件不满足，便会抛出异常 AssertionError，并返回具体的错误信息（optional）。</p>
+<p>它的具体语法是下面这样的：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">assert_stmt ::=  <span class="string">"assert"</span> expression [<span class="string">","</span> expression]</span><br></pre></td></tr></table></figure>
+
+<p>我们先来看一个简单形式的assert expression，比如下面这个例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">assert</span> <span class="number">1</span> == <span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<p>它就相当于下面这两行代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> __debug__:</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> expression: <span class="keyword">raise</span> AssertionError</span><br></pre></td></tr></table></figure>
+
+<p>再来看assert expression1, expression2的形式，比如下面这个例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">assert</span> <span class="number">1</span> == <span class="number">2</span>,  <span class="string">'assertion is wrong'</span></span><br></pre></td></tr></table></figure>
+
+<p>它就相当于下面这两行代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> __debug__:</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> expression1: <span class="keyword">raise</span> AssertionError(expression2)</span><br></pre></td></tr></table></figure>
+
+<p>这里的<strong>debug</strong>是一个常数。如果 Python 程序执行时附带了-O这个选项，比如Python test.py -O，那么程序中所有的 assert 语句都会失效，常数<strong>debug</strong>便为 False；反之<strong>debug</strong>则为 True。</p>
+<p>不过，需要注意的是，直接对常数<strong>debug</strong>赋值是非法的，因为它的值在解释器开始运行时就已经决定了，中途无法改变。</p>
+<p>此外，一定记住，不要在使用 assert 时加入括号，比如下面这个例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">assert</span>(<span class="number">1</span> == <span class="number">2</span>, <span class="string">'This should fail'</span>)</span><br></pre></td></tr></table></figure>
+
+<pre><code>&lt;&gt;:1: SyntaxWarning: assertion is always true, perhaps remove parentheses?
+&lt;&gt;:1: SyntaxWarning: assertion is always true, perhaps remove parentheses?
+&lt;&gt;:1: SyntaxWarning: assertion is always true, perhaps remove parentheses?
+&lt;ipython-input-1-2c057bd7fe24&gt;:1: SyntaxWarning: assertion is always true, perhaps remove parentheses?
+  assert(1 == 2, &apos;This should fail&apos;)</code></pre><p>如果你按照这样来写，无论表达式对与错（比如这里的 1 == 2 显然是错误的），assert 检查永远不会 fail，程序只会给你 SyntaxWarning。</p>
+<p>正确的写法，应该是下面这种不带括号的写法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">assert</span> <span class="number">1</span> == <span class="number">2</span>， <span class="string">'This should fail'</span></span><br></pre></td></tr></table></figure>
+
+
+<pre><code>  File &quot;&lt;ipython-input-2-fc2fe8967c4a&gt;&quot;, line 1
+    assert 1 == 2， &apos;This should fail&apos;
+                 ^
+SyntaxError: invalid character in identifier</code></pre><p>总的来说，assert 在程序中的作用，是对代码做一些 internal 的 self-check。使用 assert，就表示你很确定。这个条件一定会发生或者一定不会发生。</p>
+<p>举个例子，比如你有一个函数，其中一个参数是人的性别，因为性别只有男女之分（这里只指生理性别），你便可以使用 assert，以防止程序的非法输入。如果你的程序没有 bug，那么 assert 永远不会抛出异常；而它一旦抛出了异常，你就知道程序存在问题了，并且可以根据错误信息，很容易定位出错误的源头。</p>
+<h3 id="assert-的用法"><a href="#assert-的用法" class="headerlink" title="assert 的用法"></a>assert 的用法</h3><p>讲完了 assert 的基本语法与概念，我们接下来通过一些实际应用的例子，来看看 assert 在 Python 中的用法，并弄清楚 assert 的使用场景。</p>
+<p>第一个例子，假设你现在使用的极客时间正在做专栏促销活动，准备对一些专栏进行打折，所以后台需要写一个 apply_discount() 函数，要求输入为原来的价格和折扣，输出是折后的价格。那么，我们可以大致写成下面这样：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">apply_discount</span><span class="params">(price, discount)</span>:</span></span><br><span class="line">    updated_price = price * (<span class="number">1</span> - discount)</span><br><span class="line">    <span class="keyword">assert</span> <span class="number">0</span> &lt;= updated_price &lt;= price, <span class="string">'price should be greater or equal to 0 and less or equal to original price'</span></span><br><span class="line">    <span class="keyword">return</span> updated_price</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，在计算新价格的后面，我们还写了一个 assert 语句，用来检查折后价格，这个值必须大于等于 0、小于等于原来的价格，否则就抛出异常。</p>
+<p>我们可以试着输入几组数，来验证一下这个功能：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">apply_discount(<span class="number">100</span>, <span class="number">0.2</span>)</span><br><span class="line"><span class="number">80.0</span></span><br><span class="line"> </span><br><span class="line">apply_discount(<span class="number">100</span>, <span class="number">2</span>)</span><br><span class="line">AssertionError: price should be greater <span class="keyword">or</span> equal to <span class="number">0</span> <span class="keyword">and</span> less <span class="keyword">or</span> equal to original price</span><br></pre></td></tr></table></figure>
+
+<p>显然，当 discount 是 0.2 时，输出 80，没有问题。但是当 discount 为 2 时，程序便抛出下面这个异常：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AssertionError：price should be greater <span class="keyword">or</span> equal to <span class="number">0</span> <span class="keyword">and</span> less <span class="keyword">or</span> equal to original price</span><br></pre></td></tr></table></figure>
+
+<p>这样一来，如果开发人员修改相关的代码，或者是加入新的功能，导致 discount 数值的异常时，我们运行测试时就可以很容易发现问题。正如我开头所说，assert 的加入，可以有效预防 bug 的发生，提高程序的健壮性。</p>
+<p>再来看一个例子，最常见的除法操作，这在任何领域的计算中都经常会遇到。同样还是以极客时间为例，假如极客时间后台想知道每个专栏的平均销售价格，那么就需要给定销售总额和销售数目，这样平均销售价格便很容易计算出来：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">calculate_average_price</span><span class="params">(total_sales, num_sales)</span>:</span></span><br><span class="line">    <span class="keyword">assert</span> num_sales &gt; <span class="number">0</span>, <span class="string">'number of sales should be greater than 0'</span></span><br><span class="line">    <span class="keyword">return</span> total_sales / num_sales</span><br></pre></td></tr></table></figure>
+
+<p>同样的，我们也加入了 assert 语句，规定销售数目必须大于 0，这样就可以防止后台计算那些还未开卖的专栏的价格。</p>
+<p>除了这两个例子，在实际工作中，assert 还有一些很常见的用法，比如下面的场景：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(input)</span>:</span></span><br><span class="line">    <span class="keyword">assert</span> isinstance(input, list), <span class="string">'input must be type of list'</span></span><br><span class="line">    <span class="comment"># 下面的操作都是基于前提：input 必须是 list</span></span><br><span class="line">    <span class="keyword">if</span> len(input) == <span class="number">1</span>:</span><br><span class="line">        ...</span><br><span class="line">    <span class="keyword">elif</span> len(input) == <span class="number">2</span>:</span><br><span class="line">        ...</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        ...</span><br></pre></td></tr></table></figure>
+
+<p>这里函数 func() 里的所有操作，都是基于输入必须是 list 这个前提。是不是很熟悉的需求呢？那我们就很有必要在开头加一句 assert 的检查，防止程序出错。</p>
+<p>当然，我们也要根据具体情况具体分析。比如上面这个例子，之所以能加 assert，是因为我们很确定输入必须是 list，不能是其他数据类型。</p>
+<p>如果你的程序中，允许 input 是其他数据类型，并且对不同的数据类型都有不同的处理方式，那你就应该写成 if else 的条件语句了：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(input)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> isinstance(input, list):</span><br><span class="line">        ...</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        ...</span><br></pre></td></tr></table></figure>
+
+<h3 id="assert-错误示例"><a href="#assert-错误示例" class="headerlink" title="assert 错误示例"></a>assert 错误示例</h3><p>前面我们讲了这么多 assert 的使用场景，可能给你一种错觉，也可能会让你有些迷茫：很多地方都可以使用 assert， 那么，很多 if 条件语句是不是都可以换成 assert 呢？这么想可就不准确了，接下来，我们就一起来看几个典型的错误用法，避免一些想当然的用法。</p>
+<p>还是以极客时间为例，我们假设下面这样的场景：后台有时候需要删除一些上线时间较长的专栏，于是，相关的开发人员便设计出了下面这个专栏删除函数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">delete_course</span><span class="params">(user, course_id)</span>:</span></span><br><span class="line">    <span class="keyword">assert</span> user_is_admin(user), <span class="string">'user must be admin'</span></span><br><span class="line">    <span class="keyword">assert</span> course_exist(course_id), <span class="string">'course id must exist'</span></span><br><span class="line">    delete(course_id)</span><br></pre></td></tr></table></figure>
+
+<p>极客时间规定，必须是 admin 才能删除专栏，并且这个专栏课程必须存在。有的同学一看，很熟悉的需求啊，所以在前面加了相应的 assert 检查。那么我想让你思考一下，这样写到底对不对呢？</p>
+<p>答案显然是否定的。你可能觉得，从代码功能角度来说，这没错啊。但是在实际工程中，基本上没人会这么写。为什么呢？</p>
+<p>要注意，前面我说过，assert 的检查是可以被关闭的，比如在运行 Python 程序时，加入-O这个选项就会让 assert 失效。因此，一旦 assert 的检查被关闭，user_is_admin() 和 course_exist() 这两个函数便不会被执行。这就会导致：</p>
+<ul>
+<li>任何用户都有权限删除专栏课程；</li>
+<li>并且，不管这个课程是否存在，他们都可以强行执行删除操作。<br>这显然会给程序带来巨大的安全漏洞。所以，正确的做法，是使用条件语句进行相应的检查，并合理抛出异常：</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">delete_course</span><span class="params">(user, course_id)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> user_is_admin(user):</span><br><span class="line">        <span class="keyword">raise</span> Exception(<span class="string">'user must be admin'</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> course_exist(course_id):</span><br><span class="line">        <span class="keyword">raise</span> Exception(<span class="string">'coursde id must exist'</span>)</span><br><span class="line">    delete(course_id)</span><br></pre></td></tr></table></figure>
+
+<p>再来看一个例子，如果你想打开一个文件，进行数据读取、处理等一系列操作，那么下面这样的写法，显然也是不正确的：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">read_and_process</span><span class="params">(path)</span>:</span></span><br><span class="line">    <span class="keyword">assert</span> file_exist(path), <span class="string">'file must exist'</span></span><br><span class="line">    <span class="keyword">with</span> open(path) <span class="keyword">as</span> f:</span><br><span class="line">      ...</span><br></pre></td></tr></table></figure>
+
+<p>因为 assert 的使用，表明你强行指定了文件必须存在，但事实上在很多情况下，这个假设并不成立。另外，打开文件操作，也有可能触发其他的异常。所以，正确的做法是进行异常处理，用 try 和 except 来解决：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">read_and_process</span><span class="params">(path)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">with</span> open(path) <span class="keyword">as</span> f:</span><br><span class="line">            ...</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            ...</span><br></pre></td></tr></table></figure>
+
+<p>总的来说，assert 并不适用 run-time error 的检查。比如你试图打开一个文件，但文件不存在；再或者是你试图从网上下载一个东西，但中途断网了了等等，这些情况下，还是应该参照我们前面所讲的错误与异常的内容，进行正确处理。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>今天这节课，我们一起学习了 assert 的用法。assert 通常用来对代码进行必要的 self check，表明你很确定这种情况一定发生，或者一定不会发生。需要注意的是，使用 assert 时，一定不要加上括号，否则无论表达式对与错，assert 检查永远不会 fail。另外，程序中的 assert 语句，可以通过-O等选项被全局 disable。</p>
+<p>通过这节课的几个使用场景，你能看到，assert 的合理使用，可以增加代码的健壮度，同时也方便了程序出错时开发人员的定位排查。</p>
+<p>不过，我们也不能滥用 assert。很多情况下，程序中出现的不同情况都是意料之中的，需要我们用不同的方案去处理，这时候用条件语句进行判断更为合适。而对于程序中的一些 run-time error，请记得使用异常处理。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/19/04%E4%B8%A8Python%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97%EF%BC%9A%E7%94%A8NumPy%E5%BF%AB%E9%80%9F%E5%A4%84%E7%90%86%E6%95%B0%E6%8D%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1953,408 +2407,11 @@ False</code></pre><figure class="highlight python"><table><tr><td class="gutter"
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/15/25.%20Reverse%20Nodes%20in%20k-Group/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LvYang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LvYang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/15/25.%20Reverse%20Nodes%20in%20k-Group/" itemprop="url">25. Reverse Nodes in k-Group</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-15T10:15:07+08:00">
-                2019-12-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/leetcode/" itemprop="url" rel="index">
-                    <span itemprop="name">leetcode</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/12/15/25.%20Reverse%20Nodes%20in%20k-Group/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/12/15/25.%20Reverse%20Nodes%20in%20k-Group/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Given a linked list, reverse the nodes of a linked list k at a time and return its modified list.</p>
-<p>k is a positive integer and is less than or equal to the length of the linked list. If the number of nodes is not a multiple of k then left-out nodes in the end should remain as it is.</p>
-<p>Example:</p>
-<p>Given this linked list: 1-&gt;2-&gt;3-&gt;4-&gt;5</p>
-<p>For k = 2, you should return: 2-&gt;1-&gt;4-&gt;3-&gt;5</p>
-<p>For k = 3, you should return: 3-&gt;2-&gt;1-&gt;4-&gt;5</p>
-<p>Note:</p>
-<p>Only constant extra memory is allowed.<br>You may not alter the values in the list’s nodes, only nodes itself may be changed.</p>
-<p>给你一个链表，每 k 个节点一组进行翻转，请你返回翻转后的链表。</p>
-<p>k 是一个正整数，它的值小于或等于链表的长度。</p>
-<p>如果节点总数不是 k 的整数倍，那么请将最后剩余的节点保持原有顺序。</p>
-<p>示例 :</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">给定这个链表：1-&gt;2-&gt;3-&gt;4-&gt;5</span><br><span class="line"></span><br><span class="line">当 k = 2 时，应当返回: 2-&gt;1-&gt;4-&gt;3-&gt;5</span><br><span class="line"></span><br><span class="line">当 k = 3 时，应当返回: 3-&gt;2-&gt;1-&gt;4-&gt;5</span><br></pre></td></tr></table></figure>
-<p>说明 :</p>
-<ul>
-<li>你的算法只能使用常数的额外空间。</li>
-<li>你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_reverseGroup</span><span class="params">(self, pre, lat)</span>:</span></span><br><span class="line">        lpre = pre.next</span><br><span class="line">        cur = lpre.next</span><br><span class="line">        <span class="keyword">while</span> cur != lat:</span><br><span class="line">            lpre.next = cur.next</span><br><span class="line">            cur.next = pre.next</span><br><span class="line">            pre.next = cur</span><br><span class="line">            cur = lpre.next</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> lpre</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">reverseKGroup</span><span class="params">(self, head, k)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :type head: ListNode</span></span><br><span class="line"><span class="string">        :type k: int</span></span><br><span class="line"><span class="string">        :rtype: ListNode</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        h = ListNode(<span class="number">-1</span>)</span><br><span class="line">        h.next = head</span><br><span class="line">        pre = h</span><br><span class="line">        cur = head</span><br><span class="line">        </span><br><span class="line">        t = <span class="number">1</span></span><br><span class="line">        <span class="keyword">while</span> cur != <span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">if</span> t % k == <span class="number">0</span>:</span><br><span class="line">                pre = self._reverseGroup(pre, cur.next)</span><br><span class="line">                cur = pre.next</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                cur = cur.next</span><br><span class="line">            t += <span class="number">1</span></span><br><span class="line">           </span><br><span class="line">        <span class="keyword">return</span> h.next</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/13/22%20%7C%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8BAsyncio/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LvYang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LvYang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/13/22%20%7C%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8BAsyncio/" itemprop="url">22 | 并发编程之Asyncio</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-13T21:10:07+08:00">
-                2019-12-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
-                    <span itemprop="name">python核心技术与实战</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/12/13/22%20%7C%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8BAsyncio/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/12/13/22%20%7C%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8BAsyncio/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>上节课，我们一起学习了 Python 并发编程的一种实现——多线程。今天这节课，我们继续学习 Python 并发编程的另一种实现方式——Asyncio。不同于协程那章，这节课我们更注重原理的理解。</p>
-<p>通过上节课的学习，我们知道，在处理 I/O 操作时，使用多线程与普通的单线程相比，效率得到了极大的提高。你可能会想，既然这样，为什么还需要 Asyncio？</p>
-<p>诚然，多线程有诸多优点且应用广泛，但也存在一定的局限性：</p>
-<ul>
-<li>比如，多线程运行过程容易被打断，因此有可能出现 race condition 的情况；</li>
-<li>再如，线程切换本身存在一定的损耗，线程数不能无限增加，因此，如果你的 I/O 操作非常 heavy，多线程很有可能满足不了高效率、高质量的需求。<br>正是为了解决这些问题，Asyncio 应运而生。</li>
-</ul>
-<h3 id="什么是-Asyncio"><a href="#什么是-Asyncio" class="headerlink" title="什么是 Asyncio"></a>什么是 Asyncio</h3><h3 id="Sync-VS-Async"><a href="#Sync-VS-Async" class="headerlink" title="Sync VS Async"></a>Sync VS Async</h3><p>我们首先来区分一下 Sync（同步）和 Async（异步）的概念。</p>
-<ul>
-<li>所谓 Sync，是指操作一个接一个地执行，下一个操作必须等上一个操作完成后才能执行。</li>
-<li>而 Async 是指不同操作间可以相互交替执行，如果其中的某个操作被 block 了，程序并不会等待，而是会找出可执行的操作继续执行。</li>
-</ul>
-<p>举个简单的例子，你的老板让你做一份这个季度的报表，并且邮件发给他。</p>
-<ul>
-<li>如果按照 Sync 的方式，你会先向软件输入这个季度的各项数据，接下来等待 5min，等报表明细生成后，再写邮件发给他。</li>
-<li>但如果按照 Async 的方式，再你输完这个季度的各项数据后，便会开始写邮件。等报表明细生成后，你会暂停邮件，先去查看报表，确认后继续写邮件直到发送完毕。</li>
-</ul>
-<h3 id="Asyncio-工作原理"><a href="#Asyncio-工作原理" class="headerlink" title="Asyncio 工作原理"></a>Asyncio 工作原理</h3><p>明白了 Sync 和 Async，回到我们今天的主题，到底什么是 Asyncio 呢？</p>
-<p>事实上，Asyncio 和其他 Python 程序一样，是单线程的，它只有一个主线程，但是可以进行多个不同的任务（task），这里的任务，就是特殊的 future 对象。这些不同的任务，被一个叫做 event loop 的对象所控制。你可以把这里的任务，类比成多线程版本里的多个线程。</p>
-<p>为了简化讲解这个问题，我们可以假设任务只有两个状态：一是预备状态；二是等待状态。所谓的预备状态，是指任务目前空闲，但随时待命准备运行。而等待状态，是指任务已经运行，但正在等待外部的操作完成，比如 I/O 操作。</p>
-<p>在这种情况下，event loop 会维护两个任务列表，分别对应这两种状态；并且选取预备状态的一个任务（具体选取哪个任务，和其等待的时间长短、占用的资源等等相关），使其运行，一直到这个任务把控制权交还给 event loop 为止。</p>
-<p>当任务把控制权交还给 event loop 时，event loop 会根据其是否完成，把任务放到预备或等待状态的列表，然后遍历等待状态列表的任务，查看他们是否完成。</p>
-<ul>
-<li>如果完成，则将其放到预备状态的列表；</li>
-<li>如果未完成，则继续放在等待状态的列表。<br>而原先在预备状态列表的任务位置仍旧不变，因为它们还未运行。</li>
-</ul>
-<p>这样，当所有任务被重新放置在合适的列表后，新一轮的循环又开始了：event loop 继续从预备状态的列表中选取一个任务使其执行…如此周而复始，直到所有任务完成。</p>
-<p>值得一提的是，对于 Asyncio 来说，它的任务在运行时不会被外部的一些因素打断，因此 Asyncio 内的操作不会出现 race condition 的情况，这样你就不需要担心线程安全的问题了。</p>
-<h3 id="Asyncio-用法"><a href="#Asyncio-用法" class="headerlink" title="Asyncio 用法"></a>Asyncio 用法</h3><p>讲完了 Asyncio 的原理，我们结合具体的代码来看一下它的用法。还是以上节课下载网站内容为例，用 Asyncio 的写法我放在了下面代码中（省略了异常处理的一些操作），接下来我们一起来看：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">import</span> aiohttp</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"> </span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">download_one</span><span class="params">(url)</span>:</span></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> aiohttp.ClientSession() <span class="keyword">as</span> session:</span><br><span class="line">        <span class="keyword">async</span> <span class="keyword">with</span> session.get(url) <span class="keyword">as</span> resp:</span><br><span class="line">            print(<span class="string">'Read &#123;&#125; from &#123;&#125;'</span>.format(resp.content_length, url))</span><br><span class="line"> </span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">download_all</span><span class="params">(sites)</span>:</span></span><br><span class="line">    tasks = [asyncio.create_task(download_one(site)) <span class="keyword">for</span> site <span class="keyword">in</span> sites]</span><br><span class="line">    <span class="keyword">await</span> asyncio.gather(*tasks)</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    sites = [</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Arts'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:History'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Society'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Biography'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Mathematics'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Technology'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Geography'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Science'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Computer_science'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Python_(programming_language)'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Java_(programming_language)'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/PHP'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Node.js'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/The_C_Programming_Language'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Go_(programming_language)'</span></span><br><span class="line">    ]</span><br><span class="line">    start_time = time.perf_counter()</span><br><span class="line">    asyncio.run(download_all(sites))</span><br><span class="line">    end_time = time.perf_counter()</span><br><span class="line">    print(<span class="string">'Download &#123;&#125; sites in &#123;&#125; seconds'</span>.format(len(sites), end_time - start_time))</span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
-
-
-<pre><code>---------------------------------------------------------------------------
-
-ModuleNotFoundError                       Traceback (most recent call last)
-
-&lt;ipython-input-1-1c8dff975abc&gt; in &lt;module&gt;
-      1 import asyncio
-----&gt; 2 import aiohttp
-      3 import time
-      4 
-      5 async def download_one(url):
-
-
-ModuleNotFoundError: No module named &apos;aiohttp&apos;</code></pre><p>这里的 Async 和 await 关键字是 Asyncio 的最新写法，表示这个语句 / 函数是 non-block 的，正好对应前面所讲的 event loop 的概念。如果任务执行的过程需要等待，则将其放入等待状态的列表中，然后继续执行预备状态列表里的任务。</p>
-<p>主函数里的 asyncio.run(coro) 是 Asyncio 的 root call，表示拿到 event loop，运行输入的 coro，直到它结束，最后关闭这个 event loop。事实上，asyncio.run() 是 Python3.7+ 才引入的，相当于老版本的以下语句：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">loop = asyncio.get_event_loop()</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    loop.run_until_complete(coro)</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    loop.close()</span><br></pre></td></tr></table></figure>
-
-<p>至于 Asyncio 版本的函数 download_all()，和之前多线程版本有很大的区别：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tasks = [asyncio.create_task(download_one(site)) <span class="keyword">for</span> site <span class="keyword">in</span> sites]</span><br><span class="line"><span class="keyword">await</span> asyncio.gather(*task)</span><br></pre></td></tr></table></figure>
-
-<p>这里的asyncio.create_task(coro)，表示对输入的协程 coro 创建一个任务，安排它的执行，并返回此任务对象。这个函数也是 Python 3.7+ 新增的，如果是之前的版本，你可以用asyncio.ensure_future(coro)等效替代。可以看到，这里我们对每一个网站的下载，都创建了一个对应的任务。</p>
-<p>再往下看，asyncio.gather(*aws, loop=None, return_exception=False)，则表示在 event loop 中运行aws序列的所有任务。当然，除了例子中用到的这几个函数，Asyncio 还提供了很多其他的用法，你可以查看 相应文档 进行了解。</p>
-<p>最后，我们再来看一下最后的输出结果——用时只有 0.06s，效率比起之前的多线程版本，可以说是更上一层楼，充分体现其优势。</p>
-<h3 id="Asyncio-有缺陷吗？"><a href="#Asyncio-有缺陷吗？" class="headerlink" title="Asyncio 有缺陷吗？"></a>Asyncio 有缺陷吗？</h3><p>学了这么多内容，我们认识到了 Asyncio 的强大，但你要清楚，任何一种方案都不是完美的，都存在一定的局限性，Asyncio 同样如此。</p>
-<p>实际工作中，想用好 Asyncio，特别是发挥其强大的功能，很多情况下必须得有相应的 Python 库支持。你可能注意到了，上节课的多线程编程中，我们使用的是 requests 库，但今天我们并没有使用，而是用了 aiohttp 库，原因就是 requests 库并不兼容 Asyncio，但是 aiohttp 库兼容。</p>
-<p>Asyncio 软件库的兼容性问题，在 Python3 的早期一直是个大问题，但是随着技术的发展，这个问题正逐步得到解决。</p>
-<p>另外，使用 Asyncio 时，因为你在任务的调度方面有了更大的自主权，写代码时就得更加注意，不然很容易出错。</p>
-<p>举个例子，如果你需要 await 一系列的操作，就得使用 asyncio.gather()；如果只是单个的 future，或许只用 asyncio.wait() 就可以了。那么，对于你的 future，你是想要让它 run_until_complete() 还是 run_forever() 呢？诸如此类，都是你在面对具体问题时需要考虑的。</p>
-<h3 id="多线程还是-Asyncio"><a href="#多线程还是-Asyncio" class="headerlink" title="多线程还是 Asyncio"></a>多线程还是 Asyncio</h3><p>不知不觉，我们已经把并发编程的两种方式都给学习完了。不过，遇到实际问题时，多线程和 Asyncio 到底如何选择呢？</p>
-<p>总的来说，你可以遵循以下伪代码的规范：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> io_bound:</span><br><span class="line">    <span class="keyword">if</span> io_slow:</span><br><span class="line">        print(<span class="string">'Use Asyncio'</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        print(<span class="string">'Use multi-threading'</span>)</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> cpu_bound:</span><br><span class="line">    print(<span class="string">'Use multi-processing'</span>)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>如果是 I/O bound，并且 I/O 操作很慢，需要很多任务 / 线程协同实现，那么使用 Asyncio 更合适。</li>
-<li>如果是 I/O bound，但是 I/O 操作很快，只需要有限数量的任务 / 线程，那么使用多线程就可以了。</li>
-<li>如果是 CPU bound，则需要使用多进程来提高程序运行效率。</li>
-</ul>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>今天这节课，我们一起学习了 Asyncio 的原理和用法，并比较了 Asyncio 和多线程各自的优缺点。</p>
-<p>不同于多线程，Asyncio 是单线程的，但其内部 event loop 的机制，可以让它并发地运行多个不同的任务，并且比多线程享有更大的自主控制权。</p>
-<p>Asyncio 中的任务，在运行过程中不会被打断，因此不会出现 race condition 的情况。尤其是在 I/O 操作 heavy 的场景下，Asyncio 比多线程的运行效率更高。因为 Asyncio 内部任务切换的损耗，远比线程切换的损耗要小；并且 Asyncio 可以开启的任务数量，也比多线程中的线程数量多得多。</p>
-<p>但需要注意的是，很多情况下，使用 Asyncio 需要特定第三方库的支持，比如前面示例中的 aiohttp。而如果 I/O 操作很快，并不 heavy，那么运用多线程，也能很有效地解决问题。</p>
-<h3 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h3><p>这两节课，我们学习了并发编程的两种实现方式，也多次提到了并行编程（multi-processing），其适用于 CPU heavy 的场景。</p>
-<p>现在有这么一个需求：输入一个列表，对于列表中的每个元素，我想计算 0 到这个元素的所有整数的平方和。</p>
-<p>我把常规版本的写法放在了下面，你能通过查阅资料，写出它的多进程版本，并且比较程序的耗时吗？</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cpu_bound</span><span class="params">(number)</span>:</span></span><br><span class="line">    print(sum(i * i <span class="keyword">for</span> i <span class="keyword">in</span> range(number)))</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">calculate_sums</span><span class="params">(numbers)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> number <span class="keyword">in</span> numbers:</span><br><span class="line">        cpu_bound(number)</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    start_time = time.perf_counter()  </span><br><span class="line">    numbers = [<span class="number">10000000</span> + x <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">20</span>)]</span><br><span class="line">    calculate_sums(numbers)</span><br><span class="line">    end_time = time.perf_counter()</span><br><span class="line">    print(<span class="string">'Calculation takes &#123;&#125; seconds'</span>.format(end_time - start_time))</span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/">&lt;i class=&quot;fa fa-angle-left&quot;&gt;&lt;&#x2F;i&gt;</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/">&lt;i class=&quot;fa fa-angle-right&quot;&gt;&lt;&#x2F;i&gt;</a>
+    <a class="extend prev" rel="prev" href="/">&lt;i class=&quot;fa fa-angle-left&quot;&gt;&lt;&#x2F;i&gt;</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/">&lt;i class=&quot;fa fa-angle-right&quot;&gt;&lt;&#x2F;i&gt;</a>
   </nav>
 
 
@@ -2400,7 +2457,7 @@ ModuleNotFoundError: No module named &apos;aiohttp&apos;</code></pre><p>这里�
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-count">41</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2411,7 +2468,7 @@ ModuleNotFoundError: No module named &apos;aiohttp&apos;</code></pre><p>这里�
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -2422,7 +2479,7 @@ ModuleNotFoundError: No module named &apos;aiohttp&apos;</code></pre><p>这里�
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
