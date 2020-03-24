@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="极客时间,sql," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="今天我们主要学习如何使用 SQL 检索数据。如果你已经有了一定的 SQL 基础，这节课可以跳过，也可以把它当做是个快速的复习。 SELECT 可以说是 SQL 中最常用的语句了。你可以把 SQL 语句看作是英语语句，SELECT 就是 SQL 中的关键字之一，除了 SELECT 之外，还有 INSERT、DELETE、UPDATE 等关键字，这些关键字是 SQL 的保留字，这样可以很方便地帮助我们">
+<meta name="keywords" content="极客时间,sql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="04丨使用DDL创建数据库&amp;数据表时需要注意什么？">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;03&#x2F;24&#x2F;05%E4%B8%A8%E6%A3%80%E7%B4%A2%E6%95%B0%E6%8D%AE%EF%BC%9A%E4%BD%A0%E8%BF%98%E5%9C%A8SELECT%20*%20%E4%B9%88%EF%BC%9F&#x2F;index.html">
+<meta property="og:site_name" content="LvYang">
+<meta property="og:description" content="今天我们主要学习如何使用 SQL 检索数据。如果你已经有了一定的 SQL 基础，这节课可以跳过，也可以把它当做是个快速的复习。 SELECT 可以说是 SQL 中最常用的语句了。你可以把 SQL 语句看作是英语语句，SELECT 就是 SQL 中的关键字之一，除了 SELECT 之外，还有 INSERT、DELETE、UPDATE 等关键字，这些关键字是 SQL 的保留字，这样可以很方便地帮助我们">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-03-24T12:29:22.988Z">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/03/24/05丨检索数据：你还在SELECT * 么？/"/>
+
+
+
+
+
+  <title>04丨使用DDL创建数据库&数据表时需要注意什么？ | LvYang</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LvYang</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/24/05%E4%B8%A8%E6%A3%80%E7%B4%A2%E6%95%B0%E6%8D%AE%EF%BC%9A%E4%BD%A0%E8%BF%98%E5%9C%A8SELECT%20*%20%E4%B9%88%EF%BC%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">04丨使用DDL创建数据库&数据表时需要注意什么？</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-24T20:39:07+08:00">
+                2020-03-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" itemprop="url" rel="index">
+                    <span itemprop="name">SQL必知必会</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/24/05%E4%B8%A8%E6%A3%80%E7%B4%A2%E6%95%B0%E6%8D%AE%EF%BC%9A%E4%BD%A0%E8%BF%98%E5%9C%A8SELECT%20*%20%E4%B9%88%EF%BC%9F/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2020/03/24/05%E4%B8%A8%E6%A3%80%E7%B4%A2%E6%95%B0%E6%8D%AE%EF%BC%9A%E4%BD%A0%E8%BF%98%E5%9C%A8SELECT%20*%20%E4%B9%88%EF%BC%9F/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>今天我们主要学习如何使用 SQL 检索数据。如果你已经有了一定的 SQL 基础，这节课可以跳过，也可以把它当做是个快速的复习。</p>
+<p>SELECT 可以说是 SQL 中最常用的语句了。你可以把 SQL 语句看作是英语语句，SELECT 就是 SQL 中的关键字之一，除了 SELECT 之外，还有 INSERT、DELETE、UPDATE 等关键字，这些关键字是 SQL 的保留字，这样可以很方便地帮助我们分析理解 SQL 语句。我们在定义数据库表名、字段名和变量名时，要尽量避免使用这些保留字。</p>
+<p>SELECT 的作用是从一个表或多个表中检索出想要的数据行。今天我主要讲解 SELECT 的基础查询，后面我会讲解如何通过多个表的连接操作进行复杂的查询。</p>
+<p>在这篇文章中，你需要重点掌握以下几方面的内容：</p>
+<ol>
+<li>SELECT 查询的基础语法；</li>
+<li>如何排序检索数据；</li>
+<li>什么情况下用SELECT*，如何提升 SELECT 查询效率？<h3 id="SELECT-查询的基础语法"><a href="#SELECT-查询的基础语法" class="headerlink" title="SELECT 查询的基础语法"></a>SELECT 查询的基础语法</h3>SELECT 可以帮助我们从一个表或多个表中进行数据查询。我们知道一个数据表是由列（字段名）和行（数据行）组成的，我们要返回满足条件的数据行，就需要在 SELECT 后面加上我们想要查询的列名，可以是一列，也可以是多个列。如果你不知道所有列名都有什么，也可以检索所有列。</li>
+</ol>
+<p>我创建了一个王者荣耀英雄数据表，这张表里一共有 69 个英雄，23 个属性值（不包括英雄名 name）。</p>
+<h3 id="查询列"><a href="#查询列" class="headerlink" title="查询列"></a>查询列</h3><p>如果我们想要对数据表中的某一列进行检索，在 SELECT 后面加上这个列的字段名即可。比如我们想要检索数据表中都有哪些英雄。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL：SELECT name FROM heros</span><br></pre></td></tr></table></figure>
+<p>运行结果（69 条记录）见下图，你可以看到这样就等于单独输出了 name 这一列。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">name</span><br><span class="line">夏侯惇</span><br><span class="line">钟无艳</span><br><span class="line">...</span><br><span class="line">刘禅</span><br><span class="line">百里守约</span><br></pre></td></tr></table></figure>
+
+
+<p>我们也可以对多个列进行检索，在列名之间用逗号 (,) 分割即可。比如我们想要检索有哪些英雄，他们的最大生命、最大法力、最大物攻和最大物防分别是多少。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL：SELECT name, hp_max, mp_max, attack_max, defense_max FROM heros</span><br></pre></td></tr></table></figure>
+<p>运行结果（69 条记录）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">name  hp_max mp_max attack_max defense_max</span><br><span class="line">夏侯惇	7350	1746	321	397</span><br><span class="line">钟无艳	7000	1760	318	409</span><br><span class="line">张飞	8341	100	301	504</span><br><span class="line">牛魔	8476	1926	273	394</span><br><span class="line">吕布	7344	0	343	390</span><br><span class="line">亚瑟	8050	0	346	400</span><br><span class="line">芈月	6164	100	289	361</span><br><span class="line">程咬金	8611	0	316	504</span><br><span class="line">廉颇	9328	1708	286	514</span><br></pre></td></tr></table></figure>
+
+<p>这个表中一共有 25 个字段，除了 id 和英雄名 name 以外，还存在 23 个属性值，如果我们记不住所有的字段名称，可以使用 SELECT * 帮我们检索出所有的列：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL：SELECT * FROM heros</span><br></pre></td></tr></table></figure>
+<p>运行结果（69 条记录）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">10000	夏侯惇	7350	288.8	3307	1746	94	430	321	11.57	159	397	21.14	101	98	3.357	51	37	1.571	15	0	近战	坦克	战士	2016-07-19</span><br><span class="line">10001	钟无艳	7000	275	3150	1760	95	430	318	11	164	409	22.07	100	92	3.143	48	37	1.571	15	0	近战	战士	坦克	</span><br><span class="line">10002	张飞	8341	329.4	3450	100	0	100	301	10.57	153	504	27.07	125	115	4.143	57	5	0	5	0	近战	坦克	辅助	</span><br><span class="line">10003	牛魔	8476	352.8	3537	1926	104	470	273	8.357	156	394	20.36	109	117	4.214	58	42	1.786	17	0	近战	坦克	辅助	2015-11-24</span><br><span class="line">10004	吕布	7344	270	3564	0	0	0	343	12.36	170	390	20.79	99	97	3.071	54	0	0	0	0	近战	战士	坦克	2015-12-22</span><br><span class="line">10005	亚瑟	8050	316.3	3622	0	0	0	346	13	164	400	21.57	98	106	3.643	55	0	0	0	0	近战	战士	坦克	</span><br><span class="line">10006	芈月	6164	281.5	3105	100	0	100	289	9.786	152	361	19.5	88	77	2.357	44	0	0	0	0	远程	法师	坦克	2015-12-08</span><br><span class="line">10007	程咬金	8611	369.6	3437	0	0	0	316	11.07	161	504	27.07	125	119	4.429	57	0	0	0	0	近战	坦克	战士</span><br></pre></td></tr></table></figure>
+<p>我们在做数据探索的时候，SELECT <em>还是很有用的，这样我们就不需要写很长的 SELECT 语句了。但是在生产环境时要尽量避免使用SELECT</em>，具体原因我会在后面讲。</p>
+<h3 id="起别名"><a href="#起别名" class="headerlink" title="起别名"></a>起别名</h3><p>我们在使用 SELECT 查询的时候，还有一些技巧可以使用，比如你可以给列名起别名。我们在进行检索的时候，可以给英雄名、最大生命、最大法力、最大物攻和最大物防等取别名：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL：SELECT name AS n, hp_max AS hm, mp_max AS mm, attack_max AS am, defense_max AS dm FROM heros</span><br></pre></td></tr></table></figure>
+
+<p>运行结果和上面多列检索的运行结果是一样的，只是将列名改成了 n、hm、mm、am 和 dm。当然这里的列别名只是举例，一般来说起别名的作用是对原有名称进行简化，从而让 SQL 语句看起来更精简。同样我们也可以对表名称起别名，这个在多表连接查询的时候会用到。</p>
+<p>查询常数<br>SELECT 查询还可以对常数进行查询。对的，就是在 SELECT 查询结果中增加一列固定的常数列。这列的取值是我们指定的，而不是从数据表中动态取出的。你可能会问为什么我们还要对常数进行查询呢？SQL 中的 SELECT 语法的确提供了这个功能，一般来说我们只从一个表中查询数据，通常不需要增加一个固定的常数列，但如果我们想整合不同的数据源，用常数列作为这个表的标记，就需要查询常数。</p>
+<p>比如说，我们想对 heros 数据表中的英雄名进行查询，同时增加一列字段platform，这个字段固定值为“王者荣耀”，可以这样写：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL：SELECT &apos;王者荣耀&apos; as platform, name FROM heros</span><br></pre></td></tr></table></figure>
+
+<p>运行结果：（69 条记录）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">platform   name</span><br><span class="line">王者荣耀	夏侯惇</span><br><span class="line">王者荣耀	钟无艳</span><br><span class="line">王者荣耀	张飞</span><br><span class="line">王者荣耀	牛魔</span><br><span class="line">王者荣耀	吕布</span><br><span class="line">王者荣耀	亚瑟</span><br><span class="line">王者荣耀	芈月</span><br><span class="line">王者荣耀	程咬金</span><br></pre></td></tr></table></figure>
+
+<p>在这个 SQL 语句中，我们虚构了一个platform字段，并且把它设置为固定值“王者荣耀”。</p>
+<p>需要说明的是，如果常数是个字符串，那么使用单引号（‘’）就非常重要了，比如‘王者荣耀’。单引号说明引号中的字符串是个常数，否则 SQL 会把王者荣耀当成列名进行查询，但实际上数据表里没有这个列名，就会引起错误。如果常数是英文字母，比如’WZRY’也需要加引号。如果常数是个数字，就可以直接写数字，不需要单引号，比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL：SELECT 123 as platform, name FROM heros</span><br></pre></td></tr></table></figure>
+<p>运行结果：（69 条记录）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">platorm  name</span><br><span class="line">123	夏侯惇</span><br><span class="line">123	钟无艳</span><br><span class="line">123	张飞</span><br><span class="line">123	牛魔</span><br><span class="line">123	吕布</span><br><span class="line">123	亚瑟</span><br><span class="line">123	芈月</span><br></pre></td></tr></table></figure>
+
+<h3 id="去除重复行"><a href="#去除重复行" class="headerlink" title="去除重复行"></a>去除重复行</h3><p>关于单个表的 SELECT 查询，还有一个非常实用的操作，就是从结果中去掉重复的行。使用的关键字是 DISTINCT。比如我们想要看下 heros 表中关于攻击范围的取值都有哪些：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL：SELECT DISTINCT attack_range FROM heros</span><br></pre></td></tr></table></figure>
+
+<p>这是运行结果（2 条记录），这样我们就能直观地看到攻击范围其实只有两个值，那就是近战和远程。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">attack_range</span><br><span class="line">近战</span><br><span class="line">远程</span><br></pre></td></tr></table></figure>
+<p>如果我们带上英雄名称，会是怎样呢：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL：SELECT DISTINCT attack_range, name FROM heros</span><br></pre></td></tr></table></figure>
+<p>运行结果（69 条记录）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">近战	夏侯惇</span><br><span class="line">近战	钟无艳</span><br><span class="line">近战	张飞</span><br><span class="line">近战	牛魔</span><br><span class="line">近战	吕布</span><br><span class="line">近战	亚瑟</span><br><span class="line">远程	芈月</span><br><span class="line">近战	程咬金</span><br><span class="line">近战	廉颇</span><br><span class="line">近战	东皇太一</span><br><span class="line">近战	庄周</span><br><span class="line">近战	太乙真人</span><br><span class="line">近战	白起</span><br><span class="line">近战	雅典娜</span><br><span class="line">近战	刘邦</span><br><span class="line">近战	刘禅</span><br><span class="line">近战	墨子</span><br><span class="line">近战	项羽</span><br><span class="line">近战	关羽</span><br><span class="line">远程	后羿</span><br><span class="line">远程	马可波罗</span><br><span class="line">远程	鲁班七号</span><br></pre></td></tr></table></figure>
+
+<p>这里有两点需要注意：</p>
+<ol>
+<li><p>DISTINCT 需要放到所有列名的前面，如果写成SELECT name, DISTINCT attack_range FROM heros会报错。</p>
+</li>
+<li><p>DISTINCT 其实是对后面所有列名的组合进行去重，你能看到最后的结果是 69 条，因为这 69 个英雄名称不同，都有攻击范围（attack_range）这个属性值。如果你想要看都有哪些不同的攻击范围（attack_range），只需要写DISTINCT attack_range即可，后面不需要再加其他的列名了。</p>
+<h3 id="如何排序检索数据"><a href="#如何排序检索数据" class="headerlink" title="如何排序检索数据"></a>如何排序检索数据</h3><p>当我们检索数据的时候，有时候需要按照某种顺序进行结果的返回，比如我们想要查询所有的英雄，按照最大生命从高到底的顺序进行排列，就需要使用 ORDER BY 子句。使用 ORDER BY 子句有以下几个点需要掌握：</p>
+</li>
+<li><p>排序的列名：ORDER BY 后面可以有一个或多个列名，如果是多个列名进行排序，会按照后面第一个列先进行排序，当第一列的值相同的时候，再按照第二列进行排序，以此类推。</p>
+</li>
+<li><p>排序的顺序：ORDER BY 后面可以注明排序规则，ASC 代表递增排序，DESC 代表递减排序。如果没有注明排序规则，默认情况下是按照 ASC 递增排序。我们很容易理解 ORDER BY 对数值类型字段的排序规则，但如果排序字段类型为文本数据，就需要参考数据库的设置方式了，这样才能判断 A 是在 B 之前，还是在 B 之后。比如使用 MySQL 在创建字段的时候设置为 BINARY 属性，就代表区分大小写。</p>
+</li>
+<li><p>非选择列排序：ORDER BY 可以使用非选择列进行排序，所以即使在 SELECT 后面没有这个列名，你同样可以放到 ORDER BY 后面进行排序。</p>
+</li>
+<li><p>ORDER BY 的位置：ORDER BY 通常位于 SELECT 语句的最后一条子句，否则会报错。<br>在了解了 ORDER BY 的使用语法之后，我们来看下如何对 heros 数据表进行排序。</p>
+</li>
+</ol>
+<p>假设我们想要显示英雄名称及最大生命值，按照最大生命值从高到低的方式进行排序：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL：SELECT name, hp_max FROM heros ORDER BY hp_max DESC</span><br></pre></td></tr></table></figure>
+<p>运行结果（69 条记录）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">name hp_max</span><br><span class="line">廉颇	9328</span><br><span class="line">白起	8638</span><br><span class="line">程咬金	8611</span><br><span class="line">刘禅	8581</span><br><span class="line">牛魔	8476</span><br><span class="line">张飞	8341</span><br><span class="line">庄周	8149</span><br></pre></td></tr></table></figure>
+
+<p>如果想要显示英雄名称及最大生命值，按照第一排序最大法力从低到高，当最大法力值相等的时候则按照第二排序进行，即最大生命值从高到低的方式进行排序：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL：SELECT name, hp_max FROM heros ORDER BY mp_max, hp_max DESC</span><br></pre></td></tr></table></figure>
+<p>运行结果：（69 条记录）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">程咬金	8611</span><br><span class="line">亚瑟	8050</span><br><span class="line">曹操	7473</span><br><span class="line">吕布	7344</span><br><span class="line">橘石京	7000</span><br><span class="line">宫本武藏	6210</span><br><span class="line">阿轲	5968</span><br><span class="line">老夫子	7155</span><br><span class="line">关羽	7107</span><br><span class="line">张飞	8341</span><br><span class="line">芈月	6164</span><br><span class="line">花木兰	5397</span><br></pre></td></tr></table></figure>
+<h3 id="约束返回结果的数量"><a href="#约束返回结果的数量" class="headerlink" title="约束返回结果的数量"></a>约束返回结果的数量</h3><p>另外在查询过程中，我们可以约束返回结果的数量，使用 LIMIT 关键字。比如我们想返回英雄名称及最大生命值，按照最大生命值从高到低排序，返回 5 条记录即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL：SELECT name, hp_max FROM heros ORDER BY hp_max DESC LIMIT 5</span><br></pre></td></tr></table></figure>
+<p>运行结果（5 条记录）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">name hp_max</span><br><span class="line">廉颇	9328</span><br><span class="line">白起	8638</span><br><span class="line">程咬金	8611</span><br><span class="line">刘禅	8581</span><br><span class="line">牛魔	8476</span><br></pre></td></tr></table></figure>
+
+<p>有一点需要注意，约束返回结果的数量，在不同的 DBMS 中使用的关键字可能不同。在 MySQL、PostgreSQL、MariaDB 和 SQLite 中使用 LIMIT 关键字，而且需要放到 SELECT 语句的最后面。如果是 SQL Server 和 Access，需要使用 TOP 关键字，比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL：SELECT TOP 5 name, hp_max FROM heros ORDER BY hp_max DESC</span><br></pre></td></tr></table></figure>
+<p>约束返回结果的数量可以减少数据表的网络传输量，也可以提升查询效率。如果我们知道返回结果只有 1 条，就可以使用LIMIT 1，告诉 SELECT 语句只需要返回一条记录即可。这样的好处就是 SELECT 不需要扫描完整的表，只需要检索到一条符合条件的记录即可返回。</p>
+<h3 id="SELECT-的执行顺序"><a href="#SELECT-的执行顺序" class="headerlink" title="SELECT 的执行顺序"></a>SELECT 的执行顺序</h3><p>查询是 RDBMS 中最频繁的操作。我们在理解 SELECT 语法的时候，还需要了解 SELECT 执行时的底层原理。只有这样，才能让我们对 SQL 有更深刻的认识。</p>
+<p>其中你需要记住 SELECT 查询时的两个顺序：</p>
+<ol>
+<li>关键字的顺序是不能颠倒的：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT ... FROM ... WHERE ... GROUP BY ... HAVING ... ORDER BY ...</span><br></pre></td></tr></table></figure></li>
+<li>SELECT 语句的执行顺序（在 MySQL 和 Oracle 中，SELECT 执行顺序基本相同）：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FROM &gt; WHERE &gt; GROUP BY &gt; HAVING &gt; SELECT 的字段 &gt; DISTINCT &gt; ORDER BY &gt; LIMIT</span><br></pre></td></tr></table></figure>
+比如你写了一个 SQL 语句，那么它的关键字顺序和执行顺序是下面这样的：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SELECT DISTINCT player_id, player_name, count(*) as num # 顺序 5</span><br><span class="line">FROM player JOIN team ON player.team_id = team.team_id # 顺序 1</span><br><span class="line">WHERE height &gt; 1.80 # 顺序 2</span><br><span class="line">GROUP BY player.team_id # 顺序 3</span><br><span class="line">HAVING num &gt; 2 # 顺序 4</span><br><span class="line">ORDER BY num DESC # 顺序 6</span><br><span class="line">LIMIT 2 # 顺序 7</span><br></pre></td></tr></table></figure>
+在 SELECT 语句执行这些步骤的时候，每个步骤都会产生一个虚拟表，然后将这个虚拟表传入下一个步骤中作为输入。需要注意的是，这些步骤隐含在 SQL 的执行过程中，对于我们来说是不可见的。</li>
+</ol>
+<p>我来详细解释一下 SQL 的执行原理。</p>
+<p>首先，你可以注意到，SELECT 是先执行 FROM 这一步的。在这个阶段，如果是多张表联查，还会经历下面的几个步骤：</p>
+<p>首先先通过 CROSS JOIN 求笛卡尔积，相当于得到虚拟表 vt（virtual table）1-1；<br>通过 ON 进行筛选，在虚拟表 vt1-1 的基础上进行筛选，得到虚拟表 vt1-2；<br>添加外部行。如果我们使用的是左连接、右链接或者全连接，就会涉及到外部行，也就是在虚拟表 vt1-2 的基础上增加外部行，得到虚拟表 vt1-3。<br>当然如果我们操作的是两张以上的表，还会重复上面的步骤，直到所有表都被处理完为止。这个过程得到是我们的原始数据。</p>
+<p>当我们拿到了查询数据表的原始数据，也就是最终的虚拟表 vt1，就可以在此基础上再进行 WHERE 阶段。在这个阶段中，会根据 vt1 表的结果进行筛选过滤，得到虚拟表 vt2。</p>
+<p>然后进入第三步和第四步，也就是 GROUP 和 HAVING 阶段。在这个阶段中，实际上是在虚拟表 vt2 的基础上进行分组和分组过滤，得到中间的虚拟表 vt3 和 vt4。</p>
+<p>当我们完成了条件筛选部分之后，就可以筛选表中提取的字段，也就是进入到 SELECT 和 DISTINCT 阶段。</p>
+<p>首先在 SELECT 阶段会提取想要的字段，然后在 DISTINCT 阶段过滤掉重复的行，分别得到中间的虚拟表 vt5-1 和 vt5-2。</p>
+<p>当我们提取了想要的字段数据之后，就可以按照指定的字段进行排序，也就是 ORDER BY 阶段，得到虚拟表 vt6。</p>
+<p>最后在 vt6 的基础上，取出指定行的记录，也就是 LIMIT 阶段，得到最终的结果，对应的是虚拟表 vt7。</p>
+<p>当然我们在写 SELECT 语句的时候，不一定存在所有的关键字，相应的阶段就会省略。</p>
+<p>同时因为 SQL 是一门类似英语的结构化查询语言，所以我们在写 SELECT 语句的时候，还要注意相应的关键字顺序，所谓底层运行的原理，就是我们刚才讲到的执行顺序。</p>
+<p>什么情况下用 SELECT*，如何提升 SELECT 查询效率？<br>当我们初学 SELECT 语法的时候，经常会使用SELECT *，因为使用方便。实际上这样也增加了数据库的负担。所以如果我们不需要把所有列都检索出来，还是先指定出所需的列名，因为写清列名，可以减少数据表查询的网络传输量，而且考虑到在实际的工作中，我们往往不需要全部的列名，因此你需要养成良好的习惯，写出所需的列名。</p>
+<p>如果我们只是练习，或者对数据表进行探索，那么是可以使用SELECT *的。它的查询效率和把所有列名都写出来再进行查询的效率相差并不大。这样可以方便你对数据表有个整体的认知。但是在生产环境下，不推荐你直接使用SELECT *进行查询。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>今天我对 SELECT 的基础语法进行了讲解，SELECT 是 SQL 的基础。但不同阶段看 SELECT 都会有新的体会。当你第一次学习的时候，关注的往往是如何使用它，或者语法是否正确。再看的时候，可能就会更关注 SELECT 的查询效率，以及不同 DBMS 之间的差别。<br>在我们的日常工作中，很多人都可以写出 SELECT 语句，但是执行的效率却相差很大。产生这种情况的原因主要有两个，一个是习惯的培养，比如大部分初学者会经常使用SELECT *，而好的习惯则是只查询所需要的列；另一个对 SQL 查询的执行顺序及查询效率的关注，比如当你知道只有 1 条记录的时候，就可以使用LIMIT 1来进行约束，从而提升查询效率。</p>
+<p>最后留两道思考题吧，我今天对单表的 SELECT 查询进行了讲解，你之前可能也有学习使用的经验，可以说下你对 SELECT 使用的理解吗？另外，我今天使用 heros 数据表进行了举例，请你编写 SQL 语句，对英雄名称和最大法力进行查询，按照最大生命从高到低排序，只返回 5 条记录即可。你可以说明下使用的 DBMS 及相应的 SQL 语句。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT name, mp_max FROM heros ORDER BY hp_max DESC LIMIT 5</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">廉颇	1708</span><br><span class="line">白起	1666</span><br><span class="line">程咬金	0</span><br><span class="line">刘禅	1694</span><br><span class="line">牛魔	1926</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E6%9E%81%E5%AE%A2%E6%97%B6%E9%97%B4/" rel="tag"># 极客时间</a>
+          
+            <a href="/tags/sql/" rel="tag"># sql</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/23/04%E4%B8%A8%E4%BD%BF%E7%94%A8DDL%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93&%E6%95%B0%E6%8D%AE%E8%A1%A8%E6%97%B6%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E4%BB%80%E4%B9%88%EF%BC%9F/" rel="next" title="04丨使用DDL创建数据库&数据表时需要注意什么？">
+                <i class="fa fa-chevron-left"></i> 04丨使用DDL创建数据库&数据表时需要注意什么？
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">LvYang</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">44</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#SELECT-查询的基础语法"><span class="nav-number">1.</span> <span class="nav-text">SELECT 查询的基础语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询列"><span class="nav-number">2.</span> <span class="nav-text">查询列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#起别名"><span class="nav-number">3.</span> <span class="nav-text">起别名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#去除重复行"><span class="nav-number">4.</span> <span class="nav-text">去除重复行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何排序检索数据"><span class="nav-number">5.</span> <span class="nav-text">如何排序检索数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#约束返回结果的数量"><span class="nav-number">6.</span> <span class="nav-text">约束返回结果的数量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SELECT-的执行顺序"><span class="nav-number">7.</span> <span class="nav-text">SELECT 的执行顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">8.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LvYang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'mengfa',
+            repo: 'blogcomments',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'b715de6e1ca56e27e404f3764f7a58cc1f3d4b22',
+            
+                client_id: 'Iv1.b0b9f79f82846ce7'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'qcq1G35cOv9sG5BrpbdXJwtJ-gzGzoHsz',
+        appKey: 'VtFEF7WhBgSXbcGzdO1GztzO',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
