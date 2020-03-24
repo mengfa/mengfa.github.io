@@ -258,6 +258,256 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/24/07%E4%B8%A8%E4%BB%80%E4%B9%88%E6%98%AFSQL%E5%87%BD%E6%95%B0%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8SQL%E5%87%BD%E6%95%B0%E5%8F%AF%E8%83%BD%E4%BC%9A%E5%B8%A6%E6%9D%A5%E9%97%AE%E9%A2%98%EF%BC%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/24/07%E4%B8%A8%E4%BB%80%E4%B9%88%E6%98%AFSQL%E5%87%BD%E6%95%B0%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8SQL%E5%87%BD%E6%95%B0%E5%8F%AF%E8%83%BD%E4%BC%9A%E5%B8%A6%E6%9D%A5%E9%97%AE%E9%A2%98%EF%BC%9F/" itemprop="url">07丨什么是SQL函数？为什么使用SQL函数可能会带来问题？</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-24T21:42:07+08:00">
+                2020-03-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" itemprop="url" rel="index">
+                    <span itemprop="name">SQL必知必会</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/24/07%E4%B8%A8%E4%BB%80%E4%B9%88%E6%98%AFSQL%E5%87%BD%E6%95%B0%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8SQL%E5%87%BD%E6%95%B0%E5%8F%AF%E8%83%BD%E4%BC%9A%E5%B8%A6%E6%9D%A5%E9%97%AE%E9%A2%98%EF%BC%9F/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/03/24/07%E4%B8%A8%E4%BB%80%E4%B9%88%E6%98%AFSQL%E5%87%BD%E6%95%B0%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8SQL%E5%87%BD%E6%95%B0%E5%8F%AF%E8%83%BD%E4%BC%9A%E5%B8%A6%E6%9D%A5%E9%97%AE%E9%A2%98%EF%BC%9F/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>函数在计算机语言的使用中贯穿始终，在 SQL 中我们也可以使用函数对检索出来的数据进行函数操作，比如求某列数据的平均值，或者求字符串的长度等。从函数定义的角度出发，我们可以将函数分成内置函数和自定义函数。在 SQL 语言中，同样也包括了内置函数和自定义函数。内置函数是系统内置的通用函数，而自定义函数是我们根据自己的需要编写的，下面讲解的是 SQL 的内置函数。</p>
+<p>你需要从以下几个方面掌握 SQL 函数：</p>
+<ol>
+<li>什么是 SQL 函数？</li>
+<li>内置的 SQL 函数都包括哪些？</li>
+<li>如何使用 SQL 函数对一个数据表进行操作，比如针对一个王者荣耀的英雄数据库，我们可以使用这些函数完成哪些操作？</li>
+<li>什么情况下使用 SQL 函数？为什么使用 SQL 函数有时候会带来问题？<h3 id="什么是-SQL-函数"><a href="#什么是-SQL-函数" class="headerlink" title="什么是 SQL 函数"></a>什么是 SQL 函数</h3>当我们学习编程语言的时候，也会遇到函数。函数的作用是什么呢？它可以把我们经常使用的代码封装起来，需要的时候直接调用即可。这样既提高了代码效率，又提高了可维护性。</li>
+</ol>
+<p>SQL 中的函数一般是在数据上执行的，可以很方便地转换和处理数据。一般来说，当我们从数据表中检索出数据之后，就可以进一步对这些数据进行操作，得到更有意义的结果，比如返回指定条件的函数，或者求某个字段的平均值等。</p>
+<h3 id="常用的-SQL-函数有哪些"><a href="#常用的-SQL-函数有哪些" class="headerlink" title="常用的 SQL 函数有哪些"></a>常用的 SQL 函数有哪些</h3><p>SQL 提供了一些常用的内置函数，当然你也可以自己定义 SQL 函数。SQL 的内置函数对于不同的数据库软件来说具有一定的通用性，我们可以把内置函数分成四类：</p>
+<h3 id="算术函数"><a href="#算术函数" class="headerlink" title="算术函数"></a>算术函数</h3><p>字符串函数<br>日期函数<br>转换函数<br>这 4 类函数分别代表了算术处理、字符串处理、日期处理、数据类型转换，它们是 SQL 函数常用的划分形式，你可以思考下，为什么是这 4 个维度？</p>
+<p>函数是对提取出来的数据进行操作，那么数据表中字段类型的定义有哪几种呢？</p>
+<p>我们经常会保存一些数值，不论是整数类型，还是浮点类型，实际上对应的就是数值类型。同样我们也会保存一些文本内容，可能是人名，也可能是某个说明，对应的就是字符串类型。此外我们还需要保存时间，也就是日期类型。那么针对数值、字符串和日期类型的数据，我们可以对它们分别进行算术函数、字符串函数以及日期函数的操作。如果想要完成不同类型数据之间的转换，就可以使用转换函数。</p>
+<h3 id="算术函数-1"><a href="#算术函数-1" class="headerlink" title="算术函数"></a>算术函数</h3><p>算术函数，顾名思义就是对数值类型的字段进行算术运算。常用的算术函数及含义如下表所示：</p>
+<p>这里我举一些简单的例子，你来体会下：</p>
+<p>SELECT ABS(-2)，运行结果为 2。</p>
+<p>SELECT MOD(101,3)，运行结果 2。</p>
+<p>SELECT ROUND(37.25,1)，运行结果 37.3。</p>
+<h3 id="字符串函数"><a href="#字符串函数" class="headerlink" title="字符串函数"></a>字符串函数</h3><p>常用的字符串函数操作包括了字符串拼接，大小写转换，求长度以及字符串替换和截取等。具体的函数名称及含义如下表所示：<br>这里同样有一些简单的例子，你可以自己运行下：</p>
+<p>SELECT CONCAT(‘abc’, 123)，运行结果为 abc123。</p>
+<p>SELECT LENGTH(‘你好’)，运行结果为 6。</p>
+<p>SELECT CHAR_LENGTH(‘你好’)，运行结果为 2。</p>
+<p>SELECT LOWER(‘ABC’)，运行结果为 abc。</p>
+<p>SELECT UPPER(‘abc’)，运行结果 ABC。</p>
+<p>SELECT REPLACE(‘fabcd’, ‘abc’, 123)，运行结果为 f123d。</p>
+<p>SELECT SUBSTRING(‘fabcd’, 1,3)，运行结果为 fab。</p>
+<h3 id="日期函数"><a href="#日期函数" class="headerlink" title="日期函数"></a>日期函数</h3><p>日期函数是对数据表中的日期进行处理，常用的函数包括：<br>下面是一些简单的例子，你可自己运行下：</p>
+<p>SELECT CURRENT_DATE()，运行结果为 2019-04-03。</p>
+<p>SELECT CURRENT_TIME()，运行结果为 21:26:34。</p>
+<p>SELECT CURRENT_TIMESTAMP()，运行结果为 2019-04-03 21:26:34。</p>
+<p>SELECT EXTRACT(YEAR FROM ‘2019-04-03’)，运行结果为 2019。</p>
+<p>SELECT DATE(‘2019-04-01 12:00:05’)，运行结果为 2019-04-01。</p>
+<p>这里需要注意的是，DATE 日期格式必须是 yyyy-mm-dd 的形式。如果要进行日期比较，就要使用 DATE 函数，不要直接使用日期与字符串进行比较，我会在后面的例子中讲具体的原因。</p>
+<h3 id="转换函数"><a href="#转换函数" class="headerlink" title="转换函数"></a>转换函数</h3><p>转换函数可以转换数据之间的类型，常用的函数如下表所示：<br>这两个函数不像其他函数，看一眼函数名就知道代表什么、如何使用。下面举了这两个函数的例子，你需要自己运行下：</p>
+<p>SELECT CAST(123.123 AS INT)，运行结果会报错。</p>
+<p>SELECT CAST(123.123 AS DECIMAL(8,2))，运行结果为 123.12。</p>
+<p>SELECT COALESCE(null,1,2)，运行结果为 1。</p>
+<p>CAST 函数在转换数据类型的时候，不会四舍五入，如果原数值有小数，那么转换为整数类型的时候就会报错。不过你可以指定转化的小数类型，在 MySQL 和 SQL Server 中，你可以用DECIMAL(a,b)来指定，其中 a 代表整数部分和小数部分加起来最大的位数，b 代表小数位数，比如DECIMAL(8,2)代表的是精度为 8 位（整数加小数位数最多为 8 位），小数位数为 2 位的数据类型。所以SELECT CAST(123.123 AS DECIMAL(8,2))的转换结果为 123.12。</p>
+<h3 id="用-SQL-函数对王者荣耀英雄数据做处理"><a href="#用-SQL-函数对王者荣耀英雄数据做处理" class="headerlink" title="用 SQL 函数对王者荣耀英雄数据做处理"></a>用 SQL 函数对王者荣耀英雄数据做处理</h3><p>我创建了一个王者荣耀英雄数据库，一共有 69 个英雄，23 个属性值。<br>我们现在把这个文件导入到 MySQL 中，你可以使用 Navicat 可视化数据库管理工具将.sql 文件导入到数据库中。数据表为 heros，然后使用今天学习的 SQL 函数，对这个英雄数据表进行处理。</p>
+<p>首先显示英雄以及他的物攻成长，对应字段为attack_growth。我们让这个字段精确到小数点后一位，需要使用的是算术函数里的 ROUND 函数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT name, ROUND(attack_growth,1) FROM heros</span><br></pre></td></tr></table></figure>
+<p>代码中，ROUND(attack_growth,1)中的attack_growth代表想要处理的数据，“1”代表四舍五入的位数，也就是我们这里需要精确到的位数。</p>
+<p>运行结果为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">name  ROUND(attack_growth,1)</span><br><span class="line">夏侯惇	11.6</span><br><span class="line">钟无艳	11</span><br><span class="line">张飞	10.6</span><br><span class="line">牛魔	8.4</span><br><span class="line">吕布	12.4</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>假设我们想显示英雄最大生命值的最大值，就需要用到 MAX 函数。在数据中，“最大生命值”对应的列数为hp_max，在代码中的格式为MAX(hp_max)。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL：SELECT name, MAX(hp_max) FROM heros</span><br></pre></td></tr></table></figure>
+
+<p>运行结果为 9328。</p>
+<p>假如我们想要知道最大生命值最大的是哪个英雄，以及对应的数值，就需要分成两个步骤来处理：首先找到英雄的最大生命值的最大值，即SELECT MAX(hp_max) FROM heros，然后再筛选最大生命值等于这个最大值的英雄，如下所示。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT name, hp_max FROM heros WHERE hp_max = (SELECT MAX(hp_max) FROM heros)</span><br></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">廉颇 9328</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT name FROM heros  order by hp_max desc limit 1</span><br></pre></td></tr></table></figure>
+
+<p>假如我们想显示英雄的名字，以及他们的名字字数，需要用到CHAR_LENGTH函数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL：SELECT CHAR_LENGTH(name), name FROM heros</span><br></pre></td></tr></table></figure>
+<p>运行结果为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CHAR_LENGTH(name) name</span><br><span class="line">3	夏侯惇</span><br><span class="line">3	钟无艳</span><br><span class="line">2	张飞</span><br><span class="line">2	牛魔</span><br><span class="line">2	吕布</span><br><span class="line">2	亚瑟</span><br></pre></td></tr></table></figure>
+
+<p>假如想要提取英雄上线日期（对应字段 birthdate）的年份，只显示有上线日期的英雄即可（有些英雄没有上线日期的数据，不需要显示），这里我们需要使用 EXTRACT 函数，提取某一个时间元素。所以我们需要筛选上线日期不为空的英雄，即WHERE birthdate is not null，然后再显示他们的名字和上线日期的年份，即：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL： SELECT name, EXTRACT(YEAR FROM birthdate) AS birthdate FROM heros WHERE birthdate is NOT NULL</span><br></pre></td></tr></table></figure>
+<p>或者使用如下形式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL: SELECT name, YEAR(birthdate) AS birthdate FROM heros WHERE birthdate is NOT NULL</span><br></pre></td></tr></table></figure>
+<p>运行结果为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">name  birthdate</span><br><span class="line">夏侯惇	2016</span><br><span class="line">牛魔	2015</span><br><span class="line">吕布	2015</span><br><span class="line">芈月	2015</span><br><span class="line">东皇太一	2017</span><br><span class="line">太乙真人	2016</span><br><span class="line">刘邦	2016</span><br><span class="line">关羽	2016</span><br></pre></td></tr></table></figure>
+
+<p>假设我们需要找出在 2016 年 10 月 1 日之后上线的所有英雄。这里我们可以采用 DATE 函数来判断 birthdate 的日期是否大于 2016-10-01，即WHERE DATE(birthdate)&gt;’2016-10-01’，然后再显示符合要求的全部字段信息，即：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL： SELECT * FROM heros WHERE DATE(birthdate)&gt;&apos;2016-10-01&apos;</span><br></pre></td></tr></table></figure>
+<p>需要注意的是下面这种写法是不安全的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM heros WHERE birthdate&gt;&apos;2016-10-01&apos;</span><br></pre></td></tr></table></figure>
+<p>因为很多时候你无法确认 birthdate 的数据类型是字符串，还是 datetime 类型，如果你想对日期部分进行比较，那么使用DATE(birthdate)来进行比较是更安全的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">10009	东皇太一	7669	319.1	3201	1926	104	470	286	8.786	163	360	18.64	99	106	3.786	53	42	1.786	17	0	近战	坦克		2017-03-30</span><br><span class="line">10011	太乙真人	6835	242.3	3443	1680	90	420	284	9.286	154	396	21.57	94	86	2.643	49	35	1.429	15	0	近战	辅助	坦克	2016-11-24</span><br><span class="line">10033	干将莫邪	5583	171	3189	1946	104	490	292	9.5	159	323	16.5	92	71	1.857	45	41	1.714	17	0	远程	法师		2017-05-22</span><br><span class="line">10047	大乔	5399	174.4	2958	1926	104	470	305	9.786	168	340	17.64	93	69	1.929	42	42	1.786	17	0	近战	辅助		2017-02-28</span><br></pre></td></tr></table></figure>
+<p>假设我们需要知道在 2016 年 10 月 1 日之后上线英雄的平均最大生命值、平均最大法力和最高物攻最大值。同样我们需要先筛选日期条件，即WHERE DATE(birthdate)&gt;’2016-10-01’，然后再选择AVG(hp_max), AVG(mp_max), MAX(attack_max)字段进行显示。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL： SELECT AVG(hp_max), AVG(mp_max), MAX(attack_max) FROM heros WHERE DATE(birthdate)&gt;&apos;2016-10-01&apos;</span><br></pre></td></tr></table></figure>
+<p>运行结果为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">AVG(hp_max) AVG(mp_max)  MAX(attack_max)</span><br><span class="line">6611.5	1821.5	410</span><br></pre></td></tr></table></figure>
+
+<h3 id="为什么使用-SQL-函数会带来问题"><a href="#为什么使用-SQL-函数会带来问题" class="headerlink" title="为什么使用 SQL 函数会带来问题"></a>为什么使用 SQL 函数会带来问题</h3><p>尽管 SQL 函数使用起来会很方便，但我们使用的时候还是要谨慎，因为你使用的函数很可能在运行环境中无法工作，这是为什么呢？</p>
+<p>如果你学习过编程语言，就会知道语言是有不同版本的，比如 Python 会有 2.7 版本和 3.x 版本，不过它们之间的函数差异不大，也就在 10% 左右。但我们在使用 SQL 语言的时候，不是直接和这门语言打交道，而是通过它使用不同的数据库软件，即 DBMS。DBMS 之间的差异性很大，远大于同一个语言不同版本之间的差异。实际上，只有很少的函数是被 DBMS 同时支持的。比如，大多数 DBMS 使用（||）或者（+）来做拼接符，而在 MySQL 中的字符串拼接函数为Concat()。大部分 DBMS 会有自己特定的函数，这就意味着采用 SQL 函数的代码可移植性是很差的，因此在使用函数的时候需要特别注意。</p>
+<h3 id="关于大小写的规范"><a href="#关于大小写的规范" class="headerlink" title="关于大小写的规范"></a>关于大小写的规范</h3><p>细心的人可能会发现，我在写 SELECT 语句的时候用的是大写，而你在网上很多地方，包括你自己写的时候可能用的是小写。实际上在 SQL 中，关键字和函数名是不用区分字母大小写的，比如 SELECT、WHERE、ORDER、GROUP BY 等关键字，以及 ABS、MOD、ROUND、MAX 等函数名。</p>
+<p>不过在 SQL 中，你还是要确定大小写的规范，因为在 Linux 和 Windows 环境下，你可能会遇到不同的大小写问题。</p>
+<p>比如 MySQL 在 Linux 的环境下，数据库名、表名、变量名是严格区分大小写的，而字段名是忽略大小写的。</p>
+<p>而 MySQL 在 Windows 的环境下全部不区分大小写。</p>
+<p>这就意味着如果你的变量名命名规范没有统一，就可能产生错误。这里有一个有关命名规范的建议：</p>
+<ol>
+<li>关键字和函数名称全部大写；</li>
+<li>数据库名、表名、字段名称全部小写；</li>
+<li>SQL 语句必须以分号结尾。<br>虽然关键字和函数名称在 SQL 中不区分大小写，也就是如果小写的话同样可以执行，但是数据库名、表名和字段名在 Linux MySQL 环境下是区分大小写的，因此建议你统一这些字段的命名规则，比如全部采用小写的方式。同时将关键词和函数名称全部大写，以便于区分数据库名、表名、字段名。</li>
+</ol>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>函数对于一门语言的重要性毋庸置疑，我们在写 Python 代码的时候，会自己编写函数，也会使用 Python 内置的函数。在 SQL 中，使用函数的时候需要格外留意。不过如果工程量不大，使用的是同一个 DBMS 的话，还是可以使用函数简化操作的，这样也能提高代码效率。只是在系统集成，或者在多个 DBMS 同时存在的情况下，使用函数的时候就需要慎重一些。</p>
+<p>比如CONCAT()是字符串拼接函数，在 MySQL 和 Oracle 中都有这个函数，但是在这两个 DBMS 中作用却不一样，CONCAT函数在 MySQL 中可以连接多个字符串，而在 Oracle 中CONCAT函数只能连接两个字符串，如果要连接多个字符串就需要用（||）连字符来解决。</p>
+<p>讲完了 SQL 函数的使用，我们来做一道练习题。还是根据王者荣耀英雄数据表，请你使用 SQL 函数作如下的练习：</p>
+<p>计算英雄的最大生命平均值；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT AVG(hp_max) as avg_max  FROM heros</span><br></pre></td></tr></table></figure>
+
+<p>显示出所有在 2017 年之前上线的英雄，如果英雄没有统计上线日期则不显示。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT name FROM heros WHERE YEAR(birthdate)&lt;2017 and birthdate is NOT NULL</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/24/06%E4%B8%A8%E6%95%B0%E6%8D%AE%E8%BF%87%E6%BB%A4%EF%BC%9ASQL%E6%95%B0%E6%8D%AE%E8%BF%87%E6%BB%A4%E9%83%BD%E6%9C%89%E5%93%AA%E4%BA%9B%E6%96%B9%E6%B3%95%EF%BC%9F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2244,311 +2494,6 @@ SyntaxError: invalid syntax</code></pre><p>这里我定义了 heros 数据表，
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/36%20%7C%20Pandas%20&%20Numpy%E7%AD%96%E7%95%A5%E4%B8%8E%E5%9B%9E%E6%B5%8B%E7%B3%BB%E7%BB%9F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LvYang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LvYang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/36%20%7C%20Pandas%20&%20Numpy%E7%AD%96%E7%95%A5%E4%B8%8E%E5%9B%9E%E6%B5%8B%E7%B3%BB%E7%BB%9F/" itemprop="url">36 | Pandas & Numpy策略与回测系统</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-06T20:10:07+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
-                    <span itemprop="name">python核心技术与实战</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/01/06/36%20%7C%20Pandas%20&%20Numpy%E7%AD%96%E7%95%A5%E4%B8%8E%E5%9B%9E%E6%B5%8B%E7%B3%BB%E7%BB%9F/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/01/06/36%20%7C%20Pandas%20&%20Numpy%E7%AD%96%E7%95%A5%E4%B8%8E%E5%9B%9E%E6%B5%8B%E7%B3%BB%E7%BB%9F/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>上节课，我们介绍了交易所的数据抓取，特别是 orderbook 和 tick 数据的抓取。今天这节课，我们考虑的是，怎么在这些历史数据上测试一个交易策略。</p>
-<p>首先我们要明确，对于很多策略来说，我们上节课抓取的密集的 orderbook 和 tick 数据，并不能简单地直接使用。因为数据量太密集，包含了太多细节；而且长时间连接时，网络随机出现的不稳定，会导致丢失部分 tick 数据。因此，我们还需要进行合适的清洗、聚合等操作。</p>
-<p>此外，为了进行回测，我们需要一个交易策略，还需要一个测试框架。目前已存在很多成熟的回测框架，但是为了 Python 学习，我决定带你搭建一个简单的回测框架，并且从中简单一窥 Pandas 的优势。</p>
-<h3 id="OHLCV-数据"><a href="#OHLCV-数据" class="headerlink" title="OHLCV 数据"></a>OHLCV 数据</h3><p>了解过一些股票交易的同学，可能知道 K 线这种东西。K 线又称“蜡烛线”，是一种反映价格走势的图线。它的特色在于，一个线段内记录了多项讯息，相当易读易懂且实用有效，因此被广泛用于股票、期货、贵金属、数字货币等行情的技术分析。下面便是一个 K 线示意图。</p>
-<p>其中，每一个小蜡烛，都代表着当天的开盘价（Open）、最高价（High）、最低价（Low）和收盘价（Close），也就是我画的第二张图表示的这样。</p>
-<p>类似的，除了日 K 线之外，还有周 K 线、小时 K 线、分钟 K 线等等。那么这个 K 线是怎么计算来的呢？</p>
-<p>我们以小时 K 线图为例，还记得我们当时抓取的 tick 数据吗？也就是每一笔交易的价格和数量。那么，如果从上午 10:00 开始，我们开始积累 tick 的交易数据，以 10:00 开始的第一个交易作为 Open 数据，11:00 前的最后一笔交易作为 Close 值，并把这一个小时最低和最高的成交价格分别作为 High 和 Low 的值，我们就可以绘制出这一个小时对应的“小蜡烛”形状了。</p>
-<p>如果再加上这一个小时总的成交量（Volumn），就得到了 OHLCV 数据。</p>
-<p>所以，如果我们一直抓取着 tick 底层原始数据，我们就能在上层聚合出 1 分钟 K 线、小时 K 线以及日、周 k 线等等。如果你对这一部分操作有兴趣，可以把此作为今天的课后作业来实践。</p>
-<p>接下来，我们将使用 Gemini 从 2015 年到 2019 年 7 月这个时间内，BTC 对 USD 每个小时的 OHLCV 数据，作为策略和回测的输入。你可以在这里下载数据。</p>
-<p>数据下载完成后，我们可以利用 Pandas 读取，比如下面这段代码。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">assert_msg</span><span class="params">(condition, msg)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> condition:</span><br><span class="line">        <span class="keyword">raise</span> Exception(msg)</span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">read_file</span><span class="params">(filename)</span>:</span></span><br><span class="line">    <span class="comment"># 获得文件绝对路径</span></span><br><span class="line">    filepath = path.join(path.dirname(__file__), filename)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 判定文件是否存在</span></span><br><span class="line">    assert_msg(path.exists(filepath), <span class="string">" 文件不存在 "</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 读取 CSV 文件并返回</span></span><br><span class="line">    <span class="keyword">return</span> pd.read_csv(filepath,</span><br><span class="line">                       index_col=<span class="number">0</span>, </span><br><span class="line">                       parse_dates=<span class="literal">True</span>,</span><br><span class="line">                       infer_datetime_format=<span class="literal">True</span>)</span><br><span class="line"> </span><br><span class="line">BTCUSD = read_file(<span class="string">'BTCUSD_GEMINI.csv'</span>)</span><br><span class="line">assert_msg(BTCUSD.__len__() &gt; <span class="number">0</span>, <span class="string">'读取失败'</span>)</span><br><span class="line">print(BTCUSD.head())</span><br></pre></td></tr></table></figure>
-
-
-<pre><code>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-1-de519e90fcc7&gt; in &lt;module&gt;
-     16                        infer_datetime_format=True)
-     17 
----&gt; 18 BTCUSD = read_file(&apos;BTCUSD_GEMINI.csv&apos;)
-     19 assert_msg(BTCUSD.__len__() &gt; 0, &apos;读取失败&apos;)
-     20 print(BTCUSD.head())
-
-
-&lt;ipython-input-1-de519e90fcc7&gt; in read_file(filename)
-      5 def read_file(filename):
-      6     # 获得文件绝对路径
-----&gt; 7     filepath = path.join(path.dirname(__file__), filename)
-      8 
-      9     # 判定文件是否存在
-
-
-NameError: name &apos;path&apos; is not defined</code></pre><p>这段代码提供了两个工具函数。</p>
-<ul>
-<li>一个是 read_file，它的作用是，用 pandas 读取 csv 文件。</li>
-<li>另一个是 assert_msg，它的作用类似于 assert，如果传入的条件（contidtion）为否，就会抛出异常。不过，你需要提供一个参数，用于指定要抛出的异常信息。</li>
-</ul>
-<h3 id="回测框架"><a href="#回测框架" class="headerlink" title="回测框架"></a>回测框架</h3><p>说完了数据，我们接着来看回测数据。常见的回测框架有两类。一类是向量化回测框架，它通常基于 Pandas+Numpy 来自己搭建计算核心；后端则是用 MySQL 或者 MongoDB 作为源。这种框架通过 Pandas+Numpy 对 OHLC 数组进行向量运算，可以在较长的历史数据上进行回测。不过，因为这类框架一般只用 OHLC，所以模拟会比较粗糙。</p>
-<p>另一类则是事件驱动型回测框架。这类框架，本质上是针对每一个 tick 的变动或者 orderbook 的变动生成事件；然后，再把一个个事件交给策略进行执行。因此，虽然它的拓展性很强，可以允许更加灵活的策略，但回测速度是很慢的。</p>
-<p>我们想要学习量化交易，使用大型成熟的回测框架，自然是第一选择。</p>
-<ul>
-<li>比如 Zipline，就是一个热门的事件驱动型回测框架，背后有大型社区和文档的支持。</li>
-<li>PyAlgoTrade 也是事件驱动的回测框架，文档相对完整，整合了知名的技术分析（Techique Analysis）库 TA-Lib。在速度和灵活方面，它比 Zipline 强。不过，它的一大硬伤是不支持 Pandas 的模块和对象。</li>
-</ul>
-<p>显然，对于我们 Python 学习者来说，第一类也就是向量型回测框架，才是最适合我们练手的项目了。那么，我们就开始吧。</p>
-<p>首先，我先为你梳理下回测流程，也就是下面五步：</p>
-<ol>
-<li>读取 OHLC 数据；</li>
-<li>对 OHLC 进行指标运算；</li>
-<li>策略根据指标向量决定买卖；</li>
-<li>发给模拟的”交易所“进行交易；</li>
-<li>最后，统计结果。</li>
-</ol>
-<p>对此，使用之前学到的面向对象思维方式，我们可以大致抽取三个类：</p>
-<ul>
-<li>交易所类（ ExchangeAPI）：负责维护账户的资金和仓位，以及进行模拟的买卖；</li>
-<li>策略类（Strategy）：负责根据市场信息生成指标，根据指标决定买卖；</li>
-<li>回测类框架（Backtest）：包含一个策略类和一个交易所类，负责迭代地对每个数据点调用策略执行。</li>
-</ul>
-<p>接下来，我们先从最外层的大框架开始。这样的好处在于，我们是从上到下、从外往内地思考，虽然还没有开始设计依赖项（Backtest 的依赖项是 ExchangeAPI 和 Strategy），但我们可以推测出它们应有的接口形式。推测接口的本质，其实就是推测程序的输入。</p>
-<p>这也是我在一开始提到过的，对于程序这个“黑箱”，你在一开始设计的时候，就要想好输入和输出。</p>
-<p>回到最外层 Backtest 类。我们需要知道，输出是最后的收益，那么显然，输入应该是初始输入的资金数量（cash）。</p>
-<p>此外，为了模拟得更加真实，我们还要考虑交易所的手续费（commission）。手续费的多少取决于券商（broker）或者交易所，比如我们买卖股票的券商手续费可能是万七，那么就是 0.0007。但是在比特币交易领域，手续费通常会稍微高一点，可能是千分之二左右。当然，无论怎么多，一般也不会超过 5 %。否则我们大家交易几次就破产了，也就不会有人去交易了。</p>
-<p>这里说一句题外话，不知道你有没有发现，无论数字货币的价格是涨还是跌，总有一方永远不亏，那就是交易所。因为只要有人交易，他们就有白花花的银子进账。</p>
-<p>回到正题，至此，我们就确定了 Backtest 的输入和输出。</p>
-<p>它的输入是：</p>
-<ul>
-<li>OHLC 数据；</li>
-<li>初始资金；</li>
-<li>手续费率；</li>
-<li>交易所类；</li>
-<li>策略类。</li>
-</ul>
-<p>输出则是：</p>
-<ul>
-<li>最后剩余市值。</li>
-</ul>
-<p>对此，你可以参考下面这段代码：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Backtest</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Backtest 回测类，用于读取历史行情数据、执行策略、模拟交易并估计</span></span><br><span class="line"><span class="string">    收益。</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">    初始化的时候调用 Backtest.run 来时回测</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">    instance, or `backtesting.backtesting.Backtest.optimize` to</span></span><br><span class="line"><span class="string">    optimize it.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,</span></span></span><br><span class="line"><span class="function"><span class="params">                 data: pd.DataFrame,</span></span></span><br><span class="line"><span class="function"><span class="params">                 strategy_type: type<span class="params">(Strategy)</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">                 broker_type: type<span class="params">(ExchangeAPI)</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">                 cash: float = <span class="number">10000</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">                 commission: float = <span class="number">.0</span>)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        构造回测对象。需要的参数包括：历史数据，策略对象，初始资金数量，手续费率等。</span></span><br><span class="line"><span class="string">        初始化过程包括检测输入类型，填充数据空值等。</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">        参数：</span></span><br><span class="line"><span class="string">        :param data:            pd.DataFrame        pandas Dataframe 格式的历史 OHLCV 数据</span></span><br><span class="line"><span class="string">        :param broker_type:     type(ExchangeAPI)   交易所 API 类型，负责执行买卖操作以及账户状态的维护</span></span><br><span class="line"><span class="string">        :param strategy_type:   type(Strategy)      策略类型</span></span><br><span class="line"><span class="string">        :param cash:            float               初始资金数量</span></span><br><span class="line"><span class="string">        :param commission:       float               每次交易手续费率。如 2% 的手续费此处为 0.02</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line"> </span><br><span class="line">        assert_msg(issubclass(strategy_type, Strategy), <span class="string">'strategy_type 不是一个 Strategy 类型'</span>)</span><br><span class="line">        assert_msg(issubclass(broker_type, ExchangeAPI), <span class="string">'strategy_type 不是一个 Strategy 类型'</span>)</span><br><span class="line">        assert_msg(isinstance(commission, Number), <span class="string">'commission 不是浮点数值类型'</span>)</span><br><span class="line"> </span><br><span class="line">        data = data.copy(<span class="literal">False</span>)</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># 如果没有 Volumn 列，填充 NaN</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">'Volume'</span> <span class="keyword">not</span> <span class="keyword">in</span> data:</span><br><span class="line">            data[<span class="string">'Volume'</span>] = np.nan</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># 验证 OHLC 数据格式</span></span><br><span class="line">        assert_msg(len(data.columns &amp; &#123;<span class="string">'Open'</span>, <span class="string">'High'</span>, <span class="string">'Low'</span>, <span class="string">'Close'</span>, <span class="string">'Volume'</span>&#125;) == <span class="number">5</span>,</span><br><span class="line">                   (<span class="string">" 输入的`data`格式不正确，至少需要包含这些列："</span></span><br><span class="line">                    <span class="string">"'Open', 'High', 'Low', 'Close'"</span>))</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># 检查缺失值</span></span><br><span class="line">        assert_msg(<span class="keyword">not</span> data[[<span class="string">'Open'</span>, <span class="string">'High'</span>, <span class="string">'Low'</span>, <span class="string">'Close'</span>]].max().isnull().any(),</span><br><span class="line">            (<span class="string">'部分 OHLC 包含缺失值，请去掉那些行或者通过差值填充. '</span>))</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># 如果行情数据没有按照时间排序，重新排序一下</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> data.index.is_monotonic_increasing:</span><br><span class="line">            data = data.sort_index()</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># 利用数据，初始化交易所对象和策略对象。</span></span><br><span class="line">        self._data = data  <span class="comment"># type: pd.DataFrame</span></span><br><span class="line">        self._broker = broker_type(data, cash, commission)</span><br><span class="line">        self._strategy = strategy_type(self._broker, self._data)</span><br><span class="line">        self._results = <span class="literal">None</span></span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        运行回测，迭代历史数据，执行模拟交易并返回回测结果。</span></span><br><span class="line"><span class="string">        Run the backtest. Returns `pd.Series` with results and statistics.</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">        Keyword arguments are interpreted as strategy parameters.</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        strategy = self._strategy</span><br><span class="line">        broker = self._broker</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># 策略初始化</span></span><br><span class="line">        strategy.init()</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># 设定回测开始和结束位置</span></span><br><span class="line">        start = <span class="number">100</span></span><br><span class="line">        end = len(self._data)</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># 回测主循环，更新市场状态，然后执行策略</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(start, end):</span><br><span class="line">            <span class="comment"># 注意要先把市场状态移动到第 i 时刻，然后再执行策略。</span></span><br><span class="line">            broker.next(i)</span><br><span class="line">            strategy.next(i)</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># 完成策略执行之后，计算结果并返回</span></span><br><span class="line">        self._results = self._compute_result(broker)</span><br><span class="line">        <span class="keyword">return</span> self._results</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_compute_result</span><span class="params">(self, broker)</span>:</span></span><br><span class="line">        s = pd.Series()</span><br><span class="line">        s[<span class="string">'初始市值'</span>] = broker.initial_cash</span><br><span class="line">        s[<span class="string">'结束市值'</span>] = broker.market_value</span><br><span class="line">        s[<span class="string">'收益'</span>] = broker.market_value - broker.initial_cash</span><br><span class="line">        <span class="keyword">return</span> s</span><br></pre></td></tr></table></figure>
-
-<p>这段代码有点长，但是核心其实就两部分。</p>
-<ul>
-<li>初始化函数（init）：传入必要参数，对 OHLC 数据进行简单清洗、排序和验证。我们从不同地方下载的数据，可能格式不一样；而排序的方式也可能是从前往后。所以，这里我们把数据统一设置为按照时间从之前往现在的排序。</li>
-<li>执行函数（run）：这是回测框架的主要循环部分，核心是更新市场还有更新策略的时间。迭代完成所有的历史数据后，它会计算收益并返回。</li>
-</ul>
-<p>你应该注意到了，此时，我们还没有定义策略和交易所 API 的结构。不过，通过回测的执行函数，我们可以确定这两个类的接口形式。</p>
-<p>策略类（Strategy）的接口形式为：</p>
-<ul>
-<li>初始化函数 init()，根据历史数据进行指标（Indicator）计算。</li>
-<li>步进函数 next()，根据当前时间和指标，决定买卖操作，并发给交易所类执行。</li>
-</ul>
-<p>交易所类（ExchangeAPI）的接口形式为：</p>
-<ul>
-<li>步进函数 next()，根据当前时间，更新最新的价格；</li>
-<li>买入操作 buy()，买入资产；</li>
-<li>卖出操作 sell()，卖出资产。</li>
-</ul>
-<h3 id="交易策略"><a href="#交易策略" class="headerlink" title="交易策略"></a>交易策略</h3><p>接下来我们来看交易策略。交易策略的开发是一个非常复杂的学问。为了达到学习的目的，我们来想一个简单的策略——移动均值交叉策略。</p>
-<p>为了了解这个策略，我们先了解一下，什么叫做简单移动均值（Simple Moving Average，简称为 SMA，以下皆用 SMA 表示简单移动均值）。我们知道，N 个数的序列 x[0]、x[1] .…… x[N] 的均值，就是这 N 个数的和除以 N。</p>
-<p>现在，我假设一个比较小的数 K，比 N 小很多。我们用一个 K 大小的滑动窗口，在原始的数组上滑动。通过对每次框住的 K 个元素求均值，我们就可以得到，原始数组的窗口大小为 K 的 SMA 了。</p>
-<p>SMA，实质上就是对原始数组进行了一个简单平滑处理。比如，某支股票的价格波动很大，那么，我们用 SMA 平滑之后，就会得到下面这张图的效果。</p>
-<p>你可以看出，如果窗口大小越大，那么 SMA 应该越平滑，变化越慢；反之，如果 SMA 比较小，那么短期的变化也会越快地反映在 SMA 上。</p>
-<p>于是，我们想到，能不能对投资品的价格设置两个指标呢？这俩指标，一个是小窗口的 SMA，一个是大窗口的 SMA。</p>
-<ul>
-<li>如果小窗口的 SMA 曲线从下面刺破或者穿过大窗口 SMA，那么说明，这个投资品的价格在短期内快速上涨，同时这个趋势很强烈，可能是一个买入的信号；</li>
-<li>反之，如果大窗口的 SMA 从下方突破小窗口 SMA，那么说明，投资品的价格在短期内快速下跌，我们应该考虑卖出。<br>下面这幅图，就展示了这两种情况。</li>
-</ul>
-<p>明白了这里的概念和原理后，接下来的操作就不难了。利用 Pandas，我们可以非常简单地计算 SMA 和 SMA 交叉。比如，你可以引入下面两个工具函数：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">SMA</span><span class="params">(values, n)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    返回简单滑动平均</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">return</span> pd.Series(values).rolling(n).mean()</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">crossover</span><span class="params">(series1, series2)</span> -&gt; bool:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    检查两个序列是否在结尾交叉</span></span><br><span class="line"><span class="string">    :param series1:  序列 1</span></span><br><span class="line"><span class="string">    :param series2:  序列 2</span></span><br><span class="line"><span class="string">    :return:         如果交叉返回 True，反之 False</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">return</span> series1[<span class="number">-2</span>] &lt; series2[<span class="number">-2</span>] <span class="keyword">and</span> series1[<span class="number">-1</span>] &gt; series2[<span class="number">-1</span>]</span><br></pre></td></tr></table></figure>
-
-<p>如代码所示，对于输入的一个数组，Pandas 的 rolling(k) 函数，可以方便地计算窗内口大小为 K 的 SMA 数组；而想要检查某个时刻两个 SMA 是否交叉，你只需要查看两个数组末尾的两个元素即可。</p>
-<p>那么，基于此，我们就可以开发出一个简单的策略了。下面这段代码表示策略的核心思想，我做了详细的注释，你理解起来应该没有问题：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">next</span><span class="params">(self, tick)</span>:</span></span><br><span class="line">        <span class="comment"># 如果此时快线刚好越过慢线，买入全部</span></span><br><span class="line">        <span class="keyword">if</span> crossover(self.sma1[:tick], self.sma2[:tick]):</span><br><span class="line">            self.buy()</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># 如果是慢线刚好越过快线，卖出全部</span></span><br><span class="line">        <span class="keyword">elif</span> crossover(self.sma2[:tick], self.sma1[:tick]):</span><br><span class="line">            self.sell()</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># 否则，这个时刻不执行任何操作。</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
-
-<p>说完策略的核心思想，我们开始搭建策略类的框子。</p>
-<p>首先，我们要考虑到，策略类 Strategy 应该是一个可以被继承的类，同时应该包含一些固定的接口。这样，回测器才能方便地调用。</p>
-<p>于是，我们可以定义一个 Strategy 抽象类，包含两个接口方法 init 和 next，分别对应我们前面说的指标计算和步进函数。不过注意，抽象类是不能被实例化的。所以，我们必须定义一个具体的子类，同时实现了 init 和 next 方法才可以。</p>
-<p>这个类的定义，你可以参考下面代码的实现：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> abc</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> Callable</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Strategy</span><span class="params">(metaclass=abc.ABCMeta)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    抽象策略类，用于定义交易策略。</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">    如果要定义自己的策略类，需要继承这个基类，并实现两个抽象方法：</span></span><br><span class="line"><span class="string">    Strategy.init</span></span><br><span class="line"><span class="string">    Strategy.next</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, broker, data)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        构造策略对象。</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">        @params broker:  ExchangeAPI    交易 API 接口，用于模拟交易</span></span><br><span class="line"><span class="string">        @params data:    list           行情数据数据</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        self._indicators = []</span><br><span class="line">        self._broker = broker  <span class="comment"># type: _Broker</span></span><br><span class="line">        self._data = data  <span class="comment"># type: _Data</span></span><br><span class="line">        self._tick = <span class="number">0</span></span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">I</span><span class="params">(self, func: Callable, *args)</span> -&gt; np.ndarray:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        计算买卖指标向量。买卖指标向量是一个数组，长度和历史数据对应；</span></span><br><span class="line"><span class="string">        用于判定这个时间点上需要进行 " 买 " 还是 " 卖 "。</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">        例如计算滑动平均：</span></span><br><span class="line"><span class="string">        def init():</span></span><br><span class="line"><span class="string">            self.sma = self.I(utils.SMA, self.data.Close, N)</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        value = func(*args)</span><br><span class="line">        value = np.asarray(value)</span><br><span class="line">        assert_msg(value.shape[<span class="number">-1</span>] == len(self._data.Close), <span class="string">'指示器长度必须和 data 长度相同'</span>)</span><br><span class="line"> </span><br><span class="line">        self._indicators.append(value)</span><br><span class="line">        <span class="keyword">return</span> value</span><br><span class="line"> </span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">tick</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self._tick</span><br><span class="line"> </span><br><span class="line"><span class="meta">    @abc.abstractmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">init</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        初始化策略。在策略回测 / 执行过程中调用一次，用于初始化策略内部状态。</span></span><br><span class="line"><span class="string">        这里也可以预计算策略的辅助参数。比如根据历史行情数据：</span></span><br><span class="line"><span class="string">        计算买卖的指示器向量；</span></span><br><span class="line"><span class="string">        训练模型 / 初始化模型参数</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">    @abc.abstractmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">next</span><span class="params">(self, tick)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        步进函数，执行第 tick 步的策略。tick 代表当前的 " 时间 "。比如 data[tick] 用于访问当前的市场价格。</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">buy</span><span class="params">(self)</span>:</span></span><br><span class="line">        self._broker.buy()</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">sell</span><span class="params">(self)</span>:</span></span><br><span class="line">        self._broker.sell()</span><br><span class="line"> </span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">data</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self._data</span><br></pre></td></tr></table></figure>
-
-<p>为了方便访问成员，我们还定义了一些 Python property。同时，我们的买卖请求是由策略类发出、由交易所 API 来执行的，所以我们的策略类里依赖于 ExchangeAPI 类。</p>
-<p>现在，有了这个框架，我们实现移动均线交叉策略就很简单了。你只需要在 init 函数中，定义计算大小窗口 SMA 的逻辑；同时，在 next 函数中完成交叉检测和买卖调用就行了。具体实现，你可以参考下面这段代码：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> utils <span class="keyword">import</span> assert_msg, crossover, SMA</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SmaCross</span><span class="params">(Strategy)</span>:</span></span><br><span class="line">    <span class="comment"># 小窗口 SMA 的窗口大小，用于计算 SMA 快线</span></span><br><span class="line">    fast = <span class="number">10</span></span><br><span class="line"> </span><br><span class="line">    <span class="comment"># 大窗口 SMA 的窗口大小，用于计算 SMA 慢线</span></span><br><span class="line">    slow = <span class="number">20</span></span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">init</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="comment"># 计算历史上每个时刻的快线和慢线</span></span><br><span class="line">        self.sma1 = self.I(SMA, self.data.Close, self.fast)</span><br><span class="line">        self.sma2 = self.I(SMA, self.data.Close, self.slow)</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">next</span><span class="params">(self, tick)</span>:</span></span><br><span class="line">        <span class="comment"># 如果此时快线刚好越过慢线，买入全部</span></span><br><span class="line">        <span class="keyword">if</span> crossover(self.sma1[:tick], self.sma2[:tick]):</span><br><span class="line">            self.buy()</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># 如果是慢线刚好越过快线，卖出全部</span></span><br><span class="line">        <span class="keyword">elif</span> crossover(self.sma2[:tick], self.sma1[:tick]):</span><br><span class="line">            self.sell()</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># 否则，这个时刻不执行任何操作。</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="模拟交易"><a href="#模拟交易" class="headerlink" title="模拟交易"></a>模拟交易</h3><p>到这里，我们的回测就只差最后一块儿了。胜利就在眼前，我们继续加油。</p>
-<p>我们前面提到过，交易所类负责模拟交易，而模拟的基础，就是需要当前市场的价格。这里，我们可以用 OHLC 中的 Close，作为那个时刻的价格。</p>
-<p>此外，为了简化设计，我们假设买卖操作都利用的是当前账户的所有资金、仓位，且市场容量足够大。这样，我们的下单请求就能够马上完全执行。</p>
-<p>也别忘了手续费这个大头。考虑到有手续费的情况，此时，我们最核心的买卖函数应该怎么来写呢？</p>
-<p>我们一起来想这个问题。假设，我们现在有 1000.0 元，此时 BTC 的价格是 100.00 元（当然没有这么好的事情啊，这里只是假设），并且交易手续费为 1%。那么，我们能买到多少 BTC 呢？</p>
-<p>我们可以采用这种算法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">买到的数量 = 投入的资金 * (1.0 - 手续费) / 价格</span><br></pre></td></tr></table></figure>
-<p>那么此时，你就能收到 9.9 个 BTC。</p>
-<p>类似的，卖出的时候结算方式如下，也不难理解：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">卖出的收益 = 持有的数量 * 价格 *  (1.0 - 手续费)</span><br></pre></td></tr></table></figure>
-<p>所以，最终模拟交易所类的实现，你可以参考下面这段代码：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> utils <span class="keyword">import</span> read_file, assert_msg, crossover, SMA</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ExchangeAPI</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, data, cash, commission)</span>:</span></span><br><span class="line">        assert_msg(<span class="number">0</span> &lt; cash, <span class="string">" 初始现金数量大于 0，输入的现金数量：&#123;&#125;"</span>.format(cash))</span><br><span class="line">        assert_msg(<span class="number">0</span> &lt;= commission &lt;= <span class="number">0.05</span>, <span class="string">" 合理的手续费率一般不会超过 5%，输入的费率：&#123;&#125;"</span>.format(commission))</span><br><span class="line">        self._inital_cash = cash</span><br><span class="line">        self._data = data</span><br><span class="line">        self._commission = commission</span><br><span class="line">        self._position = <span class="number">0</span></span><br><span class="line">        self._cash = cash</span><br><span class="line">        self._i = <span class="number">0</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">cash</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :return: 返回当前账户现金数量</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">return</span> self._cash</span><br><span class="line"> </span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">position</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :return: 返回当前账户仓位</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">return</span> self._position</span><br><span class="line"> </span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">initial_cash</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :return: 返回初始现金数量</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">return</span> self._inital_cash</span><br><span class="line"> </span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">market_value</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :return: 返回当前市值</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">return</span> self._cash + self._position * self.current_price</span><br><span class="line"> </span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">current_price</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :return: 返回当前市场价格</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">return</span> self._data.Close[self._i]</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">buy</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        用当前账户剩余资金，按照市场价格全部买入</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        self._position = float(self._cash / (self.current_price * (<span class="number">1</span> + self._commission)))</span><br><span class="line">        self._cash = <span class="number">0.0</span></span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">sell</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        卖出当前账户剩余持仓</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        self._cash += float(self._position * self.current_price * (<span class="number">1</span> - self._commission))</span><br><span class="line">        self._position = <span class="number">0.0</span></span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">next</span><span class="params">(self, tick)</span>:</span></span><br><span class="line">        self._i = tick</span><br></pre></td></tr></table></figure>
-
-<p>其中的 current_price（当前价格），可以方便地获得模拟交易所当前时刻的商品价格；而 market_value，则可以获得当前总市值。在初始化函数的时候，我们检查手续费率和输入的现金数量，是不是在一个合理的范围。</p>
-<p>有了所有的这些部分，我们就可以来模拟回测啦！</p>
-<p>首先，我们设置初始资金量为 10000.00 美元，交易所手续费率为 0。这里你可以猜一下，如果我们从 2015 年到现在，都按照 SMA 来买卖，现在应该有多少钱呢？</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    BTCUSD = read_file(<span class="string">'BTCUSD_GEMINI.csv'</span>)</span><br><span class="line">    ret = Backtest(BTCUSD, SmaCross, ExchangeAPI, <span class="number">10000.0</span>, <span class="number">0.00</span>).run()</span><br><span class="line">    print(ret)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
-
-<p>铛铛铛，答案揭晓，程序将输出：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">初始市值     10000.000000</span><br><span class="line">结束市值     576361.772884</span><br><span class="line">收益         566361.772884</span><br></pre></td></tr></table></figure>
-
-<p>哇，结束时，我们将有 57 万美元，翻了整整 57 倍啊！简直不要太爽。不过，等等，这个手续费率为 0，实在是有点碍眼，因为根本不可能啊。我们现在来设一个比较真实的值吧，大概千分之三，然后再来试试：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">初始市值    10000.000000</span><br><span class="line">结束市值     2036.562001</span><br><span class="line">收益      -7963.437999</span><br></pre></td></tr></table></figure>
-<p>什么鬼？我们变成赔钱了，只剩下 2000 美元了！这是真的吗？</p>
-<p>这是真的，也是假的。</p>
-<p>我说的“真”是指，如果你真的用 SMA 交叉这种简单的方法去交易，那么手续费摩擦和滑点等因素，确实可能让你的高频策略赔钱。</p>
-<p>而我说是“假”是指，这种模拟交易的方式非常粗糙。真实的市场情况，并非这么理想——比如买卖请求永远马上执行；再比如，我们在市场中进行交易的同时不会影响市场价格等，这些理想情况都是不可能的。所以，很多时候，回测永远赚钱，但实盘马上赔钱。</p>
-<p>总结<br>这节课，我们继承上一节，介绍了回测框架的分类、数据的格式，并且带你从头开始写了一个简单的回测系统。你可以把今天的代码片段“拼”起来，这样就会得到一个简化的回测系统样例。同时，我们实现了一个简单的交易策略，并且在真实的历史数据上运行了回测结果。我们观察到，在加入手续费后，策略的收益情况发生了显著的变化。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2599,7 +2544,7 @@ NameError: name &apos;path&apos; is not defined</code></pre><p>这段代码提�
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">46</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
