@@ -258,6 +258,238 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/19/04%E4%B8%A8Python%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97%EF%BC%9A%E7%94%A8NumPy%E5%BF%AB%E9%80%9F%E5%A4%84%E7%90%86%E6%95%B0%E6%8D%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/19/04%E4%B8%A8Python%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97%EF%BC%9A%E7%94%A8NumPy%E5%BF%AB%E9%80%9F%E5%A4%84%E7%90%86%E6%95%B0%E6%8D%AE/" itemprop="url">04丨Python科学计算：用NumPy快速处理数据</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-19T21:25:07+08:00">
+                2019-12-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AE%9E%E6%88%9845%E8%AE%B2/" itemprop="url" rel="index">
+                    <span itemprop="name">数据分析实战45讲</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/12/19/04%E4%B8%A8Python%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97%EF%BC%9A%E7%94%A8NumPy%E5%BF%AB%E9%80%9F%E5%A4%84%E7%90%86%E6%95%B0%E6%8D%AE/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/12/19/04%E4%B8%A8Python%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97%EF%BC%9A%E7%94%A8NumPy%E5%BF%AB%E9%80%9F%E5%A4%84%E7%90%86%E6%95%B0%E6%8D%AE/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p> Python 数组结构中的列表 list，它实际上相当于一个数组的结构。而 NumPy 中一个关键数据类型就是关于数组的，那为什么还存在这样一个第三方的数组结构呢？</p>
+<p>实际上，标准的 Python 中，用列表 list 保存数组的数值。由于列表中的元素可以是任意的对象，所以列表中 list 保存的是对象的指针。虽然在 Python 编程中隐去了指针的概念，但是数组有指针，Python 的列表 list 其实就是数组。这样如果我要保存一个简单的数组 [0,1,2]，就需要有 3 个指针和 3 个整数的对象，这样对于 Python 来说是非常不经济的，浪费了内存和计算时间。</p>
+<h3 id="使用-NumPy-让你的-Python-科学计算更高效"><a href="#使用-NumPy-让你的-Python-科学计算更高效" class="headerlink" title="使用 NumPy 让你的 Python 科学计算更高效"></a>使用 NumPy 让你的 Python 科学计算更高效</h3><p>为什么要用 NumPy 数组结构而不是 Python 本身的列表 list？这是因为列表 list 的元素在系统内存中是分散存储的，而 NumPy 数组存储在一个均匀连续的内存块中。这样数组计算遍历所有的元素，不像列表 list 还需要对内存地址进行查找，从而节省了计算资源。</p>
+<p>另外在内存访问模式中，缓存会直接把字节块从 RAM 加载到 CPU 寄存器中。因为数据连续的存储在内存中，NumPy 直接利用现代 CPU 的矢量化指令计算，加载寄存器中的多个连续浮点数。另外 NumPy 中的矩阵计算可以采用多线程的方式，充分利用多核 CPU 计算资源，大大提升了计算效率。</p>
+<p>当然除了使用 NumPy 外，你还需要一些技巧来提升内存和提高计算资源的利用率。一个重要的规则就是：避免采用隐式拷贝，而是采用就地操作的方式。举个例子，如果我想让一个数值 x 是原来的两倍，可以直接写成 x<em>=2，而不要写成 y=x</em>2。</p>
+<p>这样速度能快到 2 倍甚至更多。</p>
+<p>既然 NumPy 这么厉害，你该从哪儿入手学习呢？在 NumPy 里有两个重要的对象：ndarray（N-dimensional array object）解决了多维数组问题，而 ufunc（universal function object）则是解决对数组进行处理的函数。下面，我就带你一一来看。</p>
+<h4 id="ndarray-对象"><a href="#ndarray-对象" class="headerlink" title="ndarray 对象"></a>ndarray 对象</h4><p>ndarray 实际上是多维数组的含义。在 NumPy 数组中，维数称为秩（rank），一维数组的秩为 1，二维数组的秩为 2，以此类推。在 NumPy 中，每一个线性的数组称为一个轴（axes），其实秩就是描述轴的数量。</p>
+<p>下面，你来看 ndarray 对象是如何创建数组的，又是如何处理结构数组的呢？</p>
+<h3 id="创建数组"><a href="#创建数组" class="headerlink" title="创建数组"></a>创建数组</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">a = np.array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])</span><br><span class="line">b = np.array([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>], [<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>]])</span><br><span class="line">b[<span class="number">1</span>,<span class="number">1</span>]=<span class="number">10</span></span><br><span class="line">print(a.shape)</span><br><span class="line">print(b.shape)</span><br><span class="line">print(a.dtype)</span><br><span class="line">print(b)</span><br></pre></td></tr></table></figure>
+
+<pre><code>(3,)
+(3, 3)
+int64
+[[ 1  2  3]
+ [ 4 10  6]
+ [ 7  8  9]]</code></pre><p>创建数组前，你需要引用 NumPy 库，可以直接通过 array 函数创建数组，如果是多重数组，比如示例里的 b，那么该怎么做呢？你可以先把一个数组作为一个元素，然后嵌套起来，比如示例 b 中的 [1,2,3] 就是一个元素，然后 [4,5,6][7,8,9] 也是作为元素，然后把三个元素再放到 [] 数组里，赋值给变量 b。</p>
+<p>当然数组也是有属性的，比如你可以通过函数 shape 属性获得数组的大小，通过 dtype 获得元素的属性。如果你想对数组里的数值进行修改的话，直接赋值即可，注意下标是从 0 开始计的，所以如果你想对 b 数组，九宫格里的中间元素进行修改的话，下标应该是 [1,1]。</p>
+<h3 id="结构数组"><a href="#结构数组" class="headerlink" title="结构数组"></a>结构数组</h3><p>如果你想统计一个班级里面学生的姓名、年龄，以及语文、英语、数学成绩该怎么办？当然你可以用数组的下标来代表不同的字段，比如下标为 0 的是姓名、下标为 1 的是年龄等，但是这样不显性。</p>
+<p>实际上在 C 语言里，可以定义结构数组，也就是通过 struct 定义结构类型，结构中的字段占据连续的内存空间，每个结构体占用的内存大小都相同，那在 NumPy 中是怎样操作的呢？</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">persontype = np.dtype(&#123;</span><br><span class="line">    <span class="string">'names'</span>:[<span class="string">'name'</span>, <span class="string">'age'</span>, <span class="string">'chinese'</span>, <span class="string">'math'</span>, <span class="string">'english'</span>],</span><br><span class="line">    <span class="string">'formats'</span>:[<span class="string">'S32'</span>,<span class="string">'i'</span>, <span class="string">'i'</span>, <span class="string">'i'</span>, <span class="string">'f'</span>]&#125;)</span><br><span class="line">peoples = np.array([(<span class="string">"ZhangFei"</span>,<span class="number">32</span>,<span class="number">75</span>,<span class="number">100</span>, <span class="number">90</span>),(<span class="string">"GuanYu"</span>,<span class="number">24</span>,<span class="number">85</span>,<span class="number">96</span>,<span class="number">88.5</span>),</span><br><span class="line">       (<span class="string">"ZhaoYun"</span>,<span class="number">28</span>,<span class="number">85</span>,<span class="number">92</span>,<span class="number">96.5</span>),(<span class="string">"HuangZhong"</span>,<span class="number">29</span>,<span class="number">65</span>,<span class="number">85</span>,<span class="number">100</span>)],</span><br><span class="line">    dtype=persontype)</span><br><span class="line">ages = peoples[:][<span class="string">'age'</span>]</span><br><span class="line">chineses = peoples[:][<span class="string">'chinese'</span>]</span><br><span class="line">maths = peoples[:][<span class="string">'math'</span>]</span><br><span class="line">englishs = peoples[:][<span class="string">'english'</span>]</span><br><span class="line">print(np.mean(ages))</span><br><span class="line">print(np.mean(chineses))</span><br><span class="line">print(np.mean(maths))</span><br><span class="line">print(np.mean(englishs))</span><br></pre></td></tr></table></figure>
+
+<pre><code>28.25
+77.5
+93.25
+93.75</code></pre><p>你看下这个例子，首先在 NumPy 中是用 dtype 定义的结构类型，然后在定义数组的时候，用 array 中指定了结构数组的类型 dtype=persontype，这样你就可以自由地使用自定义的 persontype 了。比如想知道每个人的语文成绩，就可以用 chineses = peoples[:][‘chinese’]，当然 NumPy 中还有一些自带的数学运算，比如计算平均值使用 np.mean。</p>
+<h3 id="ufunc-运算"><a href="#ufunc-运算" class="headerlink" title="ufunc 运算"></a>ufunc 运算</h3><p>ufunc 是 universal function 的缩写，是不是听起来就感觉功能非常强大？确如其名，它能对数组中每个元素进行函数操作。NumPy 中很多 ufunc 函数计算速度非常快，因为都是采用 C 语言实现的。</p>
+<h3 id="连续数组的创建"><a href="#连续数组的创建" class="headerlink" title="连续数组的创建"></a>连续数组的创建</h3><p>NumPy 可以很方便地创建连续数组，比如我使用 arange 或 linspace 函数进行创建：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x1 = np.arange(<span class="number">1</span>,<span class="number">11</span>,<span class="number">2</span>)</span><br><span class="line">x2 = np.linspace(<span class="number">1</span>,<span class="number">9</span>,<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+
+<p>np.arange 和 np.linspace 起到的作用是一样的，都是创建等差数组。这两个数组的结果 x1,x2 都是 [1 3 5 7 9]。结果相同，但是你能看出来创建的方式是不同的。</p>
+<p>arange() 类似内置函数 range()，通过指定初始值、终值、步长来创建等差数列的一维数组，默认是不包括终值的。</p>
+<p>linspace 是 linear space 的缩写，代表线性等分向量的含义。linspace() 通过指定<strong>初始值、终值、元素个数来创建等差数列的一维数组，默认是包括终值的。</strong></p>
+<h3 id="算数运算"><a href="#算数运算" class="headerlink" title="算数运算"></a>算数运算</h3><p>通过 NumPy 可以自由地创建等差数组，同时也可以进行加、减、乘、除、求 n 次方和取余数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">x1 = np.arange(<span class="number">1</span>,<span class="number">11</span>,<span class="number">2</span>)</span><br><span class="line">x2 = np.linspace(<span class="number">1</span>,<span class="number">9</span>,<span class="number">5</span>)</span><br><span class="line">print(np.add(x1, x2))</span><br><span class="line">print(np.subtract(x1, x2))</span><br><span class="line">print(np.multiply(x1, x2))</span><br><span class="line">print(np.divide(x1, x2))</span><br><span class="line">print(np.power(x1, x2))</span><br><span class="line">print(np.remainder(x1, x2))</span><br></pre></td></tr></table></figure>
+
+<pre><code>[ 2.  6. 10. 14. 18.]
+[0. 0. 0. 0. 0.]
+[ 1.  9. 25. 49. 81.]
+[1. 1. 1. 1. 1.]
+[1.00000000e+00 2.70000000e+01 3.12500000e+03 8.23543000e+05
+ 3.87420489e+08]
+[0. 0. 0. 0. 0.]</code></pre><p>我还以 x1, x2 数组为例，求这两个数组之间的加、减、乘、除、求 n 次方和取余数。在 n 次方中，x2 数组中的元素实际上是次方的次数，x1 数组的元素为基数。</p>
+<p>在取余函数里，你既可以用 np.remainder(x1, x2)，也可以用 np.mod(x1, x2)，结果是一样的。</p>
+<h3 id="统计函数"><a href="#统计函数" class="headerlink" title="统计函数"></a>统计函数</h3><p>如果你想要对一堆数据有更清晰的认识，就需要对这些数据进行描述性的统计分析，比如了解这些数据中的最大值、最小值、平均值，是否符合正态分布，方差、标准差多少等等。它们可以让你更清楚地对这组数据有认知。</p>
+<p>下面我来介绍下在 NumPy 中如何使用这些统计函数。</p>
+<h3 id="计数组-矩阵中的最大值函数-amax-，最小值函数-amin"><a href="#计数组-矩阵中的最大值函数-amax-，最小值函数-amin" class="headerlink" title="计数组 / 矩阵中的最大值函数 amax()，最小值函数 amin()"></a>计数组 / 矩阵中的最大值函数 amax()，最小值函数 amin()</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">a = np.array([[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>], [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>], [<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>]])</span><br><span class="line">print(np.amin(a))</span><br><span class="line">print(np.amin(a,<span class="number">0</span>))</span><br><span class="line">print(np.amin(a,<span class="number">1</span>))</span><br><span class="line">print(np.amax(a))</span><br><span class="line">print(np.amax(a,<span class="number">0</span>))</span><br><span class="line">print(np.amax(a,<span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+
+<pre><code>1
+[1 2 3]
+[1 4 7]
+9
+[7 8 9]
+[3 6 9]</code></pre><p>amin() 用于计算数组中的元素沿指定轴的最小值。对于一个二维数组 a，amin(a) 指的是数组中全部元素的最小值，amin(a,0) 是延着 axis=0 轴的最小值，axis=0 轴是把元素看成了 [1,4,7], [2,5,8], [3,6,9] 三个元素，所以最小值为 [1,2,3]，amin(a,1) 是延着 axis=1 轴的最小值，axis=1 轴是把元素看成了 [1,2,3], [4,5,6], [7,8,9] 三个元素，所以最小值为 [1,4,7]。同理 amax() 是计算数组中元素沿指定轴的最大值。</p>
+<h3 id="统计最大值与最小值之差-ptp"><a href="#统计最大值与最小值之差-ptp" class="headerlink" title="统计最大值与最小值之差 ptp()"></a>统计最大值与最小值之差 ptp()</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a = np.array([[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>], [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>], [<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>]])</span><br><span class="line">print(np.ptp(a)) </span><br><span class="line">print(np.ptp(a,<span class="number">0</span>))</span><br><span class="line">print(np.ptp(a,<span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+
+<pre><code>8
+[6 6 6]
+[2 2 2]</code></pre><p>对于相同的数组 a，np.ptp(a) 可以统计数组中最大值与最小值的差，即 9-1=8。同样 ptp(a,0) 统计的是沿着 axis=0 轴的最大值与最小值之差，即 7-1=6（当然 8-2=6,9-3=6，第三行减去第一行的 ptp 差均为 6），ptp(a,1) 统计的是沿着 axis=1 轴的最大值与最小值之差，即 3-1=2（当然 6-4=2, 9-7=2，即第三列与第一列的 ptp 差均为 2）。</p>
+<h3 id="统计数组的百分位数-percentile"><a href="#统计数组的百分位数-percentile" class="headerlink" title="统计数组的百分位数 percentile()"></a>统计数组的百分位数 percentile()</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a = np.array([[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>], [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>], [<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>]])</span><br><span class="line"><span class="keyword">print</span> np.percentile(a, <span class="number">50</span>)</span><br><span class="line"><span class="keyword">print</span> np.percentile(a, <span class="number">50</span>, axis=<span class="number">0</span>)</span><br><span class="line"><span class="keyword">print</span> np.percentile(a, <span class="number">50</span>, axis=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<p>同样，percentile() 代表着第 p 个百分位数，这里 p 的取值范围是 0-100，如果 p=0，那么就是求最小值，如果 p=50 就是求平均值，如果 p=100 就是求最大值。同样你也可以求得在 axis=0 和 axis=1 两个轴上的 p% 的百分位数。</p>
+<h3 id="统计数组中的中位数-median-、平均数-mean"><a href="#统计数组中的中位数-median-、平均数-mean" class="headerlink" title="统计数组中的中位数 median()、平均数 mean()"></a>统计数组中的中位数 median()、平均数 mean()</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">a = np.array([[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>], [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>], [<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>]])</span><br><span class="line"><span class="comment"># 求中位数</span></span><br><span class="line"><span class="keyword">print</span> np.median(a)</span><br><span class="line"><span class="keyword">print</span> np.median(a, axis=<span class="number">0</span>)</span><br><span class="line"><span class="keyword">print</span> np.median(a, axis=<span class="number">1</span>)</span><br><span class="line"><span class="comment"># 求平均数</span></span><br><span class="line"><span class="keyword">print</span> np.mean(a)</span><br><span class="line"><span class="keyword">print</span> np.mean(a, axis=<span class="number">0</span>)</span><br><span class="line"><span class="keyword">print</span> np.mean(a, axis=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<p>你可以用 median() 和 mean() 求数组的中位数、平均值，同样也可以求得在 axis=0 和 1 两个轴上的中位数、平均值。你可以自己练习下看看运行结果。</p>
+<h3 id="统计数组中的加权平均值-average"><a href="#统计数组中的加权平均值-average" class="headerlink" title="统计数组中的加权平均值 average()"></a>统计数组中的加权平均值 average()</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a = np.array([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>])</span><br><span class="line">wts = np.array([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>])</span><br><span class="line"><span class="keyword">print</span> np.average(a)</span><br><span class="line"><span class="keyword">print</span> np.average(a,weights=wts)</span><br></pre></td></tr></table></figure>
+
+<p>average() 函数可以求加权平均，加权平均的意思就是每个元素可以设置个权重，默认情况下每个元素的权重是相同的，所以 np.average(a)=(1+2+3+4)/4=2.5，你也可以指定权重数组 wts=[1,2,3,4]，这样加权平均 np.average(a,weights=wts)=(1<em>1+2</em>2+3<em>3+4</em>4)/(1+2+3+4)=3.0。</p>
+<h3 id="统计数组中的标准差-std-、方差-var"><a href="#统计数组中的标准差-std-、方差-var" class="headerlink" title="统计数组中的标准差 std()、方差 var()"></a>统计数组中的标准差 std()、方差 var()</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a = np.array([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>])</span><br><span class="line"><span class="keyword">print</span> np.std(a)</span><br><span class="line"><span class="keyword">print</span> np.var(a)</span><br></pre></td></tr></table></figure>
+
+<p>方差的计算是指每个数值与平均值之差的平方求和的平均值，即 mean((x - x.mean())** 2)。标准差是方差的算术平方根。在数学意义上，代表的是一组数据离平均值的分散程度。所以 np.var(a)=1.25, np.std(a)=1.118033988749895。</p>
+<h3 id="NumPy-排序"><a href="#NumPy-排序" class="headerlink" title="NumPy 排序"></a>NumPy 排序</h3><p>排序是算法中使用频率最高的一种，也是在数据分析工作中常用的方法，计算机专业的同学会在大学期间的算法课中学习。</p>
+<p>那么这些排序算法在 NumPy 中实现起来其实非常简单，一条语句就可以搞定。这里你可以使用 sort 函数，sort(a, axis=-1, kind=‘quicksort’, order=None)，默认情况下使用的是快速排序；在 kind 里，可以指定 quicksort、mergesort、heapsort 分别表示快速排序、合并排序、堆排序。同样 axis 默认是 -1，即沿着数组的最后一个轴进行排序，也可以取不同的 axis 轴，或者 axis=None 代表采用扁平化的方式作为一个向量进行排序。另外 order 字段，对于结构化的数组可以指定按照某个字段进行排序。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">a = np.array([[<span class="number">4</span>,<span class="number">3</span>,<span class="number">2</span>],[<span class="number">2</span>,<span class="number">4</span>,<span class="number">1</span>]])</span><br><span class="line"><span class="keyword">print</span> np.sort(a)</span><br><span class="line"><span class="keyword">print</span> np.sort(a, axis=<span class="literal">None</span>)</span><br><span class="line"><span class="keyword">print</span> np.sort(a, axis=<span class="number">0</span>)  </span><br><span class="line"><span class="keyword">print</span> np.sort(a, axis=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<p>你可以自己计算下这个运行结果，然后再跑一遍比对下。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>在 NumPy 学习中，你重点要掌握的就是对数组的使用，因为这是 NumPy 和标准 Python 最大的区别。在 NumPy 中重新对数组进行了定义，同时提供了算术和统计运算，你也可以使用 NumPy 自带的排序功能，一句话就搞定各种排序算法。</p>
+<p>当然要理解 NumPy 提供的数据结构为什么比 Python 自身的“更高级、更高效”，要从对数据指针的引用角度进行理解。</p>
+<p>我今天重点讲了 NumPy 的数据结构，你能用自己的话说明一下为什么要用 NumPy 而不是 Python 的列表 list 吗？除此之外，你还知道那些数据结构类型？</p>
+<h3 id="练习题：统计全班的成绩"><a href="#练习题：统计全班的成绩" class="headerlink" title="练习题：统计全班的成绩"></a>练习题：统计全班的成绩</h3><p>假设一个团队里有 5 名学员，成绩如下表所示。你可以用 NumPy 统计下这些人在语文、英语、数学中的平均成绩、最小成绩、最大成绩、方差、标准差。然后把这些人的总成绩排序，得出名次进行成绩输出。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/19/00%20%7C%20%E4%BD%A0%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E8%83%BD%E5%8A%9B%EF%BC%9F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1552,176 +1784,6 @@ False</code></pre><figure class="highlight python"><table><tr><td class="gutter"
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/15/25.%20Reverse%20Nodes%20in%20k-Group/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LvYang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LvYang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/15/25.%20Reverse%20Nodes%20in%20k-Group/" itemprop="url">25. Reverse Nodes in k-Group</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-15T10:15:07+08:00">
-                2019-12-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/leetcode/" itemprop="url" rel="index">
-                    <span itemprop="name">leetcode</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/12/15/25.%20Reverse%20Nodes%20in%20k-Group/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/12/15/25.%20Reverse%20Nodes%20in%20k-Group/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Given a linked list, reverse the nodes of a linked list k at a time and return its modified list.</p>
-<p>k is a positive integer and is less than or equal to the length of the linked list. If the number of nodes is not a multiple of k then left-out nodes in the end should remain as it is.</p>
-<p>Example:</p>
-<p>Given this linked list: 1-&gt;2-&gt;3-&gt;4-&gt;5</p>
-<p>For k = 2, you should return: 2-&gt;1-&gt;4-&gt;3-&gt;5</p>
-<p>For k = 3, you should return: 3-&gt;2-&gt;1-&gt;4-&gt;5</p>
-<p>Note:</p>
-<p>Only constant extra memory is allowed.<br>You may not alter the values in the list’s nodes, only nodes itself may be changed.</p>
-<p>给你一个链表，每 k 个节点一组进行翻转，请你返回翻转后的链表。</p>
-<p>k 是一个正整数，它的值小于或等于链表的长度。</p>
-<p>如果节点总数不是 k 的整数倍，那么请将最后剩余的节点保持原有顺序。</p>
-<p>示例 :</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">给定这个链表：1-&gt;2-&gt;3-&gt;4-&gt;5</span><br><span class="line"></span><br><span class="line">当 k = 2 时，应当返回: 2-&gt;1-&gt;4-&gt;3-&gt;5</span><br><span class="line"></span><br><span class="line">当 k = 3 时，应当返回: 3-&gt;2-&gt;1-&gt;4-&gt;5</span><br></pre></td></tr></table></figure>
-<p>说明 :</p>
-<ul>
-<li>你的算法只能使用常数的额外空间。</li>
-<li>你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_reverseGroup</span><span class="params">(self, pre, lat)</span>:</span></span><br><span class="line">        lpre = pre.next</span><br><span class="line">        cur = lpre.next</span><br><span class="line">        <span class="keyword">while</span> cur != lat:</span><br><span class="line">            lpre.next = cur.next</span><br><span class="line">            cur.next = pre.next</span><br><span class="line">            pre.next = cur</span><br><span class="line">            cur = lpre.next</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> lpre</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">reverseKGroup</span><span class="params">(self, head, k)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :type head: ListNode</span></span><br><span class="line"><span class="string">        :type k: int</span></span><br><span class="line"><span class="string">        :rtype: ListNode</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        h = ListNode(<span class="number">-1</span>)</span><br><span class="line">        h.next = head</span><br><span class="line">        pre = h</span><br><span class="line">        cur = head</span><br><span class="line">        </span><br><span class="line">        t = <span class="number">1</span></span><br><span class="line">        <span class="keyword">while</span> cur != <span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">if</span> t % k == <span class="number">0</span>:</span><br><span class="line">                pre = self._reverseGroup(pre, cur.next)</span><br><span class="line">                cur = pre.next</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                cur = cur.next</span><br><span class="line">            t += <span class="number">1</span></span><br><span class="line">           </span><br><span class="line">        <span class="keyword">return</span> h.next</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/15/24.%20Swap%20Nodes%20in%20Pairs/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1857,6 +1919,176 @@ False</code></pre><figure class="highlight python"><table><tr><td class="gutter"
 
 <pre><code>1 --&gt;2 --&gt;3 --&gt;4 --&gt;NULL
 2 --&gt;1 --&gt;4 --&gt;3 --&gt;NULL</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/15/25.%20Reverse%20Nodes%20in%20k-Group/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/15/25.%20Reverse%20Nodes%20in%20k-Group/" itemprop="url">25. Reverse Nodes in k-Group</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-15T10:15:07+08:00">
+                2019-12-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/leetcode/" itemprop="url" rel="index">
+                    <span itemprop="name">leetcode</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/12/15/25.%20Reverse%20Nodes%20in%20k-Group/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/12/15/25.%20Reverse%20Nodes%20in%20k-Group/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Given a linked list, reverse the nodes of a linked list k at a time and return its modified list.</p>
+<p>k is a positive integer and is less than or equal to the length of the linked list. If the number of nodes is not a multiple of k then left-out nodes in the end should remain as it is.</p>
+<p>Example:</p>
+<p>Given this linked list: 1-&gt;2-&gt;3-&gt;4-&gt;5</p>
+<p>For k = 2, you should return: 2-&gt;1-&gt;4-&gt;3-&gt;5</p>
+<p>For k = 3, you should return: 3-&gt;2-&gt;1-&gt;4-&gt;5</p>
+<p>Note:</p>
+<p>Only constant extra memory is allowed.<br>You may not alter the values in the list’s nodes, only nodes itself may be changed.</p>
+<p>给你一个链表，每 k 个节点一组进行翻转，请你返回翻转后的链表。</p>
+<p>k 是一个正整数，它的值小于或等于链表的长度。</p>
+<p>如果节点总数不是 k 的整数倍，那么请将最后剩余的节点保持原有顺序。</p>
+<p>示例 :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">给定这个链表：1-&gt;2-&gt;3-&gt;4-&gt;5</span><br><span class="line"></span><br><span class="line">当 k = 2 时，应当返回: 2-&gt;1-&gt;4-&gt;3-&gt;5</span><br><span class="line"></span><br><span class="line">当 k = 3 时，应当返回: 3-&gt;2-&gt;1-&gt;4-&gt;5</span><br></pre></td></tr></table></figure>
+<p>说明 :</p>
+<ul>
+<li>你的算法只能使用常数的额外空间。</li>
+<li>你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_reverseGroup</span><span class="params">(self, pre, lat)</span>:</span></span><br><span class="line">        lpre = pre.next</span><br><span class="line">        cur = lpre.next</span><br><span class="line">        <span class="keyword">while</span> cur != lat:</span><br><span class="line">            lpre.next = cur.next</span><br><span class="line">            cur.next = pre.next</span><br><span class="line">            pre.next = cur</span><br><span class="line">            cur = lpre.next</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> lpre</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">reverseKGroup</span><span class="params">(self, head, k)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :type head: ListNode</span></span><br><span class="line"><span class="string">        :type k: int</span></span><br><span class="line"><span class="string">        :rtype: ListNode</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        h = ListNode(<span class="number">-1</span>)</span><br><span class="line">        h.next = head</span><br><span class="line">        pre = h</span><br><span class="line">        cur = head</span><br><span class="line">        </span><br><span class="line">        t = <span class="number">1</span></span><br><span class="line">        <span class="keyword">while</span> cur != <span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">if</span> t % k == <span class="number">0</span>:</span><br><span class="line">                pre = self._reverseGroup(pre, cur.next)</span><br><span class="line">                cur = pre.next</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                cur = cur.next</span><br><span class="line">            t += <span class="number">1</span></span><br><span class="line">           </span><br><span class="line">        <span class="keyword">return</span> h.next</span><br></pre></td></tr></table></figure>
+
           
         
       
@@ -2118,266 +2350,6 @@ ModuleNotFoundError: No module named &apos;aiohttp&apos;</code></pre><p>这里�
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/13/21%20%7C%20Python%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8BFutures/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LvYang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LvYang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/13/21%20%7C%20Python%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8BFutures/" itemprop="url">21 | Python并发编程之Futures</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-13T20:50:07+08:00">
-                2019-12-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
-                    <span itemprop="name">python核心技术与实战</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/12/13/21%20%7C%20Python%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8BFutures/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/12/13/21%20%7C%20Python%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8BFutures/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Python 中的并发编程——Futures。</p>
-<h3 id="区分并发和并行"><a href="#区分并发和并行" class="headerlink" title="区分并发和并行"></a>区分并发和并行</h3><p>在我们学习并发编程时，常常同时听到并发（Concurrency）和并行（Parallelism）这两个术语，这两者经常一起使用，导致很多人以为它们是一个意思，其实不然。</p>
-<p>首先你要辨别一个误区，在 Python 中，并发并不是指同一时刻有多个操作（thread、task）同时进行。相反，某个特定的时刻，它只允许有一个操作发生，只不过线程 / 任务之间会互相切换，直到完成。我们来看下面这张图：</p>
-<p>图中出现了 thread 和 task 两种切换顺序的不同方式，分别对应 Python 中并发的两种形式——threading 和 asyncio。</p>
-<p>对于 threading，操作系统知道每个线程的所有信息，因此它会做主在适当的时候做线程切换。很显然，这样的好处是代码容易书写，因为程序员不需要做任何切换操作的处理；但是切换线程的操作，也有可能出现在一个语句执行的过程中（比如 x += 1），这样就容易出现 race condition 的情况。</p>
-<p>而对于 asyncio，主程序想要切换任务时，必须得到此任务可以被切换的通知，这样一来也就可以避免刚刚提到的 race condition 的情况。</p>
-<p>至于所谓的并行，指的才是同一时刻、同时发生。Python 中的 multi-processing 便是这个意思，对于 multi-processing，你可以简单地这么理解：比如你的电脑是 6 核处理器，那么在运行程序时，就可以强制 Python 开 6 个进程，同时执行，以加快运行速度，它的原理示意图如下：</p>
-<p>对比来看，</p>
-<ul>
-<li>并发通常应用于 I/O 操作频繁的场景，比如你要从网站上下载多个文件，I/O 操作的时间可能会比 CPU 运行处理的时间长得多。</li>
-<li>而并行则更多应用于 CPU heavy 的场景，比如 MapReduce 中的并行计算，为了加快运行速度，一般会用多台机器、多个处理器来完成。<h3 id="并发编程之-Futures"><a href="#并发编程之-Futures" class="headerlink" title="并发编程之 Futures"></a>并发编程之 Futures</h3><h3 id="单线程与多线程性能比较"><a href="#单线程与多线程性能比较" class="headerlink" title="单线程与多线程性能比较"></a>单线程与多线程性能比较</h3></li>
-</ul>
-<p>接下来，我们一起通过具体的实例，从代码的角度来理解并发编程中的 Futures，并进一步来比较其与单线程的性能区别。</p>
-<p>假设我们有一个任务，是下载一些网站的内容并打印。如果用单线程的方式，它的代码实现如下所示（为了简化代码，突出主题，此处我忽略了异常处理）：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">download_one</span><span class="params">(url)</span>:</span></span><br><span class="line">    resp = requests.get(url)</span><br><span class="line">    print(<span class="string">'Read &#123;&#125; from &#123;&#125;'</span>.format(len(resp.content), url))</span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">download_all</span><span class="params">(sites)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> site <span class="keyword">in</span> sites:</span><br><span class="line">        download_one(site)</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    sites = [</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Arts'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:History'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Society'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Biography'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Mathematics'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Technology'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Geography'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Science'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Computer_science'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Python_(programming_language)'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Java_(programming_language)'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/PHP'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Node.js'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/The_C_Programming_Language'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Go_(programming_language)'</span></span><br><span class="line">    ]</span><br><span class="line">    start_time = time.perf_counter()</span><br><span class="line">    download_all(sites)</span><br><span class="line">    end_time = time.perf_counter()</span><br><span class="line">    print(<span class="string">'Download &#123;&#125; sites in &#123;&#125; seconds'</span>.format(len(sites), end_time - start_time))</span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
-
-<pre><code>Read 129166 from https://en.wikipedia.org/wiki/Portal:Arts
-Read 196790 from https://en.wikipedia.org/wiki/Portal:History
-Read 227218 from https://en.wikipedia.org/wiki/Portal:Society
-Read 315517 from https://en.wikipedia.org/wiki/Portal:Biography
-Read 139637 from https://en.wikipedia.org/wiki/Portal:Mathematics
-Read 148720 from https://en.wikipedia.org/wiki/Portal:Technology
-Read 158254 from https://en.wikipedia.org/wiki/Portal:Geography
-Read 96941 from https://en.wikipedia.org/wiki/Portal:Science
-Read 330734 from https://en.wikipedia.org/wiki/Computer_science
-Read 408460 from https://en.wikipedia.org/wiki/Python_(programming_language)
-Read 322431 from https://en.wikipedia.org/wiki/Java_(programming_language)
-Read 482127 from https://en.wikipedia.org/wiki/PHP
-Read 177540 from https://en.wikipedia.org/wiki/Node.js
-Read 56570 from https://en.wikipedia.org/wiki/The_C_Programming_Language
-Read 329485 from https://en.wikipedia.org/wiki/Go_(programming_language)
-Download 15 sites in 15.883507495999993 seconds</code></pre><p>这种方式应该是最直接也最简单的：</p>
-<ul>
-<li>先是遍历存储网站的列表；</li>
-<li>然后对当前网站执行下载操作；</li>
-<li>等到当前操作完成后，再对下一个网站进行同样的操作，一直到结束。</li>
-</ul>
-<p>我们可以看到总共耗时约 2.4s。单线程的优点是简单明了，但是明显效率低下，因为上述程序的绝大多数时间，都浪费在了 I/O 等待上。程序每次对一个网站执行下载操作，都必须等到前一个网站下载完成后才能开始。如果放在实际生产环境中，我们需要下载的网站数量至少是以万为单位的，不难想象，这种方案根本行不通。</p>
-<p>接着我们再来看，多线程版本的代码实现：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> concurrent.futures</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">download_one</span><span class="params">(url)</span>:</span></span><br><span class="line">    resp = requests.get(url)</span><br><span class="line">    print(<span class="string">'Read &#123;&#125; from &#123;&#125;'</span>.format(len(resp.content), url))</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">download_all</span><span class="params">(sites)</span>:</span></span><br><span class="line">    <span class="keyword">with</span> concurrent.futures.ThreadPoolExecutor(max_workers=<span class="number">5</span>) <span class="keyword">as</span> executor:</span><br><span class="line">        executor.map(download_one, sites)</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    sites = [</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Arts'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:History'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Society'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Biography'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Mathematics'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Technology'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Geography'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Science'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Computer_science'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Python_(programming_language)'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Java_(programming_language)'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/PHP'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Node.js'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/The_C_Programming_Language'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Go_(programming_language)'</span></span><br><span class="line">    ]</span><br><span class="line">    start_time = time.perf_counter()</span><br><span class="line">    download_all(sites)</span><br><span class="line">    end_time = time.perf_counter()</span><br><span class="line">    print(<span class="string">'Download &#123;&#125; sites in &#123;&#125; seconds'</span>.format(len(sites), end_time - start_time))</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
-
-<pre><code>Read 129166 from https://en.wikipedia.org/wiki/Portal:Arts
-Read 227218 from https://en.wikipedia.org/wiki/Portal:Society
-Read 196790 from https://en.wikipedia.org/wiki/Portal:History
-Read 315517 from https://en.wikipedia.org/wiki/Portal:Biography
-Read 139005 from https://en.wikipedia.org/wiki/Portal:Mathematics
-Read 96941 from https://en.wikipedia.org/wiki/Portal:Science
-Read 148720 from https://en.wikipedia.org/wiki/Portal:Technology
-Read 158254 from https://en.wikipedia.org/wiki/Portal:Geography
-Read 408460 from https://en.wikipedia.org/wiki/Python_(programming_language)
-Read 330734 from https://en.wikipedia.org/wiki/Computer_science
-Read 177540 from https://en.wikipedia.org/wiki/Node.js
-Read 482127 from https://en.wikipedia.org/wiki/PHP
-Read 322431 from https://en.wikipedia.org/wiki/Java_(programming_language)
-Read 329485 from https://en.wikipedia.org/wiki/Go_(programming_language)
-Read 56570 from https://en.wikipedia.org/wiki/The_C_Programming_Language
-Download 15 sites in 4.299461989000065 seconds</code></pre><p>非常明显，总耗时是 0.2s 左右，效率一下子提升了 10 倍多。</p>
-<p>我们具体来看这段代码，它是多线程版本和单线程版的主要区别所在：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> concurrent.futures.ThreadPoolExecutor(max_workers=<span class="number">5</span>) <span class="keyword">as</span> executor:</span><br><span class="line">     executor.map(download_one, sites)</span><br></pre></td></tr></table></figure>
-
-<p>这里我们创建了一个线程池，总共有 5 个线程可以分配使用。executer.map() 与前面所讲的 Python 内置的 map() 函数类似，表示对 sites 中的每一个元素，并发地调用函数 download_one()。</p>
-<p>顺便提一下，在 download_one() 函数中，我们使用的 requests.get() 方法是线程安全的（thread-safe），因此在多线程的环境下，它也可以安全使用，并不会出现 race condition 的情况。</p>
-<p>另外，虽然线程的数量可以自己定义，但是线程数并不是越多越好，因为线程的创建、维护和删除也会有一定的开销。所以如果你设置的很大，反而可能会导致速度变慢。我们往往需要根据实际的需求做一些测试，来寻找最优的线程数量。</p>
-<p>当然，我们也可以用并行的方式去提高程序运行效率。你只需要在 download_all() 函数中，做出下面的变化即可：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> futures.ThreadPoolExecutor(workers) <span class="keyword">as</span> executor</span><br><span class="line">=&gt;</span><br><span class="line"><span class="keyword">with</span> futures.ProcessPoolExecutor() <span class="keyword">as</span> executor:</span><br></pre></td></tr></table></figure>
-
-
-<pre><code>  File &quot;&lt;ipython-input-3-5f534bcae088&gt;&quot;, line 1
-    with futures.ThreadPoolExecutor(workers) as executor
-                                                        ^
-SyntaxError: invalid syntax</code></pre><p>在需要修改的这部分代码中，函数 ProcessPoolExecutor() 表示创建进程池，使用多个进程并行的执行程序。不过，这里我们通常省略参数 workers，因为系统会自动返回 CPU 的数量作为可以调用的进程数。</p>
-<p>我刚刚提到过，并行的方式一般用在 CPU heavy 的场景中，因为对于 I/O heavy 的操作，多数时间都会用于等待，相比于多线程，使用多进程并不会提升效率。反而很多时候，因为 CPU 数量的限制，会导致其执行效率不如多线程版本。</p>
-<h3 id="到底什么是-Futures-？"><a href="#到底什么是-Futures-？" class="headerlink" title="到底什么是 Futures ？"></a>到底什么是 Futures ？</h3><p>Python 中的 Futures 模块，位于 concurrent.futures 和 asyncio 中，它们都表示带有延迟的操作。Futures 会将处于等待状态的操作包裹起来放到队列中，这些操作的状态随时可以查询，当然，它们的结果或是异常，也能够在操作完成后被获取。</p>
-<p>通常来说，作为用户，我们不用考虑如何去创建 Futures，这些 Futures 底层都会帮我们处理好。我们要做的，实际上是去 schedule 这些 Futures 的执行。</p>
-<p>比如，Futures 中的 Executor 类，当我们执行 executor.submit(func) 时，它便会安排里面的 func() 函数执行，并返回创建好的 future 实例，以便你之后查询调用。</p>
-<p>这里再介绍一些常用的函数。Futures 中的方法 done()，表示相对应的操作是否完成——True 表示完成，False 表示没有完成。不过，要注意，done() 是 non-blocking 的，会立即返回结果。相对应的 add_done_callback(fn)，则表示 Futures 完成后，相对应的参数函数 fn，会被通知并执行调用。</p>
-<p>Futures 中还有一个重要的函数 result()，它表示当 future 完成后，返回其对应的结果或异常。而 as_completed(fs)，则是针对给定的 future 迭代器 fs，在其完成后，返回完成后的迭代器。</p>
-<p>所以，上述例子也可以写成下面的形式：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> concurrent.futures</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">download_one</span><span class="params">(url)</span>:</span></span><br><span class="line">    resp = requests.get(url)</span><br><span class="line">    print(<span class="string">'Read &#123;&#125; from &#123;&#125;'</span>.format(len(resp.content), url))</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">download_all</span><span class="params">(sites)</span>:</span></span><br><span class="line">    <span class="keyword">with</span> concurrent.futures.ThreadPoolExecutor(max_workers=<span class="number">5</span>) <span class="keyword">as</span> executor:</span><br><span class="line">        to_do = []</span><br><span class="line">        <span class="keyword">for</span> site <span class="keyword">in</span> sites:</span><br><span class="line">            future = executor.submit(download_one, site)</span><br><span class="line">            to_do.append(future)</span><br><span class="line">            </span><br><span class="line">        <span class="keyword">for</span> future <span class="keyword">in</span> concurrent.futures.as_completed(to_do):</span><br><span class="line">            future.result()</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    sites = [</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Arts'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:History'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Society'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Biography'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Mathematics'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Technology'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Geography'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Science'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Computer_science'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Python_(programming_language)'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Java_(programming_language)'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/PHP'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Node.js'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/The_C_Programming_Language'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Go_(programming_language)'</span></span><br><span class="line">    ]</span><br><span class="line">    start_time = time.perf_counter()</span><br><span class="line">    download_all(sites)</span><br><span class="line">    end_time = time.perf_counter()</span><br><span class="line">    print(<span class="string">'Download &#123;&#125; sites in &#123;&#125; seconds'</span>.format(len(sites), end_time - start_time))</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
-
-<pre><code>Read 139637 from https://en.wikipedia.org/wiki/Portal:Mathematics
-Read 227218 from https://en.wikipedia.org/wiki/Portal:Society
-Read 196790 from https://en.wikipedia.org/wiki/Portal:History
-Read 148720 from https://en.wikipedia.org/wiki/Portal:Technology
-Read 96941 from https://en.wikipedia.org/wiki/Portal:Science
-Read 315517 from https://en.wikipedia.org/wiki/Portal:Biography
-Read 129166 from https://en.wikipedia.org/wiki/Portal:Arts
-Read 158254 from https://en.wikipedia.org/wiki/Portal:Geography
-Read 330734 from https://en.wikipedia.org/wiki/Computer_science
-Read 322431 from https://en.wikipedia.org/wiki/Java_(programming_language)
-Read 408460 from https://en.wikipedia.org/wiki/Python_(programming_language)
-Read 482127 from https://en.wikipedia.org/wiki/PHP
-Read 56570 from https://en.wikipedia.org/wiki/The_C_Programming_Language
-Read 177540 from https://en.wikipedia.org/wiki/Node.js
-Read 329485 from https://en.wikipedia.org/wiki/Go_(programming_language)
-Download 15 sites in 3.3601100109999607 seconds</code></pre><p>这里，我们首先调用 executor.submit()，将下载每一个网站的内容都放进 future 队列 to_do，等待执行。然后是 as_completed() 函数，在 future 完成后，便输出结果。</p>
-<p>不过，这里要注意，future 列表中每个 future 完成的顺序，和它在列表中的顺序并不一定完全一致。到底哪个先完成、哪个后完成，取决于系统的调度和每个 future 的执行时间。</p>
-<h3 id="为什么多线程每次只能有一个线程执行？"><a href="#为什么多线程每次只能有一个线程执行？" class="headerlink" title="为什么多线程每次只能有一个线程执行？"></a>为什么多线程每次只能有一个线程执行？</h3><p>前面我说过，同一时刻，Python 主程序只允许有一个线程执行，所以 Python 的并发，是通过多线程的切换完成的。你可能会疑惑这到底是为什么呢？</p>
-<p>这里我简单提一下全局解释器锁的概念，具体内容后面会讲到。</p>
-<p>事实上，Python 的解释器并不是线程安全的，为了解决由此带来的 race condition 等问题，Python 便引入了全局解释器锁，也就是同一时刻，只允许一个线程执行。当然，在执行 I/O 操作时，如果一个线程被 block 了，全局解释器锁便会被释放，从而让另一个线程能够继续执行。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这节课，我们首先学习了 Python 中并发和并行的概念与区别。</p>
-<ul>
-<li>并发，通过线程和任务之间互相切换的方式实现，但同一时刻，只允许有一个线程或任务执行。</li>
-<li>而并行，则是指多个进程完全同步同时的执行。<br>并发通常用于 I/O 操作频繁的场景，而并行则适用于 CPU heavy 的场景。</li>
-</ul>
-<p>随后，我们通过下载网站内容的例子，比较了单线程和运用 Futures 的多线程版本的性能差异。显而易见，合理地运用多线程，能够极大地提高程序运行效率。</p>
-<p>我们还一起学习了 Futures 的具体原理，介绍了一些常用函数比如 done()、result()、as_completed() 等的用法，并辅以实例加以理解。</p>
-<p>要注意，Python 中之所以同一时刻只允许一个线程运行，其实是由于全局解释器锁的存在。但是对 I/O 操作而言，当其被 block 的时候，全局解释器锁便会被释放，使其他线程继续执行。</p>
-<h3 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h3><p>最后给你留一道思考题。你能否通过查阅相关文档，为今天所讲的这个下载网站内容的例子，加上合理的异常处理，让程序更加稳定健壮呢？</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2428,7 +2400,7 @@ Download 15 sites in 3.3601100109999607 seconds</code></pre><p>这里，我们�
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">48</span>
+                  <span class="site-state-item-count">49</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

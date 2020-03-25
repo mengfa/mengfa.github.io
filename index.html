@@ -258,6 +258,224 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/25/10%E4%B8%A8%E5%B8%B8%E7%94%A8%E7%9A%84SQL%E6%A0%87%E5%87%86%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%8C%E5%9C%A8SQL92%E4%B8%AD%E6%98%AF%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E8%BF%9E%E6%8E%A5%E7%9A%84%EF%BC%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/25/10%E4%B8%A8%E5%B8%B8%E7%94%A8%E7%9A%84SQL%E6%A0%87%E5%87%86%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%8C%E5%9C%A8SQL92%E4%B8%AD%E6%98%AF%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E8%BF%9E%E6%8E%A5%E7%9A%84%EF%BC%9F/" itemprop="url">10丨常用的SQL标准有哪些，在SQL92中是如何使用连接的？</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-25T20:48:07+08:00">
+                2020-03-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" itemprop="url" rel="index">
+                    <span itemprop="name">SQL必知必会</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/25/10%E4%B8%A8%E5%B8%B8%E7%94%A8%E7%9A%84SQL%E6%A0%87%E5%87%86%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%8C%E5%9C%A8SQL92%E4%B8%AD%E6%98%AF%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E8%BF%9E%E6%8E%A5%E7%9A%84%EF%BC%9F/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/03/25/10%E4%B8%A8%E5%B8%B8%E7%94%A8%E7%9A%84SQL%E6%A0%87%E5%87%86%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%8C%E5%9C%A8SQL92%E4%B8%AD%E6%98%AF%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E8%BF%9E%E6%8E%A5%E7%9A%84%EF%BC%9F/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>今天我主要讲解连接表的操作。在讲解之前，我想先给你介绍下连接（JOIN）在 SQL 中的重要性。</p>
+<p>我们知道 SQL 的英文全称叫做 Structured Query Language，它有一个很强大的功能，就是能在各个数据表之间进行连接查询（Query）。这是因为 SQL 是建立在关系型数据库基础上的一种语言。关系型数据库的典型数据结构就是数据表，这些数据表的组成都是结构化的（Structured）。你可以把关系模型理解成一个二维表格模型，这个二维表格是由行（row）和列（column）组成的。每一个行（row）就是一条数据，每一列（column）就是数据在某一维度的属性。</p>
+<p>正是因为在数据库中，表的组成是基于关系模型的，所以一个表就是一个关系。一个数据库中可以包括多个表，也就是存在多种数据之间的关系。而我们之所以能使用 SQL 语言对各个数据表进行复杂查询，核心就在于连接，它可以用一条 SELECT 语句在多张表之间进行查询。你也可以理解为，关系型数据库的核心之一就是连接。</p>
+<p>既然连接在 SQL 中这么重要，那么针对今天的内容，需要你从以下几个方面进行掌握：</p>
+<ol>
+<li>SQL 实际上存在不同的标准，不同标准下的连接定义也有不同。你首先需要了解常用的 SQL 标准有哪些；</li>
+<li>了解了 SQL 的标准之后，我们从 SQL92 标准入门，来看下连接表的种类有哪些；</li>
+<li>针对一个实际的数据库表，如果你想要做数据统计，需要学会使用跨表的连接进行操作。<h3 id="常用的-SQL-标准有哪些"><a href="#常用的-SQL-标准有哪些" class="headerlink" title="常用的 SQL 标准有哪些"></a>常用的 SQL 标准有哪些</h3>在正式开始讲连接表的种类时，我们首先需要知道 SQL 存在不同版本的标准规范，因为不同规范下的表连接操作是有区别的。</li>
+</ol>
+<p>SQL 有两个主要的标准，分别是 SQL92 和 SQL99。92 和 99 代表了标准提出的时间，SQL92 就是 92 年提出的标准规范。当然除了 SQL92 和 SQL99 以外，还存在 SQL-86、SQL-89、SQL:2003、SQL:2008、SQL:2011 和 SQL:2016 等其他的标准。</p>
+<p>这么多标准，到底该学习哪个呢？实际上最重要的 SQL 标准就是 SQL92 和 SQL99。一般来说 SQL92 的形式更简单，但是写的 SQL 语句会比较长，可读性较差。而 SQL99 相比于 SQL92 来说，语法更加复杂，但可读性更强。我们从这两个标准发布的页数也能看出，SQL92 的标准有 500 页，而 SQL99 标准超过了 1000 页。实际上你不用担心要学习这么多内容，基本上从 SQL99 之后，很少有人能掌握所有内容，因为确实太多了。就好比我们使用 Windows、Linux 和 Office 的时候，很少有人能掌握全部内容一样。我们只需要掌握一些核心的功能，满足日常工作的需求即可。</p>
+<h3 id="在-SQL92-中是如何使用连接的"><a href="#在-SQL92-中是如何使用连接的" class="headerlink" title="在 SQL92 中是如何使用连接的"></a>在 SQL92 中是如何使用连接的</h3><p>相比于 SQL99，SQL92 规则更简单，更适合入门。在这篇文章中，我会先讲 SQL92 是如何对连接表进行操作的，下一篇文章再讲 SQL99，到时候你可以对比下这两者之间有什么区别。</p>
+<p>在进行连接之前，我们需要用数据表做举例。这里我创建了 NBA 球员和球队两张表，SQL 文件你可以从GitHub上下载。</p>
+<p>其中 player 表为球员表，一共有 37 个球员.<br>team 表为球队表，一共有 3 支球队.<br>有了这两个数据表之后，我们再来看下 SQL92 中的 5 种连接方式，它们分别是笛卡尔积、等值连接、非等值连接、外连接（左连接、右连接）和自连接。</p>
+<h3 id="笛卡尔积"><a href="#笛卡尔积" class="headerlink" title="笛卡尔积"></a>笛卡尔积</h3><p>笛卡尔乘积是一个数学运算。假设我有两个集合 X 和 Y，那么 X 和 Y 的笛卡尔积就是 X 和 Y 的所有可能组合，也就是第一个对象来自于 X，第二个对象来自于 Y 的所有可能。</p>
+<p>我们假定 player 表的数据是集合 X，先进行 SQL 查询：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM player</span><br></pre></td></tr></table></figure>
+<p>再假定 team 表的数据为集合 Y，同样需要进行 SQL 查询：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM team</span><br></pre></td></tr></table></figure>
+<p>你会看到运行结果会显示出上面的两张表格。</p>
+<p>接着我们再来看下两张表的笛卡尔积的结果，这是笛卡尔积的调用方式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL: SELECT * FROM player, team</span><br></pre></td></tr></table></figure>
+<p>运行结果（一共 37*3=111 条记录）：</p>
+<p>笛卡尔积也称为交叉连接，英文是 CROSS JOIN，它的作用就是可以把任意表进行连接，即使这两张表不相关。但我们通常进行连接还是需要筛选的，因此你需要在连接后面加上 WHERE 子句，也就是作为过滤条件对连接数据进行筛选。比如后面要讲到的等值连接。</p>
+<h3 id="等值连接"><a href="#等值连接" class="headerlink" title="等值连接"></a>等值连接</h3><p>两张表的等值连接就是用两张表中都存在的列进行连接。我们也可以对多张表进行等值连接。</p>
+<p>针对 player 表和 team 表都存在 team_id 这一列，我们可以用等值连接进行查询。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL: SELECT player_id, player.team_id, player_name, height, team_name FROM player, team WHERE player.team_id = team.team_id</span><br></pre></td></tr></table></figure>
+<h3 id="这个就是加入-player-team-id-team-team-id就不是排列组合的笛卡尔积了"><a href="#这个就是加入-player-team-id-team-team-id就不是排列组合的笛卡尔积了" class="headerlink" title="这个就是加入 player.team_id = team.team_id就不是排列组合的笛卡尔积了."></a>这个就是加入 player.team_id = team.team_id就不是排列组合的笛卡尔积了.</h3><p>我们在进行等值连接的时候，可以使用表的别名，这样会让 SQL 语句更简洁：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT player_id, a.team_id, player_name, height, team_name FROM player AS a, team AS b WHERE a.team_id = b.team_id</span><br></pre></td></tr></table></figure>
+<p>需要注意的是，如果我们使用了表的别名，在查询字段中就只能使用别名进行代替，不能使用原有的表名，比如下面的 SQL 查询就会报错：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT player_id, player.team_id, player_name, height, team_name FROM player AS a, team AS b WHERE a.team_id = b.team_id</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unknow column.</span><br></pre></td></tr></table></figure>
+<h3 id="非等值连接"><a href="#非等值连接" class="headerlink" title="非等值连接"></a>非等值连接</h3><p>当我们进行多表查询的时候，如果连接多个表的条件是等号时，就是等值连接，其他的运算符连接就是非等值查询。</p>
+<p>这里我创建一个身高级别表 height_grades.<br>我们知道 player 表中有身高 height 字段，如果想要知道每个球员的身高的级别，可以采用非等值连接查询。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SQL：SELECT p.player_name, p.height, h.height_level</span><br><span class="line">FROM player AS p, height_grades AS h</span><br><span class="line">WHERE p.height BETWEEN h.height_lowest AND h.height_highest</span><br></pre></td></tr></table></figure>
+<p>运行结果（37 条记录）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">player_name height  height_level</span><br><span class="line">韦恩-艾灵顿	1.93	B</span><br><span class="line">雷吉-杰克逊	1.91	B</span><br><span class="line">安德烈-德拉蒙德	2.11	A</span><br><span class="line">索恩-马克	2.16	A</span><br><span class="line">布鲁斯-布朗	1.96	B</span><br><span class="line">兰斯顿-加洛韦	1.88	C</span><br><span class="line">格伦-罗宾逊三世	1.98	B</span><br><span class="line">伊斯梅尔-史密斯	1.83	C</span><br></pre></td></tr></table></figure>
+
+<h3 id="外连接"><a href="#外连接" class="headerlink" title="外连接"></a>外连接</h3><p>除了查询满足条件的记录以外，外连接还可以查询某一方不满足条件的记录。两张表的外连接，会有一张是主表，另一张是从表。如果是多张表的外连接，那么第一张表是主表，即显示全部的行，而第剩下的表则显示对应连接的信息。在 SQL92 中采用（+）代表从表所在的位置，而且在 SQL92 中，只有左外连接和右外连接，没有全外连接。</p>
+<p>什么是左外连接，什么是右外连接呢？</p>
+<p>左外连接，就是指左边的表是主表，需要显示左边表的全部行，而右侧的表是从表，（+）表示哪个是从表。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL：SELECT * FROM player, team where player.team_id = team.team_id(+)</span><br></pre></td></tr></table></figure>
+<p>相当于 SQL99 中的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL：SELECT * FROM player LEFT JOIN team on player.team_id = team.team_id</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">10001	1001	韦恩-艾灵顿	1.93	1001	底特律活塞</span><br><span class="line">10002	1001	雷吉-杰克逊	1.91	1001	底特律活塞</span><br><span class="line">10003	1001	安德烈-德拉蒙德	2.11	1001	底特律活塞</span><br><span class="line">10004	1001	索恩-马克	2.16	1001	底特律活塞</span><br><span class="line">10005	1001	布鲁斯-布朗	1.96	1001	底特律活塞</span><br><span class="line">10006	1001	兰斯顿-加洛韦	1.88	1001	底特律活塞</span><br></pre></td></tr></table></figure>
+
+<p>右外连接，指的就是右边的表是主表，需要显示右边表的全部行，而左侧的表是从表。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL：SELECT * FROM player, team where player.team_id(+) = team.team_id</span><br></pre></td></tr></table></figure>
+<p>相当于 SQL99 中的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL：SELECT * FROM player RIGHT JOIN team on player.team_id = team.team_id</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">10001	1001	韦恩-艾灵顿	1.93	1001	底特律活塞</span><br><span class="line">10002	1001	雷吉-杰克逊	1.91	1001	底特律活塞</span><br><span class="line">10003	1001	安德烈-德拉蒙德	2.11	1001	底特律活塞</span><br><span class="line">10004	1001	索恩-马克	2.16	1001	底特律活塞</span><br><span class="line">10005	1001	布鲁斯-布朗	1.96	1001	底特律活塞</span><br><span class="line">10006	1001	兰斯顿-加洛韦	1.88	1001	底特律活塞</span><br><span class="line">10007	1001	格伦-罗宾逊三世	1.98	1001	底特律活塞</span><br><span class="line">10008	1001	伊斯梅尔-史密斯	1.83	1001	底特律活塞</span><br><span class="line">10009	1001	扎扎-帕楚里亚	2.11	1001	底特律活塞</span><br></pre></td></tr></table></figure>
+<p>需要注意的是，LEFT JOIN 和 RIGHT JOIN 只存在于 SQL99 及以后的标准中，在 SQL92 中不存在，只能用（+）表示。</p>
+<h3 id="自连接"><a href="#自连接" class="headerlink" title="自连接"></a>自连接</h3><p>自连接可以对多个表进行操作，也可以对同一个表进行操作。也就是说查询条件使用了当前表的字段。</p>
+<p>比如我们想要查看比布雷克·格里芬高的球员都有谁，以及他们的对应身高：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL：SELECT b.player_name, b.height FROM player as a , player as b WHERE a.player_name = &apos;布雷克-格里芬&apos; and a.height &lt; b.height</span><br></pre></td></tr></table></figure>
+<p>如果不用自连接的话，需要采用两次 SQL 查询。首先需要查询布雷克·格里芬的身高。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL：SELECT height FROM player WHERE player_name = &apos;布雷克 - 格里芬&apos;</span><br></pre></td></tr></table></figure>
+<p>运行结果为 2.08。</p>
+<p>然后再查询比 2.08 高的球员都有谁，以及他们的对应身高：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL：SELECT player_name, height FROM player WHERE height &gt; 2.08</span><br></pre></td></tr></table></figure>
+<p>运行结果和采用自连接的运行结果是一致的。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>今天我讲解了常用的 SQL 标准以及 SQL92 中的连接操作。SQL92 和 SQL99 是经典的 SQL 标准，也分别叫做 SQL-2 和 SQL-3 标准。也正是在这两个标准发布之后，SQL 影响力越来越大，甚至超越了数据库领域。现如今 SQL 已经不仅仅是数据库领域的主流语言，还是信息领域中信息处理的主流语言。在图形检索、图像检索以及语音检索中都能看到 SQL 语言的使用。</p>
+<p>除此以外，我们使用的主流 RDBMS，比如 MySQL、Oracle、SQL Sever、DB2、PostgreSQL 等都支持 SQL 语言，也就是说它们的使用符合大部分 SQL 标准，但很难完全符合，因为这些数据库管理系统都在 SQL 语言的基础上，根据自身产品的特点进行了扩充。即使这样，SQL 语言也是目前所有语言中半衰期最长的，在 1992 年，Windows3.1 发布，SQL92 标准也同时发布，如今我们早已不使用 Windows3.1 操作系统，而 SQL92 标准却一直持续至今。</p>
+<p>当然我们也要注意到 SQL 标准的变化，以及不同数据库管理系统使用时的差别，比如 Oracle 对 SQL92 支持较好，而 MySQL 则不支持 SQL92 的外连接。<br>我今天讲解了 SQL 的连接操作，你能说说内连接、外连接和自连接指的是什么吗？另外，你不妨拿案例中的 team 表做一道动手题，表格中一共有 3 支球队，现在这 3 支球队需要进行比赛，请用一条 SQL 语句显示出所有可能的比赛组合。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">SELECT * FROM team AS a,team AS b WHERE a.team_id &lt; b.team_id</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT t1.team_name,t2.team_name FROM team as t1 LEFT JOIN team as t2 ON t1.team_id != t2.team_id</span><br><span class="line"></span><br><span class="line">SELECT t1.team_name , t2.team_name FROM team as t1 ,team as t2 where t1.team_id&lt;t2.team_id;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/25/09%E4%B8%A8%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%9A%E5%AD%90%E6%9F%A5%E8%AF%A2%E7%9A%84%E7%A7%8D%E7%B1%BB%E9%83%BD%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%8C%E5%A6%82%E4%BD%95%E6%8F%90%E9%AB%98%E5%AD%90%E6%9F%A5%E8%AF%A2%E7%9A%84%E6%80%A7%E8%83%BD%EF%BC%9F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2265,248 +2483,6 @@ SyntaxError: invalid syntax</code></pre><p>这里我定义了 heros 数据表，
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/10/39%20%7C%20Django%EF%BC%9A%E6%90%AD%E5%BB%BA%E7%9B%91%E6%8E%A7%E5%B9%B3%E5%8F%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LvYang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LvYang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/10/39%20%7C%20Django%EF%BC%9A%E6%90%AD%E5%BB%BA%E7%9B%91%E6%8E%A7%E5%B9%B3%E5%8F%B0/" itemprop="url">39 | Django：搭建监控平台</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-10T20:10:07+08:00">
-                2020-01-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
-                    <span itemprop="name">python核心技术与实战</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/01/10/39%20%7C%20Django%EF%BC%9A%E6%90%AD%E5%BB%BA%E7%9B%91%E6%8E%A7%E5%B9%B3%E5%8F%B0/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/01/10/39%20%7C%20Django%EF%BC%9A%E6%90%AD%E5%BB%BA%E7%9B%91%E6%8E%A7%E5%B9%B3%E5%8F%B0/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="Django-简介和安装"><a href="#Django-简介和安装" class="headerlink" title="Django 简介和安装"></a>Django 简介和安装</h3><p>Django 是用 Python 开发的一个免费开源的 Web 框架，可以用来快速搭建优雅的高性能网站。它采用的是“MVC”的框架模式，即模型 M、视图 V 和控制器 C。</p>
-<p>Django 最大的特色，在于将网页和数据库中复杂的关系，转化为 Python 中对应的简单关系。它的设计目的，是使常见的 Web 开发任务变得快速而简单。Django 是开源的，不是商业项目或者科研项目，并且集中力量解决 Web 开发中遇到的一系列问题。所以，Django 每天都会在现有的基础上进步，以适应不断更迭的开发需求。这样既节省了开发时间，也提高了后期维护的效率。</p>
-<p>说了这么多，接下来，我们通过上手使用进一步来了解。先来看一下，如何安装和使用 Django。你可以先按照下面代码块的内容来操作，安装 Django ：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip3 install Django</span><br><span class="line">django-admin --version</span><br></pre></td></tr></table></figure>
-
-<p>接着，我们来创建一个新的 Django 项目：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">django-admin startproject TradingMonitor</span><br><span class="line">cd TradingMonitor/</span><br><span class="line">python3 manage.py migrate</span><br></pre></td></tr></table></figure>
-
-<p>这时，你能看到文件系统大概是下面这样的：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">TradingMonitor/</span><br><span class="line">├── TradingMonitor</span><br><span class="line">│   ├── __init__.py</span><br><span class="line">│   ├── settings.py</span><br><span class="line">│   ├── urls.py</span><br><span class="line">│   └── wsgi.py</span><br><span class="line">├── db.sqlite3</span><br><span class="line">└── manage.py</span><br></pre></td></tr></table></figure>
-<p>我简单解释一下它的意思：</p>
-<ul>
-<li>TradingMonitor/TradingMonitor，表示项目最初的 Python 包；</li>
-<li>TradingMonitor/init.py，表示一个空文件，声明所在目录的包为一个 Python 包；</li>
-<li>TradingMonitor/settings.py，管理项目的配置信息；</li>
-<li>TradingMonitor/urls.py，声明请求 URL 的映射关系；</li>
-<li>TradingMonitor/wsgi.py，表示 Python 程序和 Web 服务器的通信协议；</li>
-<li>manage.py，表示一个命令行工具，用来和 Django 项目进行交互；</li>
-<li>Db.sqlite3，表示默认的数据库，可以在设置中替换成其他数据库。</li>
-</ul>
-<p>另外，你可能注意到了上述命令中的python3 manage.py migrate，这个命令表示创建或更新数据库模式。每当 model 源代码被改变后，如果我们要将其应用到数据库上，就需要执行一次这个命令。</p>
-<p>接下来，我们为这个系统添加管理员账户：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 manage.py createsuperuser</span><br></pre></td></tr></table></figure>
-
-<p>然后，我们来启动 Django 的 debugging 模式：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 manage.py runserver</span><br></pre></td></tr></table></figure>
-
-<p>最后，打开浏览器输入：<a href="http://127.0.0.1:8000。如果你能看到下面这个画面，就说明" target="_blank" rel="noopener">http://127.0.0.1:8000。如果你能看到下面这个画面，就说明</a> Django 已经部署成功了。</p>
-<p>Django 的安装是不是非常简单呢？这其实也是 Python 一贯的理念，简洁，并简化入门的门槛。</p>
-<p>OK，现在我们再定位到 <a href="http://127.0.0.1:8000/admin，你会看到" target="_blank" rel="noopener">http://127.0.0.1:8000/admin，你会看到</a> Django 的后台管理网页，这里我就不过多介绍了。<br>到此，Django 就已经成功安装，并且正常启动啦。</p>
-<h3 id="MVC-架构"><a href="#MVC-架构" class="headerlink" title="MVC 架构"></a>MVC 架构</h3><p>刚刚我说过，MVC 架构是 Django 设计模式的精髓。接下来，我们就来具体看一下这个架构，并通过 Django 动手搭建一个服务端。</p>
-<h3 id="设计模型-Model"><a href="#设计模型-Model" class="headerlink" title="设计模型 Model"></a>设计模型 Model</h3><p>在之前的日志和存储系统这节课中，我介绍过 peewee 这个库，它能避开通过繁琐的 SQL 语句来操作 MySQL，直接使用 Python 的 class 来进行转换。事实上，这也是 Django 采取的方式。</p>
-<p>Django 无需数据库就可以使用，它通过对象关系映射器（object-relational mapping），仅使用 Python 代码就可以描述数据结构。</p>
-<p>我们先来看下面这段 Model 代码：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#  TradingMonitor/models.py</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">from</span> django.db <span class="keyword">import</span> models</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Position</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    asset = models.CharField(max_length=<span class="number">10</span>)</span><br><span class="line">    timestamp = models.DateTimeField()</span><br><span class="line">    amount = models.DecimalField(max_digits=<span class="number">10</span>, decimal_places=<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
-
-<p>models.py 文件主要用一个 Python 类来描述数据表，称为模型 。运用这个类，你可以通过简单的 Python 代码来创建、检索、更新、删除数据库中的记录，而不用写一条又一条的 SQL 语句，这也是我们之前所说的避免通过 SQL 操作数据库。</p>
-<p>在这里，我们创建了一个 Position 模型，用来表示我们的交易仓位信息。其中，</p>
-<ul>
-<li>asset 表示当前持有资产的代码，例如 btc；</li>
-<li>timestamp 表示时间戳；</li>
-<li>amount 则表示时间戳时刻的持仓信息。</li>
-</ul>
-<h3 id="设计视图-Views"><a href="#设计视图-Views" class="headerlink" title="设计视图 Views"></a>设计视图 Views</h3><p>在模型被定义之后，我们便可以在视图中引用模型了。通常，视图会根据参数检索数据，加载一个模板，并使用检索到的数据呈现模板。</p>
-<p>设计视图，则是我们用来实现业务逻辑的地方。我们来看 render_positions 这个代码，它接受 request 和 asset 两个参数，我们先不用管 request。这里的 asset 表示指定一个资产名称，例如 btc，然后这个函数返回一个渲染页面。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#  TradingMonitor/views.py</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">from</span> django.shortcuts <span class="keyword">import</span> render</span><br><span class="line"><span class="keyword">from</span> .models <span class="keyword">import</span> Position</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">render_positions</span><span class="params">(request, asset)</span>:</span></span><br><span class="line">    positions = Position.objects.filter(asset = asset)</span><br><span class="line">    context = &#123;<span class="string">'asset'</span>: asset, <span class="string">'positions'</span>: positions&#125;</span><br><span class="line">    <span class="keyword">return</span> render(request, <span class="string">'positions.html'</span>, context)</span><br></pre></td></tr></table></figure>
-
-<p>不过，这个函数具体是怎么工作的呢？我们一行行来看。</p>
-<p>positions = Position.objects.filter(asset = asset)，这行代码向数据库中执行一个查询操作，其中， filter 表示筛选，意思是从数据库中选出所有我们需要的 asset 的信息。不过，这里我只是为你举例做示范；真正做监控的时候，我们一般会更有针对性地从数据库中筛选读取信息，而不是一口气读取出所有的信息。</p>
-<p>context = {‘asset’: asset, ‘positions’: positions}，这行代码没什么好说的，封装一个字典。至于这个字典的用处，下面的内容中可以体现。</p>
-<p>return render(request, ‘positions.html’, context)，最后这行代码返回一个页面。这里我们采用的模板设计，这也是 Django 非常推荐的开发方式，也就是让模板和数据分离，这样，数据只需要向其中填充即可。</p>
-<p>最后的模板文件是 position.html，你应该注意到了， context 作为变量传给了模板，下面我们就来看一下设计模板的内容。</p>
-<h3 id="设计模板-Templates"><a href="#设计模板-Templates" class="headerlink" title="设计模板 Templates"></a>设计模板 Templates</h3><p>模板文件，其实就是 HTML 文件和部分代码的综合。你可以想象成，这个 HTML 在最终送给用户之前，需要被我们预先处理一下，而预先处理的方式就是找到对应的地方进行替换。</p>
-<p>我们来看下面这段示例代码：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#  TradingMonitor/templates/positions.html</span></span><br><span class="line"> </span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=<span class="string">"en-US"</span>&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;title&gt;Positions for &#123;&#123;asset&#125;&#125;&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line"> </span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;h1&gt;Positions for &#123;&#123;asset&#125;&#125;&lt;/h1&gt;</span><br><span class="line"> </span><br><span class="line">&lt;table&gt;</span><br><span class="line">&lt;tr&gt;</span><br><span class="line">    &lt;th&gt;Time&lt;/th&gt;</span><br><span class="line">    &lt;th&gt;Amount&lt;/th&gt;</span><br><span class="line">&lt;/tr&gt;</span><br><span class="line">&#123;% <span class="keyword">for</span> position <span class="keyword">in</span> positions %&#125;</span><br><span class="line">&lt;tr&gt;</span><br><span class="line">    &lt;th&gt;&#123;&#123;position.timestamp&#125;&#125;&lt;/th&gt;</span><br><span class="line">    &lt;th&gt;&#123;&#123;position.amount&#125;&#125;&lt;/th&gt;</span><br><span class="line">&lt;/tr&gt;</span><br><span class="line">&#123;% endfor %&#125;</span><br><span class="line">&lt;/table&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
-
-<p>我重点说一下几个地方。首先是<title>Positions for </title>，这里双大括号括住 asset 这个变量，这个变量对应的正是前面 context 字典中的 asset key。Django 的渲染引擎会将 asset ，替换成 context 中 asset 对应的内容，此处是替换成了 btc。</p>
-<p>再来看，自然就表示结束了。这样，我们就将数据封装到了一个列表之中。</p>
-<h3 id="设计链接-Urls"><a href="#设计链接-Urls" class="headerlink" title="设计链接 Urls"></a>设计链接 Urls</h3><p>最后，我们需要为我们的操作提供 URL 接口，具体操作我放在了下面的代码中，内容比较简单，我就不详细展开讲解了。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#  TradingMonitor/urls.py</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">from</span> django.contrib <span class="keyword">import</span> admin</span><br><span class="line"><span class="keyword">from</span> django.urls <span class="keyword">import</span> path</span><br><span class="line"><span class="keyword">from</span> . <span class="keyword">import</span> views</span><br><span class="line"> </span><br><span class="line">urlpatterns = [</span><br><span class="line">    path(<span class="string">'admin/'</span>, admin.site.urls),</span><br><span class="line">    path(<span class="string">'positions/&lt;str:asset&gt;'</span>, views.render_positions),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-
-<p>到这里，我们就可以通过 <a href="http://127.0.0.1:8000/positions/btc" target="_blank" rel="noopener">http://127.0.0.1:8000/positions/btc</a> 来访问啦！</p>
-<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>当然，除了主要流程外，我还需要强调几个很简单但非常关键的细节，不然，我们这些改变就不能被真正地应用。</p>
-<p>第一步，在 TradingMonitor/TradingMonitor 下，新建一个文件夹 migrations；并在这个文件夹中，新建一个空文件 <strong>init</strong>.py。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir TradingMonitor/migrations</span><br><span class="line">touch TradingMonitor/migrations/__init__.py</span><br></pre></td></tr></table></figure>
-
-<p>此时，你的目录结构应该长成下面这样：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">TradingMonitor/</span><br><span class="line">├── TradingMonitor</span><br><span class="line">│   ├── migrations</span><br><span class="line">│       └── __init__.py</span><br><span class="line">│   ├── templates</span><br><span class="line">│       └── positions.html</span><br><span class="line">│   ├── __init__.py</span><br><span class="line">│   ├── settings.py</span><br><span class="line">│   ├── urls.py</span><br><span class="line">│   ├── models.py</span><br><span class="line">│   ├── views.py</span><br><span class="line">│   └── wsgi.py</span><br><span class="line">├── db.sqlite3</span><br><span class="line">└── manage.py</span><br></pre></td></tr></table></figure>
-<p>第二步，修改 TradingMonitor/settings.py：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">INSTALLED_APPS = [</span><br><span class="line">    <span class="string">'django.contrib.admin'</span>,</span><br><span class="line">    <span class="string">'django.contrib.auth'</span>,</span><br><span class="line">    <span class="string">'django.contrib.contenttypes'</span>,</span><br><span class="line">    <span class="string">'django.contrib.sessions'</span>,</span><br><span class="line">    <span class="string">'django.contrib.messages'</span>,</span><br><span class="line">    <span class="string">'django.contrib.staticfiles'</span>,</span><br><span class="line">    <span class="string">'TradingMonitor'</span>,  <span class="comment"># 这里把我们的 app 加上</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">TEMPLATES = [</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">'BACKEND'</span>: <span class="string">'django.template.backends.django.DjangoTemplates'</span>,</span><br><span class="line">        <span class="string">'DIRS'</span>: [os.path.join(BASE_DIR, <span class="string">'TradingMonitor/templates'</span>)],  <span class="comment"># 这里把 templates 的目录加上</span></span><br><span class="line">        <span class="string">'APP_DIRS'</span>: <span class="literal">True</span>,</span><br><span class="line">        <span class="string">'OPTIONS'</span>: &#123;</span><br><span class="line">            <span class="string">'context_processors'</span>: [</span><br><span class="line">                <span class="string">'django.template.context_processors.debug'</span>,</span><br><span class="line">                <span class="string">'django.template.context_processors.request'</span>,</span><br><span class="line">                <span class="string">'django.contrib.auth.context_processors.auth'</span>,</span><br><span class="line">                <span class="string">'django.contrib.messages.context_processors.messages'</span>,</span><br><span class="line">            ],</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-
-<p>第三步，运行 python manage.py makemigrations：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python manage.py makemigrations</span><br></pre></td></tr></table></figure>
-
-<p>第四步，运行 python manage.py migrate：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python manage.py migrate</span><br></pre></td></tr></table></figure>
-
-<p>这几步的具体操作，我都用代码和注释表示了出来，你完全可以同步进行操作。操作完成后，现在，我们的数据结构就已经被成功同步到数据库中了。</p>
-<p>最后，输入 python manage.py runserver，然后打开浏览器输入<a href="http://127.0.0.1:8000/positions/btc，你就能看到效果啦。" target="_blank" rel="noopener">http://127.0.0.1:8000/positions/btc，你就能看到效果啦。</a></p>
-<p>现在，我们再回过头来看一下 MVC 模式，通过我画的这张图，你可以看到，M、V、C 这三者，以一种插件似的、松耦合的方式连接在一起：</p>
-<p>当然，我带你写的只是一个简单的 Django 应用程序，对于真正的量化平台监控系统而言，这还只是一个简单的开始。</p>
-<p>除此之外，对于监控系统来说，其实还有着非常多的开源插件可以使用。有一些界面非常酷炫，有一些可以做到很高的稳定性和易用性，它们很多都可以结合 Django 做出很好的效果来。比较典型的有：</p>
-<ul>
-<li>Graphite 是一款存储时间序列数据，并通过 Django Web 应用程序在图形中显示的插件；</li>
-<li>Vimeo 则是一个基于 Graphite 的仪表板，具有附加功能和平滑的设计；</li>
-<li>Scout 监控 Django 和 Flask 应用程序的性能，提供自动检测视图、SQL 查询、模板等。</li>
-</ul>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这一节课的内容更靠近上游应用层，我们以 Django 这个 Python 后端为例，讲解了搭建一个服务端的过程。你应该发现了，使用 RESTful Framework 搭建服务器，是一个如此简单的过程，你可以去开一个自己的交易所了（笑）。相比起具体的技术，今天我所讲的 MVC 框架和 Django 的思想，更值得你去深入学习和领会。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2557,7 +2533,7 @@ SyntaxError: invalid syntax</code></pre><p>这里我定义了 heros 数据表，
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">48</span>
+                  <span class="site-state-item-count">49</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

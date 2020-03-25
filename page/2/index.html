@@ -258,6 +258,248 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/10/39%20%7C%20Django%EF%BC%9A%E6%90%AD%E5%BB%BA%E7%9B%91%E6%8E%A7%E5%B9%B3%E5%8F%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/10/39%20%7C%20Django%EF%BC%9A%E6%90%AD%E5%BB%BA%E7%9B%91%E6%8E%A7%E5%B9%B3%E5%8F%B0/" itemprop="url">39 | Django：搭建监控平台</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-10T20:10:07+08:00">
+                2020-01-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
+                    <span itemprop="name">python核心技术与实战</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/01/10/39%20%7C%20Django%EF%BC%9A%E6%90%AD%E5%BB%BA%E7%9B%91%E6%8E%A7%E5%B9%B3%E5%8F%B0/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/01/10/39%20%7C%20Django%EF%BC%9A%E6%90%AD%E5%BB%BA%E7%9B%91%E6%8E%A7%E5%B9%B3%E5%8F%B0/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="Django-简介和安装"><a href="#Django-简介和安装" class="headerlink" title="Django 简介和安装"></a>Django 简介和安装</h3><p>Django 是用 Python 开发的一个免费开源的 Web 框架，可以用来快速搭建优雅的高性能网站。它采用的是“MVC”的框架模式，即模型 M、视图 V 和控制器 C。</p>
+<p>Django 最大的特色，在于将网页和数据库中复杂的关系，转化为 Python 中对应的简单关系。它的设计目的，是使常见的 Web 开发任务变得快速而简单。Django 是开源的，不是商业项目或者科研项目，并且集中力量解决 Web 开发中遇到的一系列问题。所以，Django 每天都会在现有的基础上进步，以适应不断更迭的开发需求。这样既节省了开发时间，也提高了后期维护的效率。</p>
+<p>说了这么多，接下来，我们通过上手使用进一步来了解。先来看一下，如何安装和使用 Django。你可以先按照下面代码块的内容来操作，安装 Django ：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip3 install Django</span><br><span class="line">django-admin --version</span><br></pre></td></tr></table></figure>
+
+<p>接着，我们来创建一个新的 Django 项目：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">django-admin startproject TradingMonitor</span><br><span class="line">cd TradingMonitor/</span><br><span class="line">python3 manage.py migrate</span><br></pre></td></tr></table></figure>
+
+<p>这时，你能看到文件系统大概是下面这样的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">TradingMonitor/</span><br><span class="line">├── TradingMonitor</span><br><span class="line">│   ├── __init__.py</span><br><span class="line">│   ├── settings.py</span><br><span class="line">│   ├── urls.py</span><br><span class="line">│   └── wsgi.py</span><br><span class="line">├── db.sqlite3</span><br><span class="line">└── manage.py</span><br></pre></td></tr></table></figure>
+<p>我简单解释一下它的意思：</p>
+<ul>
+<li>TradingMonitor/TradingMonitor，表示项目最初的 Python 包；</li>
+<li>TradingMonitor/init.py，表示一个空文件，声明所在目录的包为一个 Python 包；</li>
+<li>TradingMonitor/settings.py，管理项目的配置信息；</li>
+<li>TradingMonitor/urls.py，声明请求 URL 的映射关系；</li>
+<li>TradingMonitor/wsgi.py，表示 Python 程序和 Web 服务器的通信协议；</li>
+<li>manage.py，表示一个命令行工具，用来和 Django 项目进行交互；</li>
+<li>Db.sqlite3，表示默认的数据库，可以在设置中替换成其他数据库。</li>
+</ul>
+<p>另外，你可能注意到了上述命令中的python3 manage.py migrate，这个命令表示创建或更新数据库模式。每当 model 源代码被改变后，如果我们要将其应用到数据库上，就需要执行一次这个命令。</p>
+<p>接下来，我们为这个系统添加管理员账户：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 manage.py createsuperuser</span><br></pre></td></tr></table></figure>
+
+<p>然后，我们来启动 Django 的 debugging 模式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 manage.py runserver</span><br></pre></td></tr></table></figure>
+
+<p>最后，打开浏览器输入：<a href="http://127.0.0.1:8000。如果你能看到下面这个画面，就说明" target="_blank" rel="noopener">http://127.0.0.1:8000。如果你能看到下面这个画面，就说明</a> Django 已经部署成功了。</p>
+<p>Django 的安装是不是非常简单呢？这其实也是 Python 一贯的理念，简洁，并简化入门的门槛。</p>
+<p>OK，现在我们再定位到 <a href="http://127.0.0.1:8000/admin，你会看到" target="_blank" rel="noopener">http://127.0.0.1:8000/admin，你会看到</a> Django 的后台管理网页，这里我就不过多介绍了。<br>到此，Django 就已经成功安装，并且正常启动啦。</p>
+<h3 id="MVC-架构"><a href="#MVC-架构" class="headerlink" title="MVC 架构"></a>MVC 架构</h3><p>刚刚我说过，MVC 架构是 Django 设计模式的精髓。接下来，我们就来具体看一下这个架构，并通过 Django 动手搭建一个服务端。</p>
+<h3 id="设计模型-Model"><a href="#设计模型-Model" class="headerlink" title="设计模型 Model"></a>设计模型 Model</h3><p>在之前的日志和存储系统这节课中，我介绍过 peewee 这个库，它能避开通过繁琐的 SQL 语句来操作 MySQL，直接使用 Python 的 class 来进行转换。事实上，这也是 Django 采取的方式。</p>
+<p>Django 无需数据库就可以使用，它通过对象关系映射器（object-relational mapping），仅使用 Python 代码就可以描述数据结构。</p>
+<p>我们先来看下面这段 Model 代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#  TradingMonitor/models.py</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">from</span> django.db <span class="keyword">import</span> models</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Position</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    asset = models.CharField(max_length=<span class="number">10</span>)</span><br><span class="line">    timestamp = models.DateTimeField()</span><br><span class="line">    amount = models.DecimalField(max_digits=<span class="number">10</span>, decimal_places=<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+
+<p>models.py 文件主要用一个 Python 类来描述数据表，称为模型 。运用这个类，你可以通过简单的 Python 代码来创建、检索、更新、删除数据库中的记录，而不用写一条又一条的 SQL 语句，这也是我们之前所说的避免通过 SQL 操作数据库。</p>
+<p>在这里，我们创建了一个 Position 模型，用来表示我们的交易仓位信息。其中，</p>
+<ul>
+<li>asset 表示当前持有资产的代码，例如 btc；</li>
+<li>timestamp 表示时间戳；</li>
+<li>amount 则表示时间戳时刻的持仓信息。</li>
+</ul>
+<h3 id="设计视图-Views"><a href="#设计视图-Views" class="headerlink" title="设计视图 Views"></a>设计视图 Views</h3><p>在模型被定义之后，我们便可以在视图中引用模型了。通常，视图会根据参数检索数据，加载一个模板，并使用检索到的数据呈现模板。</p>
+<p>设计视图，则是我们用来实现业务逻辑的地方。我们来看 render_positions 这个代码，它接受 request 和 asset 两个参数，我们先不用管 request。这里的 asset 表示指定一个资产名称，例如 btc，然后这个函数返回一个渲染页面。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#  TradingMonitor/views.py</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">from</span> django.shortcuts <span class="keyword">import</span> render</span><br><span class="line"><span class="keyword">from</span> .models <span class="keyword">import</span> Position</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">render_positions</span><span class="params">(request, asset)</span>:</span></span><br><span class="line">    positions = Position.objects.filter(asset = asset)</span><br><span class="line">    context = &#123;<span class="string">'asset'</span>: asset, <span class="string">'positions'</span>: positions&#125;</span><br><span class="line">    <span class="keyword">return</span> render(request, <span class="string">'positions.html'</span>, context)</span><br></pre></td></tr></table></figure>
+
+<p>不过，这个函数具体是怎么工作的呢？我们一行行来看。</p>
+<p>positions = Position.objects.filter(asset = asset)，这行代码向数据库中执行一个查询操作，其中， filter 表示筛选，意思是从数据库中选出所有我们需要的 asset 的信息。不过，这里我只是为你举例做示范；真正做监控的时候，我们一般会更有针对性地从数据库中筛选读取信息，而不是一口气读取出所有的信息。</p>
+<p>context = {‘asset’: asset, ‘positions’: positions}，这行代码没什么好说的，封装一个字典。至于这个字典的用处，下面的内容中可以体现。</p>
+<p>return render(request, ‘positions.html’, context)，最后这行代码返回一个页面。这里我们采用的模板设计，这也是 Django 非常推荐的开发方式，也就是让模板和数据分离，这样，数据只需要向其中填充即可。</p>
+<p>最后的模板文件是 position.html，你应该注意到了， context 作为变量传给了模板，下面我们就来看一下设计模板的内容。</p>
+<h3 id="设计模板-Templates"><a href="#设计模板-Templates" class="headerlink" title="设计模板 Templates"></a>设计模板 Templates</h3><p>模板文件，其实就是 HTML 文件和部分代码的综合。你可以想象成，这个 HTML 在最终送给用户之前，需要被我们预先处理一下，而预先处理的方式就是找到对应的地方进行替换。</p>
+<p>我们来看下面这段示例代码：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#  TradingMonitor/templates/positions.html</span></span><br><span class="line"> </span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=<span class="string">"en-US"</span>&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;title&gt;Positions for &#123;&#123;asset&#125;&#125;&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line"> </span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;h1&gt;Positions for &#123;&#123;asset&#125;&#125;&lt;/h1&gt;</span><br><span class="line"> </span><br><span class="line">&lt;table&gt;</span><br><span class="line">&lt;tr&gt;</span><br><span class="line">    &lt;th&gt;Time&lt;/th&gt;</span><br><span class="line">    &lt;th&gt;Amount&lt;/th&gt;</span><br><span class="line">&lt;/tr&gt;</span><br><span class="line">&#123;% <span class="keyword">for</span> position <span class="keyword">in</span> positions %&#125;</span><br><span class="line">&lt;tr&gt;</span><br><span class="line">    &lt;th&gt;&#123;&#123;position.timestamp&#125;&#125;&lt;/th&gt;</span><br><span class="line">    &lt;th&gt;&#123;&#123;position.amount&#125;&#125;&lt;/th&gt;</span><br><span class="line">&lt;/tr&gt;</span><br><span class="line">&#123;% endfor %&#125;</span><br><span class="line">&lt;/table&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+
+<p>我重点说一下几个地方。首先是<title>Positions for </title>，这里双大括号括住 asset 这个变量，这个变量对应的正是前面 context 字典中的 asset key。Django 的渲染引擎会将 asset ，替换成 context 中 asset 对应的内容，此处是替换成了 btc。</p>
+<p>再来看，自然就表示结束了。这样，我们就将数据封装到了一个列表之中。</p>
+<h3 id="设计链接-Urls"><a href="#设计链接-Urls" class="headerlink" title="设计链接 Urls"></a>设计链接 Urls</h3><p>最后，我们需要为我们的操作提供 URL 接口，具体操作我放在了下面的代码中，内容比较简单，我就不详细展开讲解了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#  TradingMonitor/urls.py</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">from</span> django.contrib <span class="keyword">import</span> admin</span><br><span class="line"><span class="keyword">from</span> django.urls <span class="keyword">import</span> path</span><br><span class="line"><span class="keyword">from</span> . <span class="keyword">import</span> views</span><br><span class="line"> </span><br><span class="line">urlpatterns = [</span><br><span class="line">    path(<span class="string">'admin/'</span>, admin.site.urls),</span><br><span class="line">    path(<span class="string">'positions/&lt;str:asset&gt;'</span>, views.render_positions),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p>到这里，我们就可以通过 <a href="http://127.0.0.1:8000/positions/btc" target="_blank" rel="noopener">http://127.0.0.1:8000/positions/btc</a> 来访问啦！</p>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>当然，除了主要流程外，我还需要强调几个很简单但非常关键的细节，不然，我们这些改变就不能被真正地应用。</p>
+<p>第一步，在 TradingMonitor/TradingMonitor 下，新建一个文件夹 migrations；并在这个文件夹中，新建一个空文件 <strong>init</strong>.py。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir TradingMonitor/migrations</span><br><span class="line">touch TradingMonitor/migrations/__init__.py</span><br></pre></td></tr></table></figure>
+
+<p>此时，你的目录结构应该长成下面这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">TradingMonitor/</span><br><span class="line">├── TradingMonitor</span><br><span class="line">│   ├── migrations</span><br><span class="line">│       └── __init__.py</span><br><span class="line">│   ├── templates</span><br><span class="line">│       └── positions.html</span><br><span class="line">│   ├── __init__.py</span><br><span class="line">│   ├── settings.py</span><br><span class="line">│   ├── urls.py</span><br><span class="line">│   ├── models.py</span><br><span class="line">│   ├── views.py</span><br><span class="line">│   └── wsgi.py</span><br><span class="line">├── db.sqlite3</span><br><span class="line">└── manage.py</span><br></pre></td></tr></table></figure>
+<p>第二步，修改 TradingMonitor/settings.py：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">INSTALLED_APPS = [</span><br><span class="line">    <span class="string">'django.contrib.admin'</span>,</span><br><span class="line">    <span class="string">'django.contrib.auth'</span>,</span><br><span class="line">    <span class="string">'django.contrib.contenttypes'</span>,</span><br><span class="line">    <span class="string">'django.contrib.sessions'</span>,</span><br><span class="line">    <span class="string">'django.contrib.messages'</span>,</span><br><span class="line">    <span class="string">'django.contrib.staticfiles'</span>,</span><br><span class="line">    <span class="string">'TradingMonitor'</span>,  <span class="comment"># 这里把我们的 app 加上</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">TEMPLATES = [</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">'BACKEND'</span>: <span class="string">'django.template.backends.django.DjangoTemplates'</span>,</span><br><span class="line">        <span class="string">'DIRS'</span>: [os.path.join(BASE_DIR, <span class="string">'TradingMonitor/templates'</span>)],  <span class="comment"># 这里把 templates 的目录加上</span></span><br><span class="line">        <span class="string">'APP_DIRS'</span>: <span class="literal">True</span>,</span><br><span class="line">        <span class="string">'OPTIONS'</span>: &#123;</span><br><span class="line">            <span class="string">'context_processors'</span>: [</span><br><span class="line">                <span class="string">'django.template.context_processors.debug'</span>,</span><br><span class="line">                <span class="string">'django.template.context_processors.request'</span>,</span><br><span class="line">                <span class="string">'django.contrib.auth.context_processors.auth'</span>,</span><br><span class="line">                <span class="string">'django.contrib.messages.context_processors.messages'</span>,</span><br><span class="line">            ],</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p>第三步，运行 python manage.py makemigrations：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python manage.py makemigrations</span><br></pre></td></tr></table></figure>
+
+<p>第四步，运行 python manage.py migrate：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python manage.py migrate</span><br></pre></td></tr></table></figure>
+
+<p>这几步的具体操作，我都用代码和注释表示了出来，你完全可以同步进行操作。操作完成后，现在，我们的数据结构就已经被成功同步到数据库中了。</p>
+<p>最后，输入 python manage.py runserver，然后打开浏览器输入<a href="http://127.0.0.1:8000/positions/btc，你就能看到效果啦。" target="_blank" rel="noopener">http://127.0.0.1:8000/positions/btc，你就能看到效果啦。</a></p>
+<p>现在，我们再回过头来看一下 MVC 模式，通过我画的这张图，你可以看到，M、V、C 这三者，以一种插件似的、松耦合的方式连接在一起：</p>
+<p>当然，我带你写的只是一个简单的 Django 应用程序，对于真正的量化平台监控系统而言，这还只是一个简单的开始。</p>
+<p>除此之外，对于监控系统来说，其实还有着非常多的开源插件可以使用。有一些界面非常酷炫，有一些可以做到很高的稳定性和易用性，它们很多都可以结合 Django 做出很好的效果来。比较典型的有：</p>
+<ul>
+<li>Graphite 是一款存储时间序列数据，并通过 Django Web 应用程序在图形中显示的插件；</li>
+<li>Vimeo 则是一个基于 Graphite 的仪表板，具有附加功能和平滑的设计；</li>
+<li>Scout 监控 Django 和 Flask 应用程序的性能，提供自动检测视图、SQL 查询、模板等。</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这一节课的内容更靠近上游应用层，我们以 Django 这个 Python 后端为例，讲解了搭建一个服务端的过程。你应该发现了，使用 RESTful Framework 搭建服务器，是一个如此简单的过程，你可以去开一个自己的交易所了（笑）。相比起具体的技术，今天我所讲的 MVC 框架和 Django 的思想，更值得你去深入学习和领会。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/09/38%20%7C%20MySQL%EF%BC%9A%E6%97%A5%E5%BF%97%E5%92%8C%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2473,238 +2715,6 @@ SyntaxError: invalid character in identifier</code></pre><p>总的来说，asser
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/19/04%E4%B8%A8Python%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97%EF%BC%9A%E7%94%A8NumPy%E5%BF%AB%E9%80%9F%E5%A4%84%E7%90%86%E6%95%B0%E6%8D%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LvYang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LvYang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/19/04%E4%B8%A8Python%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97%EF%BC%9A%E7%94%A8NumPy%E5%BF%AB%E9%80%9F%E5%A4%84%E7%90%86%E6%95%B0%E6%8D%AE/" itemprop="url">04丨Python科学计算：用NumPy快速处理数据</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-19T21:25:07+08:00">
-                2019-12-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AE%9E%E6%88%9845%E8%AE%B2/" itemprop="url" rel="index">
-                    <span itemprop="name">数据分析实战45讲</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/12/19/04%E4%B8%A8Python%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97%EF%BC%9A%E7%94%A8NumPy%E5%BF%AB%E9%80%9F%E5%A4%84%E7%90%86%E6%95%B0%E6%8D%AE/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/12/19/04%E4%B8%A8Python%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97%EF%BC%9A%E7%94%A8NumPy%E5%BF%AB%E9%80%9F%E5%A4%84%E7%90%86%E6%95%B0%E6%8D%AE/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p> Python 数组结构中的列表 list，它实际上相当于一个数组的结构。而 NumPy 中一个关键数据类型就是关于数组的，那为什么还存在这样一个第三方的数组结构呢？</p>
-<p>实际上，标准的 Python 中，用列表 list 保存数组的数值。由于列表中的元素可以是任意的对象，所以列表中 list 保存的是对象的指针。虽然在 Python 编程中隐去了指针的概念，但是数组有指针，Python 的列表 list 其实就是数组。这样如果我要保存一个简单的数组 [0,1,2]，就需要有 3 个指针和 3 个整数的对象，这样对于 Python 来说是非常不经济的，浪费了内存和计算时间。</p>
-<h3 id="使用-NumPy-让你的-Python-科学计算更高效"><a href="#使用-NumPy-让你的-Python-科学计算更高效" class="headerlink" title="使用 NumPy 让你的 Python 科学计算更高效"></a>使用 NumPy 让你的 Python 科学计算更高效</h3><p>为什么要用 NumPy 数组结构而不是 Python 本身的列表 list？这是因为列表 list 的元素在系统内存中是分散存储的，而 NumPy 数组存储在一个均匀连续的内存块中。这样数组计算遍历所有的元素，不像列表 list 还需要对内存地址进行查找，从而节省了计算资源。</p>
-<p>另外在内存访问模式中，缓存会直接把字节块从 RAM 加载到 CPU 寄存器中。因为数据连续的存储在内存中，NumPy 直接利用现代 CPU 的矢量化指令计算，加载寄存器中的多个连续浮点数。另外 NumPy 中的矩阵计算可以采用多线程的方式，充分利用多核 CPU 计算资源，大大提升了计算效率。</p>
-<p>当然除了使用 NumPy 外，你还需要一些技巧来提升内存和提高计算资源的利用率。一个重要的规则就是：避免采用隐式拷贝，而是采用就地操作的方式。举个例子，如果我想让一个数值 x 是原来的两倍，可以直接写成 x<em>=2，而不要写成 y=x</em>2。</p>
-<p>这样速度能快到 2 倍甚至更多。</p>
-<p>既然 NumPy 这么厉害，你该从哪儿入手学习呢？在 NumPy 里有两个重要的对象：ndarray（N-dimensional array object）解决了多维数组问题，而 ufunc（universal function object）则是解决对数组进行处理的函数。下面，我就带你一一来看。</p>
-<h4 id="ndarray-对象"><a href="#ndarray-对象" class="headerlink" title="ndarray 对象"></a>ndarray 对象</h4><p>ndarray 实际上是多维数组的含义。在 NumPy 数组中，维数称为秩（rank），一维数组的秩为 1，二维数组的秩为 2，以此类推。在 NumPy 中，每一个线性的数组称为一个轴（axes），其实秩就是描述轴的数量。</p>
-<p>下面，你来看 ndarray 对象是如何创建数组的，又是如何处理结构数组的呢？</p>
-<h3 id="创建数组"><a href="#创建数组" class="headerlink" title="创建数组"></a>创建数组</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">a = np.array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])</span><br><span class="line">b = np.array([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>], [<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>]])</span><br><span class="line">b[<span class="number">1</span>,<span class="number">1</span>]=<span class="number">10</span></span><br><span class="line">print(a.shape)</span><br><span class="line">print(b.shape)</span><br><span class="line">print(a.dtype)</span><br><span class="line">print(b)</span><br></pre></td></tr></table></figure>
-
-<pre><code>(3,)
-(3, 3)
-int64
-[[ 1  2  3]
- [ 4 10  6]
- [ 7  8  9]]</code></pre><p>创建数组前，你需要引用 NumPy 库，可以直接通过 array 函数创建数组，如果是多重数组，比如示例里的 b，那么该怎么做呢？你可以先把一个数组作为一个元素，然后嵌套起来，比如示例 b 中的 [1,2,3] 就是一个元素，然后 [4,5,6][7,8,9] 也是作为元素，然后把三个元素再放到 [] 数组里，赋值给变量 b。</p>
-<p>当然数组也是有属性的，比如你可以通过函数 shape 属性获得数组的大小，通过 dtype 获得元素的属性。如果你想对数组里的数值进行修改的话，直接赋值即可，注意下标是从 0 开始计的，所以如果你想对 b 数组，九宫格里的中间元素进行修改的话，下标应该是 [1,1]。</p>
-<h3 id="结构数组"><a href="#结构数组" class="headerlink" title="结构数组"></a>结构数组</h3><p>如果你想统计一个班级里面学生的姓名、年龄，以及语文、英语、数学成绩该怎么办？当然你可以用数组的下标来代表不同的字段，比如下标为 0 的是姓名、下标为 1 的是年龄等，但是这样不显性。</p>
-<p>实际上在 C 语言里，可以定义结构数组，也就是通过 struct 定义结构类型，结构中的字段占据连续的内存空间，每个结构体占用的内存大小都相同，那在 NumPy 中是怎样操作的呢？</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">persontype = np.dtype(&#123;</span><br><span class="line">    <span class="string">'names'</span>:[<span class="string">'name'</span>, <span class="string">'age'</span>, <span class="string">'chinese'</span>, <span class="string">'math'</span>, <span class="string">'english'</span>],</span><br><span class="line">    <span class="string">'formats'</span>:[<span class="string">'S32'</span>,<span class="string">'i'</span>, <span class="string">'i'</span>, <span class="string">'i'</span>, <span class="string">'f'</span>]&#125;)</span><br><span class="line">peoples = np.array([(<span class="string">"ZhangFei"</span>,<span class="number">32</span>,<span class="number">75</span>,<span class="number">100</span>, <span class="number">90</span>),(<span class="string">"GuanYu"</span>,<span class="number">24</span>,<span class="number">85</span>,<span class="number">96</span>,<span class="number">88.5</span>),</span><br><span class="line">       (<span class="string">"ZhaoYun"</span>,<span class="number">28</span>,<span class="number">85</span>,<span class="number">92</span>,<span class="number">96.5</span>),(<span class="string">"HuangZhong"</span>,<span class="number">29</span>,<span class="number">65</span>,<span class="number">85</span>,<span class="number">100</span>)],</span><br><span class="line">    dtype=persontype)</span><br><span class="line">ages = peoples[:][<span class="string">'age'</span>]</span><br><span class="line">chineses = peoples[:][<span class="string">'chinese'</span>]</span><br><span class="line">maths = peoples[:][<span class="string">'math'</span>]</span><br><span class="line">englishs = peoples[:][<span class="string">'english'</span>]</span><br><span class="line">print(np.mean(ages))</span><br><span class="line">print(np.mean(chineses))</span><br><span class="line">print(np.mean(maths))</span><br><span class="line">print(np.mean(englishs))</span><br></pre></td></tr></table></figure>
-
-<pre><code>28.25
-77.5
-93.25
-93.75</code></pre><p>你看下这个例子，首先在 NumPy 中是用 dtype 定义的结构类型，然后在定义数组的时候，用 array 中指定了结构数组的类型 dtype=persontype，这样你就可以自由地使用自定义的 persontype 了。比如想知道每个人的语文成绩，就可以用 chineses = peoples[:][‘chinese’]，当然 NumPy 中还有一些自带的数学运算，比如计算平均值使用 np.mean。</p>
-<h3 id="ufunc-运算"><a href="#ufunc-运算" class="headerlink" title="ufunc 运算"></a>ufunc 运算</h3><p>ufunc 是 universal function 的缩写，是不是听起来就感觉功能非常强大？确如其名，它能对数组中每个元素进行函数操作。NumPy 中很多 ufunc 函数计算速度非常快，因为都是采用 C 语言实现的。</p>
-<h3 id="连续数组的创建"><a href="#连续数组的创建" class="headerlink" title="连续数组的创建"></a>连续数组的创建</h3><p>NumPy 可以很方便地创建连续数组，比如我使用 arange 或 linspace 函数进行创建：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x1 = np.arange(<span class="number">1</span>,<span class="number">11</span>,<span class="number">2</span>)</span><br><span class="line">x2 = np.linspace(<span class="number">1</span>,<span class="number">9</span>,<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
-
-<p>np.arange 和 np.linspace 起到的作用是一样的，都是创建等差数组。这两个数组的结果 x1,x2 都是 [1 3 5 7 9]。结果相同，但是你能看出来创建的方式是不同的。</p>
-<p>arange() 类似内置函数 range()，通过指定初始值、终值、步长来创建等差数列的一维数组，默认是不包括终值的。</p>
-<p>linspace 是 linear space 的缩写，代表线性等分向量的含义。linspace() 通过指定<strong>初始值、终值、元素个数来创建等差数列的一维数组，默认是包括终值的。</strong></p>
-<h3 id="算数运算"><a href="#算数运算" class="headerlink" title="算数运算"></a>算数运算</h3><p>通过 NumPy 可以自由地创建等差数组，同时也可以进行加、减、乘、除、求 n 次方和取余数。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">x1 = np.arange(<span class="number">1</span>,<span class="number">11</span>,<span class="number">2</span>)</span><br><span class="line">x2 = np.linspace(<span class="number">1</span>,<span class="number">9</span>,<span class="number">5</span>)</span><br><span class="line">print(np.add(x1, x2))</span><br><span class="line">print(np.subtract(x1, x2))</span><br><span class="line">print(np.multiply(x1, x2))</span><br><span class="line">print(np.divide(x1, x2))</span><br><span class="line">print(np.power(x1, x2))</span><br><span class="line">print(np.remainder(x1, x2))</span><br></pre></td></tr></table></figure>
-
-<pre><code>[ 2.  6. 10. 14. 18.]
-[0. 0. 0. 0. 0.]
-[ 1.  9. 25. 49. 81.]
-[1. 1. 1. 1. 1.]
-[1.00000000e+00 2.70000000e+01 3.12500000e+03 8.23543000e+05
- 3.87420489e+08]
-[0. 0. 0. 0. 0.]</code></pre><p>我还以 x1, x2 数组为例，求这两个数组之间的加、减、乘、除、求 n 次方和取余数。在 n 次方中，x2 数组中的元素实际上是次方的次数，x1 数组的元素为基数。</p>
-<p>在取余函数里，你既可以用 np.remainder(x1, x2)，也可以用 np.mod(x1, x2)，结果是一样的。</p>
-<h3 id="统计函数"><a href="#统计函数" class="headerlink" title="统计函数"></a>统计函数</h3><p>如果你想要对一堆数据有更清晰的认识，就需要对这些数据进行描述性的统计分析，比如了解这些数据中的最大值、最小值、平均值，是否符合正态分布，方差、标准差多少等等。它们可以让你更清楚地对这组数据有认知。</p>
-<p>下面我来介绍下在 NumPy 中如何使用这些统计函数。</p>
-<h3 id="计数组-矩阵中的最大值函数-amax-，最小值函数-amin"><a href="#计数组-矩阵中的最大值函数-amax-，最小值函数-amin" class="headerlink" title="计数组 / 矩阵中的最大值函数 amax()，最小值函数 amin()"></a>计数组 / 矩阵中的最大值函数 amax()，最小值函数 amin()</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">a = np.array([[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>], [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>], [<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>]])</span><br><span class="line">print(np.amin(a))</span><br><span class="line">print(np.amin(a,<span class="number">0</span>))</span><br><span class="line">print(np.amin(a,<span class="number">1</span>))</span><br><span class="line">print(np.amax(a))</span><br><span class="line">print(np.amax(a,<span class="number">0</span>))</span><br><span class="line">print(np.amax(a,<span class="number">1</span>))</span><br></pre></td></tr></table></figure>
-
-<pre><code>1
-[1 2 3]
-[1 4 7]
-9
-[7 8 9]
-[3 6 9]</code></pre><p>amin() 用于计算数组中的元素沿指定轴的最小值。对于一个二维数组 a，amin(a) 指的是数组中全部元素的最小值，amin(a,0) 是延着 axis=0 轴的最小值，axis=0 轴是把元素看成了 [1,4,7], [2,5,8], [3,6,9] 三个元素，所以最小值为 [1,2,3]，amin(a,1) 是延着 axis=1 轴的最小值，axis=1 轴是把元素看成了 [1,2,3], [4,5,6], [7,8,9] 三个元素，所以最小值为 [1,4,7]。同理 amax() 是计算数组中元素沿指定轴的最大值。</p>
-<h3 id="统计最大值与最小值之差-ptp"><a href="#统计最大值与最小值之差-ptp" class="headerlink" title="统计最大值与最小值之差 ptp()"></a>统计最大值与最小值之差 ptp()</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a = np.array([[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>], [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>], [<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>]])</span><br><span class="line">print(np.ptp(a)) </span><br><span class="line">print(np.ptp(a,<span class="number">0</span>))</span><br><span class="line">print(np.ptp(a,<span class="number">1</span>))</span><br></pre></td></tr></table></figure>
-
-<pre><code>8
-[6 6 6]
-[2 2 2]</code></pre><p>对于相同的数组 a，np.ptp(a) 可以统计数组中最大值与最小值的差，即 9-1=8。同样 ptp(a,0) 统计的是沿着 axis=0 轴的最大值与最小值之差，即 7-1=6（当然 8-2=6,9-3=6，第三行减去第一行的 ptp 差均为 6），ptp(a,1) 统计的是沿着 axis=1 轴的最大值与最小值之差，即 3-1=2（当然 6-4=2, 9-7=2，即第三列与第一列的 ptp 差均为 2）。</p>
-<h3 id="统计数组的百分位数-percentile"><a href="#统计数组的百分位数-percentile" class="headerlink" title="统计数组的百分位数 percentile()"></a>统计数组的百分位数 percentile()</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a = np.array([[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>], [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>], [<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>]])</span><br><span class="line"><span class="keyword">print</span> np.percentile(a, <span class="number">50</span>)</span><br><span class="line"><span class="keyword">print</span> np.percentile(a, <span class="number">50</span>, axis=<span class="number">0</span>)</span><br><span class="line"><span class="keyword">print</span> np.percentile(a, <span class="number">50</span>, axis=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
-
-<p>同样，percentile() 代表着第 p 个百分位数，这里 p 的取值范围是 0-100，如果 p=0，那么就是求最小值，如果 p=50 就是求平均值，如果 p=100 就是求最大值。同样你也可以求得在 axis=0 和 axis=1 两个轴上的 p% 的百分位数。</p>
-<h3 id="统计数组中的中位数-median-、平均数-mean"><a href="#统计数组中的中位数-median-、平均数-mean" class="headerlink" title="统计数组中的中位数 median()、平均数 mean()"></a>统计数组中的中位数 median()、平均数 mean()</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">a = np.array([[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>], [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>], [<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>]])</span><br><span class="line"><span class="comment"># 求中位数</span></span><br><span class="line"><span class="keyword">print</span> np.median(a)</span><br><span class="line"><span class="keyword">print</span> np.median(a, axis=<span class="number">0</span>)</span><br><span class="line"><span class="keyword">print</span> np.median(a, axis=<span class="number">1</span>)</span><br><span class="line"><span class="comment"># 求平均数</span></span><br><span class="line"><span class="keyword">print</span> np.mean(a)</span><br><span class="line"><span class="keyword">print</span> np.mean(a, axis=<span class="number">0</span>)</span><br><span class="line"><span class="keyword">print</span> np.mean(a, axis=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
-
-<p>你可以用 median() 和 mean() 求数组的中位数、平均值，同样也可以求得在 axis=0 和 1 两个轴上的中位数、平均值。你可以自己练习下看看运行结果。</p>
-<h3 id="统计数组中的加权平均值-average"><a href="#统计数组中的加权平均值-average" class="headerlink" title="统计数组中的加权平均值 average()"></a>统计数组中的加权平均值 average()</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a = np.array([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>])</span><br><span class="line">wts = np.array([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>])</span><br><span class="line"><span class="keyword">print</span> np.average(a)</span><br><span class="line"><span class="keyword">print</span> np.average(a,weights=wts)</span><br></pre></td></tr></table></figure>
-
-<p>average() 函数可以求加权平均，加权平均的意思就是每个元素可以设置个权重，默认情况下每个元素的权重是相同的，所以 np.average(a)=(1+2+3+4)/4=2.5，你也可以指定权重数组 wts=[1,2,3,4]，这样加权平均 np.average(a,weights=wts)=(1<em>1+2</em>2+3<em>3+4</em>4)/(1+2+3+4)=3.0。</p>
-<h3 id="统计数组中的标准差-std-、方差-var"><a href="#统计数组中的标准差-std-、方差-var" class="headerlink" title="统计数组中的标准差 std()、方差 var()"></a>统计数组中的标准差 std()、方差 var()</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a = np.array([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>])</span><br><span class="line"><span class="keyword">print</span> np.std(a)</span><br><span class="line"><span class="keyword">print</span> np.var(a)</span><br></pre></td></tr></table></figure>
-
-<p>方差的计算是指每个数值与平均值之差的平方求和的平均值，即 mean((x - x.mean())** 2)。标准差是方差的算术平方根。在数学意义上，代表的是一组数据离平均值的分散程度。所以 np.var(a)=1.25, np.std(a)=1.118033988749895。</p>
-<h3 id="NumPy-排序"><a href="#NumPy-排序" class="headerlink" title="NumPy 排序"></a>NumPy 排序</h3><p>排序是算法中使用频率最高的一种，也是在数据分析工作中常用的方法，计算机专业的同学会在大学期间的算法课中学习。</p>
-<p>那么这些排序算法在 NumPy 中实现起来其实非常简单，一条语句就可以搞定。这里你可以使用 sort 函数，sort(a, axis=-1, kind=‘quicksort’, order=None)，默认情况下使用的是快速排序；在 kind 里，可以指定 quicksort、mergesort、heapsort 分别表示快速排序、合并排序、堆排序。同样 axis 默认是 -1，即沿着数组的最后一个轴进行排序，也可以取不同的 axis 轴，或者 axis=None 代表采用扁平化的方式作为一个向量进行排序。另外 order 字段，对于结构化的数组可以指定按照某个字段进行排序。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">a = np.array([[<span class="number">4</span>,<span class="number">3</span>,<span class="number">2</span>],[<span class="number">2</span>,<span class="number">4</span>,<span class="number">1</span>]])</span><br><span class="line"><span class="keyword">print</span> np.sort(a)</span><br><span class="line"><span class="keyword">print</span> np.sort(a, axis=<span class="literal">None</span>)</span><br><span class="line"><span class="keyword">print</span> np.sort(a, axis=<span class="number">0</span>)  </span><br><span class="line"><span class="keyword">print</span> np.sort(a, axis=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
-
-<p>你可以自己计算下这个运行结果，然后再跑一遍比对下。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>在 NumPy 学习中，你重点要掌握的就是对数组的使用，因为这是 NumPy 和标准 Python 最大的区别。在 NumPy 中重新对数组进行了定义，同时提供了算术和统计运算，你也可以使用 NumPy 自带的排序功能，一句话就搞定各种排序算法。</p>
-<p>当然要理解 NumPy 提供的数据结构为什么比 Python 自身的“更高级、更高效”，要从对数据指针的引用角度进行理解。</p>
-<p>我今天重点讲了 NumPy 的数据结构，你能用自己的话说明一下为什么要用 NumPy 而不是 Python 的列表 list 吗？除此之外，你还知道那些数据结构类型？</p>
-<h3 id="练习题：统计全班的成绩"><a href="#练习题：统计全班的成绩" class="headerlink" title="练习题：统计全班的成绩"></a>练习题：统计全班的成绩</h3><p>假设一个团队里有 5 名学员，成绩如下表所示。你可以用 NumPy 统计下这些人在语文、英语、数学中的平均成绩、最小成绩、最大成绩、方差、标准差。然后把这些人的总成绩排序，得出名次进行成绩输出。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2755,7 +2765,7 @@ int64
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">48</span>
+                  <span class="site-state-item-count">49</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
