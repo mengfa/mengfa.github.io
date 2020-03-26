@@ -258,6 +258,424 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/26/14%E4%B8%A8%E4%BB%80%E4%B9%88%E6%98%AF%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86%EF%BC%8C%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8COMMIT%E5%92%8CROLLBACK%E8%BF%9B%E8%A1%8C%E6%93%8D%E4%BD%9C%EF%BC%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/26/14%E4%B8%A8%E4%BB%80%E4%B9%88%E6%98%AF%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86%EF%BC%8C%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8COMMIT%E5%92%8CROLLBACK%E8%BF%9B%E8%A1%8C%E6%93%8D%E4%BD%9C%EF%BC%9F/" itemprop="url">14丨什么是事务处理，如何使用COMMIT和ROLLBACK进行操作？</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-26T20:39:01+08:00">
+                2020-03-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" itemprop="url" rel="index">
+                    <span itemprop="name">SQL必知必会</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/26/14%E4%B8%A8%E4%BB%80%E4%B9%88%E6%98%AF%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86%EF%BC%8C%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8COMMIT%E5%92%8CROLLBACK%E8%BF%9B%E8%A1%8C%E6%93%8D%E4%BD%9C%EF%BC%9F/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/03/26/14%E4%B8%A8%E4%BB%80%E4%B9%88%E6%98%AF%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86%EF%BC%8C%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8COMMIT%E5%92%8CROLLBACK%E8%BF%9B%E8%A1%8C%E6%93%8D%E4%BD%9C%EF%BC%9F/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>我们知道在 MySQL 5.5 版本之前，默认的存储引擎是 MyISAM，在 5.5 版本之后默认存储引擎是 InnoDB。InnoDB 和 MyISAM 区别之一就是 InnoDB 支持事务，也可以说这是 InnoDB 取代 MyISAM 的重要原因。那么什么是事务呢？事务的英文是 transaction，从英文中你也能看出来它是进行一次处理的基本单元，要么完全执行，要么都不执行。</p>
+<p>这么讲，你可能觉得有些抽象，我换一种方式讲。</p>
+<p>不知道你是否遇到过这样的情况，你去家门口的小卖铺买东西，已经交了钱，但是老板比较忙接了个电话，忘记你是否交过钱，然后让你重新付款，这时你还要找之前的付款记录证明你已经完成了付款。</p>
+<p>实际上如果我们线下的交易也能支持事务（满足事务的特性），就不会出现交了钱却拿不到商品的烦恼了，同样，对于小卖铺的老板来说，也不存在给出了商品但没有收到款的风险。总之，事务保证了一次处理的完整性，也保证了数据库中的数据一致性。它是一种高级的数据处理方式，如果我们在增加、删除、修改的时候某一个环节出了错，它允许我们回滚还原。正是因为这个特点，事务非常适合应用在安全性高的场景里，比如金融行业等。</p>
+<p>我们今天就来学习下 SQL 中的事务。今天的课程你将重点掌握以下的内容：</p>
+<ol>
+<li><p>事务的特性是什么？如何理解它们？</p>
+</li>
+<li><p>如何对事务进行控制？控制的命令都有哪些？</p>
+</li>
+<li><p>为什么我们执行 COMMIT、ROLLBACK 这些命令的时候，有时会成功，有时会失败？</p>
+<h3 id="事务的特性：ACID"><a href="#事务的特性：ACID" class="headerlink" title="事务的特性：ACID"></a>事务的特性：ACID</h3><p>我刚才提到了事务的特性：要么完全执行，要么都不执行。不过要对事务进行更深一步的理解，还要从事务的 4 个特性说起，这 4 个特性用英文字母来表达就是 ACID。</p>
+</li>
+<li><p>A，也就是原子性（Atomicity）。原子的概念就是不可分割，你可以把它理解为组成物质的基本单位，也是我们进行数据处理操作的基本单位。</p>
+</li>
+<li><p>C，就是一致性（Consistency）。一致性指的就是数据库在进行事务操作后，会由原来的一致状态，变成另一种一致的状态。也就是说当事务提交后，或者当事务发生回滚后，数据库的完整性约束不能被破坏。</p>
+</li>
+<li><p>I，就是隔离性（Isolation）。它指的是每个事务都是彼此独立的，不会受到其他事务的执行影响。也就是说一个事务在提交之前，对其他事务都是不可见的。</p>
+</li>
+<li><p>最后一个 D，指的是持久性（Durability）。事务提交之后对数据的修改是持久性的，即使在系统出故障的情况下，比如系统崩溃或者存储介质发生故障，数据的修改依然是有效的。因为当事务完成，数据库的日志就会被更新，这时可以通过日志，让系统恢复到最后一次成功的更新状态。<br>ACID 可以说是事务的四大特性，在这四个特性中，原子性是基础，隔离性是手段，一致性是约束条件，而持久性是我们的目的。原子性和隔离性比较好理解，这里我讲下对一致性的理解（国内很多网站上对一致性的阐述有误，具体你可以参考 Wikipedia 对Consistency的阐述）。</p>
+</li>
+</ol>
+<p>我之前讲到过数据表的 7 种常见约束（对应 04 篇）。这里指的一致性本身是由具体的业务定义的，也就是说，任何写入数据库中的数据都需要满足我们事先定义的约束规则。</p>
+<p>比如说，在数据表中我们将姓名字段设置为唯一性约束，这时当事务进行提交或者事务发生回滚的时候，如果数据表中的姓名非唯一，就破坏了事务的一致性要求。所以说，事务操作会让数据表的状态变成另一种一致的状态，如果事务中的某个操作失败了，系统就会自动撤销当前正在执行的事务，返回到事务操作之前的状态。</p>
+<p>事务的另一个特点就是持久性，持久性是通过事务日志来保证的。日志包括了回滚日志和重做日志。当我们通过事务对数据进行修改的时候，首先会将数据库的变化信息记录到重做日志中，然后再对数据库中对应的行进行修改。这样做的好处是，即使数据库系统崩溃，数据库重启后也能找到没有更新到数据库系统中的重做日志，重新执行，从而使事务具有持久性。</p>
+<h3 id="事务的控制"><a href="#事务的控制" class="headerlink" title="事务的控制"></a>事务的控制</h3><p>当我们了解了事务的特性后，再来看下如何使用事务。我们知道 Oracle 是支持事务的，而在 MySQL 中，则需要选择适合的存储引擎才可以支持事务。如果你使用的是 MySQL，可以通过 SHOW ENGINES 命令来查看当前 MySQL 支持的存储引擎都有哪些，以及这些存储引擎是否支持事务。</p>
+<p>你能看出在 MySQL 中，InnoDB 是支持事务的，而 MyISAM 存储引擎不支持事务。</p>
+<p>看到这里，我们已经对事务有了一定的了解，现在我们再来看下事务的常用控制语句都有哪些。</p>
+<ol>
+<li>START TRANSACTION 或者 BEGIN，作用是显式开启一个事务。</li>
+<li>COMMIT：提交事务。当提交事务后，对数据库的修改是永久性的。</li>
+<li>ROLLBACK 或者 ROLLBACK TO [SAVEPOINT]，意为回滚事务。意思是撤销正在进行的所有没有提交的修改，或者将事务回滚到某个保存点。</li>
+<li>SAVEPOINT：在事务中创建保存点，方便后续针对保存点进行回滚。一个事务中可以存在多个保存点。</li>
+<li>RELEASE SAVEPOINT：删除某个保存点。</li>
+<li>SET TRANSACTION，设置事务的隔离级别。<br>需要说明的是，使用事务有两种方式，分别为隐式事务和显式事务。隐式事务实际上就是自动提交，Oracle 默认不自动提交，需要手写 COMMIT 命令，而 MySQL 默认自动提交，当然我们可以配置 MySQL 的参数：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; set autocommit =0;  // 关闭自动提交</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ysql&gt; set autocommit =1;  // 开启自动提交</span><br></pre></td></tr></table></figure>
+我们看下在 MySQL 的默认状态下，下面这个事务最后的处理结果是什么：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE test(name varchar(255), PRIMARY KEY (name)) ENGINE=InnoDB;</span><br><span class="line">BEGIN;</span><br><span class="line">INSERT INTO test SELECT &apos;关羽&apos;;</span><br><span class="line">COMMIT;</span><br><span class="line">BEGIN;</span><br><span class="line">INSERT INTO test SELECT &apos;张飞&apos;;</span><br><span class="line">INSERT INTO test SELECT &apos;张飞&apos;;</span><br><span class="line">ROLLBACK;</span><br><span class="line">SELECT * FROM test;</span><br><span class="line">运行结果（1 行数据）：</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ol>
+<p>在这个事务中，整个 SQL 一共执行了 2 个事务，第一个是插入“关羽”，提交后执行成功，第二个是插入两次“张飞”，这里需要注意的是，我们将 name 设置为了主键，也就是说主键的值是唯一的，那么第二次插入“张飞”时就会产生错误，然后执行 ROLLBACK 相当于对事务进行了回滚，所以我们看到最终结果只有一行数据，也就是第一个事务执行之后的结果，即“关羽”。</p>
+<p>那么如果我们进行下面的操作又会怎样呢？</p>
+<p>CREATE TABLE test(name varchar(255), PRIMARY KEY (name)) ENGINE=InnoDB;<br>BEGIN;<br>INSERT INTO test SELECT ‘关羽’;<br>COMMIT;<br>INSERT INTO test SELECT ‘张飞’;<br>INSERT INTO test SELECT ‘张飞’;<br>ROLLBACK;<br>SELECT * FROM test;<br>运行结果（2 行数据）：</p>
+<p>你能看到这次数据是 2 行，上一次操作我把两次插入“张飞”放到一个事务里，而这次操作它们不在同一个事务里，那么对于 MySQL 来说，默认情况下这实际上就是两个事务，因为在 autocommit=1 的情况下，MySQL 会进行隐式事务，也就是自动提交，因此在进行第一次插入“张飞”后，数据表里就存在了两行数据，而第二次插入“张飞”就会报错：1062 - Duplicate entry ‘张飞’ for key ‘PRIMARY’。</p>
+<p>最后我们在执行 ROLLBACK 的时候，实际上事务已经自动提交了，就没法进行回滚了。</p>
+<p>同样的我们再来看下这段代码，你又能发现什么不同呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE test(name varchar(255), PRIMARY KEY (name)) ENGINE=InnoDB;</span><br><span class="line">SET @@completion_type = 1;</span><br><span class="line">BEGIN;</span><br><span class="line">INSERT INTO test SELECT &apos;关羽&apos;;</span><br><span class="line">COMMIT;</span><br><span class="line">INSERT INTO test SELECT &apos;张飞&apos;;</span><br><span class="line">INSERT INTO test SELECT &apos;张飞&apos;;</span><br><span class="line">ROLLBACK;</span><br><span class="line">SELECT * FROM test;</span><br></pre></td></tr></table></figure>
+<p>运行结果（1 行数据）：</p>
+<p>你能看到还是相同的 SQL 代码，只是我在事务开始之前设置了SET @@completion_type = 1;，结果就和我们第一次处理的一样，只有一个“关羽”。这是为什么呢？</p>
+<p>这里我讲解下 MySQL 中 completion_type 参数的作用，实际上这个参数有 3 种可能：</p>
+<ol>
+<li>completion=0，这是默认情况。也就是说当我们执行 COMMIT 的时候会提交事务，在执行下一个事务时，还需要我们使用 START TRANSACTION 或者 BEGIN 来开启。</li>
+<li>completion=1，这种情况下，当我们提交事务后，相当于执行了 COMMIT AND CHAIN，也就是开启一个链式事务，即当我们提交事务之后会开启一个相同隔离级别的事务（隔离级别会在下一节中进行介绍）。</li>
+<li>completion=2，这种情况下 COMMIT=COMMIT AND RELEASE，也就是当我们提交后，会自动与服务器断开连接。</li>
+</ol>
+<p>在上面这段代码里，我使用了 completion=1，也就是说当我提交之后，相当于在下一行写了一个 START TRANSACTION 或 BEGIN。这时两次插入“张飞”会被认为是在同一个事务之内的操作，那么第二次插入“张飞”就会导致事务失败，而回滚也将这次事务进行了撤销，所以你能看到的结果就只有一个“关羽”。</p>
+<p>通过这样简单的练习，你应该能体会到事务提交和回滚的操作。</p>
+<p>当我们设置 autocommit=0 时，不论是否采用 START TRANSACTION 或者 BEGIN 的方式来开启事务，都需要用 COMMIT 进行提交，让事务生效，使用 ROLLBACK 对事务进行回滚。</p>
+<p>当我们设置 autocommit=1 时，每条 SQL 语句都会自动进行提交。<br>不过这时，如果你采用 START TRANSACTION 或者 BEGIN 的方式来显式地开启事务，那么这个事务只有在 COMMIT 时才会生效，在 ROLLBACK 时才会回滚。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>关于 SQL 中的事务处理，内容相对比较多，因此我会采用两节来进行讲解。今天我们对事务的概念进行了理解，并进行了简单的事务操作。我们在做数据库操作的时候，可能会失败，但正是因为有事务的存在，即使在数据库操作失败的情况下，也能保证数据的一致性。同样，多个应用程序访问数据库的时候，事务可以提供隔离，保证事务之间不被干扰。最后，事务一旦提交，结果就会是永久性的，这就意味着，即使系统崩溃了，数据库也可以对数据进行恢复。</p>
+<p>在使用事务的过程中，我们会采用控制流语句对事务进行操作，不过在实际操作中，不一定每次使用 COMMIT 或 ROLLBACK 都会成功，你还需要知道当前系统的事务执行方式，也就是一些常用的参数情况，比如 MySQL 中的 autocommit 和 completion_type 等。</p>
+<p>事务是数据库区别于文件系统的重要特性之一，当我们有了事务就会让数据库始终保持一致性，同时我们还能通过事务的机制恢复到某个时间点，这样可以保证已提交到数据库的修改不会因为系统崩溃而丢失。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/26/13%E4%B8%A8%E4%BB%80%E4%B9%88%E6%98%AF%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%EF%BC%8C%E5%9C%A8%E5%AE%9E%E9%99%85%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%94%A8%E5%BE%97%E5%A4%9A%E4%B9%88%EF%BC%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/26/13%E4%B8%A8%E4%BB%80%E4%B9%88%E6%98%AF%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%EF%BC%8C%E5%9C%A8%E5%AE%9E%E9%99%85%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%94%A8%E5%BE%97%E5%A4%9A%E4%B9%88%EF%BC%9F/" itemprop="url">13丨什么是存储过程，在实际项目中用得多么？</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-26T20:09:01+08:00">
+                2020-03-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" itemprop="url" rel="index">
+                    <span itemprop="name">SQL必知必会</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/26/13%E4%B8%A8%E4%BB%80%E4%B9%88%E6%98%AF%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%EF%BC%8C%E5%9C%A8%E5%AE%9E%E9%99%85%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%94%A8%E5%BE%97%E5%A4%9A%E4%B9%88%EF%BC%9F/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/03/26/13%E4%B8%A8%E4%BB%80%E4%B9%88%E6%98%AF%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%EF%BC%8C%E5%9C%A8%E5%AE%9E%E9%99%85%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%94%A8%E5%BE%97%E5%A4%9A%E4%B9%88%EF%BC%9F/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>上一节我介绍了视图，它是 SQL 中的一个重要应用，使用视图对 SQL 查询进行封装，可以让 SQL 的代码结构更清晰，让用户权限管理更安全。</p>
+<p>今天我来讲一下 SQL 的存储过程，它是 SQL 中另一个重要应用，和视图一样，都是对 SQL 代码进行封装，可以反复利用。它和视图有着同样的优点，清晰、安全，还可以减少网络传输量。不过它和视图不同，视图是虚拟表，通常不对底层数据表直接操作，而存储过程是程序化的 SQL，可以直接操作底层数据表，相比于面向集合的操作方式，能够实现一些更复杂的数据处理。存储过程可以说是由 SQL 语句和流控制语句构成的语句集合，它和我们之前学到的函数一样，可以接收输入参数，也可以返回输出参数给调用者，返回计算结果。</p>
+<p>今天有关存储过程的内容，你将重点掌握以下几个部分：</p>
+<ol>
+<li>什么是存储过程，如何创建一个存储过程？</li>
+<li>流控制语句都有哪些，如何使用它们？</li>
+<li>各大公司是如何看待存储过程的？在实际工作中，我们该如何使用存储过程？<h3 id="什么是存储过程，如何创建一个存储过程"><a href="#什么是存储过程，如何创建一个存储过程" class="headerlink" title="什么是存储过程，如何创建一个存储过程"></a>什么是存储过程，如何创建一个存储过程</h3>存储过程的英文是 Stored Procedure。它的思想很简单，就是 SQL 语句的封装。一旦存储过程被创建出来，使用它就像使用函数一样简单，我们直接通过调用存储过程名即可。我在前面讲过，存储过程实际上由 SQL 语句和流控制语句共同组成。流控制语句都有哪些呢？这个我稍后讲解。</li>
+</ol>
+<p>我们先来看下如何定义一个存储过程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CREATE PROCEDURE 存储过程名称 ([参数列表])</span><br><span class="line">BEGIN</span><br><span class="line">    需要执行的语句</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
+<p>在这里，我们使用 CREATE PROCEDURE 创建一个存储过程，后面是存储过程的名称，以及过程所带的参数，可以包括输入参数和输出参数。最后由 BEGIN 和 END 来定义我们所要执行的语句块。</p>
+<p>和视图一样，我们可以删除已经创建的存储过程，使用的是 DROP PROCEDURE。如果要更新存储过程，我们需要使用 ALTER PROCEDURE。</p>
+<p>讲完了如何创建，更新和删除一个存储过程，下面我们来看下如何实现一个简单的存储过程。比如我想做一个累加运算，计算 1+2+…+n 等于多少，我们可以通过参数 n 来表示想要累加的个数，那么如何用存储过程实现这一目的呢？这里我做一个 add_num 的存储过程，具体的代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">CREATE PROCEDURE `add_num`(IN n INT)</span><br><span class="line">BEGIN</span><br><span class="line">       DECLARE i INT;</span><br><span class="line">       DECLARE sum INT;</span><br><span class="line">       </span><br><span class="line">       SET i = 1;</span><br><span class="line">       SET sum = 0;</span><br><span class="line">       WHILE i &lt;= n DO</span><br><span class="line">              SET sum = sum + i;</span><br><span class="line">              SET i = i +1;</span><br><span class="line">       END WHILE;</span><br><span class="line">       SELECT sum;</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
+<p>当我们需要再次使用这个存储过程的时候，直接使用 CALL add_num(50);即可。这里我传入的参数为 50，也就是统计 1+2+…+50 的积累之和，查询结果为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SUM</span><br><span class="line">1275</span><br></pre></td></tr></table></figure>
+
+<p>这就是一个简单的存储过程，除了理解 1+2+…+n 的实现过程，还有两点你需要理解，一个是 DELIMITER 定义语句的结束符，另一个是存储过程的三种参数类型。</p>
+<p>我们先来看下 DELIMITER 的作用。如果你使用 Navicat 这个工具来管理 MySQL 执行存储过程，那么直接执行上面这段代码就可以了。如果用的是 MySQL，你还需要用 DELIMITER 来临时定义新的结束符。因为默认情况下 SQL 采用（；）作为结束符，这样当存储过程中的每一句 SQL 结束之后，采用（；）作为结束符，就相当于告诉 SQL 可以执行这一句了。但是存储过程是一个整体，我们不希望 SQL 逐条执行，而是采用存储过程整段执行的方式，因此我们就需要临时定义新的 DELIMITER，新的结束符可以用（//）或者（$$）。如果你用的是 MySQL，那么上面这段代码，应该写成下面这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER //</span><br><span class="line">CREATE PROCEDURE `add_num`(IN n INT)</span><br><span class="line">BEGIN</span><br><span class="line">       DECLARE i INT;</span><br><span class="line">       DECLARE sum INT;</span><br><span class="line">       </span><br><span class="line">       SET i = 1;</span><br><span class="line">       SET sum = 0;</span><br><span class="line">       WHILE i &lt;= n DO</span><br><span class="line">              SET sum = sum + i;</span><br><span class="line">              SET i = i +1;</span><br><span class="line">       END WHILE;</span><br><span class="line">       SELECT sum;</span><br><span class="line">END //</span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+<p>首先我用（//）作为结束符，又在整个存储过程结束后采用了（//）作为结束符号，告诉 SQL 可以执行了，然后再将结束符还原成默认的（;）。</p>
+<p>需要注意的是，如果你用的是 Navicat 工具，那么在编写存储过程的时候，Navicat 会自动设置 DELIMITER 为其他符号，我们不需要再进行 DELIMITER 的操作。</p>
+<p>我们再来看下存储过程的 3 种参数类型。在刚才的存储过程中，我们使用了 IN 类型的参数，另外还有 OUT 类型和 INOUT 类型，作用如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">参数类型  是否返回         作用</span><br><span class="line">IN       否              向存储过程传入参数,存储过程中修改该参数的值,不能被返回.</span><br><span class="line">OUT      是              把存储过程计算的结果放到该参数中, 调用者可以得到返回值.</span><br><span class="line">INOUT    是              IN和OUT的结合,既用于存储过程的传入参数,同时又可以把计算结果放入参数中,调用者可以得到返回参数.</span><br></pre></td></tr></table></figure>
+<p>IN 和 OUT 的结合，既用于存储过程的传入参数，同时又可以把计算结果放到参数中，调用者可以得到返回值。</p>
+<p>你能看到，IN 参数必须在调用存储过程时指定，而在存储过程中修改该参数的值不能被返回。而 OUT 参数和 INOUT 参数可以在存储过程中被改变，并可返回。</p>
+<p>举个例子，这里会用到我们之前讲过的王者荣耀的英雄数据表 heros。假设我想创建一个存储类型 get_hero_scores，用来查询某一类型英雄中的最大的最大生命值，最小的最大魔法值，以及平均最大攻击值，那么该怎么写呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">CREATE PROCEDURE `get_hero_scores`(</span><br><span class="line">       OUT max_max_hp FLOAT,</span><br><span class="line">       OUT min_max_mp FLOAT,</span><br><span class="line">       OUT avg_max_attack FLOAT,  </span><br><span class="line">       s VARCHAR(255)</span><br><span class="line">       )</span><br><span class="line">BEGIN</span><br><span class="line">       SELECT MAX(hp_max), MIN(mp_max), AVG(attack_max) FROM heros WHERE role_main = s INTO max_max_hp, min_max_mp, avg_max_attack;</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
+<p>你能看到我定义了 4 个参数类型，其中 3 个为 OUT 类型，分别为 max_max_hp、min_max_mp 和 avg_max_attack，另一个参数 s 为 IN 类型。<br>这里我们从 heros 数据表中筛选主要英雄定位为 s 的英雄数据，即筛选条件为 role_main=s，提取这些数据中的最大的最大生命值，最小的最大魔法值，以及平均最大攻击值，分别赋值给变量 max_max_hp、min_max_mp 和 avg_max_attack。<br>然后我们就可以调用存储过程，使用下面这段代码即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ALL get_hero_scores(@max_max_hp, @min_max_mp, @avg_max_attack, &apos;战士&apos;);</span><br><span class="line">SELECT @max_max_hp, @min_max_mp, @avg_max_attack;</span><br></pre></td></tr></table></figure>
+<p>流控制语句<br>流控制语句是用来做流程控制的，我刚才讲了两个简单的存储过程的例子，一个是 1+2+…+n 的结果计算，一个是王者荣耀的数据查询，你能看到这两个例子中，我用到了下面的流控制语句：</p>
+<ol>
+<li>BEGIN…END：BEGIN…END 中间包含了多个语句，每个语句都以（;）号为结束符。</li>
+<li>DECLARE：DECLARE 用来声明变量，使用的位置在于 BEGIN…END 语句中间，而且需要在其他语句使用之前进行变量的声明。</li>
+<li>SET：赋值语句，用于对变量进行赋值。</li>
+<li>SELECT…INTO：把从数据表中查询的结果存放到变量中，也就是为变量赋值。<br>除了上面这些用到的流控制语句以外，还有一些常用的流控制语句：</li>
+</ol>
+<p>1.IF…THEN…ENDIF：条件判断语句，我们还可以在 IF…THEN…ENDIF 中使用 ELSE 和 ELSEIF 来进行条件判断。<br>2.CASE：CASE 语句用于多条件的分支判断，使用的语法是下面这样的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CASE </span><br><span class="line">	WHEN expression1 THEN ...</span><br><span class="line">	WHEN expression2 THEN ...</span><br><span class="line">	...</span><br><span class="line">    ELSE </span><br><span class="line">    --ELSE 语句可以加，也可以不加。加的话代表的所有条件都不满足时采用的方式。</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
+<p>3.LOOP、LEAVE 和 ITERATE：LOOP 是循环语句，使用 LEAVE 可以跳出循环，使用 ITERATE 则可以进入下一次循环。如果你有面向过程的编程语言的使用经验，你可以把 LEAVE 理解为 BREAK，把 ITERATE 理解为 CONTINUE。<br>4.REPEAT…UNTIL…END REPEAT：这是一个循环语句，首先会执行一次循环，然后在 UNTIL 中进行表达式的判断，如果满足条件就退出，即 END REPEAT；如果条件不满足，则会就继续执行循环，直到满足退出条件为止。<br>5.WHILE…DO…END WHILE：这也是循环语句，和 REPEAT 循环不同的是，这个语句需要先进行条件判断，如果满足条件就进行循环，如果不满足条件就退出循环。</p>
+<p>我们之前说过 SQL 是声明型语言，使用 SQL 就像在使用英语，简单直接。今天讲的存储过程，尤其是在存储过程中使用到的流控制语句，属于过程性语言，类似于 C++ 语言中函数，这些语句可以帮我们解决复杂的业务逻辑。</p>
+<h3 id="关于存储过程使用的争议"><a href="#关于存储过程使用的争议" class="headerlink" title="关于存储过程使用的争议"></a>关于存储过程使用的争议</h3><p>尽管存储过程有诸多优点，但是对于存储过程的使用，一直都存在着很多争议，比如有些公司对于大型项目要求使用存储过程，而有些公司在手册中明确禁止使用存储过程，为什么这些公司对存储过程的使用需求差别这么大呢？</p>
+<p>我们得从存储过程的特点来找答案。</p>
+<p>你能看到存储过程有很多好处。</p>
+<p>首先存储过程可以一次编译多次使用。存储过程只在创造时进行编译，之后的使用都不需要重新编译，这就提升了 SQL 的执行效率。其次它可以减少开发工作量。将代码封装成模块，实际上是编程的核心思想之一，这样可以把复杂的问题拆解成不同的模块，然后模块之间可以重复使用，在减少开发工作量的同时，还能保证代码的结构清晰。还有一点，存储过程的安全性强，我们在设定存储过程的时候可以设置对用户的使用权限，这样就和视图一样具有较强的安全性。最后它可以减少网络传输量，因为代码封装到存储过程中，每次使用只需要调用存储过程即可，这样就减少了网络传输量。同时在进行相对复杂的数据库操作时，原本需要使用一条一条的 SQL 语句，可能要连接多次数据库才能完成的操作，现在变成了一次存储过程，只需要连接一次即可。</p>
+<p>基于上面这些优点，不少大公司都要求大型项目使用存储过程，比如微软、IBM 等公司。但是国内的阿里并不推荐开发人员使用存储过程，这是为什么呢？</p>
+<p>存储过程虽然有诸如上面的好处，但缺点也是很明显的。</p>
+<p>它的可移植性差，存储过程不能跨数据库移植，比如在 MySQL、Oracle 和 SQL Server 里编写的存储过程，在换成其他数据库时都需要重新编写。</p>
+<p>其次调试困难，只有少数 DBMS 支持存储过程的调试。对于复杂的存储过程来说，开发和维护都不容易。</p>
+<p>此外，存储过程的版本管理也很困难，比如数据表索引发生变化了，可能会导致存储过程失效。我们在开发软件的时候往往需要进行版本管理，但是存储过程本身没有版本控制，版本迭代更新的时候很麻烦。</p>
+<p>最后它不适合高并发的场景，高并发的场景需要减少数据库的压力，有时数据库会采用分库分表的方式，而且对可扩展性要求很高，在这种情况下，存储过程会变得难以维护，增加数据库的压力，显然就不适用了。</p>
+<p>了解了存储过程的优缺点之后，我想说的是，存储过程既方便，又有局限性。尽管不同的公司对存储过程的态度不一，但是对于我们开发人员来说，不论怎样，掌握存储过程都是必备的技能之一。</p>
+<p>最后我们做一个小练习吧。针对王者荣耀的英雄数据表 heros 表，请编写存储过程 get_sum_score，用来得到某一类型英雄（主要定位为某一类型即可）的最大生命值的总和。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/25/12%E4%B8%A8%E8%A7%86%E5%9B%BE%E5%9C%A8SQL%E4%B8%AD%E7%9A%84%E4%BD%9C%E7%94%A8%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%8C%E5%AE%83%E6%98%AF%E6%80%8E%E6%A0%B7%E5%B7%A5%E4%BD%9C%E7%9A%84%EF%BC%9F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2108,466 +2526,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/23/04%E4%B8%A8%E4%BD%BF%E7%94%A8DDL%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93&%E6%95%B0%E6%8D%AE%E8%A1%A8%E6%97%B6%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E4%BB%80%E4%B9%88%EF%BC%9F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LvYang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LvYang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/23/04%E4%B8%A8%E4%BD%BF%E7%94%A8DDL%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93&%E6%95%B0%E6%8D%AE%E8%A1%A8%E6%97%B6%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E4%BB%80%E4%B9%88%EF%BC%9F/" itemprop="url">04丨使用DDL创建数据库&数据表时需要注意什么？</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-23T20:52:07+08:00">
-                2020-03-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" itemprop="url" rel="index">
-                    <span itemprop="name">SQL必知必会</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/03/23/04%E4%B8%A8%E4%BD%BF%E7%94%A8DDL%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93&%E6%95%B0%E6%8D%AE%E8%A1%A8%E6%97%B6%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E4%BB%80%E4%B9%88%EF%BC%9F/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/03/23/04%E4%B8%A8%E4%BD%BF%E7%94%A8DDL%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93&%E6%95%B0%E6%8D%AE%E8%A1%A8%E6%97%B6%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E4%BB%80%E4%B9%88%EF%BC%9F/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>DDL 是 DBMS 的核心组件，也是 SQL 的重要组成部分，DDL 的正确性和稳定性是整个 SQL 运行的重要基础。面对同一个需求，不同的开发人员创建出来的数据库和数据表可能千差万别，那么在设计数据库的时候，究竟什么是好的原则？我们在创建数据表的时候需要注意什么？</p>
-<p>今天的内容，你可以从以下几个角度来学习：</p>
-<ol>
-<li>了解 DDL 的基础语法，它如何定义数据库和数据表；</li>
-<li>使用 DDL 定义数据表时，都有哪些约束性；</li>
-<li>使用 DDL 设计数据库时，都有哪些重要原则。</li>
-</ol>
-<h3 id="DDL-的基础语法及设计工具"><a href="#DDL-的基础语法及设计工具" class="headerlink" title="DDL 的基础语法及设计工具"></a>DDL 的基础语法及设计工具</h3><p>DDL 的英文全称是 Data Definition Language，中文是数据定义语言。它定义了数据库的结构和数据表的结构。</p>
-<p>在 DDL 中，我们常用的功能是增删改，分别对应的命令是 CREATE、DROP 和 ALTER。需要注意的是，在执行 DDL 的时候，不需要 COMMIT，就可以完成执行任务。</p>
-<h4 id="1-对数据库进行定义"><a href="#1-对数据库进行定义" class="headerlink" title="1.对数据库进行定义"></a>1.对数据库进行定义</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CREATE DATABASE nba; // 创建一个名为 nba 的数据库</span><br><span class="line">DROP DATABASE nba; // 删除一个名为 nba 的数据库</span><br></pre></td></tr></table></figure>
-
-<h4 id="2-对数据表进行定义"><a href="#2-对数据表进行定义" class="headerlink" title="2.对数据表进行定义"></a>2.对数据表进行定义</h4><p>创建表结构的语法是这样的：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE table_name</span><br></pre></td></tr></table></figure>
-
-<h3 id="创建表结构"><a href="#创建表结构" class="headerlink" title="创建表结构"></a>创建表结构</h3><p>比如我们想创建一个球员表，表名为 player，里面有两个字段，一个是 player_id，它是 int 类型，另一个 player_name 字段是varchar(255)类型。这两个字段都不为空，且 player_id 是递增的。</p>
-<p>那么创建的时候就可以写为：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE player  (</span><br><span class="line">  player_id int(<span class="number">11</span>) NOT NULL AUTO_INCREMENT,</span><br><span class="line">  player_name varchar(<span class="number">255</span>) NOT NULL</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-
-<p>需要注意的是，语句最后以分号（;）作为结束符，最后一个字段的定义结束后没有逗号。数据类型中 int(11) 代表整数类型，显示长度为 11 位，括号中的参数 11 代表的是最大有效显示长度，与类型包含的数值范围大小无关。varchar(255)代表的是最大长度为 255 的可变字符串类型。NOT NULL表明整个字段不能是空值，是一种数据约束。AUTO_INCREMENT代表主键自动增长。</p>
-<p>实际上，我们通常很少自己写 DDL 语句，可以使用一些可视化工具来创建和操作数据库和数据表。在这里我推荐使用 Navicat，它是一个数据库管理和设计工具，跨平台，支持很多种数据库管理软件，比如 MySQL、Oracle、MariaDB 等。基本上专栏讲到的数据库软件都可以使用 Navicat 来管理。</p>
-<p>假如还是针对 player 这张表，我们想设计以下的字段：</p>
-<table>
-<thead>
-<tr>
-<th align="left">字段</th>
-<th align="left">含义</th>
-<th align="left">类型</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">player_id</td>
-<td align="left">球员ID</td>
-<td align="left">int整数类型,最大显示长度11</td>
-</tr>
-<tr>
-<td align="left">team_id</td>
-<td align="left">球队ID</td>
-<td align="left">int整数类型,最大显示长度11</td>
-</tr>
-<tr>
-<td align="left">player_name</td>
-<td align="left">球员姓名</td>
-<td align="left">varchar字符串类型,最大长度255</td>
-</tr>
-<tr>
-<td align="left">height</td>
-<td align="left">身高</td>
-<td align="left">float浮点类型,一共存储3个有效数字,其中小数点长度为2.</td>
-</tr>
-</tbody></table>
-<p>其中 player_id 是数据表 player 的主键，且自动增长，也就是 player_id 会从 1 开始，然后每次加 1。player_id、team_id、player_name 这三个字段均不为空，height 字段可以为空。</p>
-<p>按照上面的设计需求，我们可以使用 Navicat 软件进行设计.<br>然后，我们还可以对 player_name 字段进行索引，索引类型为Unique。<br>这样一张 player 表就通过可视化工具设计好了。我们可以把这张表导出来，可以看看这张表对应的 SQL 语句是怎样的。方法是在 Navicat 左侧用右键选中 player 这张表，然后选择“转储 SQL 文件”→“仅结构”，这样就可以看到导出的 SQL 文件了，代码如下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">DROP TABLE IF EXISTS `player`;</span><br><span class="line">CREATE TABLE `player`  (</span><br><span class="line">  `player_id` int(<span class="number">11</span>) NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `team_id` int(<span class="number">11</span>) NOT NULL,</span><br><span class="line">  `player_name` varchar(<span class="number">255</span>) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,</span><br><span class="line">  `height` float(<span class="number">3</span>, <span class="number">2</span>) NULL DEFAULT <span class="number">0.00</span>,</span><br><span class="line">  PRIMARY KEY (`player_id`) USING BTREE,</span><br><span class="line">  UNIQUE INDEX `player_name`(`player_name`) USING BTREE</span><br><span class="line">) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;</span><br></pre></td></tr></table></figure>
-
-<p>你能看到整个 SQL 文件中的 DDL 处理，首先先删除 player 表（如果数据库中存在该表的话），然后再创建 player 表，里面的数据表和字段都使用了反引号，这是为了避免它们的名称与 MySQL 保留字段相同，对数据表和字段名称都加上了反引号。</p>
-<p>其中 player_name 字段的字符集是 utf8，排序规则是utf8_general_ci，代表对大小写不敏感，如果设置为utf8_bin，代表对大小写敏感，还有许多其他排序规则这里不进行介绍。</p>
-<p>因为 player_id 设置为了主键，因此在 DDL 中使用PRIMARY KEY进行规定，同时索引方法采用 BTREE。</p>
-<p>因为我们对 player_name 字段进行索引，在设置字段索引时，我们可以设置为UNIQUE INDEX（唯一索引），也可以设置为其他索引方式，比如NORMAL INDEX（普通索引），这里我们采用UNIQUE INDEX。唯一索引和普通索引的区别在于它对字段进行了唯一性的约束。在索引方式上，你可以选择BTREE或者HASH，这里采用了BTREE方法进行索引。我会在后面介绍BTREE和HASH索引方式的区别。</p>
-<p>整个数据表的存储规则采用 InnoDB。之前我们简单介绍过 InnoDB，它是 MySQL5.5 版本之后默认的存储引擎。同时，我们将字符集设置为 utf8，排序规则为utf8_general_ci，行格式为Dynamic，就可以定义数据表的最后约定了：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;</span><br></pre></td></tr></table></figure>
-
-<p>你能看出可视化工具还是非常方便的，它能直接帮我们将数据库的结构定义转化成 SQL 语言，方便数据库和数据表结构的导出和导入。不过在使用可视化工具前，你首先需要了解对于 DDL 的基础语法，至少能清晰地看出来不同字段的定义规则、索引方法，以及主键和外键的定义。</p>
-<h3 id="修改表结构"><a href="#修改表结构" class="headerlink" title="修改表结构"></a>修改表结构</h3><p>在创建表结构之后，我们还可以对表结构进行修改，虽然直接使用 Navicat 可以保证重新导出的数据表就是最新的，但你也有必要了解，如何使用 DDL 命令来完成表结构的修改。</p>
-<ol>
-<li>添加字段，比如我在数据表中添加一个 age 字段，类型为int(11)</li>
-</ol>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE player ADD (age int(<span class="number">11</span>));</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>修改字段名，将 age 字段改成player_age</li>
-</ol>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE player RENAME COLUMN age to player_age</span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>修改字段的数据类型，将player_age的数据类型设置为float(3,1)</li>
-</ol>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE player MODIFY (player_age float(<span class="number">3</span>,<span class="number">1</span>));</span><br></pre></td></tr></table></figure>
-
-<ol start="4">
-<li>删除字段, 删除刚才添加的player_age字段</li>
-</ol>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE player DROP COLUMN player_age;</span><br></pre></td></tr></table></figure>
-
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">### 数据表的常见约束</span></span><br><span class="line">当我们创建数据表的时候，还会对字段进行约束，约束的目的在于保证 RDBMS 里面数据的准确性和一致性。下面，我们来看下常见的约束有哪些。</span><br><span class="line"></span><br><span class="line">首先是主键约束。</span><br><span class="line"></span><br><span class="line">主键起的作用是唯一标识一条记录，不能重复，不能为空，即 UNIQUE+NOT NULL。一个数据表的主键只能有一个。主键可以是一个字段，也可以由多个字段复合组成。在上面的例子中，我们就把 player_id 设置为了主键。</span><br><span class="line"></span><br><span class="line">其次还有外键约束。</span><br><span class="line"></span><br><span class="line">外键确保了表与表之间引用的完整性。一个表中的外键对应另一张表的主键。外键可以是重复的，也可以为空。比如 player_id 在 player 表中是主键，如果你想设置一个球员比分表即 player_score，就可以在 player_score 中设置 player_id 为外键，关联到 player 表中。</span><br><span class="line"></span><br><span class="line">除了对键进行约束外，还有字段约束。</span><br><span class="line"></span><br><span class="line">唯一性约束。</span><br><span class="line"></span><br><span class="line">唯一性约束表明了字段在表中的数值是唯一的，即使我们已经有了主键，还可以对其他字段进行唯一性约束。比如我们在 player 表中给 player_name 设置唯一性约束，就表明任何两个球员的姓名不能相同。需要注意的是，唯一性约束和普通索引（NORMAL INDEX）之间是有区别的。唯一性约束相当于创建了一个约束和普通索引，目的是保证字段的正确性，而普通索引只是提升数据检索的速度，并不对字段的唯一性进行约束。</span><br><span class="line"></span><br><span class="line">NOT NULL 约束。对字段定义了 NOT NULL，即表明该字段不应为空，必须有取值。</span><br><span class="line"></span><br><span class="line">DEFAULT，表明了字段的默认值。如果在插入数据的时候，这个字段没有取值，就设置为默认值。比如我们将身高 height 字段的取值默认设置为 <span class="number">0.00</span>，即DEFAULT <span class="number">0.00</span>。</span><br><span class="line"></span><br><span class="line">CHECK 约束，用来检查特定字段取值范围的有效性，CHECK 约束的结果不能为 FALSE，比如我们可以对身高 height 的数值进行 CHECK 约束，必须≥<span class="number">0</span>，且＜<span class="number">3</span>，即CHECK(height&gt;=<span class="number">0</span> AND height&lt;<span class="number">3</span>)。</span><br><span class="line"></span><br><span class="line"><span class="comment">### 设计数据表的原则</span></span><br><span class="line">我们在设计数据表的时候，经常会考虑到各种问题，比如：用户都需要什么数据？需要在数据表中保存哪些数据？哪些数据是经常访问的数据？如何提升检索效率？</span><br><span class="line"></span><br><span class="line">如何保证数据表中数据的正确性，当插入、删除、更新的时候该进行怎样的约束检查？</span><br><span class="line"></span><br><span class="line">如何降低数据表的数据冗余度，保证数据表不会因为用户量的增长而迅速扩张？</span><br><span class="line"></span><br><span class="line">如何让负责数据库维护的人员更方便地使用数据库？</span><br><span class="line"></span><br><span class="line">除此以外，我们使用数据库的应用场景也各不相同，可以说针对不同的情况，设计出来的数据表可能千差万别。那么有没有一种设计原则可以让我们来借鉴呢？这里我整理了一个“三少一多”原则：</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="number">1.</span>数据表的个数越少越好</span><br><span class="line"></span><br><span class="line">RDBMS 的核心在于对实体和联系的定义，也就是 E-R 图（Entity Relationship Diagram），数据表越少，证明实体和联系设计得越简洁，既方便理解又方便操作。</span><br><span class="line"></span><br><span class="line"><span class="number">2.</span>数据表中的字段个数越少越好</span><br><span class="line"></span><br><span class="line">字段个数越多，数据冗余的可能性越大。设置字段个数少的前提是各个字段相互独立，而不是某个字段的取值可以由其他字段计算出来。当然字段个数少是相对的，我们通常会在数据冗余和检索效率中进行平衡。</span><br><span class="line"></span><br><span class="line"><span class="number">3.</span>数据表中联合主键的字段个数越少越好</span><br><span class="line"></span><br><span class="line">设置主键是为了确定唯一性，当一个字段无法确定唯一性的时候，就需要采用联合主键的方式（也就是用多个字段来定义一个主键）。联合主键中的字段越多，占用的索引空间越大，不仅会加大理解难度，还会增加运行时间和索引空间，因此联合主键的字段个数越少越好。</span><br><span class="line"></span><br><span class="line"><span class="number">4.</span>使用主键和外键越多越好</span><br><span class="line"></span><br><span class="line">数据库的设计实际上就是定义各种表，以及各种字段之间的关系。这些关系越多，证明这些实体之间的冗余度越低，利用度越高。这样做的好处在于不仅保证了数据表之间的独立性，还能提升相互之间的关联使用率。</span><br><span class="line"></span><br><span class="line">你应该能看出来“三少一多”原则的核心就是简单可复用。简单指的是用更少的表、更少的字段、更少的联合主键字段来完成数据表的设计。可复用则是通过主键、外键的使用来增强数据表之间的复用率。因为一个主键可以理解是一张表的代表。键设计得越多，证明它们之间的利用率越高。</span><br><span class="line"></span><br><span class="line"><span class="comment">### 总结</span></span><br><span class="line">今天我们学习了 DDL 的基础语法，比如如何对数据库和数据库表进行定义，也了解了使用 Navicat 可视化管理工具来辅助我们完成数据表的设计，省去了手写 SQL 的工作量。</span><br><span class="line"></span><br><span class="line">在创建数据表的时候，除了对字段名及数据类型进行定义以外，我们考虑最多的就是关于字段的约束，我介绍了 <span class="number">7</span> 种常见的约束，它们都是数据表设计中会用到的约束：主键、外键、唯一性、NOT NULL、DEFAULT、CHECK 约束等。</span><br><span class="line"></span><br><span class="line">当然，了解了如何操作创建数据表之后，你还需要动脑思考，怎样才能设计出一个好的数据表？设计的原则都有哪些？针对这个，我整理出了“三少一多”原则，在实际使用过程中，你需要灵活掌握，因为这个原则并不是绝对的，有时候我们需要牺牲数据的冗余度来换取数据处理的效率。</span><br></pre></td></tr></table></figure>
-
-<h3 id="我们在创建数据表的时候，会对数据表设置主键、外键和索引。你能说下这三者的作用和区别吗？"><a href="#我们在创建数据表的时候，会对数据表设置主键、外键和索引。你能说下这三者的作用和区别吗？" class="headerlink" title="我们在创建数据表的时候，会对数据表设置主键、外键和索引。你能说下这三者的作用和区别吗？"></a>我们在创建数据表的时候，会对数据表设置主键、外键和索引。你能说下这三者的作用和区别吗？</h3><p>主键：唯一标识一条记录，不能重复，不能为空。<br>外键：确保了表于表之间引用的完整性，可以重复，可以为空<br>索引：提升数据检索速度<br>区别：主键是索引的一种，而且是唯一索引的一种。而并非在是索引，是两表之间的链接</p>
-<h3 id="外键多了会有很多维护问题吧？"><a href="#外键多了会有很多维护问题吧？" class="headerlink" title="外键多了会有很多维护问题吧？"></a>外键多了会有很多维护问题吧？</h3><p>作者回复: 是否使用外键确实会有一些争议。我来解释下关于外键的使用：<br>首先，外键本身是为了实现强一致性，所以如果需要正确性&gt;性能的话，还是建议使用外键，它可以让我们在数据库的层面保证数据的完整性和一致性。<br>当然不用外键，你也可以在业务层进行实现。不过，这样做也同样存在一定的风险，因为这样，就会让业务逻辑会与数据具备一定的耦合性。也就是业务逻辑和数据必须同时修改。而且在工作中，业务层可能会经常发生变化。</p>
-<p>当然，很多互联网的公司，尤其是超大型的数据应用场景，大量的插入，更新和删除在外键的约束下会降低性能，同时数据库在水平拆分和分库的情况下，数据库端也做不到执行外键约束。另外，在高并发的情况下，外键的存在也会造成额外的开销。因为每次更新数据，都需要检查另外一张表的数据，也容易造成死锁。<br>所以在这种情况下，尤其是大型项目中后期，可以采用业务层来实现，取消外键提高效率。<br>不过在SQL学习之初，包括在系统最初设计的时候，还是建议你采用规范的数据库设计，也就是采用外键来对数据表进行约束。因为这样可以建立一个强一致性，可靠性高的数据库结构，也不需要在业务层来实现过多的检查。<br>当然在项目后期，业务量增大的情况下，你需要更多考虑到数据库性能问题，可以取消外键的约束，转移到业务层来实现。而且在大型互联网项目中，考虑到分库分表的情况，也会降低外键的使用。<br>不过在SQL学习，以及项目早期，还是建议你使用外键。在项目后期，你可以分析有哪些外键造成了过多的性能消耗。一般遵循2/8原则，会有20%的外键造成80%的资源效率，你可以只把这20%的外键进行开放，采用业务层逻辑来进行实现，当然你需要保证业务层的实现没有错误。不同阶段，考虑的问题不同。当用户和业务量增大的时候，对于大型互联网应用，也会通过减少外键的使用，来减低死锁发生的概率，提高并发处理能力。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/23/03%E4%B8%A8%E5%AD%A6%E4%BC%9A%E7%94%A8%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E6%96%B9%E5%BC%8F%E6%80%9D%E8%80%83SQL%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LvYang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LvYang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/23/03%E4%B8%A8%E5%AD%A6%E4%BC%9A%E7%94%A8%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E6%96%B9%E5%BC%8F%E6%80%9D%E8%80%83SQL%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84/" itemprop="url">03丨学会用数据库的方式思考SQL是如何执行的</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-23T20:29:07+08:00">
-                2020-03-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" itemprop="url" rel="index">
-                    <span itemprop="name">SQL必知必会</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/03/23/03%E4%B8%A8%E5%AD%A6%E4%BC%9A%E7%94%A8%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E6%96%B9%E5%BC%8F%E6%80%9D%E8%80%83SQL%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/03/23/03%E4%B8%A8%E5%AD%A6%E4%BC%9A%E7%94%A8%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E6%96%B9%E5%BC%8F%E6%80%9D%E8%80%83SQL%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>通过上一篇文章对不同的 DBMS 的介绍，你应该对它们有了一些基础的了解。虽然 SQL 是声明式语言，我们可以像使用英语一样使用它，不过在 RDBMS（关系型数据库管理系统）中，SQL 的实现方式还是有差别的。今天我们就从数据库的角度来思考一下 SQL 是如何被执行的。</p>
-<p>关于今天的内容，你会从以下几个方面进行学习：</p>
-<ol>
-<li>Oracle 中的 SQL 是如何执行的，什么是硬解析和软解析；</li>
-<li>MySQL 中的 SQL 是如何执行的，MySQL 的体系结构又是怎样的；</li>
-<li>什么是存储引擎，MySQL 的存储引擎都有哪些？</li>
-</ol>
-<h3 id="Oracle-中的-SQL-是如何执行的"><a href="#Oracle-中的-SQL-是如何执行的" class="headerlink" title="Oracle 中的 SQL 是如何执行的"></a>Oracle 中的 SQL 是如何执行的</h3><p>我们先来看下 SQL 在 Oracle 中的执行过程：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">                     SQL语句</span><br><span class="line">                        |</span><br><span class="line">                        |                   硬解析</span><br><span class="line">语法检查----&gt;语义检查----&gt;权限检查----&gt;共享池检查-----&gt;优化器</span><br><span class="line">                                     |             |</span><br><span class="line">                              软解析  |             |</span><br><span class="line">                                    执行-------------</span><br><span class="line">                                   </span><br><span class="line">```                                   </span><br><span class="line"></span><br><span class="line">从上面这张图中可以看出，SQL 语句在 Oracle 中经历了以下的几个步骤。</span><br><span class="line"></span><br><span class="line">1. 语法检查：检查 SQL 拼写是否正确，如果不正确，Oracle 会报语法错误。</span><br><span class="line"></span><br><span class="line">2. 语义检查：检查 SQL 中的访问对象是否存在。比如我们在写 SELECT 语句的时候，列名写错了，系统就会提示错误。语法检查和语义检查的作用是保证 SQL 语句没有错误。</span><br><span class="line"></span><br><span class="line">3. 权限检查：看用户是否具备访问该数据的权限。</span><br><span class="line"></span><br><span class="line">4. 共享池检查：共享池（Shared Pool）是一块内存池，最主要的作用是缓存 SQL 语句和该语句的执行计划。Oracle 通过检查共享池是否存在 SQL 语句的执行计划，来判断进行软解析，还是硬解析。那软解析和硬解析又该怎么理解呢？</span><br><span class="line"></span><br><span class="line">在共享池中，Oracle 首先对 SQL 语句进行 Hash 运算，然后根据 Hash 值在库缓存（Library Cache）中查找，如果存在 SQL 语句的执行计划，就直接拿来执行，直接进入“执行器”的环节，这就是软解析。</span><br><span class="line"></span><br><span class="line">如果没有找到 SQL 语句和执行计划，Oracle 就需要创建解析树进行解析，生成执行计划，进入“优化器”这个步骤，这就是硬解析。</span><br><span class="line"></span><br><span class="line">5. 优化器：优化器中就是要进行硬解析，也就是决定怎么做，比如创建解析树，生成执行计划。</span><br><span class="line"></span><br><span class="line">6. 执行器：当有了解析树和执行计划之后，就知道了 SQL 该怎么被执行，这样就可以在执行器中执行语句了。</span><br><span class="line"></span><br><span class="line">共享池是 Oracle 中的术语，包括了库缓存，数据字典缓冲区等。我们上面已经讲到了库缓存区，它主要缓存 SQL 语句和执行计划。而数据字典缓冲区存储的是 Oracle 中的对象定义，比如表、视图、索引等对象。当对 SQL 语句进行解析的时候，如果需要相关的数据，会从数据字典缓冲区中提取。</span><br><span class="line"></span><br><span class="line">库缓存这一个步骤，决定了 SQL 语句是否需要进行硬解析。为了提升 SQL 的执行效率，我们应该尽量避免硬解析，因为在 SQL 的执行过程中，创建解析树，生成执行计划是很消耗资源的。</span><br><span class="line"></span><br><span class="line">你可能会问，如何避免硬解析，尽量使用软解析呢？在 Oracle 中，绑定变量是它的一大特色。绑定变量就是在 SQL 语句中使用变量，通过不同的变量取值来改变 SQL 的执行结果。这样做的好处是能提升软解析的可能性，不足之处在于可能会导致生成的执行计划不够优化，因此是否需要绑定变量还需要视情况而定。</span><br><span class="line"></span><br><span class="line">举个例子，我们可以使用下面的查询语句：</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">```python</span><br><span class="line">SQL&gt; select * from player where player_id = 10001;</span><br></pre></td></tr></table></figure>
-
-<p>你也可以使用绑定变量，如：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; select * <span class="keyword">from</span> player where player_id = :player_id;</span><br></pre></td></tr></table></figure>
-
-<p>这两个查询语句的效率在 Oracle 中是完全不同的。如果你在查询 player_id = 10001 之后，还会查询 10002、10003 之类的数据，那么每一次查询都会创建一个新的查询解析。而第二种方式使用了绑定变量，那么在第一次查询之后，在共享池中就会存在这类查询的执行计划，也就是软解析。</p>
-<p>因此我们可以通过使用绑定变量来减少硬解析，减少 Oracle 的解析工作量。但是这种方式也有缺点，使用动态 SQL 的方式，因为参数不同，会导致 SQL 的执行效率不同，同时 SQL 优化也会比较困难。</p>
-<h3 id="MySQL-中的-SQL-是如何执行的"><a href="#MySQL-中的-SQL-是如何执行的" class="headerlink" title="MySQL 中的 SQL 是如何执行的"></a>MySQL 中的 SQL 是如何执行的</h3><p>Oracle 中采用了共享池来判断 SQL 语句是否存在缓存和执行计划，通过这一步骤我们可以知道应该采用硬解析还是软解析。那么在 MySQL 中，SQL 是如何被执行的呢？</p>
-<p>首先 MySQL 是典型的 C/S 架构，即 Client/Server 架构，服务器端程序使用的 mysqld。整体的 MySQL 流程如下图所示：</p>
-<p>你能看到 MySQL 由三层组成：</p>
-<ol>
-<li>连接层：客户端和服务器端建立连接，客户端发送 SQL 至服务器端；</li>
-<li>SQL 层：对 SQL 语句进行查询处理；</li>
-<li>存储引擎层：与数据库文件打交道，负责数据的存储和读取。</li>
-</ol>
-<p>其中 SQL 层与数据库文件的存储方式无关，我们来看下 SQL 层的结构：</p>
-<p>SQL语句 —-&gt;解析器—-&gt;优化器—-&gt;执行器—|<br>    |        ^                           |-&gt;输出结果<br>    |        |没找到                      |<br>    |        |                           |<br>    |——-&gt;缓存查询&lt;——————–|找到</p>
-<ol>
-<li>询缓存：Server 如果在查询缓存中发现了这条 SQL 语句，就会直接将结果返回给客户端；如果没有，就进入到解析器阶段。需要说明的是，因为查询缓存往往效率不高，所以在 MySQL8.0 之后就抛弃了这个功能。</li>
-<li>解析器：在解析器中对 SQL 语句进行语法分析、语义分析。</li>
-<li>优化器：在优化器中会确定 SQL 语句的执行路径，比如是根据全表检索，还是根据索引来检索等。</li>
-<li>执行器：在执行之前需要判断该用户是否具备权限，如果具备权限就执行 SQL 查询并返回结果。在 MySQL8.0 以下的版本，如果设置了查询缓存，这时会将查询结果进行缓存。</li>
-</ol>
-<p>你能看到 SQL 语句在 MySQL 中的流程是：SQL 语句→缓存查询→解析器→优化器→执行器。在一部分中，MySQL 和 Oracle 执行 SQL 的原理是一样的。</p>
-<p>与 Oracle 不同的是，MySQL 的存储引擎采用了插件的形式，每个存储引擎都面向一种特定的数据库应用环境。同时开源的 MySQL 还允许开发人员设置自己的存储引擎，下面是一些常见的存储引擎：</p>
-<ol>
-<li>InnoDB 存储引擎：它是 MySQL 5.5 版本之后默认的存储引擎，最大的特点是支持事务、行级锁定、外键约束等。</li>
-<li>MyISAM 存储引擎：在 MySQL 5.5 版本之前是默认的存储引擎，不支持事务，也不支持外键，最大的特点是速度快，占用资源少。</li>
-<li>Memory 存储引擎：使用系统内存作为存储介质，以便得到更快的响应速度。不过如果 mysqld 进程崩溃，则会导致所有的数据丢失，因此我们只有当数据是临时的情况下才使用 Memory 存储引擎。</li>
-<li>NDB 存储引擎：也叫做 NDB Cluster 存储引擎，主要用于 MySQL Cluster 分布式集群环境，类似于 Oracle 的 RAC 集群。</li>
-<li>Archive 存储引擎：它有很好的压缩机制，用于文件归档，在请求写入时会进行压缩，所以也经常用来做仓库。</li>
-</ol>
-<p>需要注意的是，数据库的设计在于表的设计，而在 MySQL 中每个表的设计都可以采用不同的存储引擎，我们可以根据实际的数据处理需要来选择存储引擎，这也是 MySQL 的强大之处。</p>
-<h3 id="数据库管理系统也是一种软件"><a href="#数据库管理系统也是一种软件" class="headerlink" title="数据库管理系统也是一种软件"></a>数据库管理系统也是一种软件</h3><p>我们刚才了解了 SQL 语句在 Oracle 和 MySQL 中的执行流程，实际上完整的 Oracle 和 MySQL 结构图要复杂得多：</p>
-<p>如果你只是简单地把 MySQL 和 Oracle 看成数据库管理系统软件，从外部看难免会觉得“晦涩难懂”，毕竟组织结构太多了。我们在学习的时候，还需要具备抽象的能力，抓取最核心的部分：SQL 的执行原理。因为不同的 DBMS 的 SQL 的执行原理是相通的，只是在不同的软件中，各有各的实现路径。</p>
-<p>既然一条 SQL 语句会经历不同的模块，那我们就来看下，在不同的模块中，SQL 执行所使用的资源（时间）是怎样的。下面我来教你如何在 MySQL 中对一条 SQL 语句的执行时间进行分析。</p>
-<p>首先我们需要看下 profiling 是否开启，开启它可以让 MySQL 收集在 SQL 执行时所使用的资源情况，命令如下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select @@profiling;</span><br></pre></td></tr></table></figure>
-
-<p>profiling=0 代表关闭，我们需要把 profiling 打开，即设置为 1：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; set profiling=<span class="number">1</span>;</span><br></pre></td></tr></table></figure>
-
-<p>然后我们执行一个 SQL 查询（你可以执行任何一个 SQL 查询）：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * <span class="keyword">from</span> wucai.heros;</span><br></pre></td></tr></table></figure>
-
-<p>查看当前会话所产生的所有 profiles：<br>你会发现我们刚才执行了两次查询，Query ID 分别为 1 和 2。如果我们想要获取上一次查询的执行时间，可以使用：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show profile;</span><br></pre></td></tr></table></figure>
-
-<p>starting    0.000083    6.837<br>checking permissions    0.000011    0.906  权限检查<br>Opening tables    0.000088    7.249          打开表<br>init    0.00002    1.647                      初始化<br>System lock    0.000007    0.577              锁系统<br>optimizing    0.000005    0.412              优化查询<br>statistics    0.00001    0.824<br>preparing    0.000031    2.554              准备<br>Creating tmp table    0.000046    3.789      执行<br>Sorting result    0.000006    0.494<br>executing    0.000634    52.224<br>Sending data    0.000152    12.521<br>Creating sort index    0.000036    2.965<br>end    0.000004    0.329<br>query end    0.000004    0.329<br>removing tmp table    0.000007    0.577<br>query end    0.000002    0.165<br>closing tables    0.000002    0.165<br>removing tmp table    0.000008    0.659<br>closing tables    0.000003    0.247<br>freeing items    0.000034    2.801<br>cleaning up    0.000021    1.730<br>当然你也可以查询指定的 Query ID，比如：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show profile <span class="keyword">for</span> query <span class="number">2</span>;</span><br></pre></td></tr></table></figure>
-
-<p>查询 SQL 的执行时间结果和上面是一样的。</p>
-<p>在 8.0 版本之后，MySQL 不再支持缓存的查询，原因我在上文已经说过。一旦数据表有更新，缓存都将清空，因此只有数据表是静态的时候，或者数据表很少发生变化时，使用缓存查询才有价值，否则如果数据表经常更新，反而增加了 SQL 的查询时间。</p>
-<p>你可以使用 select version() 来查看 MySQL 的版本情况</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>我们在使用 SQL 的时候，往往只见树木，不见森林，不会注意到它在各种数据库软件中是如何执行的，今天我们从全貌的角度来理解这个问题。你能看到不同的 RDBMS 之间有相同的地方，也有不同的地方。</p>
-<p>相同的地方在于 Oracle 和 MySQL 都是通过解析器→优化器→执行器这样的流程来执行 SQL 的。</p>
-<p>但 Oracle 和 MySQL 在进行 SQL 的查询上面有软件实现层面的差异。Oracle 提出了共享池的概念，通过共享池来判断是进行软解析，还是硬解析。而在 MySQL 中，8.0 以后的版本不再支持查询缓存，而是直接执行解析器→优化器→执行器的流程，这一点从 MySQL 中的 show profile 里也能看到。同时 MySQL 的一大特色就是提供了各种存储引擎以供选择，不同的存储引擎有各自的使用场景，我们可以针对每张表选择适合的存储引擎。</p>
-<p>今天的内容到这里就结束了，你能说一下 Oracle 中的绑定变量是什么吗？使用它有什么优缺点吗？MySQL 的存储引擎是一大特色，其中 MyISAM 和 InnoDB 都是常用的存储引擎，这两个搜索引擎的特性和使用场景分别是什么？</p>
-<p>最后留一道选择题吧，解析后的 SQL 语句在 Oracle 的哪个区域中进行缓存？</p>
-<p>A. 数据缓冲区<br>B. 日志缓冲区<br>C. 共享池<br>D. 大池</p>
-<p>答案是:C<br>共享池检查：共享池（Shared Pool）是一块内存池，最主要的作用是缓存 SQL 语句和该语句的执行计划。Oracle 通过检查共享池是否存在 SQL 语句的执行计划，来判断进行软解析，还是硬解析。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2618,7 +2576,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">51</span>
+                  <span class="site-state-item-count">53</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

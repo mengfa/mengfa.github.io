@@ -258,6 +258,360 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/15/141.%20Linked%20List%20Cycle/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/15/141.%20Linked%20List%20Cycle/" itemprop="url">141. Linked List Cycle</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-15T12:15:07+08:00">
+                2019-12-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/leetcode/" itemprop="url" rel="index">
+                    <span itemprop="name">leetcode</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/12/15/141.%20Linked%20List%20Cycle/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/12/15/141.%20Linked%20List%20Cycle/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Given a linked list, determine if it has a cycle in it.</p>
+<p>To represent a cycle in the given linked list, we use an integer pos which represents the position (0-indexed) in the linked list where tail connects to. If pos is -1, then there is no cycle in the linked list.</p>
+<p>Example 1:</p>
+<p>Input: head = [3,2,0,-4], pos = 1<br>Output: true<br>Explanation: There is a cycle in the linked list, where tail connects to the second node.</p>
+<p>Example 2:</p>
+<p>Input: head = [1,2], pos = 0<br>Output: true<br>Explanation: There is a cycle in the linked list, where tail connects to the first node.</p>
+<p>Example 3:</p>
+<p>Input: head = [1], pos = -1<br>Output: false<br>Explanation: There is no cycle in the linked list.</p>
+<p>给定一个链表，判断链表中是否有环。</p>
+<p>为了表示给定链表中的环，我们使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。 如果 pos 是 -1，则在该链表中没有环。</p>
+<p>示例 1：</p>
+<p>输入：head = [3,2,0,-4], pos = 1<br>输出：true<br>解释：链表中有一个环，其尾部连接到第二个节点。</p>
+<p>示例 2：</p>
+<p>输入：head = [1,2], pos = 0<br>输出：true<br>解释：链表中有一个环，其尾部连接到第一个节点。</p>
+<p>示例 3：</p>
+<p>输入：head = [1], pos = -1<br>输出：false<br>解释：链表中没有环。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ListNode</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, x)</span>:</span></span><br><span class="line">        self.val = x</span><br><span class="line">        self.next = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">createList</span><span class="params">()</span>:</span></span><br><span class="line">    head = ListNode(<span class="number">1</span>)</span><br><span class="line">    cur = head</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">2</span>, <span class="number">5</span>):</span><br><span class="line">        cur.next = ListNode(i)</span><br><span class="line">        cur = cur.next</span><br><span class="line">    <span class="keyword">return</span> head</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">printList</span><span class="params">(head)</span>:</span></span><br><span class="line">    cur = head</span><br><span class="line">    <span class="keyword">while</span> cur != <span class="literal">None</span>:</span><br><span class="line">        print(cur.val, <span class="string">'--&gt;'</span>, end=<span class="string">''</span>)</span><br><span class="line">        cur = cur.next</span><br><span class="line">    print(<span class="string">'NULL'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">hasCycle</span><span class="params">(self, head)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :type head: ListNode</span></span><br><span class="line"><span class="string">        :rtype: bool</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">if</span> head == <span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        </span><br><span class="line">        fast, slow = head, head</span><br><span class="line">        <span class="keyword">while</span> fast.next != <span class="literal">None</span> <span class="keyword">and</span> fast.next.next != <span class="literal">None</span>:</span><br><span class="line">            slow = slow.next</span><br><span class="line">            fast = fast.next.next</span><br><span class="line">            <span class="keyword">if</span> slow == fast:</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    head = createList()</span><br><span class="line">    printList(head)</span><br><span class="line">    res = Solution().hasCycle(head)</span><br><span class="line">    printList(head)</span><br><span class="line">    print(res)</span><br></pre></td></tr></table></figure>
+
+<pre><code>1 --&gt;2 --&gt;3 --&gt;4 --&gt;NULL
+1 --&gt;2 --&gt;3 --&gt;4 --&gt;NULL
+False</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/15/24.%20Swap%20Nodes%20in%20Pairs/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/15/24.%20Swap%20Nodes%20in%20Pairs/" itemprop="url">24. Swap Nodes in Pairs</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-15T10:15:07+08:00">
+                2019-12-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/leetcode/" itemprop="url" rel="index">
+                    <span itemprop="name">leetcode</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/12/15/24.%20Swap%20Nodes%20in%20Pairs/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/12/15/24.%20Swap%20Nodes%20in%20Pairs/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="英文题目"><a href="#英文题目" class="headerlink" title="英文题目"></a>英文题目</h3><p>Given a linked list, swap every two adjacent nodes and return its head.</p>
+<p>You may not modify the values in the list’s nodes, only nodes itself may be changed.</p>
+<p>Example:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Given 1-&gt;2-&gt;3-&gt;4, you should return the list as 2-&gt;1-&gt;4-&gt;3.</span><br></pre></td></tr></table></figure>
+
+<h3 id="中文题目"><a href="#中文题目" class="headerlink" title="中文题目"></a>中文题目</h3><p>给定一个链表，两两交换其中相邻的节点，并返回交换后的链表。</p>
+<p>你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。</p>
+<p>示例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">给定 1-&gt;2-&gt;3-&gt;4, 你应该返回 2-&gt;1-&gt;4-&gt;3.</span><br></pre></td></tr></table></figure>
+
+<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>给定一个链表，两两交换其中相邻的节点，并返回交换后的链表。</p>
+<p>示例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">给定 1-&gt;2-&gt;3-&gt;4, 你应该返回 2-&gt;1-&gt;4-&gt;3.</span><br></pre></td></tr></table></figure>
+<p>说明:</p>
+<ul>
+<li>你的算法只能使用常数的额外空间。</li>
+<li>你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。</li>
+</ul>
+<p>解题思路:</p>
+<p>我们首先需要建立pre、node1、node2和lat四个指针即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pre   node1  node2   lat</span><br><span class="line"> h  -&gt;  1  -&gt;  2  -&gt;  3  -&gt;  4</span><br></pre></td></tr></table></figure>
+
+<p> 然后pre-&gt;next=node2;node2.next=node1;node1.next=lat</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">      -----------</span><br><span class="line">     |         |</span><br><span class="line">h    1 &lt;- 2 -&gt; 3 -&gt; 4</span><br><span class="line">|         |</span><br><span class="line">-----------</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2-&gt;1-&gt;4-&gt;3.</span><br></pre></td></tr></table></figure>
+
+<h3 id="图解"><a href="#图解" class="headerlink" title="图解"></a>图解</h3><p><img src="/2019/12/15/24.%20Swap%20Nodes%20in%20Pairs/24.webp" alt="jupyter"></p>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ListNode</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, x)</span>:</span></span><br><span class="line">        self.val = x</span><br><span class="line">        self.next = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">createList</span><span class="params">()</span>:</span></span><br><span class="line">    head = ListNode(<span class="number">1</span>)</span><br><span class="line">    cur = head</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">2</span>, <span class="number">5</span>):</span><br><span class="line">        cur.next = ListNode(i)</span><br><span class="line">        cur = cur.next</span><br><span class="line">    <span class="keyword">return</span> head</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">printList</span><span class="params">(head)</span>:</span></span><br><span class="line">    cur = head</span><br><span class="line">    <span class="keyword">while</span> cur != <span class="literal">None</span>:</span><br><span class="line">        print(cur.val, <span class="string">'--&gt;'</span>, end=<span class="string">''</span>)</span><br><span class="line">        cur = cur.next</span><br><span class="line">    print(<span class="string">'NULL'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">swapPairs</span><span class="params">(self, head)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :type head: ListNode</span></span><br><span class="line"><span class="string">        :rtype: ListNode</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        h = ListNode(<span class="number">-1</span>)</span><br><span class="line">        h.next = head</span><br><span class="line">        pre = h</span><br><span class="line">        <span class="keyword">while</span> pre.next != <span class="literal">None</span> <span class="keyword">and</span> pre.next.next != <span class="literal">None</span>:</span><br><span class="line">            <span class="comment"># 定义node1， node2.所以要node1， node2.</span></span><br><span class="line">            node1 = pre.next</span><br><span class="line">            node2 = node1.next</span><br><span class="line">            lat = node2.next</span><br><span class="line">            <span class="comment">#变换顺序，重新赋值next，所以都是给next赋值。</span></span><br><span class="line">            pre.next = node2</span><br><span class="line">            node2.next = node1</span><br><span class="line">            node1.next = lat</span><br><span class="line"></span><br><span class="line">            pre = node1</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> h.next</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    head = createList()</span><br><span class="line">    printList(head)</span><br><span class="line">    res = Solution().swapPairs(head)</span><br><span class="line">    printList(res)</span><br></pre></td></tr></table></figure>
+
+<pre><code>1 --&gt;2 --&gt;3 --&gt;4 --&gt;NULL
+2 --&gt;1 --&gt;4 --&gt;3 --&gt;NULL</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/15/25.%20Reverse%20Nodes%20in%20k-Group/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2157,519 +2511,6 @@ hello world</code></pre><h3 id="装饰器用法实例"><a href="#装饰器用法
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/10/02%E4%B8%A8%E5%AD%A6%E4%B9%A0%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%E7%9A%84%E6%9C%80%E4%BD%B3%E8%B7%AF%E5%BE%84%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LvYang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LvYang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/10/02%E4%B8%A8%E5%AD%A6%E4%B9%A0%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%E7%9A%84%E6%9C%80%E4%BD%B3%E8%B7%AF%E5%BE%84%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F/" itemprop="url">02丨学习数据挖掘的最佳路径是什么？</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-10T23:15:07+08:00">
-                2019-12-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AE%9E%E6%88%9845%E8%AE%B2/" itemprop="url" rel="index">
-                    <span itemprop="name">数据分析实战45讲</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/12/10/02%E4%B8%A8%E5%AD%A6%E4%B9%A0%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%E7%9A%84%E6%9C%80%E4%BD%B3%E8%B7%AF%E5%BE%84%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/12/10/02%E4%B8%A8%E5%AD%A6%E4%B9%A0%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%E7%9A%84%E6%9C%80%E4%BD%B3%E8%B7%AF%E5%BE%84%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="数据挖掘，从知识清单开始"><a href="#数据挖掘，从知识清单开始" class="headerlink" title="数据挖掘，从知识清单开始"></a>数据挖掘，从知识清单开始</h3><p>我们第一天学开车的时候一定不会直接上路，而是要你先学习基本的知识，然后再进行上车模拟。</p>
-<p>只有对知识有全面的认知，才能确保在以后的工作中即使遇到了问题，也可以快速定位问题所在，然后找方法去对应和解决。</p>
-<p>所以我列了一个数据挖掘的知识清单，分别是数据挖掘的基本流程、十大算法和数学原理，以此来开启我们的学习之旅。</p>
-<h3 id="数据挖掘的基本流程"><a href="#数据挖掘的基本流程" class="headerlink" title="数据挖掘的基本流程"></a>数据挖掘的基本流程</h3><p>在正式讲数据挖掘知识清单之前，我先和你聊聊数据挖掘的基本流程。</p>
-<p>数据挖掘的过程可以分成以下 6 个步骤。</p>
-<ol>
-<li><p>商业理解：数据挖掘不是我们的目的，我们的目的是更好地帮助业务，所以第一步我们要从商业的角度理解项目需求，在这个基础上，再对数据挖掘的目标进行定义。</p>
-</li>
-<li><p>数据理解：尝试收集部分数据，然后对数据进行探索，包括数据描述、数据质量验证等。这有助于你对收集的数据有个初步的认知。</p>
-</li>
-<li><p>数据准备：开始收集数据，并对数据进行清洗、数据集成等操作，完成数据挖掘前的准备工作。</p>
-</li>
-<li><p>模型建立：选择和应用各种数据挖掘模型，并进行优化，以便得到更好的分类结果。</p>
-</li>
-<li><p>模型评估：对模型进行评价，并检查构建模型的每个步骤，确认模型是否实现了预定的商业目标。</p>
-</li>
-<li><p>上线发布：模型的作用是从数据中找到金矿，也就是我们所说的“知识”，获得的知识需要转化成用户可以使用的方式，呈现的形式可以是一份报告，也可以是实现一个比较复杂的、可重复的数据挖掘过程。数据挖掘结果如果是日常运营的一部分，那么后续的监控和维护就会变得重要。</p>
-</li>
-</ol>
-<h3 id="数据挖掘的十大算法"><a href="#数据挖掘的十大算法" class="headerlink" title="数据挖掘的十大算法"></a>数据挖掘的十大算法</h3><p>为了进行数据挖掘任务，数据科学家们提出了各种模型，在众多的数据挖掘模型中，国际权威的学术组织 ICDM （the IEEE International Conference on Data Mining）评选出了十大经典的算法。</p>
-<p>按照不同的目的，我可以将这些算法分成四类，以便你更好的理解。</p>
-<p><strong>l 分类算法：</strong>C4.5，朴素贝叶斯（Naive Bayes），SVM，KNN，Adaboost，CART</p>
-<p><strong>l 聚类算法：</strong>K-Means，EM</p>
-<p><strong>l 关联分析：</strong>Apriori</p>
-<p><strong>l 连接分析：</strong>PageRank</p>
-<ol>
-<li>C4.5</li>
-</ol>
-<p>C4.5 算法是得票最高的算法，可以说是十大算法之首。C4.5 是决策树的算法，它创造性地在决策树构造过程中就进行了剪枝，并且可以处理连续的属性，也能对不完整的数据进行处理。它可以说是决策树分类中，具有里程碑式意义的算法。</p>
-<ol start="2">
-<li>朴素贝叶斯（Naive Bayes）</li>
-</ol>
-<p>朴素贝叶斯模型是基于概率论的原理，它的思想是这样的：对于给出的未知物体想要进行分类，就需要求解在这个未知物体出现的条件下各个类别出现的概率，哪个最大，就认为这个未知物体属于哪个分类。</p>
-<ol start="3">
-<li>SVM</li>
-</ol>
-<p>SVM 的中文叫支持向量机，英文是 Support Vector Machine，简称 SVM。SVM 在训练中建立了一个超平面的分类模型。如果你对超平面不理解，没有关系，我在后面的算法篇会给你进行介绍。</p>
-<ol start="4">
-<li>KNN</li>
-</ol>
-<p>KNN 也叫 K 最近邻算法，英文是 K-Nearest Neighbor。所谓 K 近邻，就是每个样本都可以用它最接近的 K 个邻居来代表。如果一个样本，它的 K 个最接近的邻居都属于分类 A，那么这个样本也属于分类 A。</p>
-<ol start="5">
-<li>AdaBoost</li>
-</ol>
-<p>Adaboost 在训练中建立了一个联合的分类模型。boost 在英文中代表提升的意思，所以 Adaboost 是个构建分类器的提升算法。它可以让我们多个弱的分类器组成一个强的分类器，所以 Adaboost 也是一个常用的分类算法。</p>
-<ol start="6">
-<li>CART</li>
-</ol>
-<p>CART 代表分类和回归树，英文是 Classification and Regression Trees。像英文一样，它构建了两棵树：一棵是分类树，另一个是回归树。和 C4.5 一样，它是一个决策树学习方法。</p>
-<ol start="7">
-<li>Apriori</li>
-</ol>
-<p>Apriori 是一种挖掘关联规则（association rules）的算法，它通过挖掘频繁项集（frequent item sets）来揭示物品之间的关联关系，被广泛应用到商业挖掘和网络安全等领域中。频繁项集是指经常出现在一起的物品的集合，关联规则暗示着两种物品之间可能存在很强的关系。</p>
-<ol start="8">
-<li>K-Means</li>
-</ol>
-<p>K-Means 算法是一个聚类算法。你可以这么理解，最终我想把物体划分成 K 类。假设每个类别里面，都有个“中心点”，即意见领袖，它是这个类别的核心。现在我有一个新点要归类，这时候就只要计算这个新点与 K 个中心点的距离，距离哪个中心点近，就变成了哪个类别。</p>
-<ol start="9">
-<li>EM</li>
-</ol>
-<p>EM 算法也叫最大期望算法，是求参数的最大似然估计的一种方法。原理是这样的：假设我们想要评估参数 A 和参数 B，在开始状态下二者都是未知的，并且知道了 A 的信息就可以得到 B 的信息，反过来知道了 B 也就得到了 A。可以考虑首先赋予 A 某个初值，以此得到 B 的估值，然后从 B 的估值出发，重新估计 A 的取值，这个过程一直持续到收敛为止。</p>
-<p>EM 算法经常用于聚类和机器学习领域中。</p>
-<ol start="10">
-<li>PageRank</li>
-</ol>
-<p>PageRank 起源于论文影响力的计算方式，如果一篇文论被引入的次数越多，就代表这篇论文的影响力越强。同样 PageRank 被 Google 创造性地应用到了网页权重的计算中：当一个页面链出的页面越多，说明这个页面的“参考文献”越多，当这个页面被链入的频率越高，说明这个页面被引用的次数越高。基于这个原理，我们可以得到网站的权重划分。</p>
-<p>算法可以说是数据挖掘的灵魂，也是最精华的部分。这 10 个经典算法在整个数据挖掘领域中的得票最高的，后面的一些其他算法也基本上都是在这个基础上进行改进和创新。今天你先对十大算法有一个初步的了解，你只需要做到心中有数就可以了，具体内容不理解没有关系，后面我会详细给你进行讲解。</p>
-<h3 id="数据挖掘的数学原理"><a href="#数据挖掘的数学原理" class="headerlink" title="数据挖掘的数学原理"></a>数据挖掘的数学原理</h3><p>我说了这么多数据挖掘中的经典算法，但是如果你不了解概率论和数理统计，还是很难掌握算法的本质；如果你不懂线性代数，就很难理解矩阵和向量运作在数据挖掘中的价值；如果你没有最优化方法的概念，就对迭代收敛理解不深。所以说，想要更深刻地理解数据挖掘的方法，就非常有必要了解它后背的数学原理。</p>
-<ol>
-<li>概率论与数理统计</li>
-</ol>
-<p>概率论在我们上大学的时候，基本上都学过，不过大学里老师教的内容，偏概率的多一些，统计部分讲得比较少。在数据挖掘里使用到概率论的地方就比较多了。比如条件概率、独立性的概念，以及随机变量、多维随机变量的概念。</p>
-<p>很多算法的本质都与概率论相关，所以说概率论与数理统计是数据挖掘的重要数学基础。</p>
-<ol start="2">
-<li>线性代数</li>
-</ol>
-<p>向量和矩阵是线性代数中的重要知识点，它被广泛应用到数据挖掘中，比如我们经常会把对象抽象为矩阵的表示，一幅图像就可以抽象出来是一个矩阵，我们也经常计算特征值和特征向量，用特征向量来近似代表物体的特征。这个是大数据降维的基本思路。</p>
-<p>基于矩阵的各种运算，以及基于矩阵的理论成熟，可以帮我们解决很多实际问题，比如 PCA 方法、SVD 方法，以及 MF、NMF 方法等在数据挖掘中都有广泛的应用。</p>
-<ol start="3">
-<li>图论</li>
-</ol>
-<p>社交网络的兴起，让图论的应用也越来越广。人与人的关系，可以用图论上的两个节点来进行连接，节点的度可以理解为一个人的朋友数。我们都听说过人脉的六度理论，在 Facebook 上被证明平均一个人与另一个人的连接，只需要 3.57 个人。当然图论对于网络结构的分析非常有效，同时图论也在关系挖掘和图像分割中有重要的作用。</p>
-<ol start="4">
-<li>最优化方法</li>
-</ol>
-<p>最优化方法相当于机器学习中自我学习的过程，当机器知道了目标，训练后与结果存在偏差就需要迭代调整，那么最优化就是这个调整的过程。一般来说，这个学习和迭代的过程是漫长、随机的。最优化方法的提出就是用更短的时间得到收敛，取得更好的效果。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>今天我列了下学习数据挖掘你要掌握的知识清单，只有你对数据挖掘的流程、算法、原理有更深的理解，你才能在实际工作中更好地运用，我将在后面的章节中对它们进行一一介绍。</p>
-<ol>
-<li>基本流程<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">商业理解---数据理解---数据准备---模型建立---模型评估---上车心啊发布</span><br></pre></td></tr></table></figure></li>
-<li>十大算法<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">分类算法: c4.5,朴素贝叶斯,SVM,KNN, Adaboost, CART</span><br><span class="line">聚类算法: K-Means, EM</span><br><span class="line">关联分析: Apriori</span><br><span class="line">连接分析: PageRank</span><br></pre></td></tr></table></figure></li>
-<li>数学原理<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">概率论与数据分析, 线性代数, 图论, 最优化方法.</span><br></pre></td></tr></table></figure>
-
-
-</li>
-</ol>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/10/16%20%7C%20%E5%80%BC%E4%BC%A0%E9%80%92%EF%BC%8C%E5%BC%95%E7%94%A8%E4%BC%A0%E9%80%92or%E5%85%B6%E4%BB%96%EF%BC%8CPython%E9%87%8C%E5%8F%82%E6%95%B0%E6%98%AF%E5%A6%82%E4%BD%95%E4%BC%A0%E9%80%92%E7%9A%84%EF%BC%9F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LvYang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LvYang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/10/16%20%7C%20%E5%80%BC%E4%BC%A0%E9%80%92%EF%BC%8C%E5%BC%95%E7%94%A8%E4%BC%A0%E9%80%92or%E5%85%B6%E4%BB%96%EF%BC%8CPython%E9%87%8C%E5%8F%82%E6%95%B0%E6%98%AF%E5%A6%82%E4%BD%95%E4%BC%A0%E9%80%92%E7%9A%84%EF%BC%9F/" itemprop="url">16 | 值传递，引用传递or其他，Python里参数是如何传递的？</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-10T22:13:07+08:00">
-                2019-12-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
-                    <span itemprop="name">python核心技术与实战</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/12/10/16%20%7C%20%E5%80%BC%E4%BC%A0%E9%80%92%EF%BC%8C%E5%BC%95%E7%94%A8%E4%BC%A0%E9%80%92or%E5%85%B6%E4%BB%96%EF%BC%8CPython%E9%87%8C%E5%8F%82%E6%95%B0%E6%98%AF%E5%A6%82%E4%BD%95%E4%BC%A0%E9%80%92%E7%9A%84%EF%BC%9F/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/12/10/16%20%7C%20%E5%80%BC%E4%BC%A0%E9%80%92%EF%BC%8C%E5%BC%95%E7%94%A8%E4%BC%A0%E9%80%92or%E5%85%B6%E4%BB%96%EF%BC%8CPython%E9%87%8C%E5%8F%82%E6%95%B0%E6%98%AF%E5%A6%82%E4%BD%95%E4%BC%A0%E9%80%92%E7%9A%84%EF%BC%9F/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="什么是值传递和引用传递"><a href="#什么是值传递和引用传递" class="headerlink" title="什么是值传递和引用传递"></a>什么是值传递和引用传递</h3><p>如果你接触过其他的编程语言，比如 C/C++，很容易想到，常见的参数传递有 2 种：值传递和引用传递。所谓值传递，通常就是拷贝参数的值，然后传递给函数里的新变量。这样，原变量和新变量之间互相独立，互不影响。</p>
-<p>比如，我们来看下面的一段 C++ 代码：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#include &lt;iostream&gt;</span></span><br><span class="line">using namespace std;</span><br><span class="line"> </span><br><span class="line">// 交换 <span class="number">2</span> 个变量的值</span><br><span class="line">void swap(int x, int y) &#123;</span><br><span class="line">int temp;</span><br><span class="line">temp = x; // 交换 x 和 y 的值</span><br><span class="line"> x = y;</span><br><span class="line"> y = temp;</span><br><span class="line"> <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line">int main () &#123;</span><br><span class="line"> int a = <span class="number">1</span>;</span><br><span class="line"> int b = <span class="number">2</span>;</span><br><span class="line"> cout &lt;&lt; <span class="string">"Before swap, value of a :"</span> &lt;&lt; a &lt;&lt; endl;</span><br><span class="line"> cout &lt;&lt; <span class="string">"Before swap, value of b :"</span> &lt;&lt; b &lt;&lt; endl;</span><br><span class="line"> swap(a, b); </span><br><span class="line"> cout &lt;&lt; <span class="string">"After swap, value of a :"</span> &lt;&lt; a &lt;&lt; endl;</span><br><span class="line"> cout &lt;&lt; <span class="string">"After swap, value of b :"</span> &lt;&lt; b &lt;&lt; endl;</span><br><span class="line"> <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line">Before swap, value of a :<span class="number">1</span></span><br><span class="line">Before swap, value of b :<span class="number">2</span></span><br><span class="line">After swap, value of a :<span class="number">1</span></span><br><span class="line">After swap, value of b :<span class="number">2</span></span><br></pre></td></tr></table></figure>
-
-<p>这里的 swap() 函数，把 a 和 b 的值拷贝给了 x 和 y，然后再交换 x 和 y 的值。这样一来，x 和 y 的值发生了改变，但是 a 和 b 不受其影响，所以值不变。这种方式，就是我们所说的值传递。</p>
-<p>所谓引用传递，通常是指把参数的引用传给新的变量，这样，原变量和新变量就会指向同一块内存地址。如果改变了其中任何一个变量的值，那么另外一个变量也会相应地随之改变。</p>
-<p>还是拿我们刚刚讲到的 C++ 代码为例，上述例子中的 swap() 函数，如果改成下面的形式，声明引用类型的参数变量：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">void swap(int&amp; x, int&amp; y) &#123;</span><br><span class="line">   int temp;</span><br><span class="line">   temp = x; // 交换 x 和 y 的值</span><br><span class="line">   x = y;</span><br><span class="line">   y = temp;</span><br><span class="line">   <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment"># 那么输出的便是另一个结果：</span></span><br><span class="line">Before swap, value of a :<span class="number">1</span></span><br><span class="line">Before swap, value of b :<span class="number">2</span></span><br><span class="line">After swap, value of a :<span class="number">2</span></span><br><span class="line">After swap, value of b :<span class="number">1</span></span><br></pre></td></tr></table></figure>
-
-<p>原变量 a 和 b 的值被交换了，因为引用传递使得 a 和 x，b 和 y 一模一样，对 x 和 y 的任何改变必然导致了 a 和 b 的相应改变。</p>
-<p>不过，这是 C/C++ 语言中的特点。那么 Python 中，参数传递到底是如何进行的呢？它们到底属于值传递、引用传递，还是其他呢？</p>
-<p>在回答这个问题之前，让我们先来了解一下，Python 变量和赋值的基本原理。</p>
-<h3 id="Python-变量及其赋值"><a href="#Python-变量及其赋值" class="headerlink" title="Python 变量及其赋值"></a>Python 变量及其赋值</h3><p>我们首先来看，下面的 Python 代码示例：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">a = <span class="number">1</span></span><br><span class="line">b = a</span><br><span class="line">a = a + <span class="number">1</span></span><br><span class="line">print(<span class="string">"a value: &#123;&#125;"</span>.format(a))</span><br><span class="line">print(<span class="string">"b value: &#123;&#125;"</span>.format(b))</span><br></pre></td></tr></table></figure>
-
-<pre><code>a value: 2
-b value: 1</code></pre><p>这里首先将 1 赋值于 a，即 a 指向了 1 这个对象，如下面的流程图所示：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a--&gt;1</span><br></pre></td></tr></table></figure>
-
-<p>接着 b = a 则表示，让变量 b 也同时指向 1 这个对象。这里要注意，Python 里的对象可以被多个变量所指向或引用。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">a---|</span><br><span class="line">    |</span><br><span class="line">    1</span><br><span class="line">    |</span><br><span class="line">b---|</span><br></pre></td></tr></table></figure>
-
-<p>最后执行 a = a + 1。需要注意的是，Python 的数据类型，例如整型（int）、字符串（string）等等，是不可变的。所以，a = a + 1，并不是让 a 的值增加 1，而是表示重新创建了一个新的值为 2 的对象，并让 a 指向它。但是 b 仍然不变，仍然指向 1 这个对象。</p>
-<p>因此，最后的结果是，a 的值变成了 2，而 b 的值不变仍然是 1。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a ---&gt;2</span><br><span class="line">b ---&gt;1</span><br></pre></td></tr></table></figure>
-
-<p>通过这个例子你可以看到，这里的 a 和 b，开始只是两个指向同一个对象的变量而已，或者你也可以把它们想象成同一个对象的两个名字。简单的赋值 b = a，并不表示重新创建了新对象，只是让同一个对象被多个变量指向或引用。</p>
-<p>同时，指向同一个对象，也并不意味着两个变量就被绑定到了一起。如果你给其中一个变量重新赋值，并不会影响其他变量的值。</p>
-<p>明白了这个基本的变量赋值例子，我们再来看一个列表的例子：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">l1 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">l2 = l1</span><br><span class="line">l1.append(<span class="number">4</span>)</span><br><span class="line">print(l1,l2)</span><br></pre></td></tr></table></figure>
-
-<pre><code>[1, 2, 3, 4] [1, 2, 3, 4]</code></pre><p>同样的，我们首先让列表 l1 和 l2 同时指向了 [1, 2, 3] 这个对象。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">L1 -----------&gt;[1,2,3]</span><br><span class="line">                  ^</span><br><span class="line">                  |</span><br><span class="line">                  |</span><br><span class="line">L2 ----------------</span><br></pre></td></tr></table></figure>
-
-<p>由于列表是可变的，所以 l1.append(4) 不会创建新的列表，只是在原列表的末尾插入了元素 4，变成 [1, 2, 3, 4]。由于 l1 和 l2 同时指向这个列表，所以列表的变化会同时反映在 l1 和 l2 这两个变量上，那么，l1 和 l2 的值就同时变为了 [1, 2, 3, 4]。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">L1 -----------&gt;[1,2,3,4]</span><br><span class="line">                  ^</span><br><span class="line">                  |</span><br><span class="line">                  |</span><br><span class="line">L2 ----------------</span><br></pre></td></tr></table></figure>
-
-
-<p>另外，需要注意的是，Python 里的变量可以被删除，但是对象无法被删除。比如下面的代码：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">l = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="keyword">del</span> l</span><br></pre></td></tr></table></figure>
-
-
-<pre><code>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-6-96fed7891f25&gt; in &lt;module&gt;
-      1 l = [1, 2, 3]
-      2 del l
-----&gt; 3 print(l)
-
-
-NameError: name &apos;l&apos; is not defined</code></pre><p>del l 删除了 l 这个变量，从此以后你无法访问 l，但是对象 [1, 2, 3] 仍然存在。Python 程序运行时，其自带的垃圾回收系统会跟踪每个对象的引用。如果 [1, 2, 3] 除了 l 外，还在其他地方被引用，那就不会被回收，反之则会被回收。</p>
-<p>由此可见，在 Python 中：</p>
-<ul>
-<li>变量的赋值，只是表示让变量指向了某个对象，并不表示拷贝对象给变量；而一个对象，可以被多个变量所指向。</li>
-<li>可变对象（列表，字典，集合等等）的改变，会影响所有指向该对象的变量。</li>
-<li>对于不可变对象（字符串，整型，元祖等等），所有指向该对象的变量的值总是一样的，也不会改变。但是通过某些操作（+= 等等）更新不可变对象的值时，会返回一个新的对象。</li>
-<li>变量可以被删除，但是对象无法被删除。<h3 id="Python-函数的参数传递"><a href="#Python-函数的参数传递" class="headerlink" title="Python 函数的参数传递"></a>Python 函数的参数传递</h3>从上述 Python 变量的命名与赋值的原理讲解中，相信你能举一反三，大概猜出 Python 函数中参数是如何传递了吧？</li>
-</ul>
-<p>这里首先引用 Python 官方文档中的一段说明：</p>
-<blockquote>
-<p>“Remember that arguments are passed by assignment in Python. Since assignment just creates references to objects, there’s no alias between an argument name in the caller and callee, and so no call-by-reference per Se.”</p>
-</blockquote>
-<p>准确地说，Python 的参数传递是赋值传递 （pass by assignment），或者叫作对象的引用传递（pass by object reference）。Python 里所有的数据类型都是对象，所以参数传递时，只是让新变量与原变量指向相同的对象而已，并不存在值传递或是引用传递一说。</p>
-<p>比如，我们来看下面这个例子：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_func1</span><span class="params">(b)</span>:</span></span><br><span class="line">	b = <span class="number">2</span></span><br><span class="line"> </span><br><span class="line">a = <span class="number">1</span></span><br><span class="line">my_func1(a)</span><br><span class="line">print(a)</span><br></pre></td></tr></table></figure>
-
-<pre><code>1
-1</code></pre><p>这里的参数传递，使变量 a 和 b 同时指向了 1 这个对象。但当我们执行到 b = 2 时，系统会重新创建一个值为 2 的新对象，并让 b 指向它；而 a 仍然指向 1 这个对象。所以，a 的值不变，仍然为 1。</p>
-<p>那么对于上述例子的情况，是不是就没有办法改变 a 的值了呢？</p>
-<p>答案当然是否定的，我们只需稍作改变，让函数返回新变量，赋给 a。这样，a 就指向了一个新的值为 2 的对象，a 的值也因此变为 2。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_func2</span><span class="params">(b)</span>:</span></span><br><span class="line">	b = <span class="number">2</span></span><br><span class="line">	<span class="keyword">return</span> b</span><br><span class="line"> </span><br><span class="line">a = <span class="number">1</span></span><br><span class="line">a = my_func2(a)</span><br><span class="line">print(a)</span><br></pre></td></tr></table></figure>
-
-<pre><code>2</code></pre><p>不过，当可变对象当作参数传入函数里的时候，改变可变对象的值，就会影响所有指向它的变量。比如下面的例子：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_func3</span><span class="params">(l2)</span>:</span></span><br><span class="line">	l2.append(<span class="number">4</span>)</span><br><span class="line"> </span><br><span class="line">l1 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">my_func3(l1)</span><br><span class="line">print(l1)</span><br></pre></td></tr></table></figure>
-
-<pre><code>[1, 2, 3, 4]</code></pre><p>这里 l1 和 l2 先是同时指向值为 [1, 2, 3] 的列表。不过，由于列表可变，执行 append() 函数，对其末尾加入新元素 4 时，变量 l1 和 l2 的值也都随之改变了。</p>
-<p>但是，下面这个例子，看似都是给列表增加了一个新元素，却得到了明显不同的结果。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_func4</span><span class="params">(l2)</span>:</span></span><br><span class="line">	l2 = l2 + [<span class="number">4</span>]</span><br><span class="line"> </span><br><span class="line">l1 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">my_func4(l1)</span><br><span class="line">print(l1)</span><br></pre></td></tr></table></figure>
-
-<p>为什么 l1 仍然是 [1, 2, 3]，而不是 [1, 2, 3, 4] 呢？</p>
-<p>要注意，这里 l2 = l2 + [4]，表示创建了一个“末尾加入元素 4“的新列表，并让 l2 指向这个新的对象。这个过程与 l1 无关，因此 l1 的值不变。当然，同样的，如果要改变 l1 的值，我们就得让上述函数返回一个新列表，再赋予 l1 即可：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_func5</span><span class="params">(l2)</span>:</span></span><br><span class="line">	l2 = l2 + [<span class="number">4</span>]</span><br><span class="line">	<span class="keyword">return</span> l2</span><br><span class="line"> </span><br><span class="line">l1 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">l1 = my_func5(l1)</span><br><span class="line">print(l1)</span><br></pre></td></tr></table></figure>
-
-<p>这里你尤其要记住的是，改变变量和重新赋值的区别：</p>
-<ul>
-<li>my_func3() 中单纯地改变了对象的值，因此函数返回后，所有指向该对象的变量都会被改变；</li>
-<li>但 my_func4() 中则创建了新的对象，并赋值给一个本地变量，因此原变量仍然不变。<br>至于 my_func3() 和 my_func5() 的用法，两者虽然写法不同，但实现的功能一致。不过，在实际工作应用中，我们往往倾向于类似 my_func5() 的写法，添加返回语句。这样更简洁明了，不易出错。</li>
-</ul>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>今天，我们一起学习了 Python 的变量及其赋值的基本原理，并且解释了 Python 中参数是如何传递的。和其他语言不同的是，Python 中参数的传递既不是值传递，也不是引用传递，而是赋值传递，或者是叫对象的引用传递。</p>
-<p>需要注意的是，这里的赋值或对象的引用传递，不是指向一个具体的内存地址，而是指向一个具体的对象。</p>
-<ul>
-<li>如果对象是可变的，当其改变时，所有指向这个对象的变量都会改变。</li>
-<li>如果对象不可变，简单的赋值只能改变其中一个变量的值，其余变量则不受影响。<br>清楚了这一点，如果你想通过一个函数来改变某个变量的值，通常有两种方法。一种是直接将可变数据类型（比如列表，字典，集合）当作参数传入，直接在其上修改；第二种则是创建一个新变量，来保存修改后的值，然后将其返回给原变量。在实际工作中，我们更倾向于使用后者，因为其表达清晰明了，不易出错。</li>
-</ul>
-<h3 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h3><p>最后，我为你留下了两道思考题。</p>
-<p>第一个问题，下面的代码中, l1、l2 和 l3 都指向同一个对象吗？</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">l1 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">l2 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">l3 = l2</span><br><span class="line"><span class="comment">## 不是一个对象.</span></span><br><span class="line">l2 <span class="keyword">is</span> l3</span><br></pre></td></tr></table></figure>
-
-
-
-
-<pre><code>False</code></pre><p>第二个问题，下面的代码中，打印 d 最后的输出是什么呢？</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(d)</span>:</span></span><br><span class="line">    d[<span class="string">'a'</span>] = <span class="number">10</span></span><br><span class="line">    d[<span class="string">'b'</span>] = <span class="number">20</span></span><br><span class="line">    d = &#123;<span class="string">'a'</span>: <span class="number">1</span>, <span class="string">'b'</span>: <span class="number">2</span>&#125;</span><br><span class="line">d=&#123;&#125;</span><br><span class="line">func(d)</span><br><span class="line">print(d)</span><br><span class="line"><span class="comment"># d = &#123;'a': 10, 'b': 20&#125;</span></span><br></pre></td></tr></table></figure>
-
-<pre><code>{&apos;a&apos;: 10, &apos;b&apos;: 20}</code></pre><h3 id="自我总结"><a href="#自我总结" class="headerlink" title="自我总结"></a>自我总结</h3><p>需要注意的是，这里的赋值或对象的引用传递，不是指向一个具体的内存地址，而是指向一个具体的对象。</p>
-<ul>
-<li><p>如果对象是可变的，当其改变时，所有指向这个对象的变量都会改变。</p>
-</li>
-<li><p>如果对象不可变，简单的赋值只能改变其中一个变量的值，其余变量则不受影响。</p>
-</li>
-<li><p>因为实际工作中都是直接return, 创建新的变量,所以感触不大.</p>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2720,7 +2561,7 @@ NameError: name &apos;l&apos; is not defined</code></pre><p>del l 删除了 l �
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">51</span>
+                  <span class="site-state-item-count">53</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
