@@ -258,6 +258,245 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/03/34%20%7C%20RESTful%20&%20Socket%E6%90%AD%E5%BB%BA%E4%BA%A4%E6%98%93%E6%89%A7%E8%A1%8C%E5%B1%82%E6%A0%B8%E5%BF%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/03/34%20%7C%20RESTful%20&%20Socket%E6%90%AD%E5%BB%BA%E4%BA%A4%E6%98%93%E6%89%A7%E8%A1%8C%E5%B1%82%E6%A0%B8%E5%BF%83/" itemprop="url">34 | RESTful & Socket搭建交易执行层核心</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-03T20:10:07+08:00">
+                2020-01-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
+                    <span itemprop="name">python核心技术与实战</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/01/03/34%20%7C%20RESTful%20&%20Socket%E6%90%AD%E5%BB%BA%E4%BA%A4%E6%98%93%E6%89%A7%E8%A1%8C%E5%B1%82%E6%A0%B8%E5%BF%83/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/01/03/34%20%7C%20RESTful%20&%20Socket%E6%90%AD%E5%BB%BA%E4%BA%A4%E6%98%93%E6%89%A7%E8%A1%8C%E5%B1%82%E6%A0%B8%E5%BF%83/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>从这节课开始，我们将实打实地从代码出发，一步步设计出一套清晰完整、易于理解的量化交易系统。</p>
+<p>一个量化交易系统，可以说是一个黑箱。这个黑箱连接交易所获取到的数据，通过策略运算，然后再连接交易所进行下单操作。正如我们在输入输出那节课说的那样，黑箱的特性是输入和输出。每一个设计网络交互的同学，都需要在大脑中形成清晰的交互状态图：</p>
+<p>知道包是怎样在网络间传递的；<br>知道每一个节点是如何处理不同的输入包，然后输出并分发给下一级的。<br>在你搞不明白的时候，可以先在草稿纸上画出交互拓扑图，标注清楚每个节点的输入和输出格式，然后想清楚网络是怎么流动的。这一点，对网络编程至关重要。</p>
+<p>现在，我假设你对网络编程只有很基本的了解。所以接下来，我将先从 REST 的定义讲起，然后过渡到具体的交互方式——如何通过 Python 和交易所进行交互，从而执行下单、撤单、查询订单等网络交互方式。</p>
+<h3 id="REST-简介"><a href="#REST-简介" class="headerlink" title="REST 简介"></a>REST 简介</h3><p>什么是 REST API？什么是 Socket？有过网络编程经验的同学，一定对这两个词汇不陌生。</p>
+<p>REST 的全称是表征层状态转移（REpresentational State Transfer），本意是指一种操作资源方法。不过，你不用纠结于这个绕口的名字。换种方式来说，REST 的实质可以理解为：通过 URL 定位资源，用 GET、POST、PUT、DELETE 等动词来描述操作。而满足 REST 要求的接口，就被称为 RESTful 的接口。</p>
+<p>为了方便你更容易理解这些概念，这里我举个例子来类比。小明同学不是很聪明但很懂事，每天会在他的妈妈下班回来后给妈妈泡茶。刚开始，他的妈妈会发出这样的要求：</p>
+<p>这里的“茶”就是资源，“厨房的茶”就是资源的地址（URI）；“泡”是动词；后面的要求，都是接口参数。这样的一个接口，就是小明提供的一个 REST 接口。</p>
+<p>如果小明是一台机器，那么解析这个请求就会非常容易；而我们作为维护者，查看小明的代码也很简单。当小明把这个接口暴露到网上时，这就是一个 RESTful 的接口。</p>
+<p>总的来说，RESTful 接口通常以 HTTP GET 和 POST 形式出现。但并非所有的 GET、POST 请求接口，都是 RESTful 的接口。</p>
+<p>这话可能有些拗口，我们举个例子来看。上节课中，我们获取了 Gemini 交易所中，BTC 对 USD 价格的 ticker 接口：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET https://api.gemini.com/v1/pubticker/btcusd</span><br></pre></td></tr></table></figure>
+
+<p>这里的“GET“是动词，后边的 URI 是“Ticker“这个资源的地址。所以，这是一个 RESTful 的接口。</p>
+<p>但下面这样的接口，就不是一个严格的 RESTful 接口：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">POST https://api.restful.cn/accounts/delete/:username</span><br></pre></td></tr></table></figure>
+
+<p>因为 URI 中包含动词“delete”（删除），所以这个 URI 并不是指向一个资源。如果要修改成严格的 RESTful 接口，我们可以把它改成下面这样：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DELETE https://api.rest.cn/accounts/:username</span><br></pre></td></tr></table></figure>
+
+<p>然后，我们带着这个观念去看 Gemini 的取消订单接口：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">POST https://api.gemini.com/v1/order/cancel</span><br></pre></td></tr></table></figure>
+
+<p>注：Private API Invocation 的网址链接为<a href="https://docs.gemini.com/rest-api/#private-api-invocation" target="_blank" rel="noopener">https://docs.gemini.com/rest-api/#private-api-invocation</a></p>
+<p>你会发现，这个接口不够“RESTful”的地方有：</p>
+<ul>
+<li>动词设计不准确，接口使用“POST”而不是重用 HTTP 动词“DELETE”；</li>
+<li>URI 里包含动词 cancel；</li>
+<li>ID 代表的订单是资源，但订单 ID 是放在参数列表而不是URI里的，因此 URI 并没有指向资源。</li>
+</ul>
+<p>所以严格来说，这不是一个 RESTful 的接口。</p>
+<p>此外，如果我们去检查 Gemini 的其他私有接口（Private，私有接口是指需要附加身份验证信息才能访问的接口），我们会发现，那些接口的设计都不是严格 RESTful 的。不仅如此，大部分的交易所，比如 Bitmex、Bitfinex、OKCoin 等等，它们提供的“REST 接口”，也都不是严格 RESTful 的。这些接口之所以还能被称为“REST 接口”，是因为他们大部分满足了 REST 接口的另一个重要要求：无状态。</p>
+<p>无状态的意思是，每个 REST 请求都是独立的，不需要服务器在会话（Session）中缓存中间状态来完成这个请求。简单来说，如果服务器 A 接收到请求的时候宕机了，而此时把这个请求发送给交易所的服务器 B，也能继续完成，那么这个接口就是无状态的。</p>
+<p>这里，我再给你举一个简单的有状态的接口的例子。服务器要求，在客户端请求取消订单的时候，必须发送两次不一样的 HTTP 请求。并且，第一次发送让服务器“等待取消”；第二次发送“确认取消”。那么，就算这个接口满足了 RESTful 的动词、资源分离原则，也不是一个 REST 接口。</p>
+<p>当然，对于交易所的 REST 接口，你并不需要过于纠结“RESTful”这个概念，否则很容易就被这些名词给绕晕了。你只需要把握住最核心的一点：一个 HTTP 请求完成一次完整操作。</p>
+<h3 id="交易所-API-简介"><a href="#交易所-API-简介" class="headerlink" title="交易所 API 简介"></a>交易所 API 简介</h3><p>现在，你对 REST 和 Web Socket 应该有一个大致了解了吧。接下来，我们就开始做点有意思的事情。</p>
+<p>首先，我来介绍一下交易所是什么。区块链交易所是个撮合交易平台： 它兼容了传统撮合规则撮合引擎，将资金托管和交割方式替换为区块链。数字资产交易所，则是一个中心化的平台，通过 Web 页面或 PC、手机客户端的形式，让用户将数字资产充值到指定钱包地址（交易所创建的钱包），然后在平台挂买单、卖单以实现数字资产之间的兑换。</p>
+<p>通俗来说，交易所就是一个买和卖的菜市场。有人在摊位上大声喊着：“二斤羊肉啊，二斤羊肉，四斤牛肉来换！”这种人被称为 maker（挂单者）。有的人则游走于不同摊位，不动声色地掏出两斤牛肉，顺手拿走一斤羊肉。这种人被称为 taker（吃单者）。</p>
+<p>交易所存在的意义，一方面是为 maker 和 taker 提供足够的空间活动；另一方面，让一个名叫撮合引擎的玩意儿，尽可能地把单子撮合在一起，然后收取一定比例的保护费…啊不对，是手续费，从而保障游戏继续进行下去。</p>
+<p>市场显然是个很伟大的发明，这里我们就不进行更深入的哲学讨论了。</p>
+<p>然后，我再来介绍一个叫做 Gemini 的交易所。Gemini，双子星交易所，全球首个获得合法经营许可的、首个推出期货合约的、专注于撮合大宗交易的数字货币交易所。Gemini 位于纽约，是一家数字货币交易所和托管机构，允许客户交易和存储数字资产，并直接受纽约州金融服务部门（NYDFS）的监管。</p>
+<p>Gemini 的界面清晰，API 完整而易用，更重要的是，还提供了完整的测试网络，也就是说，功能和正常的 Gemini 完全一样。但是他家的交易采用虚拟币，非常方便从业者在平台上进行对接测试。</p>
+<p>另一个做得很好的交易所，是 Bitmex，他家的 API UI 界面和测试网络也是币圈一流。不过，鉴于这家是期货交易所，对于量化初学者来说有一定的门槛，我们还是选择 Gemini 更方便一些。</p>
+<p>在进入正题之前，我们最后再以比特币和美元之间的交易为例，介绍四个基本概念（orderbook 的概念这里就不介绍了，你也不用深究，你只需要知道比特币的价格是什么就行了）。</p>
+<ul>
+<li>买（buy）：用美元买入比特币的行为。</li>
+<li>卖（sell）：用比特币换取美元的行为。</li>
+<li>市价单（market order）：给交易所一个方向（买或者卖）和一个数量，交易所把给定数量的美元（或者比特币）换成比特币（或者美元）的单子。</li>
+<li>限价单（limit order）：给交易所一个价格、一个方向（买或者卖）和一个数量，交易所在价格达到给定价格的时候，把给定数量的美元（或者比特币）换成比特币（或者美元）的单子。</li>
+</ul>
+<p>这几个概念都不难懂。其中，市价单和限价单，最大的区别在于，限价单多了一个给定价格。如何理解这一点呢？我们可以来看下面这个例子。</p>
+<p>大宝在某一天中午 12:00:00，告诉交易所，我要用一千美元买比特币。交易所收到消息，在 12:00:01 回复小明，现在你的账户多了 0.099 个比特币，少了 1000 美元，交易成功。这是一个市价买单。</p>
+<p>而小宝在某一天中午 11:59:00，告诉交易所，我要挂一个单子，数量为 0.1 比特币，价格为 1000 美元，低于这个价格不卖。交易所收到消息，在 11:59:01 告诉小强，挂单成功，你的账户余额中 0.1 比特币的资金被冻结。又过了一分钟，交易所告诉小强，你的单子被完全执行了（fully executed），现在你的账户多了 1000 美元，少了 0.1 个比特币。这就是一个限价卖单。</p>
+<p>（这里肯定有人发现不对了：貌似少了一部分比特币，到底去哪儿了呢？嘿嘿，你不妨自己猜猜看。）</p>
+<p>显然，市价单，在交给交易所后，会立刻得到执行，当然执行价格也并不受你的控制。它很快，但是也非常不安全。而限价单，则限定了交易价格和数量，安全性相对高很多。缺点呢，自然就是如果市场朝相反方向走，你挂的单子可能没有任何人去接，也就变成了干吆喝却没人买。因为我没有讲解 orderbook，所以这里的说辞不完全严谨，但是对于初学者理解今天的内容，已经够用了。</p>
+<p>储备了这么久的基础知识，想必你已经跃跃欲试了吧？下面，我们正式进入正题，手把手教你使用 API 下单。</p>
+<h3 id="手把手教你使用-API-下单"><a href="#手把手教你使用-API-下单" class="headerlink" title="手把手教你使用 API 下单"></a>手把手教你使用 API 下单</h3><p>手动挂单显然太慢，也不符合量化交易的初衷。我们就来看看如何用代码实现自动化下单吧。</p>
+<p>第一步，你需要做的是，注册一个 Gemini Sandbox 账号。请放心，这个测试账号不需要你充值任何金额，注册后即送大量虚拟现金。这口吻是不是听着特像网游宣传语，接下来就是“快来贪玩蓝月里找我吧”？哈哈，不过这个设定确实如此，所以赶紧来注册一个吧。</p>
+<p>注册后，为了满足好奇，你可以先尝试着使用 web 界面自行下单。不过，事实上，未解锁的情况下是无法正常下单的，因此这样尝试并没啥太大意义。</p>
+<p>所以第二步，我们需要来配置 API Key。User Settings，API Settings，然后点 GENERATE A NEW ACCOUNT API KEY.，记下 Key 和 Secret 这两串字符。因为窗口一旦消失，这两个信息就再也找不到了，需要你重新生成。</p>
+<p>配置到此结束。接下来，我们来看具体实现。</p>
+<p>先强调一点，在量化系统开发的时候，你的心中一定要有清晰的数据流图。下单逻辑是一个很简单的 RESTful 的过程，和你在网页操作的一样，构造你的请求订单、加密请求，然后 post 给 gemini 交易所即可。</p>
+<p>不过，因为涉及到的知识点较多，带你一步一步从零来写代码显然不太现实。所以，我们采用“先读懂后记忆并使用”的方法来学，下面即为这段代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">import</span> hmac</span><br><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"> </span><br><span class="line">base_url = <span class="string">"https://api.sandbox.gemini.com"</span></span><br><span class="line">endpoint = <span class="string">"/v1/order/new"</span></span><br><span class="line">url = base_url + endpoint</span><br><span class="line"> </span><br><span class="line">gemini_api_key = <span class="string">"account-zmidXEwP72yLSSybXVvn"</span></span><br><span class="line">gemini_api_secret = <span class="string">"375b97HfE7E4tL8YaP3SJ239Pky9"</span>.encode()</span><br><span class="line"> </span><br><span class="line">t = datetime.datetime.now()</span><br><span class="line">payload_nonce = str(int(time.mktime(t.timetuple())*<span class="number">1000</span>))</span><br><span class="line"> </span><br><span class="line">payload = &#123;</span><br><span class="line">   <span class="string">"request"</span>: <span class="string">"/v1/order/new"</span>,</span><br><span class="line">   <span class="string">"nonce"</span>: payload_nonce,</span><br><span class="line">   <span class="string">"symbol"</span>: <span class="string">"btcusd"</span>,</span><br><span class="line">   <span class="string">"amount"</span>: <span class="string">"5"</span>,</span><br><span class="line">   <span class="string">"price"</span>: <span class="string">"3633.00"</span>,</span><br><span class="line">   <span class="string">"side"</span>: <span class="string">"buy"</span>,</span><br><span class="line">   <span class="string">"type"</span>: <span class="string">"exchange limit"</span>,</span><br><span class="line">   <span class="string">"options"</span>: [<span class="string">"maker-or-cancel"</span>]</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">encoded_payload = json.dumps(payload).encode()</span><br><span class="line">b64 = base64.b64encode(encoded_payload)</span><br><span class="line">signature = hmac.new(gemini_api_secret, b64, hashlib.sha384).hexdigest()</span><br><span class="line"> </span><br><span class="line">request_headers = &#123;</span><br><span class="line">    <span class="string">'Content-Type'</span>: <span class="string">"text/plain"</span>,</span><br><span class="line">    <span class="string">'Content-Length'</span>: <span class="string">"0"</span>,</span><br><span class="line">    <span class="string">'X-GEMINI-APIKEY'</span>: gemini_api_key,</span><br><span class="line">    <span class="string">'X-GEMINI-PAYLOAD'</span>: b64,</span><br><span class="line">    <span class="string">'X-GEMINI-SIGNATURE'</span>: signature,</span><br><span class="line">    <span class="string">'Cache-Control'</span>: <span class="string">"no-cache"</span></span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">response = requests.post(url,</span><br><span class="line">                         data=<span class="literal">None</span>,</span><br><span class="line">                         headers=request_headers)</span><br><span class="line"> </span><br><span class="line">new_order = response.json()</span><br><span class="line">print(new_order)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="comment">########## 输出 ##########</span></span><br><span class="line"> </span><br><span class="line">&#123;<span class="string">'order_id'</span>: <span class="string">'239088767'</span>, <span class="string">'id'</span>: <span class="string">'239088767'</span>, <span class="string">'symbol'</span>: <span class="string">'btcusd'</span>, <span class="string">'exchange'</span>: <span class="string">'gemini'</span>, <span class="string">'avg_execution_price'</span>: <span class="string">'0.00'</span>, <span class="string">'side'</span>: <span class="string">'buy'</span>, <span class="string">'type'</span>: <span class="string">'exchange limit'</span>, <span class="string">'timestamp'</span>: <span class="string">'1561956976'</span>, <span class="string">'timestampms'</span>: <span class="number">1561956976535</span>, <span class="string">'is_live'</span>: <span class="literal">True</span>, <span class="string">'is_cancelled'</span>: <span class="literal">False</span>, <span class="string">'is_hidden'</span>: <span class="literal">False</span>, <span class="string">'was_forced'</span>: <span class="literal">False</span>, <span class="string">'executed_amount'</span>: <span class="string">'0'</span>, <span class="string">'remaining_amount'</span>: <span class="string">'5'</span>, <span class="string">'options'</span>: [<span class="string">'maker-or-cancel'</span>], <span class="string">'price'</span>: <span class="string">'3633.00'</span>, <span class="string">'original_amount'</span>: <span class="string">'5'</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们来深入看一下这段代码。</p>
+<p>RESTful 的 POST 请求，通过 requests.post 来实现。post 接受三个参数，url、data 和 headers。</p>
+<p>这里的 url 等价于 <a href="https://api.sandbox.gemini.com/v1/order/new，但是在代码中分两部分写。第一部分是交易所" target="_blank" rel="noopener">https://api.sandbox.gemini.com/v1/order/new，但是在代码中分两部分写。第一部分是交易所</a> API 地址；第二部分，以斜杠开头，用来表示统一的 API endpoint。我们也可以在其他交易所的 API 中看到类似的写法，两者连接在一起，就构成了最终的 url。</p>
+<p>而接下来大段命令的目的，是为了构造 request_headers。</p>
+<p>这里我简单说一下 HTTP request，这是互联网中基于 TCP 的基础协议。HTTP 协议是 Hyper Text Transfer Protocol（超文本传输协议）的缩写，用于从万维网（WWW:World Wide Web ）服务器传输超文本到本地浏览器的传送协议。而 TCP（Transmission Control Protocol）则是面向连接的、可靠的、基于字节流的传输层通信协议。</p>
+<p>多提一句，如果你开发网络程序，建议利用闲暇时间认真读一读《计算机网络：自顶向下方法》这本书，它也是国内外计算机专业必修课中广泛采用的课本之一。一边学习，一边应用，对于初学者的能力提升是全面而充分的。</p>
+<p>回到 HTTP，它的主要特点是，连接简单、灵活，可以使用“简单请求，收到回复，然后断开连接”的方式，也是一种无状态的协议，因此充分符合 RESTful 的思想。</p>
+<p>HTTP 发送需要一个请求头（request header），也就是代码中的 request_headers，用 Python 的语言表示，就是一个 str 对 str 的字典。</p>
+<p>这个字典里，有一些字段有特殊用途， ‘Content-Type’: “text/plain” 和 ‘Content-Length’: “0” 描述 Content 的类型和长度，这里的 Content 对应于参数 data。但是 Gemini 这里的 request 的 data 没有任何用处，因此长度为 0。</p>
+<p>还有一些其他字段，例如 ‘keep-alive’ 来表示连接是否可持续化等，你也可以适当注意一下。要知道，网络编程很多 bug 都会出现在不起眼的细节之处。</p>
+<p>继续往下走看代码。payload 是一个很重要的字典，它用来存储下单操作需要的所有的信息，也就是业务逻辑信息。这里我们可以下一个 limit buy，限价买单，价格为 3633 刀。</p>
+<p>另外，请注意 nonce，这是个很关键并且在网络通信中很常见的字段。</p>
+<p>因为网络通信是不可靠的，一个信息包有可能会丢失，也有可能重复发送，在金融操作中，这两者都会造成很严重的后果。丢包的话，我们重新发送就行了；但是重复的包，我们需要去重。虽然 TCP 在某种程度上可以保证，但为了在应用层面进一步减少错误发生的机会，Gemini 交易所要求所有的通信 payload 必须带有 nonce。</p>
+<p>nonce 是个单调递增的整数。当某个后来的请求的 nonce，比上一个成功收到的请求的 nouce 小或者相等的时候，Gemini 便会拒绝这次请求。这样一来，重复的包就不会被执行两次了。另一方面，这样也可以在一定程度上防止中间人攻击：</p>
+<ul>
+<li>一则是因为 nonce 的加入，使得加密后的同样订单的加密文本完全混乱；</li>
+<li>二则是因为，这会使得中间人无法通过“发送同样的包来构造重复订单“进行攻击。</li>
+</ul>
+<p>这样的设计思路是不是很巧妙呢？这就相当于每个包都增加了一个身份识别，可以极大地提高安全性。希望你也可以多注意，多思考一下这些巧妙的用法。</p>
+<p>接下来的代码就很清晰了。我们要对 payload 进行 base64 和 sha384 算法非对称加密，其中 gemini_api_secret 为私钥；而交易所存储着公钥，可以对你发送的请求进行解密。最后，代码再将加密后的请求封装到 request_headers 中，发送给交易所，并收到 response，这个订单就完成了。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这节课我们介绍了什么是 RESTFul API，带你了解了交易所的 RESTFul API 是如何工作的，以及如何通过 RESTFul API 来下单。同时，我简单讲述了网络编程中的一些技巧操作，希望你在网络编程中要注意思考每一个细节，尽可能在写代码之前，对业务逻辑和具体的技术细节有足够清晰的认识。</p>
+<p>下一节，我们同样将从 Web Socket 的定义开始，讲解量化交易中数据模块的具体实现。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/02/33%20%7C%20%E5%B8%A6%E4%BD%A0%E5%88%9D%E6%8E%A2%E9%87%8F%E5%8C%96%E4%B8%96%E7%95%8C/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2425,181 +2664,6 @@ NameError: name &apos;foo&apos; is not defined</code></pre><p>而这四行 bytec
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/15/142.%20Linked%20List%20Cycle%20II/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LvYang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LvYang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/15/142.%20Linked%20List%20Cycle%20II/" itemprop="url">142. Linked List Cycle II</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-15T16:15:07+08:00">
-                2019-12-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/leetcode/" itemprop="url" rel="index">
-                    <span itemprop="name">leetcode</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/12/15/142.%20Linked%20List%20Cycle%20II/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/12/15/142.%20Linked%20List%20Cycle%20II/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="中文"><a href="#中文" class="headerlink" title="中文"></a>中文</h3><p>给定一个链表，返回链表开始入环的第一个节点。 如果链表无环，则返回 null。</p>
-<p>为了表示给定链表中的环，我们使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。 如果 pos 是 -1，则在该链表中没有环。</p>
-<p>说明：不允许修改给定的链表。</p>
-<p>示例 1：</p>
-<p>输入：head = [3,2,0,-4], pos = 1<br>输出：tail connects to node index 1<br>解释：链表中有一个环，其尾部连接到第二个节点。</p>
-<p>示例 2：</p>
-<p>输入：head = [1,2], pos = 0<br>输出：tail connects to node index 0<br>解释：链表中有一个环，其尾部连接到第一个节点。</p>
-<p>示例 3：</p>
-<p>输入：head = [1], pos = -1<br>输出：no cycle<br>解释：链表中没有环。</p>
-<h3 id="英文"><a href="#英文" class="headerlink" title="英文"></a>英文</h3><p>Given a linked list, return the node where the cycle begins. If there is no cycle, return null.</p>
-<p>To represent a cycle in the given linked list, we use an integer pos which represents the position (0-indexed) in the linked list where tail connects to. If pos is -1, then there is no cycle in the linked list.</p>
-<p>Note: Do not modify the linked list.</p>
-<p>Example 1:</p>
-<p>Input: head = [3,2,0,-4], pos = 1<br>Output: tail connects to node index 1<br>Explanation: There is a cycle in the linked list, where tail connects to the second node.</p>
-<p>Example 2:</p>
-<p>Input: head = [1,2], pos = 0<br>Output: tail connects to node index 0<br>Explanation: There is a cycle in the linked list, where tail connects to the first node.</p>
-<p>Example 3:</p>
-<p>Input: head = [1], pos = -1<br>Output: no cycle<br>Explanation: There is no cycle in the linked list.</p>
-<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>我们建立两个指针，一个slow一个fast，我们令移动速度关系为Vfast=2∗VslowV_{fast}=2<em>V_{slow}V<br>fast<br>​<br> =2∗V<br>slow<br>​<br> ，我们假设环的长度为Vslow∗timeV_{slow}</em>timeV<br>slow<br>​<br> ∗time的倍数k，如果此时slow和fast都在环内的话，那么在一定时间内两者必定可以相遇（使用相对速度很好理解）。如果此时slow的起点是在环的初始点（例如前面例子中的3），那么fast和slow最后一定会在起点相遇（因为Vslow∗time∗k%VslowV_{slow}<em>time</em>k%V_{slow}V<br>slow<br>​<br> ∗time∗k%V<br>slow<br>​<br> 一定为0，其中后面的VslowV_{slow}V<br>slow<br>​<br> 为相对速度）。我们现在的问题就变成了如何判断slow在环的初始点，这也非常简单，我们再建立一个entry指针，当slow==fast的时候，我们判断slow==entry，如果是的话，那么entry即为环的初始点，否则的话我们将entry++;slow++;，判断下一个位置是不是环的起始点。</p>
-<p>此处还有一个小问题，如果slow和fast不是在环内会怎么样？我们前面已经说明了如果slow和fast的起始点在环的初始点，那么最后一定会在这个点相交。那么我们不妨假设slow和fast在环的初始点前Vslow∗time∗xV_{slow}<em>time</em>xV<br>slow<br>​<br> ∗time∗x距离处（entry固定于此），那么我们slow和fast最后相交位置也一定距离环的起始点Vslow∗time∗xV_{slow}<em>time</em>xV<br>slow<br>​<br> ∗time∗x（证明同之前）。又我们entry和slow的前进速度相同，所以它俩最后一定会交于环的起始点</p>
-<ul>
-<li>如果相遇点不是开头。是在环内，相遇点距离环起始点，和链表开头到环开始点一样点距离。 从链表开头next需要点步数和相遇点到环开始点步数一样。</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">detectCycle</span><span class="params">(self, head)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :type head: ListNode</span></span><br><span class="line"><span class="string">        :rtype: ListNode</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">if</span> head == <span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">        fast, slow, entry = head, head, head</span><br><span class="line">        <span class="keyword">while</span> fast.next <span class="keyword">and</span> fast.next.next:</span><br><span class="line">            slow = slow.next</span><br><span class="line">            fast = fast.next.next</span><br><span class="line">            <span class="keyword">if</span> slow == fast:</span><br><span class="line">                <span class="keyword">while</span> slow != entry:</span><br><span class="line">                    slow = slow.next</span><br><span class="line">                    entry = entry.next</span><br><span class="line"></span><br><span class="line">                <span class="keyword">return</span> entry</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2650,7 +2714,7 @@ NameError: name &apos;foo&apos; is not defined</code></pre><p>而这四行 bytec
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-count">54</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

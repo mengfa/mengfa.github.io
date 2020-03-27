@@ -258,6 +258,212 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/10/206.%20Reverse%20Linked%20List/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/10/206.%20Reverse%20Linked%20List/" itemprop="url">206. Reverse Linked List</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-10T23:15:07+08:00">
+                2019-12-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/leetcode/" itemprop="url" rel="index">
+                    <span itemprop="name">leetcode</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/12/10/206.%20Reverse%20Linked%20List/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/12/10/206.%20Reverse%20Linked%20List/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Reverse a singly linked list.</p>
+<p><strong>Example:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: 1-&gt;2-&gt;3-&gt;4-&gt;5-&gt;NULL</span><br><span class="line">Output: 5-&gt;4-&gt;3-&gt;2-&gt;1-&gt;NULL</span><br></pre></td></tr></table></figure>
+<p><strong>Follow up:</strong></p>
+<p>A linked list can be reversed either iteratively or recursively. Could you implement both?</p>
+<p>来源：力扣（LeetCode）<br>链接：<a href="https://leetcode-cn.com/problems/reverse-linked-list" target="_blank" rel="noopener">https://leetcode-cn.com/problems/reverse-linked-list</a></p>
+<p>反转一个单链表。</p>
+<p>示例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: 1-&gt;2-&gt;3-&gt;4-&gt;5-&gt;NULL</span><br><span class="line">输出: 5-&gt;4-&gt;3-&gt;2-&gt;1-&gt;NULL</span><br></pre></td></tr></table></figure>
+<p>进阶:<br>你可以迭代或递归地反转链表。你能否用两种方法解决这道题？</p>
+<p>反转一个单链表。<br>示例:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: 1-&gt;2-&gt;3-&gt;4-&gt;5-&gt;NULL</span><br><span class="line">输出: 5-&gt;4-&gt;3-&gt;2-&gt;1-&gt;NULL</span><br></pre></td></tr></table></figure>
+
+<p>进阶:<br>你可以迭代或递归地反转链表。你能否用两种方法解决这道题？</p>
+<p>解题思路</p>
+<p>很经典的问题，首先设置pre,cur,lat三个指针</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pre   cur  lat</span><br><span class="line">null   1 -&gt; 2 -&gt; 3 -&gt; 4 -&gt; 5 -&gt; null</span><br></pre></td></tr></table></figure>
+
+<p>接着cur.next = pre</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pre   cur  lat</span><br><span class="line">null &lt;-1    2 -&gt; 3 -&gt; 4 -&gt; 5 -&gt; null</span><br></pre></td></tr></table></figure>
+
+<p>接着pre = cur，cur = lat，lat = lat.next</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">      pre  cur  lat</span><br><span class="line">null &lt;-1    2 -&gt; 3 -&gt; 4 -&gt; 5 -&gt; null</span><br></pre></td></tr></table></figure>
+
+<p>重复上述操作直到lat=None。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">                     pre  cur  lat</span><br><span class="line">null &lt;-1 &lt;- 2 &lt;- 3 &lt;- 4    5 -&gt; null</span><br></pre></td></tr></table></figure>
+
+<p>最后cur.next = pre即可。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">reverseList</span><span class="params">(self, head)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :type head: ListNode</span></span><br><span class="line"><span class="string">        :rtype: ListNode</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        pre = <span class="literal">None</span></span><br><span class="line">        cur = head</span><br><span class="line">        lat = head.next</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> lat != <span class="literal">None</span>:</span><br><span class="line">            cur.next = pre</span><br><span class="line">            pre = cur</span><br><span class="line">            cur = lat</span><br><span class="line">            lat = lat.next</span><br><span class="line"></span><br><span class="line">        cur.next = pre</span><br><span class="line">        <span class="keyword">return</span> cur</span><br></pre></td></tr></table></figure>
+
+<p>我们再回过头来看上述代码，这个代码其实有一个重大的bug。如果head=None，那么lat = cur.next就会出问题。</p>
+<p>其实我们可以这样写</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">reverseList</span><span class="params">(self, head)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :type head: ListNode</span></span><br><span class="line"><span class="string">        :rtype: ListNode</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        pre = <span class="literal">None</span></span><br><span class="line">        cur = head</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> cur != <span class="literal">None</span>:</span><br><span class="line">            lat = cur.next</span><br><span class="line">            cur.next = pre</span><br><span class="line">            pre = cur</span><br><span class="line">            cur = lat</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> pre</span><br></pre></td></tr></table></figure>
+
+<p>这个问题使用递归就更简单了，我们知道reverseList(head)返回输入的链表反转后的head，那么如果reverseList(head.next)的话</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">head</span><br><span class="line">  1-&gt;2&lt;-3&lt;-4&lt;-5</span><br><span class="line">              |</span><br><span class="line">             node</span><br></pre></td></tr></table></figure>
+
+<p>我们此时只需要head.next.next=head，也就是先建立一个双向连接</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">head</span><br><span class="line">  1-&gt;2&lt;-3&lt;-4&lt;-5</span><br><span class="line">   &lt;-         |</span><br><span class="line">             node</span><br></pre></td></tr></table></figure>
+
+<p>然后再head.next=None，返回node即可。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">    head</span><br><span class="line">null&lt;<span class="number">-1</span>&lt;<span class="number">-2</span>&lt;<span class="number">-3</span>&lt;<span class="number">-4</span>&lt;<span class="number">-5</span></span><br><span class="line">                  |</span><br><span class="line">                 node</span><br></pre></td></tr></table></figure>
+
+<p>代码如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">reverseList</span><span class="params">(self, head)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :type head: ListNode</span></span><br><span class="line"><span class="string">        :rtype: ListNode</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">if</span> head == <span class="literal">None</span> <span class="keyword">or</span> head.next == <span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">return</span> head</span><br><span class="line">        node = self.reverseList(head.next)</span><br><span class="line">        head.next.next = head</span><br><span class="line">        head.next = <span class="literal">None</span></span><br><span class="line">        <span class="keyword">return</span> node</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Definition for singly-linked list.</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ListNode</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, x)</span>:</span></span><br><span class="line">        self.val = x</span><br><span class="line">        self.next = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">reverseList</span><span class="params">(self, head)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :type head: ListNode</span></span><br><span class="line"><span class="string">        :rtype: ListNode</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        pre = <span class="literal">None</span></span><br><span class="line">        cur = head</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> cur != <span class="literal">None</span>:</span><br><span class="line">            lat = cur.next</span><br><span class="line">            cur.next = pre</span><br><span class="line">            pre = cur</span><br><span class="line">            cur = lat</span><br><span class="line">        <span class="keyword">return</span> pre</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">createList</span><span class="params">()</span>:</span></span><br><span class="line">    head = ListNode(<span class="number">0</span>)</span><br><span class="line">    cur = head</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">10</span>):</span><br><span class="line">        cur.next = ListNode(i)</span><br><span class="line">        cur = cur.next</span><br><span class="line">    <span class="keyword">return</span> head</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">printList</span><span class="params">(head)</span>:</span></span><br><span class="line">    cur = head</span><br><span class="line">    <span class="keyword">while</span> cur != <span class="literal">None</span>:</span><br><span class="line">        print(cur.val, <span class="string">'--&gt;'</span>, end=<span class="string">''</span>)</span><br><span class="line">        cur = cur.next</span><br><span class="line"></span><br><span class="line">    print(<span class="string">'NULL'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    head = createList()</span><br><span class="line">    printList(head)</span><br><span class="line">    res = Solution().reverseList(head)</span><br><span class="line">    printList(res)</span><br></pre></td></tr></table></figure>
+
+<pre><code>0 --&gt;1 --&gt;2 --&gt;3 --&gt;4 --&gt;5 --&gt;6 --&gt;7 --&gt;8 --&gt;9 --&gt;NULL
+9 --&gt;8 --&gt;7 --&gt;6 --&gt;5 --&gt;4 --&gt;3 --&gt;2 --&gt;1 --&gt;0 --&gt;NULL</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Definition for singly-linked list.</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ListNode</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, x)</span>:</span></span><br><span class="line">        self.val = x</span><br><span class="line">        self.next = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">reverseList</span><span class="params">(self, head)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :type head: ListNode</span></span><br><span class="line"><span class="string">        :rtype: ListNode</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        cur, prev = head, <span class="literal">None</span></span><br><span class="line">        <span class="keyword">while</span> cur:</span><br><span class="line">            cur.next, prev, cur = prev, cur, cur.next</span><br><span class="line">        <span class="keyword">return</span> prev</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">createList</span><span class="params">()</span>:</span></span><br><span class="line">    head = ListNode(<span class="number">0</span>)</span><br><span class="line">    cur = head</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">10</span>):</span><br><span class="line">        cur.next = ListNode(i)</span><br><span class="line">        cur = cur.next</span><br><span class="line">    <span class="keyword">return</span> head</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">printList</span><span class="params">(head)</span>:</span></span><br><span class="line">    cur = head</span><br><span class="line">    <span class="keyword">while</span> cur != <span class="literal">None</span>:</span><br><span class="line">        print(cur.val, <span class="string">'--&gt;'</span>, end=<span class="string">''</span>)</span><br><span class="line">        cur = cur.next</span><br><span class="line"></span><br><span class="line">    print(<span class="string">'NULL'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    head = createList()</span><br><span class="line">    printList(head)</span><br><span class="line">    res = Solution().reverseList(head)</span><br><span class="line">    printList(res)</span><br></pre></td></tr></table></figure>
+
+<pre><code>0 --&gt;1 --&gt;2 --&gt;3 --&gt;4 --&gt;5 --&gt;6 --&gt;7 --&gt;8 --&gt;9 --&gt;NULL
+9 --&gt;8 --&gt;7 --&gt;6 --&gt;5 --&gt;4 --&gt;3 --&gt;2 --&gt;1 --&gt;0 --&gt;NULL
+&lt;__main__.ListNode object at 0x10dc70160&gt;</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/10/02%E4%B8%A8%E5%AD%A6%E4%B9%A0%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%E7%9A%84%E6%9C%80%E4%BD%B3%E8%B7%AF%E5%BE%84%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2727,313 +2933,6 @@ type of original_params = &lt;class &apos;dict&apos;&gt;, original_params = {&ap
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/04/05%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E5%AD%97%E7%AC%A6%E4%B8%B2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LvYang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LvYang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/04/05%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E5%AD%97%E7%AC%A6%E4%B8%B2/" itemprop="url">05 | 深入浅出字符串</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-04T19:45:36+08:00">
-                2019-12-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
-                    <span itemprop="name">python核心技术与实战</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/12/04/05%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E5%AD%97%E7%AC%A6%E4%B8%B2/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/12/04/05%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E5%AD%97%E7%AC%A6%E4%B8%B2/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="字符串基础"><a href="#字符串基础" class="headerlink" title="字符串基础"></a>字符串基础</h3><p>什么是字符串呢？字符串是由独立字符组成的一个序列，通常包含在单引号（’’）双引号（””）或者三引号之中（’’’ ‘’’或””” “””，两者一样），比如下面几种写法。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">name = <span class="string">'jason'</span></span><br><span class="line">city = <span class="string">'beijing'</span></span><br><span class="line">text = <span class="string">"welcome to jike shijian"</span></span><br></pre></td></tr></table></figure>
-
-<p>这里定义了 name、city 和 text 三个变量，都是字符串类型。我们知道，Python 中单引号、双引号和三引号的字符串是一模一样的，没有区别，比如下面这个例子中的 s1、s2、s3 完全一样。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">s1 = <span class="string">'hello'</span></span><br><span class="line">s2 = <span class="string">"hello"</span></span><br><span class="line">s3 = <span class="string">"""hello"""</span></span><br><span class="line">s1 == s2 == s3</span><br><span class="line"><span class="literal">True</span></span><br></pre></td></tr></table></figure>
-
-<p>Python 的三引号字符串，则主要应用于多行字符串的情境，比如函数的注释等等。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">calculate_similarity</span><span class="params">(item1, item2)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Calculate similarity between two items</span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        item1: 1st item</span></span><br><span class="line"><span class="string">        item2: 2nd item</span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">      similarity score between item1 and item2</span></span><br><span class="line"><span class="string">    """</span></span><br></pre></td></tr></table></figure>
-
-<p>同时，Python 也支持转义字符。所谓的转义字符，就是用反斜杠开头的字符串，来表示一些特定意义的字符。我把常见的的转义字符，总结成了下面这张表格。</p>
-<p><img src="/2019/12/04/05%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E5%AD%97%E7%AC%A6%E4%B8%B2/img/05-1.png" alt="title"></p>
-<p>为了方便你理解，我举一个例子来说明。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">s = <span class="string">'a\nb\tc'</span></span><br><span class="line">print(s)</span><br><span class="line">print(len(s))</span><br></pre></td></tr></table></figure>
-
-<pre><code>a
-b    c
-5</code></pre><p>这段代码中的’\n’，表示一个字符——换行符；’\t’也表示一个字符——横向制表符。所以，最后打印出来的输出，就是字符 a，换行，字符 b，然后制表符，最后打印字符 c。不过要注意，虽然最后打印的输出横跨了两行，但是整个字符串 s 仍然只有 5 个元素。<br>在转义字符的应用中，最常见的就是换行符’\n’的使用。比如文件读取，如果我们一行行地读取，那么每一行字符串的末尾，都会包含换行符’\n’。而最后做数据处理时，我们往往会丢掉每一行的换行符。</p>
-<h3 id="字符串的常用操作"><a href="#字符串的常用操作" class="headerlink" title="字符串的常用操作"></a>字符串的常用操作</h3><p>讲完了字符串的基本原理，下面我们一起来看看字符串的常用操作。你可以把字符串想象成一个由单个字符组成的数组，所以，Python 的字符串同样支持索引，切片和遍历等等操作。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">name = <span class="string">'jason'</span></span><br><span class="line">print(name[<span class="number">0</span>])</span><br><span class="line">print(name[<span class="number">1</span>:<span class="number">3</span>])</span><br></pre></td></tr></table></figure>
-
-<pre><code>j
-as</code></pre><p>和其他数据结构，如列表、元组一样，字符串的索引同样从 0 开始，index=0 表示第一个元素（字符），[index:index+2] 则表示第 index 个元素到 index+1 个元素组成的子字符串。</p>
-<p>遍历字符串同样很简单，相当于遍历字符串中的每个字符。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> char <span class="keyword">in</span> name:</span><br><span class="line">    print(char)</span><br></pre></td></tr></table></figure>
-
-<p>特别要注意，Python 的字符串是不可变的（immutable）。因此，用下面的操作，来改变一个字符串内部的字符是错误的，不允许的。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">s = <span class="string">'hello'</span></span><br><span class="line">s[<span class="number">0</span>] = <span class="string">'H'</span></span><br><span class="line"><span class="comment"># Traceback (most recent call last):</span></span><br><span class="line"><span class="comment">#   File "&lt;stdin&gt;", line 1, in &lt;module&gt;</span></span><br><span class="line"><span class="comment"># TypeError: 'str' object does not support item assignment</span></span><br></pre></td></tr></table></figure>
-
-<p>Python 中字符串的改变，通常只能通过创建新的字符串来完成。比如上述例子中，想把’hello’的第一个字符’h’，改为大写的’H’，我们可以采用下面的做法：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">s = <span class="string">'H'</span> + s[<span class="number">1</span>:]</span><br><span class="line">s = s.replace(<span class="string">'h'</span>, <span class="string">'H'</span>)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>第一种方法，是直接用大写的’H’，通过加号’+’操作符，与原字符串切片操作的子字符串拼接而成新的字符串。</p>
-</li>
-<li><p>第二种方法，是直接扫描原字符串，把小写的’h’替换成大写的’H’，得到新的字符串。</p>
-</li>
-</ul>
-<p>你可能了解到，在其他语言中，如 Java，有可变的字符串类型，比如 StringBuilder，每次添加、改变或删除字符（串），无需创建新的字符串，时间复杂度仅为 O(1)。这样就大大提高了程序的运行效率。</p>
-<p>但可惜的是，Python 中并没有相关的数据类型，我们还是得老老实实创建新的字符串。因此，每次想要改变字符串，往往需要 O(n) 的时间复杂度，其中，n 为新字符串的长度。</p>
-<p>你可能注意到了，上述例子的说明中，我用的是“往往”、“通常”这样的字眼，并没有说“一定”。这是为什么呢？显然，随着版本的更新，Python 也越来越聪明，性能优化得越来越好了。</p>
-<p>这里，我着重讲解一下，使用加法操作符’+=’的字符串拼接方法。因为它是一个例外，打破了字符串不可变的特性。</p>
-<p>操作方法如下所示：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">#  str1 += str2  # 表示 str1 = str1 + str2</span></span><br></pre></td></tr></table></figure>
-
-
-<pre><code>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-7-b341e0578f95&gt; in &lt;module&gt;
-----&gt; 1 str1 += str2  # 表示 str1 = str1 + str2
-
-
-NameError: name &apos;str1&apos; is not defined</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">s = <span class="string">''</span></span><br><span class="line"><span class="keyword">for</span> n <span class="keyword">in</span> range(<span class="number">0</span>, <span class="number">100000</span>):</span><br><span class="line">    s += str(n)</span><br><span class="line">print(s)</span><br></pre></td></tr></table></figure>
-
-<pre><code>012345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989910010110210310410510610710810911011111211311411511611711811912012112212312412512612712812913013113213313413513613713813914014114214314414514614714814915015115215315415515615715815916016116216316416516616716816917017117217317417517617717817918018118218318418518618718818919019119219319419519619719819920020120220320420520620720820921021121221321421521621721821922022122222322422522622722822923023123223323423523623723823924024124224324424524624724824925025125225325425525625725825926026126226326426526626726826927027127227327427527627727827928028128228328428528628728828929029129229329429529629729829930030130230330430530630730830931031131231331431531631731831932032132232332432532632732832933033133233333433533633733833934034134234334434534634734834935035135235335435535635735835936036136236336436536636736836937037137237337437537637737837938038138238338438538638738838939039139239339439539639739839940040140240340</code></pre><p>你觉得这个例子的时间复杂度是多少呢？</p>
-<p>每次循环，似乎都得创建一个新的字符串；而每次创建一个新的字符串，都需要 O(n) 的时间复杂度。因此，总的时间复杂度就为 O(1) + O(2) + … + O(n) = O(n^2)。这样到底对不对呢？</p>
-<p>乍一看，这样分析确实很有道理，但是必须说明，这个结论只适用于老版本的 Python 了。自从 Python2.5 开始，每次处理字符串的拼接操作时（str1 += str2），Python 首先会检测 str1 还有没有其他的引用。如果没有的话，就会尝试原地扩充字符串 buffer 的大小，而不是重新分配一块内存来创建新的字符串并拷贝。这样的话，上述例子中的时间复杂度就仅为 O(n) 了。</p>
-<p>因此，以后你在写程序遇到字符串拼接时，如果使用’+=’更方便，就放心地去用吧，不用过分担心效率问题了。</p>
-<p>另外，对于字符串拼接问题，除了使用加法操作符，我们还可以使用字符串内置的 join 函数。string.join(iterable)，表示把每个元素都按照指定的格式连接起来。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">l = []</span><br><span class="line"><span class="keyword">for</span> n <span class="keyword">in</span> range(<span class="number">0</span>, <span class="number">100000</span>):</span><br><span class="line">    l.append(str(n))</span><br><span class="line">l = <span class="string">' '</span>.join(l)</span><br><span class="line">print(l)</span><br></pre></td></tr></table></figure>
-
-<pre><code>0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 129 130 131 132 133 134 135 136 137 138 139 140 141 142 143 144 145 146 147 148 149 150 151 152 153 154 155 156 157 158 159 160 161 162 163 164 165 166 167 168 169 170 171 172 173 174 175 176 177 178 179 180 181 182 183 184 185 186 187 188 189 190 191 192 193 194 195 196 197 198 199 200 201 202 203 204 205 206 207 208 209 210 211 212 213 214 215 216 217 218 219 220 221 222 223 224 225 226 227 228 229 230 231 232 233 234 235 236 237 238 239 240 241 242 243 244 245 246 247 248 249 250 251 252 253 254 255 256 257 258 259 260 261 262 263 264 265 266 267 268 269 270 271 272 273 274 275 276 277 278 279 280 281 282 283 284 285 286 287 288 289 290 291 292 293 294 295 296 297 298 299 300 301 302 303 304 305 306 307 308 309 310 311 312 313 314 315 316 317 318 319 320 321 322 323 324 325 326 </code></pre><p>由于列表的 append 操作是 O(1) 复杂度，字符串同理。因此，这个含有 for 循环例子的时间复杂度为 n*O(1)=O(n)。</p>
-<p>接下来，我们看一下字符串的分割函数 split()。string.split(separator)，表示把字符串按照 separator 分割成子字符串，并返回一个分割后子字符串组合的列表。它常常应用于对数据的解析处理，比如我们读取了某个文件的路径，想要调用数据库的 API，去读取对应的数据，我们通常会写成下面这样：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">query_data</span><span class="params">(namespace, table)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    given namespace and table, query database to get corresponding</span></span><br><span class="line"><span class="string">    data         </span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"> </span><br><span class="line">path = <span class="string">'hive://ads/training_table'</span></span><br><span class="line">namespace = path.split(<span class="string">'//'</span>)[<span class="number">1</span>].split(<span class="string">'/'</span>)[<span class="number">0</span>] <span class="comment"># 返回'ads'</span></span><br><span class="line">table = path.split(<span class="string">'//'</span>)[<span class="number">1</span>].split(<span class="string">'/'</span>)[<span class="number">1</span>] <span class="comment"># 返回 'training_table'</span></span><br><span class="line">data = query_data(namespace, table)</span><br></pre></td></tr></table></figure>
-
-<p>此外，常见的函数还有：</p>
-<ul>
-<li><p>string.strip(str)，表示去掉首尾的 str 字符串；</p>
-</li>
-<li><p>string.lstrip(str)，表示只去掉开头的 str 字符串；</p>
-</li>
-<li><p>string.rstrip(str)，表示只去掉尾部的 str 字符串。</p>
-</li>
-</ul>
-<p>这些在数据的解析处理中同样很常见。比如很多时候，从文件读进来的字符串中，开头和结尾都含有空字符，我们需要去掉它们，就可以用 strip() 函数：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">s = <span class="string">' my name is jason '</span></span><br><span class="line">s.strip()</span><br></pre></td></tr></table></figure>
-
-
-
-
-<pre><code>&apos;my name is jason&apos;</code></pre><p>当然，Python 中字符串还有很多常用操作，比如，string.find(sub, start, end)，表示从 start 到 end 查找字符串中子字符串 sub 的位置等等。这里，我只强调了最常用并且容易出错的几个函数，其他内容你可以自行查找相应的文档、范例加以了解，我就不一一赘述了。</p>
-<h3 id="字符串的格式化"><a href="#字符串的格式化" class="headerlink" title="字符串的格式化"></a>字符串的格式化</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">id = <span class="number">123</span></span><br><span class="line">name = <span class="string">"jason"</span></span><br><span class="line">print(<span class="string">'no data available for person with id: &#123;&#125;, name: &#123;&#125;'</span>.format(id, name))</span><br><span class="line">print(<span class="string">'no data available for person with id: %s, name: %s'</span> % (id, name))</span><br></pre></td></tr></table></figure>
-
-
-<pre><code>---------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-14-2445183242b6&gt; in &lt;module&gt;
-      1 id = 123
-----&gt; 2 name = jason
-      3 
-      4 print(&apos;no data available for person with id: {}, name: {}&apos;.format(id, name))
-
-
-NameError: name &apos;jason&apos; is not defined</code></pre><p>其中 %s 表示字符串型，%d 表示整型等等，这些属于常识，你应该都了解。</p>
-<p>当然，现在你写程序时，我还是推荐使用 format 函数，毕竟这是最新规范，也是官方文档推荐的规范。</p>
-<p>也许有人会问，为什么非要使用格式化函数，上述例子用字符串的拼接不也能完成吗？没错，在很多情况下，字符串拼接确实能满足格式化函数的需求。但是使用格式化函数，更加清晰、易读，并且更加规范，不易出错。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这节课，我们主要学习了 Python 字符串的一些基本知识和常用操作，并且结合具体的例子与场景加以说明，特别需要注意下面几点。</p>
-<ul>
-<li><p>Python 中字符串使用单引号、双引号或三引号表示，三者意义相同，并没有什么区别。其中，三引号的字符串通常用在多行字符串的场景。</p>
-</li>
-<li><p>Python 中字符串是不可变的（前面所讲的新版本 Python 中拼接操作’+=’是个例外）。因此，随意改变字符串中字符的值，是不被允许的。</p>
-</li>
-<li><p>Python 新版本（2.5+）中，字符串的拼接变得比以前高效了许多，你可以放心使用。</p>
-</li>
-<li><p>Python 中字符串的格式化（string.format）常常用在输出、日志的记录等场景。</p>
-</li>
-</ul>
-<h3 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h3><p>最后，给你留一道思考题。在新版本的 Python（2.5+）中，下面的两个字符串拼接操作，你觉得哪个更优呢？欢迎留言和我分享你的观点，也欢迎你把这篇文章分享给你的同事、朋友。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">s = <span class="string">''</span></span><br><span class="line"><span class="keyword">for</span> n <span class="keyword">in</span> range(<span class="number">0</span>, <span class="number">100000</span>):</span><br><span class="line">    s += str(n)l = []</span><br><span class="line"><span class="keyword">for</span> n <span class="keyword">in</span> range(<span class="number">0</span>, <span class="number">100000</span>):</span><br><span class="line">    l.append(str(n))</span><br><span class="line">    </span><br><span class="line">s = <span class="string">' '</span>.join(l)</span><br></pre></td></tr></table></figure>
-
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">l = []</span><br><span class="line"><span class="keyword">for</span> n <span class="keyword">in</span> range(<span class="number">0</span>, <span class="number">100000</span>):</span><br><span class="line">    l.append(str(n))</span><br><span class="line">    </span><br><span class="line">s = <span class="string">' '</span>.join(l)</span><br></pre></td></tr></table></figure>
-
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line">start_time = time.perf_counter()</span><br><span class="line">s = <span class="string">''</span></span><br><span class="line"><span class="keyword">for</span> n <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">1000</span>):</span><br><span class="line">    s += str(n)</span><br><span class="line">end_time = time.perf_counter()</span><br><span class="line"> </span><br><span class="line">print(<span class="string">'Time elapse:&#123;&#125;'</span>.format(end_time - start_time))</span><br></pre></td></tr></table></figure>
-
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line">start_time = time.perf_counter()</span><br><span class="line">s = []</span><br><span class="line"><span class="keyword">for</span> n <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">1000</span>):</span><br><span class="line">    s.append(str(n))</span><br><span class="line"><span class="string">''</span>.join(s)</span><br><span class="line">end_time = time.perf_counter()</span><br><span class="line">print(<span class="string">'Time elapse:&#123;&#125;'</span>.format(end_time - start_time))</span><br></pre></td></tr></table></figure>
-
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line">start_time = time.perf_counter()</span><br><span class="line">s = <span class="string">''</span>.join(map(str,range(<span class="number">0</span>,<span class="number">1000</span>)))</span><br><span class="line">end_time = time.perf_counter()</span><br><span class="line">print(<span class="string">'Time elapse:&#123;&#125;'</span>.format(end_time - start_time))</span><br></pre></td></tr></table></figure>
-
-<table>
-<thead>
-<tr>
-<th align="center">方案\条数</th>
-<th align="center">1000</th>
-<th align="center">100000（十万条）</th>
-<th align="center">10000000（一千万条）</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">方式一（+=）</td>
-<td align="center">0.0006100520004110876</td>
-<td align="center">0.053987349001545226</td>
-<td align="center">5.24716751743108</td>
-</tr>
-<tr>
-<td align="center">方式二（list,join）</td>
-<td align="center">0.00047015399832162075</td>
-<td align="center">0.038282303998130374</td>
-<td align="center">4.119422915999166</td>
-</tr>
-<tr>
-<td align="center">方式三(map,join)</td>
-<td align="center">0.00022071799685363658</td>
-<td align="center">0.021825258001626935</td>
-<td align="center">2.6899159259992302</td>
-</tr>
-</tbody></table>
-<ul>
-<li>结论: 字符串+=的方式千万条以下相差不大. 千万条以上效率就会差距很大了. </li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3084,7 +2983,7 @@ NameError: name &apos;jason&apos; is not defined</code></pre><p>其中 %s 表示
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-count">54</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
