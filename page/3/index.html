@@ -258,6 +258,194 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/23/02%E4%B8%A8DBMS%E7%9A%84%E5%89%8D%E4%B8%96%E4%BB%8A%E7%94%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/23/02%E4%B8%A8DBMS%E7%9A%84%E5%89%8D%E4%B8%96%E4%BB%8A%E7%94%9F/" itemprop="url">02丨DBMS的前世今生</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-23T20:01:07+08:00">
+                2020-03-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" itemprop="url" rel="index">
+                    <span itemprop="name">SQL必知必会</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/23/02%E4%B8%A8DBMS%E7%9A%84%E5%89%8D%E4%B8%96%E4%BB%8A%E7%94%9F/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/03/23/02%E4%B8%A8DBMS%E7%9A%84%E5%89%8D%E4%B8%96%E4%BB%8A%E7%94%9F/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>今天的内容，你可以从以下几个方面进行思考：</p>
+<ol>
+<li>主流的 DBMS 都有哪些，它们各自都有哪些特点；</li>
+<li>既然 SQL 是通用的标准语言，为什么能存在这么多 DBMS；</li>
+<li>从这些 DBMS 的发展史中，你有哪些感悟。</li>
+</ol>
+<h3 id="DB、DBS-和-DBMS-的区别是什么"><a href="#DB、DBS-和-DBMS-的区别是什么" class="headerlink" title="DB、DBS 和 DBMS 的区别是什么"></a>DB、DBS 和 DBMS 的区别是什么</h3><p>说到 DBMS，有一些概念你需要了解。</p>
+<p>DBMS 的英文全称是 DataBase Management System，数据库管理系统，实际上它可以对多个数据库进行管理，所以你可以理解为 DBMS = 多个数据库（DB） + 管理程序。</p>
+<p>DB 的英文是 DataBase，也就是数据库。数据库是存储数据的集合，你可以把它理解为多个数据表。</p>
+<p>DBS 的英文是 DataBase System，数据库系统。它是更大的概念，包括了数据库、数据库管理系统以及数据库管理人员 DBA。</p>
+<p>这里需要注意的是，虽然我们有时候把 Oracle、MySQL 等称之为数据库，但确切讲，它们应该是数据库管理系统，即 DBMS。</p>
+<h3 id="排名前-20-的-DBMS-都是那些"><a href="#排名前-20-的-DBMS-都是那些" class="headerlink" title="排名前 20 的 DBMS 都是那些"></a>排名前 20 的 DBMS 都是那些</h3><p>了解了 DBMS 的概念之后，我们来看下当前主流的 DBMS 都有哪些。下面这张表是 2019 年 5 月 DB-Engines 公布的 DBMS 的排名（每年的排名会有更新，主要依据这些 DBMS 在搜索引擎上的热度）：</p>
+<p>从排名中我们能看出来，关系型数据库绝对是 DBMS 的主流，其中使用最多的 DBMS 分别是 Oracle、MySQL 和 SQL Server。</p>
+<p>关系型数据库（RDBMS）就是建立在关系模型基础上的数据库，SQL 就是关系型数据库的查询语言。</p>
+<p>相比于 SQL，NoSQL 泛指非关系型数据库，包括了榜单上的键值型数据库、文档型数据库、搜索引擎和列存储等，除此以外还包括图形数据库。</p>
+<p>键值型数据库通过 Key-Value 键值的方式来存储数据，其中 Key 和 Value 可以是简单的对象，也可以是复杂的对象。Key 作为唯一的标识符，优点是查找速度快，在这方面明显优于关系型数据库，同时缺点也很明显，它无法像关系型数据库一样自由使用条件过滤（比如 WHERE），如果你不知道去哪里找数据，就要遍历所有的键，这就会消耗大量的计算。键值型数据库典型的使用场景是作为内容缓存。Redis 是最流行的键值型数据库。</p>
+<p>文档型数据库用来管理文档，在数据库中文档作为处理信息的基本单位，一个文档就相当于一条记录，MongoDB 是最流行的文档型数据库。</p>
+<p>搜索引擎也是数据库检索中的重要应用，常见的全文搜索引擎有 Elasticsearch、Splunk 和 Solr。虽然关系型数据库采用了索引提升检索效率，但是针对全文索引效率却较低。搜索引擎的优势在于采用了全文搜索的技术，核心原理是“倒排索引”。</p>
+<p>列式数据库是相对于行式存储的数据库，Oracle、MySQL、SQL Server 等数据库都是采用的行式存储（Row-based），而列式数据库是将数据按照列存储到数据库中，这样做的好处是可以大量降低系统的 I/O，适合于分布式文件系统，不足在于功能相对有限。</p>
+<p>图形数据库，利用了图这种数据结构存储了实体（对象）之间的关系。最典型的例子就是社交网络中人与人的关系，数据模型主要是以节点和边（关系）来实现，特点在于能高效地解决复杂的关系问题。</p>
+<h3 id="SQL-阵营与-NoSQL-阵营"><a href="#SQL-阵营与-NoSQL-阵营" class="headerlink" title="SQL 阵营与 NoSQL 阵营"></a>SQL 阵营与 NoSQL 阵营</h3><p>NoSQL 的分类很多，刚才提到的键值型、文档型、搜索引擎、列式存储和图形数据库等都属于 NoSQL 阵营。也只有用 NoSQL 一词才能将这些技术囊括进来。即便如此，在 DBMS 排名中，还是 SQL 阵营的比重更大，影响力前 5 的 DBMS 中有 4 个是关系型数据库，而排名前 20 的 DBMS 中也有 12 个是关系型数据库。所以说，掌握 SQL 是非常有必要的。</p>
+<p>由于 SQL 一直称霸 DBMS，因此许多人在思考是否有一种数据库技术能远离 SQL，于是 NoSQL 诞生了，但是随着发展却发现越来越离不开 SQL。到目前为止 NoSQL 阵营中的 DBMS 都会有实现类似 SQL 的功能。下面是“NoSQL”这个名词在不同时期的诠释，从这些释义的变化中可以看出 NoSQL 功能的演变：</p>
+<p>1970：NoSQL = We have no SQL</p>
+<p>1980：NoSQL = Know SQL</p>
+<p>2000：NoSQL = No SQL!</p>
+<p>2005：NoSQL = Not only SQL</p>
+<p>2013：NoSQL = No, SQL!</p>
+<p>NoSQL 对 SQL 做出了很好的补充，它可以让我们在云计算时代，更好地使用数据库技术，比如快速读写，这样可以用低廉的成本，更方便进行扩展。整个专栏的学习也将围绕 SQL 展开，同时你还需要了解 SQL 阵营中不同的 DBMS 之间的使用差异。这些 DBMS 除了支持 SQL 标准以外，还会有自己的“方言”，也就是自己独有的语法。在专栏中，我也会对近些年热门的 NoSQL 进行讲解，方便你在后续使用中更快上手。</p>
+<h3 id="SQL-阵营中的-DBMS"><a href="#SQL-阵营中的-DBMS" class="headerlink" title="SQL 阵营中的 DBMS"></a>SQL 阵营中的 DBMS</h3><p>如果我们把数据互通作为当今数字化社会发展的大中台能力，那么 DBMS 无疑是一个巨大的市场。在这个市场中，排名前 20 的 DBMS 有 12 个属于 SQL 阵营，其中排名前 3 名的 DBMS 均为 SQL 阵营，它们分别是 Oracle、MySQL 和 SQL Server。这三家的市场份额远超其他 DBMS 的市场份额。</p>
+<p>下面，我们来简单介绍下这三个主流 DBMS 的发展。</p>
+<p>1979 年，Oracle 2 诞生，它是第一个商用的 RDBMS（关系型数据库管理系统），随后被卖给了军方客户。随着 Oracle 软件的名气越来越大，公司也改叫 Oracle 公司。20 世纪 90 年代，Oracle 的创始人埃里森成为继比尔·盖茨之后第二富有的人，可以说 IBM 缔造了两个帝国，一个是软件业的霸主微软，另一个是企业软件市场的霸主 Oracle。如今 Oracle 的年收入达到了 400 亿美金，足以证明商用数据库软件的价值。从这点我们也能看出，如果选择了一个大的赛道，就要尽早商业化，占据大型企业客户完全可以创建巨大的商业价值，也足以证明一个软件企业不需要靠卖硬件也可以挣到很多钱。</p>
+<p>MySQL 是 1995 年诞生的开源数据库管理系统，因为免费开源的特性，得到了开发者的喜爱，用户量迅速增长，成为开源数据库的 No.1。但在发展过程中，MySQL 先后两次被易手，先是在 2008 年被 SUN 收购，然后在 2010 年 SUN 被 Oracle 收购，于是 Oracle 同时拥有了 MySQL 的管理权，至此 Oracle 在数据库领域中成为绝对的领导者。从这里我们也能看到，虽然 MySQL 是免费的产品，但是使用人数多，就足以证明巨大的用户价值。一个有巨大用户价值的产品，即使没有直接的商业价值，但作为基础设施也会被商业巨头看上。</p>
+<p>不过在 Oracle 收购 MySQL 的同时，MySQL 的创造者担心 MySQL 有闭源的风险，因此创建了 MySQL 的分支项目 MariaDB，MariaDB 在绝大部分情况下都是与 MySQL 兼容的，并且增加了许多新的特性，比如支持更多的存储引擎类型。许多企业也由原来的 MySQL 纷纷转向了 MariaDB。</p>
+<p>SQL Server 是微软开发的商业数据库，诞生于 1989 年。实际上微软还推出了 Access 数据库，它是一种桌面数据库，同时具备后台存储和前台界面开发的功能，更加轻量级，适合小型的应用场景。因为后台的存储空间有限，一般只有 2G，Access 的优势在于可以在前台便捷地进行界面开发。而 SQL Server 是大型数据库，用于后台的存储和查询，不具备界面开发的功能。从这里我们也能看出，即使 SQL 语言是通用的，但是为了满足不同用户的使用场景，会存在多个 DBMS。比如 Oracle 更适合大型跨国企业的使用，因为他们对费用不敏感，但是对性能要求以及安全性有更高的要求，而 MySQL 更受到许多互联网公司，尤其是早期创业公司的青睐。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>今天我们简单梳理了 DBMS 的发展。1974 年，SEQUEL 论文发表，1979 年，第一个商用关系型数据库 Oracle 2 诞生，1995 年，MySQL 开源数据库诞生，如今，NoSQL 得到了发展，并且围绕 SQL 标准展开的 DBMS 竞赛从来没有停止过。在这段发展史中，既有 SQL 阵营，又有 NoSQL 阵营，既有商业数据库软件，又有开源产品，在不同的应用场景下，同一家公司也会有不同的 DBMS 布局。</p>
+<p>如果说不同的 DBMS 代表了不同公司的利益，那么作为使用者的我们更应该注重的是这些 DBMS 的使用场景。比如 Oracle 作为市场占有率最高的商用数据库软件，适合大型的跨国企业，而针对轻量级的桌面数据库，我们采用 Access 就可以了。对于免费开源的产品来说，可以选用 MySQL 或者 MariaDB。同时在 NoSQL 阵营中，我们也需要了解键值型、文档型、搜索引擎、列式数据库和图形数据库的区别。</p>
+<p>我在文章中列举了排名前 20 的 DBMS，你都使用过哪些呢？可以说说你的使用体会吗？另外你有没有想过，虽然 SQL 是通用的标准语言，但为什么能存在这么多 DBMS 呢？</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/23/01%E4%B8%A8%E4%BA%86%E8%A7%A3SQL%EF%BC%9A%E4%B8%80%E9%97%A8%E5%8D%8A%E8%A1%B0%E6%9C%9F%E5%BE%88%E9%95%BF%E7%9A%84%E8%AF%AD%E8%A8%80/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2454,229 +2642,11 @@ NameError: name &apos;piglei&apos; is not defined</code></pre><p>通过定义魔
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/24/29%20%7C%20%E5%B7%A7%E7%94%A8%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86%E5%99%A8%E5%92%8CWith%E8%AF%AD%E5%8F%A5%E7%B2%BE%E7%AE%80%E4%BB%A3%E7%A0%81/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LvYang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LvYang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/24/29%20%7C%20%E5%B7%A7%E7%94%A8%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86%E5%99%A8%E5%92%8CWith%E8%AF%AD%E5%8F%A5%E7%B2%BE%E7%AE%80%E4%BB%A3%E7%A0%81/" itemprop="url">29 | 巧用上下文管理器和With语句精简代码</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-24T20:10:07+08:00">
-                2019-12-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
-                    <span itemprop="name">python核心技术与实战</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/12/24/29%20%7C%20%E5%B7%A7%E7%94%A8%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86%E5%99%A8%E5%92%8CWith%E8%AF%AD%E5%8F%A5%E7%B2%BE%E7%AE%80%E4%BB%A3%E7%A0%81/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/12/24/29%20%7C%20%E5%B7%A7%E7%94%A8%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86%E5%99%A8%E5%92%8CWith%E8%AF%AD%E5%8F%A5%E7%B2%BE%E7%AE%80%E4%BB%A3%E7%A0%81/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>我想你对 Python 中的 with 语句一定不陌生，在专栏里它也曾多次出现，尤其是在文件的输入输出操作中，不过我想，大部分人可能习惯了它的使用，却并不知道隐藏在其背后的“秘密”。</p>
-<p>那么，究竟 with 语句要怎么用，与之相关的上下文管理器（context manager）是什么，它们之间又有着怎样的联系呢？这节课，我就带你一起揭开它们的神秘面纱。</p>
-<h3 id="什么是上下文管理器？"><a href="#什么是上下文管理器？" class="headerlink" title="什么是上下文管理器？"></a>什么是上下文管理器？</h3><p>在任何一门编程语言中，文件的输入输出、数据库的连接断开等，都是很常见的资源管理操作。但资源都是有限的，在写程序时，我们必须保证这些资源在使用过后得到释放，不然就容易造成资源泄露，轻者使得系统处理缓慢，重则会使系统崩溃。</p>
-<p>光说这些概念，你可能体会不到这一点，我们可以看看下面的例子：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">10000000</span>): </span><br><span class="line">    f = open(<span class="string">'test.txt'</span>, <span class="string">'w'</span>)</span><br><span class="line">    f.write(<span class="string">'hello'</span>)</span><br></pre></td></tr></table></figure>
-
-<p>这里我们一共打开了 10000000 个文件，但是用完以后都没有关闭它们，如果你运行该段代码，便会报错：</p>
-<p>这就是一个典型的资源泄露的例子。因为程序中同时打开了太多的文件，占据了太多的资源，造成系统崩溃。</p>
-<p>为了解决这个问题，不同的编程语言都引入了不同的机制。而在 Python 中，对应的解决方式便是上下文管理器（context manager）。上下文管理器，能够帮助你自动分配并且释放资源，其中最典型的应用便是 with 语句。所以，上面代码的正确写法应该如下所示：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">10000000</span>):</span><br><span class="line">    <span class="keyword">with</span> open(<span class="string">'test.txt'</span>, <span class="string">'w'</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(<span class="string">'hello'</span>)</span><br></pre></td></tr></table></figure>
-
-<p>这样，我们每次打开文件“test.txt”，并写入‘hello’之后，这个文件便会自动关闭，相应的资源也可以得到释放，防止资源泄露。当然，with 语句的代码，也可以用下面的形式表示：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">f = open(<span class="string">'test.txt'</span>, <span class="string">'w'</span>)</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    f.write(<span class="string">'hello'</span>)</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    f.close()</span><br></pre></td></tr></table></figure>
-
-<p>要注意的是，最后的 finally block 尤其重要，哪怕在写入文件时发生错误异常，它也可以保证该文件最终被关闭。不过与 with 语句相比，这样的代码就显得冗余了，并且还容易漏写，因此我们一般更倾向于使用 with 语句。</p>
-<p>另外一个典型的例子，是 Python 中的 threading.lock 类。举个例子，比如我想要获取一个锁，执行相应的操作，完成后再释放，那么代码就可以写成下面这样：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">some_lock = threading.Lock()</span><br><span class="line">some_lock.acquire()</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    ...</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    some_lock.release()</span><br></pre></td></tr></table></figure>
-
-<p>而对应的 with 语句，同样非常简洁：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">some_lock = threading.Lock()</span><br><span class="line"><span class="keyword">with</span> somelock:</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
-
-<p>我们可以从这两个例子中看到，with 语句的使用，可以简化了代码，有效避免资源泄露的发生。</p>
-<h3 id="上下文管理器的实现"><a href="#上下文管理器的实现" class="headerlink" title="上下文管理器的实现"></a>上下文管理器的实现</h3><h3 id="基于类的上下文管理器"><a href="#基于类的上下文管理器" class="headerlink" title="基于类的上下文管理器"></a>基于类的上下文管理器</h3><p>了解了上下文管理的概念和优点后，下面我们就通过具体的例子，一起来看看上下文管理器的原理，搞清楚它的内部实现。这里，我自定义了一个上下文管理类 FileManager，模拟 Python 的打开、关闭文件操作：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FileManager</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name, mode)</span>:</span></span><br><span class="line">        print(<span class="string">'calling __init__ method'</span>)</span><br><span class="line">        self.name = name</span><br><span class="line">        self.mode = mode </span><br><span class="line">        self.file = <span class="literal">None</span></span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__enter__</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'calling __enter__ method'</span>)</span><br><span class="line">        self.file = open(self.name, self.mode)</span><br><span class="line">        <span class="keyword">return</span> self.file</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__exit__</span><span class="params">(self, exc_type, exc_val, exc_tb)</span>:</span></span><br><span class="line">        print(<span class="string">'calling __exit__ method'</span>)</span><br><span class="line">        <span class="keyword">if</span> self.file:</span><br><span class="line">            self.file.close()</span><br><span class="line">            </span><br><span class="line"><span class="keyword">with</span> FileManager(<span class="string">'test.txt'</span>, <span class="string">'w'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    print(<span class="string">'ready to write to file'</span>)</span><br><span class="line">    f.write(<span class="string">'hello world'</span>)</span><br></pre></td></tr></table></figure>
-
-<p>需要注意的是，当我们用类来创建上下文管理器时，必须保证这个类包括方法”<strong>enter</strong>()”和方法“<strong>exit</strong>()”。其中，方法“<strong>enter</strong>()”返回需要被管理的资源，方法“<strong>exit</strong>()”里通常会存在一些释放、清理资源的操作，比如这个例子中的关闭文件等等。</p>
-<p>而当我们用 with 语句，执行这个上下文管理器时：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> FileManager(<span class="string">'test.txt'</span>, <span class="string">'w'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(<span class="string">'hello world'</span>)</span><br></pre></td></tr></table></figure>
-
-<p>下面这四步操作会依次发生：</p>
-<ol>
-<li>方法“<strong>init</strong>()”被调用，程序初始化对象 FileManager，使得文件名（name）是”test.txt”，文件模式 (mode) 是’w’；</li>
-<li>方法“<strong>enter</strong>()”被调用，文件“test.txt”以写入的模式被打开，并且返回 FileManager 对象赋予变量 f；</li>
-<li>字符串“hello world”被写入文件“test.txt”；</li>
-<li>方法“<strong>exit</strong>()”被调用，负责关闭之前打开的文件流。</li>
-</ol>
-<p>因此，这个程序的输出是：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">calling __init__ method</span><br><span class="line">calling __enter__ method</span><br><span class="line">ready to write to file</span><br><span class="line">calling __exit__ meth</span><br></pre></td></tr></table></figure>
-
-<p>另外，值得一提的是，方法“<strong>exit</strong>()”中的参数“exc_type, exc_val, exc_tb”，分别表示 exception_type、exception_value 和 traceback。当我们执行含有上下文管理器的 with 语句时，如果有异常抛出，异常的信息就会包含在这三个变量中，传入方法“<strong>exit</strong>()”。</p>
-<p>因此，如果你需要处理可能发生的异常，可以在“<strong>exit</strong>()”添加相应的代码，比如下面这样来写：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'__init__ called'</span>)        </span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__enter__</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'__enter__ called'</span>)</span><br><span class="line">        <span class="keyword">return</span> self</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__exit__</span><span class="params">(self, exc_type, exc_value, exc_tb)</span>:</span></span><br><span class="line">        print(<span class="string">'__exit__ called'</span>)</span><br><span class="line">        <span class="keyword">if</span> exc_type:</span><br><span class="line">            print(<span class="string">f'exc_type: <span class="subst">&#123;exc_type&#125;</span>'</span>)</span><br><span class="line">            print(<span class="string">f'exc_value: <span class="subst">&#123;exc_value&#125;</span>'</span>)</span><br><span class="line">            print(<span class="string">f'exc_traceback: <span class="subst">&#123;exc_tb&#125;</span>'</span>)</span><br><span class="line">            print(<span class="string">'exception handled'</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">with</span> Foo() <span class="keyword">as</span> obj:</span><br><span class="line">    <span class="keyword">raise</span> Exception(<span class="string">'exception raised'</span>).with_traceback(<span class="literal">None</span>)</span><br></pre></td></tr></table></figure>
-
-<p>这里，我们在 with 语句中手动抛出了异常“exception raised”，你可以看到，“<strong>exit</strong>()”方法中异常，被顺利捕捉并进行了处理。不过需要注意的是，如果方法“<strong>exit</strong>()”没有返回 True，异常仍然会被抛出。因此，如果你确定异常已经被处理了，请在“<strong>exit</strong>()”的最后，加上“return True”这条语句。</p>
-<p>同样的，数据库的连接操作，也常常用上下文管理器来表示，这里我给出了比较简化的代码：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DBConnectionManager</span>:</span> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, hostname, port)</span>:</span> </span><br><span class="line">        self.hostname = hostname </span><br><span class="line">        self.port = port </span><br><span class="line">        self.connection = <span class="literal">None</span></span><br><span class="line">  </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__enter__</span><span class="params">(self)</span>:</span> </span><br><span class="line">        self.connection = DBClient(self.hostname, self.port) </span><br><span class="line">        <span class="keyword">return</span> self</span><br><span class="line">  </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__exit__</span><span class="params">(self, exc_type, exc_val, exc_tb)</span>:</span> </span><br><span class="line">        self.connection.close() </span><br><span class="line">  </span><br><span class="line"><span class="keyword">with</span> DBConnectionManager(<span class="string">'localhost'</span>, <span class="string">'8080'</span>) <span class="keyword">as</span> db_client:</span><br></pre></td></tr></table></figure>
-
-<p>与前面 FileManager 的例子类似：</p>
-<ul>
-<li>方法“<strong>init</strong>()”负责对数据库进行初始化，也就是将主机名、接口（这里是 localhost 和 8080）分别赋予变量 hostname 和 port；</li>
-<li>方法“<strong>enter</strong>()”连接数据库，并且返回对象 DBConnectionManager；</li>
-<li>方法“<strong>exit</strong>()”则负责关闭数据库的连接。<br>这样一来，只要你写完了 DBconnectionManager 这个类，那么在程序每次连接数据库时，我们都只需要简单地调用 with 语句即可，并不需要关心数据库的关闭、异常等等，显然大大提高了开发的效率。</li>
-</ul>
-<h3 id="基于生成器的上下文管理器"><a href="#基于生成器的上下文管理器" class="headerlink" title="基于生成器的上下文管理器"></a>基于生成器的上下文管理器</h3><p>诚然，基于类的上下文管理器，在 Python 中应用广泛，也是我们经常看到的形式，不过 Python 中的上下文管理器并不局限于此。除了基于类，它还可以基于生成器实现。接下来我们来看一个例子。</p>
-<p>比如，你可以使用装饰器 contextlib.contextmanager，来定义自己所需的基于生成器的上下文管理器，用以支持 with 语句。还是拿前面的类上下文管理器 FileManager 来说，我们也可以用下面形式来表示：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> contextlib <span class="keyword">import</span> contextmanager</span><br><span class="line"> </span><br><span class="line"><span class="meta">@contextmanager</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">file_manager</span><span class="params">(name, mode)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        f = open(name, mode)</span><br><span class="line">        <span class="keyword">yield</span> f</span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        f.close()</span><br><span class="line">        </span><br><span class="line"><span class="keyword">with</span> file_manager(<span class="string">'test.txt'</span>, <span class="string">'w'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(<span class="string">'hello world'</span>)</span><br></pre></td></tr></table></figure>
-
-<p>这段代码中，函数 file_manager() 是一个生成器，当我们执行 with 语句时，便会打开文件，并返回文件对象 f；当 with 语句执行完后，finally block 中的关闭文件操作便会执行。</p>
-<p>你可以看到，使用基于生成器的上下文管理器时，我们不再用定义“<strong>enter</strong>()”和“<strong>exit</strong>()”方法，但请务必加上装饰器 @contextmanager，这一点新手很容易疏忽。</p>
-<p>讲完这两种不同原理的上下文管理器后，还需要强调的是，基于类的上下文管理器和基于生成器的上下文管理器，这两者在功能上是一致的。只不过，</p>
-<ul>
-<li>基于类的上下文管理器更加 flexible，适用于大型的系统开发；</li>
-<li>而基于生成器的上下文管理器更加方便、简洁，适用于中小型程序。<br>无论你使用哪一种，请不用忘记在方法“<strong>exit</strong>()”或者是 finally block 中释放资源，这一点尤其重要。</li>
-</ul>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这节课，我们先通过一个简单的例子，了解了资源泄露的易发生性，和其带来的严重后果，从而引入了应对方案——即上下文管理器的概念。上下文管理器，通常应用在文件的打开关闭和数据库的连接关闭等场景中，可以确保用过的资源得到迅速释放，有效提高了程序的安全性，</p>
-<p>接着，我们通过自定义上下文管理的实例，了解了上下文管理工作的原理，并一起学习了基于类的上下文管理器和基于生成器的上下文管理器，这两者的功能相同，具体用哪个，取决于你的具体使用场景。</p>
-<p>另外，上下文管理器通常和 with 语句一起使用，大大提高了程序的简洁度。需要注意的是，当我们用 with 语句执行上下文管理器的操作时，一旦有异常抛出，异常的类型、值等具体信息，都会通过参数传入“<strong>exit</strong>()”函数中。你可以自行定义相关的操作对异常进行处理，而处理完异常后，也别忘了加上“return True”这条语句，否则仍然会抛出异常。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/">&lt;i class=&quot;fa fa-angle-left&quot;&gt;&lt;&#x2F;i&gt;</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/4/">&lt;i class=&quot;fa fa-angle-right&quot;&gt;&lt;&#x2F;i&gt;</a>
+    <a class="extend prev" rel="prev" href="/page/2/">&lt;i class=&quot;fa fa-angle-left&quot;&gt;&lt;&#x2F;i&gt;</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/4/">&lt;i class=&quot;fa fa-angle-right&quot;&gt;&lt;&#x2F;i&gt;</a>
   </nav>
 
 
@@ -2722,7 +2692,7 @@ NameError: name &apos;piglei&apos; is not defined</code></pre><p>通过定义魔
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-count">61</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

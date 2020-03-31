@@ -81,7 +81,7 @@
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="LvYang">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;tags&#x2F;python&#x2F;index.html">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;page&#x2F;7&#x2F;index.html">
 <meta property="og:site_name" content="LvYang">
 <meta property="og:locale" content="zh-Hans">
 <meta name="twitter:card" content="summary">
@@ -114,13 +114,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/python/"/>
+  <link rel="canonical" href="http://yoursite.com/page/7/"/>
 
 
 
 
 
-  <title>标签: python | LvYang</title>
+  <title>LvYang</title>
   
 
 
@@ -139,7 +139,8 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left 
+  page-home">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -242,309 +243,165 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
+  <section id="posts" class="posts-expand">
+    
+      
+
+  
 
   
   
   
-  <div class="post-block tag">
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>python<small>标签</small>
-        </h1>
-      </div>
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/04/20191104/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/04/20191104/" itemprop="url">无语的Mac OS Catalina bug</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-04T18:53:42+08:00">
+                2019-11-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/11/04/20191104/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/11/04/20191104/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
 
       
         
+          
+            <p>Catalina第一时间更新,Macmini一点问题都没有,MacbookAir缺要3-5小时重启一下.</p>
+<p>状况表现是:</p>
+<p>搜狗输入法提示框卡在桌面取消不掉.</p>
+<p>Chrome,创建不了新网页,崩溃.</p>
+<p>终端开不了新的线程.</p>
+<p>练hub接的键盘鼠标都失灵.</p>
+<p>等也不会恢复只能重启.</p>
+<p>我活活等了快一个月也解决不了,只能每天重启重启.</p>
+<p>直到看到了下面这篇文章.</p>
+<ul>
+<li>关键词: 计划任务 Catalina</li>
+</ul>
+<p><a href="https://codechina.org/2019/08/mac-os-catalina-beta-bug/" target="_blank" rel="noopener">https://codechina.org/2019/08/mac-os-catalina-beta-bug/</a></p>
+<ul>
+<li>mac上挂了计划任务启动脚本. 脚本判断脚本运行就不启动.</li>
+<li>可是新系统/data/目录加了权限. 计划任务启动新的进程一直不释放.</li>
+<li>最后进程太多.导致系统崩溃卡死.</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps -ef |wc -l</span><br></pre></td></tr></table></figure>
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+<ul>
+<li>查看进程数量.</li>
+</ul>
 
-      <h2 class="post-title">
+          
         
-            <a class="post-title-link" href="/2020/01/10/39%20%7C%20Django%EF%BC%9A%E6%90%AD%E5%BB%BA%E7%9B%91%E6%8E%A7%E5%B9%B3%E5%8F%B0/" itemprop="url">
-              
-                <span itemprop="name">39 | Django：搭建监控平台</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2020-01-10T20:10:07+08:00"
-              content="2020-01-10" >
-          01-10
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/01/09/38%20%7C%20MySQL%EF%BC%9A%E6%97%A5%E5%BF%97%E5%92%8C%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9F/" itemprop="url">
-              
-                <span itemprop="name">38 | MySQL：日志和数据存储系统</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2020-01-09T20:10:07+08:00"
-              content="2020-01-09" >
-          01-09
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/01/07/37%20%7C%20Kafka%20&%20ZMQ%E8%87%AA%E5%8A%A8%E5%8C%96%E4%BA%A4%E6%98%93%E6%B5%81%E6%B0%B4%E7%BA%BF/" itemprop="url">
-              
-                <span itemprop="name">37 | Kafka & ZMQ自动化交易流水线</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2020-01-07T20:10:07+08:00"
-              content="2020-01-07" >
-          01-07
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/01/06/36%20%7C%20Pandas%20&%20Numpy%E7%AD%96%E7%95%A5%E4%B8%8E%E5%9B%9E%E6%B5%8B%E7%B3%BB%E7%BB%9F/" itemprop="url">
-              
-                <span itemprop="name">36 | Pandas & Numpy策略与回测系统</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2020-01-06T20:10:07+08:00"
-              content="2020-01-06" >
-          01-06
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/01/04/35%20%7C%20RESTful%20&%20Socket%E8%A1%8C%E6%83%85%E6%95%B0%E6%8D%AE%E5%AF%B9%E6%8E%A5%E5%92%8C%E6%8A%93%E5%8F%96/" itemprop="url">
-              
-                <span itemprop="name">35 | RESTful & Socket行情数据对接和抓取</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2020-01-04T20:10:07+08:00"
-              content="2020-01-04" >
-          01-04
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/01/03/34%20%7C%20RESTful%20&%20Socket%E6%90%AD%E5%BB%BA%E4%BA%A4%E6%98%93%E6%89%A7%E8%A1%8C%E5%B1%82%E6%A0%B8%E5%BF%83/" itemprop="url">
-              
-                <span itemprop="name">34 | RESTful & Socket搭建交易执行层核心</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2020-01-03T20:10:07+08:00"
-              content="2020-01-03" >
-          01-03
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/01/02/33%20%7C%20%E5%B8%A6%E4%BD%A0%E5%88%9D%E6%8E%A2%E9%87%8F%E5%8C%96%E4%B8%96%E7%95%8C/" itemprop="url">
-              
-                <span itemprop="name">33 | 带你初探量化世界</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2020-01-02T20:10:07+08:00"
-              content="2020-01-02" >
-          01-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/12/25/2-Python%20%E5%B7%A5%E5%8C%A0%EF%BC%9A%E7%BC%96%E5%86%99%E6%9D%A1%E4%BB%B6%E5%88%86%E6%94%AF%E4%BB%A3%E7%A0%81%E7%9A%84%E6%8A%80%E5%B7%A7/" itemprop="url">
-              
-                <span itemprop="name">Python 工匠：2-编写条件分支代码的技巧</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-12-25T20:10:07+08:00"
-              content="2019-12-25" >
-          12-25
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/12/24/29%20%7C%20%E5%B7%A7%E7%94%A8%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86%E5%99%A8%E5%92%8CWith%E8%AF%AD%E5%8F%A5%E7%B2%BE%E7%AE%80%E4%BB%A3%E7%A0%81/" itemprop="url">
-              
-                <span itemprop="name">29 | 巧用上下文管理器和With语句精简代码</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-12-24T20:10:07+08:00"
-              content="2019-12-24" >
-          12-24
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/12/23/28%20%7C%20%E5%A6%82%E4%BD%95%E5%90%88%E7%90%86%E5%88%A9%E7%94%A8assert%EF%BC%9F/" itemprop="url">
-              
-                <span itemprop="name">28 | 如何合理利用assert？</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-12-23T20:10:07+08:00"
-              content="2019-12-23" >
-          12-23
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
   </div>
   
   
   
+  </article>
+
+
+    
+  </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/tags/python/page/2/">2</a><a class="page-number" href="/tags/python/page/3/">3</a><a class="extend next" rel="next" href="/tags/python/page/2/">&lt;i class=&quot;fa fa-angle-right&quot;&gt;&lt;&#x2F;i&gt;</a>
+    <a class="extend prev" rel="prev" href="/page/6/">&lt;i class=&quot;fa fa-angle-left&quot;&gt;&lt;&#x2F;i&gt;</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span>
   </nav>
 
 

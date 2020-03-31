@@ -258,6 +258,223 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/31/22%E4%B8%A8%E5%8F%8D%E8%8C%83%E5%BC%8F%E8%AE%BE%E8%AE%A1%EF%BC%9A3NF%E6%9C%89%E4%BB%80%E4%B9%88%E4%B8%8D%E8%B6%B3%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%89%E6%97%B6%E5%80%99%E9%9C%80%E8%A6%81%E5%8F%8D%E8%8C%83%E5%BC%8F%E8%AE%BE%E8%AE%A1%EF%BC%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/31/22%E4%B8%A8%E5%8F%8D%E8%8C%83%E5%BC%8F%E8%AE%BE%E8%AE%A1%EF%BC%9A3NF%E6%9C%89%E4%BB%80%E4%B9%88%E4%B8%8D%E8%B6%B3%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%89%E6%97%B6%E5%80%99%E9%9C%80%E8%A6%81%E5%8F%8D%E8%8C%83%E5%BC%8F%E8%AE%BE%E8%AE%A1%EF%BC%9F/" itemprop="url">22丨反范式设计：3NF有什么不足，为什么有时候需要反范式设计？</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-31T20:44:01+08:00">
+                2020-03-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" itemprop="url" rel="index">
+                    <span itemprop="name">SQL必知必会</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/31/22%E4%B8%A8%E5%8F%8D%E8%8C%83%E5%BC%8F%E8%AE%BE%E8%AE%A1%EF%BC%9A3NF%E6%9C%89%E4%BB%80%E4%B9%88%E4%B8%8D%E8%B6%B3%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%89%E6%97%B6%E5%80%99%E9%9C%80%E8%A6%81%E5%8F%8D%E8%8C%83%E5%BC%8F%E8%AE%BE%E8%AE%A1%EF%BC%9F/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/03/31/22%E4%B8%A8%E5%8F%8D%E8%8C%83%E5%BC%8F%E8%AE%BE%E8%AE%A1%EF%BC%9A3NF%E6%9C%89%E4%BB%80%E4%B9%88%E4%B8%8D%E8%B6%B3%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%89%E6%97%B6%E5%80%99%E9%9C%80%E8%A6%81%E5%8F%8D%E8%8C%83%E5%BC%8F%E8%AE%BE%E8%AE%A1%EF%BC%9F/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>上一篇文章中，我们介绍了数据表设计的三种范式。作为数据库的设计人员，理解范式的设计以及反范式优化是非常有必要的。</p>
+<p>为什么这么说呢？了解以下几个方面的内容之后你就明白了。</p>
+<ol>
+<li>3NF 有什么不足？除了 3NF，我们为什么还需要 BCNF？</li>
+<li>有了范式设计，为什么有时候需要进行反范式设计？</li>
+<li>反范式设计适用的场景是什么？又可能存在哪些问题？<h3 id="BCNF（巴斯范式）"><a href="#BCNF（巴斯范式）" class="headerlink" title="BCNF（巴斯范式）"></a>BCNF（巴斯范式）</h3>如果数据表的关系模式符合 3NF 的要求，就不存在问题了吗？我们来看下这张仓库管理关系 warehouse_keeper 表：</li>
+</ol>
+<p>在这个数据表中，一个仓库只有一个管理员，同时一个管理员也只管理一个仓库。我们先来梳理下这些属性之间的依赖关系。</p>
+<p>仓库名决定了管理员，管理员也决定了仓库名，同时（仓库名，物品名）的属性集合可以决定数量这个属性。</p>
+<p>这样，我们就可以找到数据表的候选键是（管理员，物品名）和（仓库名，物品名），</p>
+<p>然后我们从候选键中选择一个作为主键，比如（仓库名，物品名）。</p>
+<p>在这里，主属性是包含在任一候选键中的属性，也就是仓库名，管理员和物品名。非主属性是数量这个属性。</p>
+<p>如何判断一张表的范式呢？我们需要根据范式的等级，从低到高来进行判断。</p>
+<p>首先，数据表每个属性都是原子性的，符合 1NF 的要求；其次，数据表中非主属性”数量“都与候选键全部依赖，（仓库名，物品名）决定数量，（管理员，物品名）决定数量，因此，数据表符合 2NF 的要求；最后，数据表中的非主属性，不传递依赖于候选键。因此符合 3NF 的要求。</p>
+<p>既然数据表已经符合了 3NF 的要求，是不是就不存在问题了呢？我们来看下下面的情况：</p>
+<ol>
+<li>增加一个仓库，但是还没有存放任何物品。根据数据表实体完整性的要求，主键不能有空值，因此会出现插入异常；</li>
+<li>如果仓库更换了管理员，我们就可能会修改数据表中的多条记录；</li>
+<li>如果仓库里的商品都卖空了，那么此时仓库名称和相应的管理员名称也会随之被删除。<br>你能看到，即便数据表符合 3NF 的要求，同样可能存在插入，更新和删除数据的异常情况。</li>
+</ol>
+<p>这种情况下该怎么解决呢？</p>
+<p>首先我们需要确认造成异常的原因：主属性仓库名对于候选键（管理员，物品名）是部分依赖的关系，这样就有可能导致上面的异常情况。人们在 3NF 的基础上进行了改进，提出了<strong>BCNF，也叫做巴斯 - 科德范式，它在 3NF 的基础上消除了主属性对候选键的部分依赖或者传递依赖关系。</strong></p>
+<p>根据 BCNF 的要求，我们需要把仓库管理关系 warehouse_keeper 表拆分成下面这样：</p>
+<p>仓库表：（仓库名，管理员）</p>
+<p>库存表：（仓库名，物品名，数量）</p>
+<p>这样就不存在主属性对于候选键的部分依赖或传递依赖，上面数据表的设计就符合 BCNF。</p>
+<h3 id="反范式设计"><a href="#反范式设计" class="headerlink" title="反范式设计"></a>反范式设计</h3><p>尽管围绕着数据表的设计有很多范式，但事实上，我们在设计数据表的时候却不一定要参照这些标准。</p>
+<p>我们在之前已经了解了越高阶的范式得到的数据表越多，数据冗余度越低。但有时候，我们在设计数据表的时候，还需要为了性能和读取效率违反范式化的原则。反范式就是相对范式化而言的，换句话说，就是允许少量的冗余，通过空间来换时间。</p>
+<p>如果我们想对查询效率进行优化，有时候反范式优化也是一种优化思路。</p>
+<p>比如我们想要查询某个商品的前 1000 条评论，会涉及到两张表。</p>
+<p>商品评论表 product_comment，对应的字段名称及含义如下：</p>
+<p>用户表 user，对应的字段名称及含义如下：</p>
+<p>下面，我们就用这两张表模拟一下反范式优化。</p>
+<h3 id="实验数据：模拟两张百万量级的数据表"><a href="#实验数据：模拟两张百万量级的数据表" class="headerlink" title="实验数据：模拟两张百万量级的数据表"></a>实验数据：模拟两张百万量级的数据表</h3><p>为了更好地进行 SQL 优化实验，我们需要给用户表和商品评论表随机模拟出百万量级的数据。我们可以通过存储过程来实现模拟数据。</p>
+<p>下面是给用户表随机生成 100 万用户的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_many_user`(IN start INT(10), IN max_num INT(10))</span><br><span class="line">BEGIN</span><br><span class="line">DECLARE i INT DEFAULT 0;</span><br><span class="line">DECLARE date_start DATETIME DEFAULT (&apos;2017-01-01 00:00:00&apos;);</span><br><span class="line">DECLARE date_temp DATETIME;</span><br><span class="line">SET date_temp = date_start;</span><br><span class="line">SET autocommit=0;</span><br><span class="line">REPEAT</span><br><span class="line">SET i=i+1;</span><br><span class="line">SET date_temp = date_add(date_temp, interval RAND()*60 second);</span><br><span class="line">INSERT INTO user(user_id, user_name, create_time)</span><br><span class="line">VALUES((start+i), CONCAT(&apos;user_&apos;,i), date_temp);</span><br><span class="line">UNTIL i = max_num</span><br><span class="line">END REPEAT;</span><br><span class="line">COMMIT;</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
+<p>我用 date_start 变量来定义初始的注册时间，时间为 2017 年 1 月 1 日 0 点 0 分 0 秒，然后用 date_temp 变量计算每个用户的注册时间，新的注册用户与上一个用户注册的时间间隔为 60 秒内的随机值。然后使用 REPEAT … UNTIL … END REPEAT 循环，对 max_num 个用户的数据进行计算。在循环前，我们将 autocommit 设置为 0，这样等计算完成再统一插入，执行效率更高。</p>
+<p>然后我们来运行 call insert_many_user(10000, 1000000); 调用存储过程。这里需要通过 start 和 max_num 两个参数对初始的 user_id 和要创建的用户数量进行设置。运行结果：</p>
+<p>你能看到在 MySQL 里，创建 100 万的用户数据用时 1 分 37 秒。</p>
+<p>接着我们再来给商品评论表 product_comment 随机生成 100 万条商品评论。这里我们设置为给某一款商品评论，比如 product_id=10001。评论的内容为随机的 20 个字母。以下是创建随机的 100 万条商品评论的存储过程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_many_product_comments`(IN START INT(10), IN max_num INT(10))</span><br><span class="line">BEGIN</span><br><span class="line">DECLARE i INT DEFAULT 0;</span><br><span class="line">DECLARE date_start DATETIME DEFAULT (&apos;2018-01-01 00:00:00&apos;);</span><br><span class="line">DECLARE date_temp DATETIME;</span><br><span class="line">DECLARE comment_text VARCHAR(25);</span><br><span class="line">DECLARE user_id INT;</span><br><span class="line">SET date_temp = date_start;</span><br><span class="line">SET autocommit=0;</span><br><span class="line">REPEAT</span><br><span class="line">SET i=i+1;</span><br><span class="line">SET date_temp = date_add(date_temp, INTERVAL RAND()*60 SECOND);</span><br><span class="line">SET comment_text = substr(MD5(RAND()),1, 20);</span><br><span class="line">SET user_id = FLOOR(RAND()*1000000);</span><br><span class="line">INSERT INTO product_comment(comment_id, product_id, comment_text, comment_time, user_id)</span><br><span class="line">VALUES((START+i), 10001, comment_text, date_temp, user_id);</span><br><span class="line">UNTIL i = max_num</span><br><span class="line">END REPEAT;</span><br><span class="line">COMMIT;</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
+<p>同样的，我用 date_start 变量来定义初始的评论时间。这里新的评论时间与上一个评论的时间间隔还是 60 秒内的随机值，商品评论表中的 user_id 为随机值。我们使用 REPEAT … UNTIL … END REPEAT 循环，来对 max_num 个商品评论的数据进行计算。</p>
+<p>然后调用存储过程，运行结果如下：</p>
+<p>MySQL 一共花了 2 分 7 秒完成了商品评论数据的创建。</p>
+<h3 id="反范式优化实验对比"><a href="#反范式优化实验对比" class="headerlink" title="反范式优化实验对比"></a>反范式优化实验对比</h3><p>如果我们想要查询某个商品 ID，比如 10001 的前 1000 条评论，需要写成下面这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SELECT p.comment_text, p.comment_time, u.user_name FROM product_comment AS p </span><br><span class="line">LEFT JOIN user AS u </span><br><span class="line">ON p.user_id = u.user_id </span><br><span class="line">WHERE p.product_id = 10001 </span><br><span class="line">ORDER BY p.comment_id DESC LIMIT 1000</span><br></pre></td></tr></table></figure>
+<p>运行结果（1000 条数据行）：</p>
+<p>运行时长为 0.395 秒，查询效率并不高。</p>
+<p>这是因为在实际生活中，我们在显示商品评论的时候，通常会显示这个用户的昵称，而不是用户 ID，因此我们还需要关联 product_comment 和 user 这两张表来进行查询。当表数据量不大的时候，查询效率还好，但如果表数据量都超过了百万量级，查询效率就会变低。这是因为查询会在 product_comment 表和 user 表这两个表上进行聚集索引扫描，然后再嵌套循环，这样一来查询所耗费的时间就有几百毫秒甚至更多。对于网站的响应来说，这已经很慢了，用户体验会非常差。</p>
+<p>如果我们想要提升查询的效率，可以允许适当的数据冗余，也就是在商品评论表中增加用户昵称字段，在 product_comment 数据表的基础上增加 user_name 字段，就得到了 product_comment2 数据表。</p>
+<p>你可以在百度网盘中下载这三张数据表 product_comment、product_comment2 和 user 表，密码为 n3l8。</p>
+<p>这样一来，只需单表查询就可以得到数据集结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT comment_text, comment_time, user_name FROM product_comment2 WHERE product_id = 10001 ORDER BY comment_id DESC LIMIT 1000</span><br></pre></td></tr></table></figure>
+<p>运行结果（1000 条数据）：</p>
+<p>优化之后只需要扫描一次聚集索引即可，运行时间为 0.039 秒，查询时间是之前的 1/10。 你能看到，在数据量大的情况下，查询效率会有显著的提升。</p>
+<p>反范式存在的问题 &amp; 适用场景<br>从上面的例子中可以看出，反范式可以通过空间换时间，提升查询的效率，但是反范式也会带来一些新问题。</p>
+<p>在数据量小的情况下，反范式不能体现性能的优势，可能还会让数据库的设计更加复杂。比如采用存储过程来支持数据的更新、删除等额外操作，很容易增加系统的维护成本。</p>
+<p>比如用户每次更改昵称的时候，都需要执行存储过程来更新，如果昵称更改频繁，会非常消耗系统资源。</p>
+<p>那么反范式优化适用于哪些场景呢？</p>
+<p>在现实生活中，我们经常需要一些冗余信息，比如订单中的收货人信息，包括姓名、电话和地址等。每次发生的订单收货信息都属于历史快照，需要进行保存，但用户可以随时修改自己的信息，这时保存这些冗余信息是非常有必要的。</p>
+<p>当冗余信息有价值或者能大幅度提高查询效率的时候，我们就可以采取反范式的优化。</p>
+<p>此外反范式优化也常用在数据仓库的设计中，因为数据仓库通常存储历史数据，对增删改的实时性要求不强，对历史数据的分析需求强。这时适当允许数据的冗余度，更方便进行数据分析。</p>
+<p>我简单总结下数据仓库和数据库在使用上的区别：</p>
+<p>数据库设计的目的在于捕获数据，而数据仓库设计的目的在于分析数据；<br>数据库对数据的增删改实时性要求强，需要存储在线的用户数据，而数据仓库存储的一般是历史数据；<br>数据库设计需要尽量避免冗余，但为了提高查询效率也允许一定的冗余度，而数据仓库在设计上更偏向采用反范式设计。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>今天我们讲了 BCNF，它是基于 3NF 进行的改进。你能看到设计范式越高阶，数据表就会越精细，数据的冗余度也就越少，在一定程度上可以让数据库在内部关联上更好地组织数据。但有时候我们也需要采用反范进行优化，通过空间来换取时间。</p>
+<p>范式本身没有优劣之分，只有适用场景不同。没有完美的设计，只有合适的设计，我们在数据表的设计中，还需要根据需求将范式和反范式混合使用。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/31/21%E4%B8%A8%E8%8C%83%E5%BC%8F%E8%AE%BE%E8%AE%A1%EF%BC%9A%E6%95%B0%E6%8D%AE%E8%A1%A8%E7%9A%84%E8%8C%83%E5%BC%8F%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%8C3NF%E6%8C%87%E7%9A%84%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2198,222 +2415,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/25/12%E4%B8%A8%E8%A7%86%E5%9B%BE%E5%9C%A8SQL%E4%B8%AD%E7%9A%84%E4%BD%9C%E7%94%A8%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%8C%E5%AE%83%E6%98%AF%E6%80%8E%E6%A0%B7%E5%B7%A5%E4%BD%9C%E7%9A%84%EF%BC%9F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LvYang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LvYang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/25/12%E4%B8%A8%E8%A7%86%E5%9B%BE%E5%9C%A8SQL%E4%B8%AD%E7%9A%84%E4%BD%9C%E7%94%A8%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%8C%E5%AE%83%E6%98%AF%E6%80%8E%E6%A0%B7%E5%B7%A5%E4%BD%9C%E7%9A%84%EF%BC%9F/" itemprop="url">12丨视图在SQL中的作用是什么，它是怎样工作的？</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-25T21:31:01+08:00">
-                2020-03-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" itemprop="url" rel="index">
-                    <span itemprop="name">SQL必知必会</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/03/25/12%E4%B8%A8%E8%A7%86%E5%9B%BE%E5%9C%A8SQL%E4%B8%AD%E7%9A%84%E4%BD%9C%E7%94%A8%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%8C%E5%AE%83%E6%98%AF%E6%80%8E%E6%A0%B7%E5%B7%A5%E4%BD%9C%E7%9A%84%EF%BC%9F/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/03/25/12%E4%B8%A8%E8%A7%86%E5%9B%BE%E5%9C%A8SQL%E4%B8%AD%E7%9A%84%E4%BD%9C%E7%94%A8%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%8C%E5%AE%83%E6%98%AF%E6%80%8E%E6%A0%B7%E5%B7%A5%E4%BD%9C%E7%9A%84%EF%BC%9F/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>我们之前对 SQL 中的数据表查询进行了讲解，今天我们来看下如何对视图进行查询。视图，也就是我们今天要讲的虚拟表，本身是不具有数据的，它是 SQL 中的一个重要概念。从下面这张图中，你能看到，虚拟表的创建连接了一个或多个数据表，不同的查询应用都可以建立在虚拟表之上。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">用户       Application 应用场景</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">虚拟表       VIEW  整合一张或多张表数据</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">数据表      table 1    table2 .... table n</span><br></pre></td></tr></table></figure>
-<p>视图一方面可以帮我们使用表的一部分而不是所有的表，另一方面也可以针对不同的用户制定不同的查询视图。比如，针对一个公司的销售人员，我们只想给他看部分数据，而某些特殊的数据，比如采购的价格，则不会提供给他。</p>
-<p>刚才讲的只是视图的一个使用场景，实际上视图还有很多作用，今天我们就一起学习下。今天的文章里，你将重点掌握以下的内容：</p>
-<ol>
-<li>什么是视图？如何创建、更新和删除视图？</li>
-<li>如何使用视图来简化我们的 SQL 操作？</li>
-<li>视图和临时表的区别是什么，它们各自有什么优缺点？<h3 id="如何创建，更新和删除视图"><a href="#如何创建，更新和删除视图" class="headerlink" title="如何创建，更新和删除视图"></a>如何创建，更新和删除视图</h3>视图作为一张虚拟表，帮我们封装了底层与数据表的接口。它相当于是一张表或多张表的数据结果集。视图的这一特点，可以帮我们简化复杂的 SQL 查询，比如在编写视图后，我们就可以直接重用它，而不需要考虑视图中包含的基础查询的细节。同样，我们也可以根据需要更改数据格式，返回与底层数据表格式不同的数据。</li>
-</ol>
-<p>通常情况下，小型项目的数据库可以不使用视图，但是在大型项目中，以及数据表比较复杂的情况下，视图的价值就凸显出来了，它可以帮助我们把经常查询的结果集放到虚拟表中，提升使用效率。理解和使用起来都非常方便。</p>
-<p>创建视图：CREATE VIEW<br>那么该如何创建视图呢？创建视图的语法是：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CREATE VIEW view_name AS</span><br><span class="line">SELECT column1, column2</span><br><span class="line">FROM table</span><br><span class="line">WHERE condition</span><br></pre></td></tr></table></figure>
-<p>实际上就是我们在 SQL 查询语句的基础上封装了视图 VIEW，这样就会基于 SQL 语句的结果集形成一张虚拟表。其中 view_name 为视图名称，column1、column2 代表列名，condition 代表查询过滤条件。</p>
-<p>我们以 NBA 球员数据表为例。我们想要查询比 NBA 球员平均身高高的球员都有哪些，显示他们的球员 ID 和身高。假设我们给这个视图起个名字 player_above_avg_height，那么创建视图可以写成：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CREATE VIEW player_above_avg_height AS</span><br><span class="line">SELECT player_id, height</span><br><span class="line">FROM player</span><br><span class="line">WHERE height &gt; (SELECT AVG(height) from player)</span><br></pre></td></tr></table></figure>
-<p>当视图创建之后，它就相当于一个虚拟表，可以直接使用：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM player_above_avg_height</span><br></pre></td></tr></table></figure>
-<p>运行结果和上面一样。</p>
-<h3 id="嵌套视图"><a href="#嵌套视图" class="headerlink" title="嵌套视图"></a>嵌套视图</h3><p>当我们创建好一张视图之后，还可以在它的基础上继续创建视图，比如我们想在虚拟表 player_above_avg_height 的基础上，找到比这个表中的球员平均身高高的球员，作为新的视图 player_above_above_avg_height，那么可以写成：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CREATE VIEW player_above_above_avg_height AS</span><br><span class="line">SELECT player_id, height</span><br><span class="line">FROM player</span><br><span class="line">WHERE height &gt; (SELECT AVG(height) from player_above_avg_height)</span><br></pre></td></tr></table></figure>
-
-<p>你能看到这个视图的数据记录数为 11 个，比之前的记录少了 7 个。</p>
-<p>修改视图：ALTER VIEW<br>修改视图的语法是：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ALTER VIEW view_name AS</span><br><span class="line">SELECT column1, column2</span><br><span class="line">FROM table</span><br><span class="line">WHERE condition</span><br></pre></td></tr></table></figure>
-<p>你能看出来它的语法和创建视图一样，只是对原有视图的更新。比如我们想更新视图 player_above_avg_height，增加一个 player_name 字段，可以写成：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ALTER VIEW player_above_avg_height AS</span><br><span class="line">SELECT player_id, player_name, height</span><br><span class="line">FROM player</span><br><span class="line">WHERE height &gt; (SELECT AVG(height) from player)</span><br></pre></td></tr></table></figure>
-<p>这样的话，下次再对视图进行查询的时候，视图结果就进行了更新。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM player_above_avg_height</span><br></pre></td></tr></table></figure>
-
-<h3 id="删除视图：DROP-VIEW"><a href="#删除视图：DROP-VIEW" class="headerlink" title="删除视图：DROP VIEW"></a>删除视图：DROP VIEW</h3><p>删除视图的语法是：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DROP VIEW view_name</span><br></pre></td></tr></table></figure>
-<p>比如我们想把刚才创建的视图删除，可以使用：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DROP VIEW player_above_avg_height</span><br></pre></td></tr></table></figure>
-<p>需要说明的是，SQLite 不支持视图的修改，仅支持只读视图，也就是说你只能使用 CREATE VIEW 和 DROP VIEW，如果想要修改视图，就需要先 DROP 然后再 CREATE。</p>
-<h3 id="如何使用视图简化-SQL-操作"><a href="#如何使用视图简化-SQL-操作" class="headerlink" title="如何使用视图简化 SQL 操作"></a>如何使用视图简化 SQL 操作</h3><p>从上面这个例子中，你能看出视图就是对 SELECT 语句进行了封装，方便我们重用它们。下面我们再来看几个视图使用的例子。</p>
-<h3 id="利用视图完成复杂的连接"><a href="#利用视图完成复杂的连接" class="headerlink" title="利用视图完成复杂的连接"></a>利用视图完成复杂的连接</h3><p>我在讲解 SQL99 标准连接操作的时候，举了一个 NBA 球员和身高等级连接的例子，有两张表，分别为 player 和 height_grades。其中 height_grades 记录了不同身高对应的身高等级。这里我们可以通过创建视图，来完成球员以及对应身高等级的查询。</p>
-<p>首先我们对 player 表和 height_grades 表进行连接，关联条件是球员的身高 height（在身高等级表规定的最低身高和最高身高之间），这样就可以得到这个球员对应的身高等级，对应的字段为 height_level。然后我们通过 SELECT 得到我们想要查询的字段，分别为球员姓名 player_name、球员身高 height，还有对应的身高等级 height_level。然后把取得的查询结果集放到视图 player_height_grades 中，即：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CREATE VIEW player_height_grades AS</span><br><span class="line">SELECT p.player_name, p.height, h.height_level</span><br><span class="line">FROM player as p JOIN height_grades as h</span><br><span class="line">ON height BETWEEN h.height_lowest AND h.height_highest</span><br></pre></td></tr></table></figure>
-<p>以后我们进行查询的时候，可以直接通过视图查询，比如我想查询身高介于 1.90m 和 2.08m 之间的球员及他们对应的身高：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM player_height_grades WHERE height &gt;= 1.90 AND height &lt;= 2.08</span><br></pre></td></tr></table></figure>
-
-<p>这样就把一个相对复杂的连接查询转化成了视图查询。</p>
-<h3 id="利用视图对数据进行格式化"><a href="#利用视图对数据进行格式化" class="headerlink" title="利用视图对数据进行格式化"></a>利用视图对数据进行格式化</h3><p>我们经常需要输出某个格式的内容，比如我们想输出球员姓名和对应的球队，对应格式为 player_name(team_name)，就可以使用视图来完成数据格式化的操作：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CREATE VIEW player_team AS </span><br><span class="line">SELECT CONCAT(player_name, &apos;(&apos; , team.team_name , &apos;)&apos;) AS player_team FROM player JOIN team WHERE player.team_id = team.team_id</span><br></pre></td></tr></table></figure>
-<p>首先我们将 player 表和 team 表进行连接，关联条件是相同的 team_id。我们想要的格式是player_name(team_name)，因此我们使用 CONCAT 函数，即CONCAT(player_name, ‘(‘ , team.team_name , ‘)’)，将 player_name 字段和 team_name 字段进行拼接，得到了拼接值被命名为 player_team 的字段名，将它放到视图 player_team 中。</p>
-<p>这样的话，我们直接查询视图，就可以得到格式化后的结果：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM player_team</span><br></pre></td></tr></table></figure>
-<h3 id="使用视图与计算字段"><a href="#使用视图与计算字段" class="headerlink" title="使用视图与计算字段"></a>使用视图与计算字段</h3><p>我们在数据查询中，有很多统计的需求可以通过视图来完成。正确地使用视图可以帮我们简化复杂的数据处理。</p>
-<p>我以球员比赛成绩表为例，对应的是 player_score 表。这张表中一共有 19 个字段，它们代表的含义如下：</p>
-<p>如果我想要统计每位球员在每场比赛中的二分球、三分球和罚球的得分，可以通过创建视图完成：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CREATE VIEW game_player_score AS</span><br><span class="line">SELECT game_id, player_id, (shoot_hits-shoot_3_hits)*2 AS shoot_2_points, shoot_3_hits*3 AS shoot_3_points, shoot_p_hits AS shoot_p_points, score  FROM player_score</span><br><span class="line">`</span><br></pre></td></tr></table></figure>
-<p>然后通过查询视图就可以完成。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM game_player_score</span><br></pre></td></tr></table></figure>
-<p>你能看出正确使用视图可以简化复杂的 SQL 查询，让 SQL 更加清爽易用。不过有一点需要注意，视图是虚拟表，它只是封装了底层的数据表查询接口，因此有些 RDBMS 不支持对视图创建索引（有些 RDBMS 则支持，比如新版本的 SQL Server）。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>今天我讲解了视图的使用，包括创建，修改和删除视图。使用视图有很多好处，比如安全、简单清晰。</p>
-<ol>
-<li>安全性：虚拟表是基于底层数据表的，我们在使用视图时，一般不会轻易通过视图对底层数据进行修改，即使是使用单表的视图，也会受到限制，比如计算字段，类型转换等是无法通过视图来对底层数据进行修改的，这也在一定程度上保证了数据表的数据安全性。同时，我们还可以针对不同用户开放不同的数据查询权限，比如人员薪酬是个敏感的字段，那么只给某个级别以上的人员开放，其他人的查询视图中则不提供这个字段。</li>
-<li>简单清晰：视图是对 SQL 查询的封装，它可以将原本复杂的 SQL 查询简化，在编写好查询之后，我们就可以直接重用它而不必要知道基本的查询细节。同时我们还可以在视图之上再嵌套视图。这样就好比我们在进行模块化编程一样，不仅结构清晰，还提升了代码的复用率。</li>
-</ol>
-<p>另外，我们也需要了解到视图是虚拟表，本身不存储数据，如果想要通过视图对底层数据表的数据进行修改也会受到很多限制，通常我们是把视图用于查询，也就是对 SQL 查询的一种封装。那么它和临时表又有什么区别呢？在实际工作中，我们可能会见到各种临时数据。比如你可能会问，如果我在做一个电商的系统，中间会有个购物车的功能，需要临时统计购物车中的商品和金额，那该怎么办呢？这里就需要用到临时表了，临时表是真实存在的数据表，不过它不用于长期存放数据，只为当前连接存在，关闭连接后，临时表就会自动释放。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/">&lt;i class=&quot;fa fa-angle-right&quot;&gt;&lt;&#x2F;i&gt;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/">&lt;i class=&quot;fa fa-angle-right&quot;&gt;&lt;&#x2F;i&gt;</a>
   </nav>
 
 
@@ -2459,7 +2465,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-count">61</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
