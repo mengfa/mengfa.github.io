@@ -258,6 +258,246 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/23/04%E4%B8%A8%E4%BD%BF%E7%94%A8DDL%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93&%E6%95%B0%E6%8D%AE%E8%A1%A8%E6%97%B6%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E4%BB%80%E4%B9%88%EF%BC%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/23/04%E4%B8%A8%E4%BD%BF%E7%94%A8DDL%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93&%E6%95%B0%E6%8D%AE%E8%A1%A8%E6%97%B6%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E4%BB%80%E4%B9%88%EF%BC%9F/" itemprop="url">04丨使用DDL创建数据库&数据表时需要注意什么？</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-23T20:52:07+08:00">
+                2020-03-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" itemprop="url" rel="index">
+                    <span itemprop="name">SQL必知必会</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/23/04%E4%B8%A8%E4%BD%BF%E7%94%A8DDL%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93&%E6%95%B0%E6%8D%AE%E8%A1%A8%E6%97%B6%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E4%BB%80%E4%B9%88%EF%BC%9F/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/03/23/04%E4%B8%A8%E4%BD%BF%E7%94%A8DDL%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93&%E6%95%B0%E6%8D%AE%E8%A1%A8%E6%97%B6%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E4%BB%80%E4%B9%88%EF%BC%9F/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>DDL 是 DBMS 的核心组件，也是 SQL 的重要组成部分，DDL 的正确性和稳定性是整个 SQL 运行的重要基础。面对同一个需求，不同的开发人员创建出来的数据库和数据表可能千差万别，那么在设计数据库的时候，究竟什么是好的原则？我们在创建数据表的时候需要注意什么？</p>
+<p>今天的内容，你可以从以下几个角度来学习：</p>
+<ol>
+<li>了解 DDL 的基础语法，它如何定义数据库和数据表；</li>
+<li>使用 DDL 定义数据表时，都有哪些约束性；</li>
+<li>使用 DDL 设计数据库时，都有哪些重要原则。</li>
+</ol>
+<h3 id="DDL-的基础语法及设计工具"><a href="#DDL-的基础语法及设计工具" class="headerlink" title="DDL 的基础语法及设计工具"></a>DDL 的基础语法及设计工具</h3><p>DDL 的英文全称是 Data Definition Language，中文是数据定义语言。它定义了数据库的结构和数据表的结构。</p>
+<p>在 DDL 中，我们常用的功能是增删改，分别对应的命令是 CREATE、DROP 和 ALTER。需要注意的是，在执行 DDL 的时候，不需要 COMMIT，就可以完成执行任务。</p>
+<h4 id="1-对数据库进行定义"><a href="#1-对数据库进行定义" class="headerlink" title="1.对数据库进行定义"></a>1.对数据库进行定义</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CREATE DATABASE nba; // 创建一个名为 nba 的数据库</span><br><span class="line">DROP DATABASE nba; // 删除一个名为 nba 的数据库</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-对数据表进行定义"><a href="#2-对数据表进行定义" class="headerlink" title="2.对数据表进行定义"></a>2.对数据表进行定义</h4><p>创建表结构的语法是这样的：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE table_name</span><br></pre></td></tr></table></figure>
+
+<h3 id="创建表结构"><a href="#创建表结构" class="headerlink" title="创建表结构"></a>创建表结构</h3><p>比如我们想创建一个球员表，表名为 player，里面有两个字段，一个是 player_id，它是 int 类型，另一个 player_name 字段是varchar(255)类型。这两个字段都不为空，且 player_id 是递增的。</p>
+<p>那么创建的时候就可以写为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE player  (</span><br><span class="line">  player_id int(<span class="number">11</span>) NOT NULL AUTO_INCREMENT,</span><br><span class="line">  player_name varchar(<span class="number">255</span>) NOT NULL</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>需要注意的是，语句最后以分号（;）作为结束符，最后一个字段的定义结束后没有逗号。数据类型中 int(11) 代表整数类型，显示长度为 11 位，括号中的参数 11 代表的是最大有效显示长度，与类型包含的数值范围大小无关。varchar(255)代表的是最大长度为 255 的可变字符串类型。NOT NULL表明整个字段不能是空值，是一种数据约束。AUTO_INCREMENT代表主键自动增长。</p>
+<p>实际上，我们通常很少自己写 DDL 语句，可以使用一些可视化工具来创建和操作数据库和数据表。在这里我推荐使用 Navicat，它是一个数据库管理和设计工具，跨平台，支持很多种数据库管理软件，比如 MySQL、Oracle、MariaDB 等。基本上专栏讲到的数据库软件都可以使用 Navicat 来管理。</p>
+<p>假如还是针对 player 这张表，我们想设计以下的字段：</p>
+<table>
+<thead>
+<tr>
+<th align="left">字段</th>
+<th align="left">含义</th>
+<th align="left">类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">player_id</td>
+<td align="left">球员ID</td>
+<td align="left">int整数类型,最大显示长度11</td>
+</tr>
+<tr>
+<td align="left">team_id</td>
+<td align="left">球队ID</td>
+<td align="left">int整数类型,最大显示长度11</td>
+</tr>
+<tr>
+<td align="left">player_name</td>
+<td align="left">球员姓名</td>
+<td align="left">varchar字符串类型,最大长度255</td>
+</tr>
+<tr>
+<td align="left">height</td>
+<td align="left">身高</td>
+<td align="left">float浮点类型,一共存储3个有效数字,其中小数点长度为2.</td>
+</tr>
+</tbody></table>
+<p>其中 player_id 是数据表 player 的主键，且自动增长，也就是 player_id 会从 1 开始，然后每次加 1。player_id、team_id、player_name 这三个字段均不为空，height 字段可以为空。</p>
+<p>按照上面的设计需求，我们可以使用 Navicat 软件进行设计.<br>然后，我们还可以对 player_name 字段进行索引，索引类型为Unique。<br>这样一张 player 表就通过可视化工具设计好了。我们可以把这张表导出来，可以看看这张表对应的 SQL 语句是怎样的。方法是在 Navicat 左侧用右键选中 player 这张表，然后选择“转储 SQL 文件”→“仅结构”，这样就可以看到导出的 SQL 文件了，代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">DROP TABLE IF EXISTS `player`;</span><br><span class="line">CREATE TABLE `player`  (</span><br><span class="line">  `player_id` int(<span class="number">11</span>) NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `team_id` int(<span class="number">11</span>) NOT NULL,</span><br><span class="line">  `player_name` varchar(<span class="number">255</span>) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,</span><br><span class="line">  `height` float(<span class="number">3</span>, <span class="number">2</span>) NULL DEFAULT <span class="number">0.00</span>,</span><br><span class="line">  PRIMARY KEY (`player_id`) USING BTREE,</span><br><span class="line">  UNIQUE INDEX `player_name`(`player_name`) USING BTREE</span><br><span class="line">) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;</span><br></pre></td></tr></table></figure>
+
+<p>你能看到整个 SQL 文件中的 DDL 处理，首先先删除 player 表（如果数据库中存在该表的话），然后再创建 player 表，里面的数据表和字段都使用了反引号，这是为了避免它们的名称与 MySQL 保留字段相同，对数据表和字段名称都加上了反引号。</p>
+<p>其中 player_name 字段的字符集是 utf8，排序规则是utf8_general_ci，代表对大小写不敏感，如果设置为utf8_bin，代表对大小写敏感，还有许多其他排序规则这里不进行介绍。</p>
+<p>因为 player_id 设置为了主键，因此在 DDL 中使用PRIMARY KEY进行规定，同时索引方法采用 BTREE。</p>
+<p>因为我们对 player_name 字段进行索引，在设置字段索引时，我们可以设置为UNIQUE INDEX（唯一索引），也可以设置为其他索引方式，比如NORMAL INDEX（普通索引），这里我们采用UNIQUE INDEX。唯一索引和普通索引的区别在于它对字段进行了唯一性的约束。在索引方式上，你可以选择BTREE或者HASH，这里采用了BTREE方法进行索引。我会在后面介绍BTREE和HASH索引方式的区别。</p>
+<p>整个数据表的存储规则采用 InnoDB。之前我们简单介绍过 InnoDB，它是 MySQL5.5 版本之后默认的存储引擎。同时，我们将字符集设置为 utf8，排序规则为utf8_general_ci，行格式为Dynamic，就可以定义数据表的最后约定了：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;</span><br></pre></td></tr></table></figure>
+
+<p>你能看出可视化工具还是非常方便的，它能直接帮我们将数据库的结构定义转化成 SQL 语言，方便数据库和数据表结构的导出和导入。不过在使用可视化工具前，你首先需要了解对于 DDL 的基础语法，至少能清晰地看出来不同字段的定义规则、索引方法，以及主键和外键的定义。</p>
+<h3 id="修改表结构"><a href="#修改表结构" class="headerlink" title="修改表结构"></a>修改表结构</h3><p>在创建表结构之后，我们还可以对表结构进行修改，虽然直接使用 Navicat 可以保证重新导出的数据表就是最新的，但你也有必要了解，如何使用 DDL 命令来完成表结构的修改。</p>
+<ol>
+<li>添加字段，比如我在数据表中添加一个 age 字段，类型为int(11)</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE player ADD (age int(<span class="number">11</span>));</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>修改字段名，将 age 字段改成player_age</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE player RENAME COLUMN age to player_age</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>修改字段的数据类型，将player_age的数据类型设置为float(3,1)</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE player MODIFY (player_age float(<span class="number">3</span>,<span class="number">1</span>));</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>删除字段, 删除刚才添加的player_age字段</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE player DROP COLUMN player_age;</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">### 数据表的常见约束</span></span><br><span class="line">当我们创建数据表的时候，还会对字段进行约束，约束的目的在于保证 RDBMS 里面数据的准确性和一致性。下面，我们来看下常见的约束有哪些。</span><br><span class="line"></span><br><span class="line">首先是主键约束。</span><br><span class="line"></span><br><span class="line">主键起的作用是唯一标识一条记录，不能重复，不能为空，即 UNIQUE+NOT NULL。一个数据表的主键只能有一个。主键可以是一个字段，也可以由多个字段复合组成。在上面的例子中，我们就把 player_id 设置为了主键。</span><br><span class="line"></span><br><span class="line">其次还有外键约束。</span><br><span class="line"></span><br><span class="line">外键确保了表与表之间引用的完整性。一个表中的外键对应另一张表的主键。外键可以是重复的，也可以为空。比如 player_id 在 player 表中是主键，如果你想设置一个球员比分表即 player_score，就可以在 player_score 中设置 player_id 为外键，关联到 player 表中。</span><br><span class="line"></span><br><span class="line">除了对键进行约束外，还有字段约束。</span><br><span class="line"></span><br><span class="line">唯一性约束。</span><br><span class="line"></span><br><span class="line">唯一性约束表明了字段在表中的数值是唯一的，即使我们已经有了主键，还可以对其他字段进行唯一性约束。比如我们在 player 表中给 player_name 设置唯一性约束，就表明任何两个球员的姓名不能相同。需要注意的是，唯一性约束和普通索引（NORMAL INDEX）之间是有区别的。唯一性约束相当于创建了一个约束和普通索引，目的是保证字段的正确性，而普通索引只是提升数据检索的速度，并不对字段的唯一性进行约束。</span><br><span class="line"></span><br><span class="line">NOT NULL 约束。对字段定义了 NOT NULL，即表明该字段不应为空，必须有取值。</span><br><span class="line"></span><br><span class="line">DEFAULT，表明了字段的默认值。如果在插入数据的时候，这个字段没有取值，就设置为默认值。比如我们将身高 height 字段的取值默认设置为 <span class="number">0.00</span>，即DEFAULT <span class="number">0.00</span>。</span><br><span class="line"></span><br><span class="line">CHECK 约束，用来检查特定字段取值范围的有效性，CHECK 约束的结果不能为 FALSE，比如我们可以对身高 height 的数值进行 CHECK 约束，必须≥<span class="number">0</span>，且＜<span class="number">3</span>，即CHECK(height&gt;=<span class="number">0</span> AND height&lt;<span class="number">3</span>)。</span><br><span class="line"></span><br><span class="line"><span class="comment">### 设计数据表的原则</span></span><br><span class="line">我们在设计数据表的时候，经常会考虑到各种问题，比如：用户都需要什么数据？需要在数据表中保存哪些数据？哪些数据是经常访问的数据？如何提升检索效率？</span><br><span class="line"></span><br><span class="line">如何保证数据表中数据的正确性，当插入、删除、更新的时候该进行怎样的约束检查？</span><br><span class="line"></span><br><span class="line">如何降低数据表的数据冗余度，保证数据表不会因为用户量的增长而迅速扩张？</span><br><span class="line"></span><br><span class="line">如何让负责数据库维护的人员更方便地使用数据库？</span><br><span class="line"></span><br><span class="line">除此以外，我们使用数据库的应用场景也各不相同，可以说针对不同的情况，设计出来的数据表可能千差万别。那么有没有一种设计原则可以让我们来借鉴呢？这里我整理了一个“三少一多”原则：</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="number">1.</span>数据表的个数越少越好</span><br><span class="line"></span><br><span class="line">RDBMS 的核心在于对实体和联系的定义，也就是 E-R 图（Entity Relationship Diagram），数据表越少，证明实体和联系设计得越简洁，既方便理解又方便操作。</span><br><span class="line"></span><br><span class="line"><span class="number">2.</span>数据表中的字段个数越少越好</span><br><span class="line"></span><br><span class="line">字段个数越多，数据冗余的可能性越大。设置字段个数少的前提是各个字段相互独立，而不是某个字段的取值可以由其他字段计算出来。当然字段个数少是相对的，我们通常会在数据冗余和检索效率中进行平衡。</span><br><span class="line"></span><br><span class="line"><span class="number">3.</span>数据表中联合主键的字段个数越少越好</span><br><span class="line"></span><br><span class="line">设置主键是为了确定唯一性，当一个字段无法确定唯一性的时候，就需要采用联合主键的方式（也就是用多个字段来定义一个主键）。联合主键中的字段越多，占用的索引空间越大，不仅会加大理解难度，还会增加运行时间和索引空间，因此联合主键的字段个数越少越好。</span><br><span class="line"></span><br><span class="line"><span class="number">4.</span>使用主键和外键越多越好</span><br><span class="line"></span><br><span class="line">数据库的设计实际上就是定义各种表，以及各种字段之间的关系。这些关系越多，证明这些实体之间的冗余度越低，利用度越高。这样做的好处在于不仅保证了数据表之间的独立性，还能提升相互之间的关联使用率。</span><br><span class="line"></span><br><span class="line">你应该能看出来“三少一多”原则的核心就是简单可复用。简单指的是用更少的表、更少的字段、更少的联合主键字段来完成数据表的设计。可复用则是通过主键、外键的使用来增强数据表之间的复用率。因为一个主键可以理解是一张表的代表。键设计得越多，证明它们之间的利用率越高。</span><br><span class="line"></span><br><span class="line"><span class="comment">### 总结</span></span><br><span class="line">今天我们学习了 DDL 的基础语法，比如如何对数据库和数据库表进行定义，也了解了使用 Navicat 可视化管理工具来辅助我们完成数据表的设计，省去了手写 SQL 的工作量。</span><br><span class="line"></span><br><span class="line">在创建数据表的时候，除了对字段名及数据类型进行定义以外，我们考虑最多的就是关于字段的约束，我介绍了 <span class="number">7</span> 种常见的约束，它们都是数据表设计中会用到的约束：主键、外键、唯一性、NOT NULL、DEFAULT、CHECK 约束等。</span><br><span class="line"></span><br><span class="line">当然，了解了如何操作创建数据表之后，你还需要动脑思考，怎样才能设计出一个好的数据表？设计的原则都有哪些？针对这个，我整理出了“三少一多”原则，在实际使用过程中，你需要灵活掌握，因为这个原则并不是绝对的，有时候我们需要牺牲数据的冗余度来换取数据处理的效率。</span><br></pre></td></tr></table></figure>
+
+<h3 id="我们在创建数据表的时候，会对数据表设置主键、外键和索引。你能说下这三者的作用和区别吗？"><a href="#我们在创建数据表的时候，会对数据表设置主键、外键和索引。你能说下这三者的作用和区别吗？" class="headerlink" title="我们在创建数据表的时候，会对数据表设置主键、外键和索引。你能说下这三者的作用和区别吗？"></a>我们在创建数据表的时候，会对数据表设置主键、外键和索引。你能说下这三者的作用和区别吗？</h3><p>主键：唯一标识一条记录，不能重复，不能为空。<br>外键：确保了表于表之间引用的完整性，可以重复，可以为空<br>索引：提升数据检索速度<br>区别：主键是索引的一种，而且是唯一索引的一种。而并非在是索引，是两表之间的链接</p>
+<h3 id="外键多了会有很多维护问题吧？"><a href="#外键多了会有很多维护问题吧？" class="headerlink" title="外键多了会有很多维护问题吧？"></a>外键多了会有很多维护问题吧？</h3><p>作者回复: 是否使用外键确实会有一些争议。我来解释下关于外键的使用：<br>首先，外键本身是为了实现强一致性，所以如果需要正确性&gt;性能的话，还是建议使用外键，它可以让我们在数据库的层面保证数据的完整性和一致性。<br>当然不用外键，你也可以在业务层进行实现。不过，这样做也同样存在一定的风险，因为这样，就会让业务逻辑会与数据具备一定的耦合性。也就是业务逻辑和数据必须同时修改。而且在工作中，业务层可能会经常发生变化。</p>
+<p>当然，很多互联网的公司，尤其是超大型的数据应用场景，大量的插入，更新和删除在外键的约束下会降低性能，同时数据库在水平拆分和分库的情况下，数据库端也做不到执行外键约束。另外，在高并发的情况下，外键的存在也会造成额外的开销。因为每次更新数据，都需要检查另外一张表的数据，也容易造成死锁。<br>所以在这种情况下，尤其是大型项目中后期，可以采用业务层来实现，取消外键提高效率。<br>不过在SQL学习之初，包括在系统最初设计的时候，还是建议你采用规范的数据库设计，也就是采用外键来对数据表进行约束。因为这样可以建立一个强一致性，可靠性高的数据库结构，也不需要在业务层来实现过多的检查。<br>当然在项目后期，业务量增大的情况下，你需要更多考虑到数据库性能问题，可以取消外键的约束，转移到业务层来实现。而且在大型互联网项目中，考虑到分库分表的情况，也会降低外键的使用。<br>不过在SQL学习，以及项目早期，还是建议你使用外键。在项目后期，你可以分析有哪些外键造成了过多的性能消耗。一般遵循2/8原则，会有20%的外键造成80%的资源效率，你可以只把这20%的外键进行开放，采用业务层逻辑来进行实现，当然你需要保证业务层的实现没有错误。不同阶段，考虑的问题不同。当用户和业务量增大的时候，对于大型互联网应用，也会通过减少外键的使用，来减低死锁发生的概率，提高并发处理能力。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/23/03%E4%B8%A8%E5%AD%A6%E4%BC%9A%E7%94%A8%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E6%96%B9%E5%BC%8F%E6%80%9D%E8%80%83SQL%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2315,228 +2555,6 @@ AttributeError: module &apos;websocket&apos; has no attribute &apos;WebSocketApp
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/02/33%20%7C%20%E5%B8%A6%E4%BD%A0%E5%88%9D%E6%8E%A2%E9%87%8F%E5%8C%96%E4%B8%96%E7%95%8C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LvYang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LvYang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/02/33%20%7C%20%E5%B8%A6%E4%BD%A0%E5%88%9D%E6%8E%A2%E9%87%8F%E5%8C%96%E4%B8%96%E7%95%8C/" itemprop="url">33 | 带你初探量化世界</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-02T20:10:07+08:00">
-                2020-01-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
-                    <span itemprop="name">python核心技术与实战</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/01/02/33%20%7C%20%E5%B8%A6%E4%BD%A0%E5%88%9D%E6%8E%A2%E9%87%8F%E5%8C%96%E4%B8%96%E7%95%8C/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/01/02/33%20%7C%20%E5%B8%A6%E4%BD%A0%E5%88%9D%E6%8E%A2%E9%87%8F%E5%8C%96%E4%B8%96%E7%95%8C/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="交易是什么？"><a href="#交易是什么？" class="headerlink" title="交易是什么？"></a>交易是什么？</h3><p>市场，是人类有史以来最伟大的发明之一。亚当斯在国富论中，用“看不见的手”这个概念，生动形象地阐释了市场和理性人之间是如何交互，最终让整个社会受益的。</p>
-<p>而市场的核心，是交换。人类发展最开始是物物交换，原始的“以物易物”的方式产生于货币诞生之前。不过，这种方式非常低效，不便于流通交换，经常会出现的情况是，要走很长的交换链条才能拿到自己想要的物品。于是，一般等价物出现了，社会分工也逐渐出现了。人们把自己生产的商品换成一般等价物，然后再换成自己需要的其他商品。</p>
-<p>而交换的核心，就是买和卖。当买卖双方对价格预期相等的时候，交易达成。随着金融和技术的发展，逐渐出现了股票、债券、期权、期货等越来越多的金融工具，金融衍生品也朝着复杂的方向发展。</p>
-<p>在我们经常听到的投资银行中，量化基金交易员这种角色，所做的事情，就是在这些复杂的衍生品基础上，分析投资标的的价值，然后以某种策略来管理持有仓位，进行买进和卖出。</p>
-<p>为什么交易能赚钱，是很多疑惑不解的地方。市场究竟有没有规律可循呢？可以肯定是有的，但虽有迹可循却无法可依。交易的多样性和人性的复杂性，使得金融数据的噪音极大，我们无法简单地从某一两个因子来确定地推导行情变化。</p>
-<p>所以交易员这个行业本身，对自身素质要求是极高的。除了要具备扎实的专业素养（包括金融功底、数理逻辑、分析能力、决策能力），对心理素质的要求也非常高。这种直接和钱打交道、并直面人性深处欲望的行业，也因此吸引了无数高手的参与，很多人因此暴富，也有不少人破产，一无所有。</p>
-<p>那么，有什么办法可以规避这种，因为心理素质原因带来的风险呢？</p>
-<h3 id="量化交易"><a href="#量化交易" class="headerlink" title="量化交易"></a>量化交易</h3><p>回答这个问题之前，我先插一句题外话。刚接触量化交易的朋友，都很容易被这几个词绕晕：量化交易（Quantative Trading）、程序化交易（Program Trading）、算法交易（Algo-Trading）、高频交易（High Frequency Trading）和自动化交易平台（Automated Trading System）。</p>
-<p>虽然我遇到过不少行业内的人也混用这词，但是作为初学者来说，厘清这些术语还是很有帮助的。至少，在别人说出这些高大上的词时，我们心里不用犯怵了。</p>
-<p>先来看程序化交易，它通常用计算机程序代替交易员，来具体执行金融产品的买卖。比如，一个基金经理需要卖出大量股票。如果直接挂一个大的卖单，可能会影响市场，那就用计算机程序拆分成小单慢慢执行。所以，量化交易的下层通常是程序交易。</p>
-<p>而算法交易通常用于高频交易中。它指的是，通过算法快速判定买卖的时间点，快速买卖多个产品。</p>
-<p>量化交易则通常是指使用数学、统计甚至机器学习的方法，去找寻合适的买卖时机。所以，在这个维度的定义之下，算法交易、高频交易还有统计套利（Statistical Arbitrage）都可以算作量化交易。</p>
-<p>简单而言，我们可以认为量化交易的涵盖范围最大。因此，当你不确定用哪个词的时候，用量化交易就行了。</p>
-<p>回到我们刚刚的问题，规避心理素质原因带来的风险的方法，自然就是量化交易了。量化交易的好处显而易见。最直观来看，计算机不眠不休，不需要交易员实时操盘，满足了人们“躺着挣钱”的愿景。当然，这只是美好的想象，真要这么做的话，不久之后就要回工地搬砖了。现实场景中，成熟的量化交易也需要有人蹲守，适时干预，防止算法突然失效造成巨额的交易亏损。</p>
-<p>在数字货币领域的交易，这一点更加显著。数字货币的交易在全球许多交易所进行，和股票不同，一支股票可能只在少数几个交易所交易，而一种数字货币可以在所有的交易所同时进行交易。同时，因为没有股市的开盘、收盘限制，数字货币的交易通常是 7 x 24 小时不眠不休，比前世的 “996 福报”凶残多了。要是真有交易员能在这个市场活下来，我们尊称一声“神仙”也不为过了。</p>
-<p>多交易所交易，也意味着全球数字货币市场每时每刻都是紧密相连的。一个市场、一个局部的巨大变动，都会影响所有的市场。比如，2017 年朝鲜氢弹炸了的当天，新闻还没出来，隔壁韩国、日本的比特币价格马上拉升了一波；再比如，当比特币的负面消息半夜里传出来的时候，其价格也马上跟着暴跌一波。</p>
-<p>因此，我们经常看到比特币的价格波动巨大。很有可能今天还是财富自由状态，明天的财富就没那么自由了。显然，在这种市场中交易，人力很难持久支撑，而量化交易就很合适了。</p>
-<p>通常的电子盘交易（比如股票，数字货币），是通过券商或者软件，直接把买卖请求发送给交易所；而算法交易的底层，就是让程序来自动实现这类操作。券商或者交易所，通常也会提供 API 接口给投资者。比如，盈透证券（Interactive Broker）的接口，就可以支持股票、期权的行情数据获取和交易；而 Gemini、OKCoin 等交易所，也提供了对应的接口进行数字货币行情获取和交易。</p>
-<p>Gemini 交易所的公开行情 API，就可以通过下面这种简单的 HTTP GET 请求，来获取最近的比特币（BTC）对美元（USD）的价格和最近的成交量。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">########## GEMINI 行情接口 ##########</span></span><br><span class="line"><span class="comment">## https://api.gemini.com/v1/pubticker/:symbol</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"> </span><br><span class="line">gemini_ticker = <span class="string">'https://api.gemini.com/v1/pubticker/&#123;&#125;'</span></span><br><span class="line">symbol = <span class="string">'btcusd'</span></span><br><span class="line">btc_data = requests.get(gemini_ticker.format(symbol)).json()</span><br><span class="line">print(json.dumps(btc_data, indent=<span class="number">4</span>))</span><br><span class="line"> </span><br><span class="line"><span class="comment">########## 输出 ##########</span></span><br><span class="line"> </span><br><span class="line">&#123;</span><br><span class="line">   <span class="string">"bid"</span>: <span class="string">"8825.88"</span>,</span><br><span class="line">   <span class="string">"ask"</span>: <span class="string">"8827.52"</span>,</span><br><span class="line">   <span class="string">"volume"</span>: &#123;</span><br><span class="line">       <span class="string">"BTC"</span>: <span class="string">"910.0838782726"</span>,</span><br><span class="line">       <span class="string">"USD"</span>: <span class="string">"7972904.560901317851"</span>,</span><br><span class="line">       <span class="string">"timestamp"</span>: <span class="number">1560643800000</span></span><br><span class="line">   &#125;,</span><br><span class="line">   <span class="string">"last"</span>: <span class="string">"8838.45"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<pre><code>{
-    &quot;bid&quot;: &quot;7128.73&quot;,
-    &quot;ask&quot;: &quot;7132.64&quot;,
-    &quot;volume&quot;: {
-        &quot;BTC&quot;: &quot;414.0110753682&quot;,
-        &quot;USD&quot;: &quot;2968817.768948525139&quot;,
-        &quot;timestamp&quot;: 1577966400000
-    },
-    &quot;last&quot;: &quot;7128.73&quot;
-}
-
-
-
-
-
-{&apos;bid&apos;: &apos;8825.88&apos;,
- &apos;ask&apos;: &apos;8827.52&apos;,
- &apos;volume&apos;: {&apos;BTC&apos;: &apos;910.0838782726&apos;,
-  &apos;USD&apos;: &apos;7972904.560901317851&apos;,
-  &apos;timestamp&apos;: 1560643800000},
- &apos;last&apos;: &apos;8838.45&apos;}</code></pre><p>其中，</p>
-<p>行情模块的主要功能是，尝试获取市场的行情数据，通常也负责获取交易账户的状态。<br>策略模块的主要功能是，订阅市场的数据，根据设定的算法发出买、卖指令给执行模块。<br>执行模块的主要功能是，接受并把策略模块发过来的买、卖指令封装并转发到交易所；同时，监督并确保策略买卖的完整执行。</p>
-<h3 id="Python-算法交易"><a href="#Python-算法交易" class="headerlink" title="Python 算法交易"></a>Python 算法交易</h3><p>了解了这么多关于量化交易的知识，接下来我们就来说说 Python 算法交易。Python 在金融行业的许多方面都有用到，在算法交易领域，更是发挥了日益重要的作用。 Python 之所以能在这个行业这么流行，主要是因为下面四个原因。</p>
-<h3 id="数据分析能力"><a href="#数据分析能力" class="headerlink" title="数据分析能力"></a>数据分析能力</h3><p>第一个原因，是 Python 的数据分析能力。算法交易领域的一个基本需求，就是高效数据处理能力，而数据处理则是 Python 的强项。特别是 NumPy+Pandas 的组合，简直让算法交易开发者的生活质量直线上升。</p>
-<p>我们可以用一个简单的例子来展示一下，如何抓取、格式化和绘制，比特币过去一个小时在 Genimi 交易所的价格曲线。相关的代码我都附了详细注释，这里就不再多讲，你阅读了解一下即可。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 选择要获取的数据时间段</span></span><br><span class="line">periods = <span class="string">'3600'</span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># 通过 Http 抓取 btc 历史价格数据</span></span><br><span class="line">resp = requests.get(<span class="string">'https://api.cryptowat.ch/markets/gemini/btcusd/ohlc'</span>, </span><br><span class="line">  params=&#123;</span><br><span class="line">    <span class="string">'periods'</span>: periods</span><br><span class="line">  &#125;)</span><br><span class="line">data = resp.json()</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 转换成 pandas data frame</span></span><br><span class="line">df = pd.DataFrame(</span><br><span class="line">  data[<span class="string">'result'</span>][periods], </span><br><span class="line">  columns=[</span><br><span class="line">    <span class="string">'CloseTime'</span>,</span><br><span class="line">    <span class="string">'OpenPrice'</span>,</span><br><span class="line">    <span class="string">'HighPrice'</span>,</span><br><span class="line">    <span class="string">'LowPrice'</span>,</span><br><span class="line">    <span class="string">'ClosePrice'</span>,</span><br><span class="line">    <span class="string">'Volume'</span>,</span><br><span class="line">    <span class="string">'NA'</span>])</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 输出 DataFrame 的头部几行</span></span><br><span class="line">print(df.head())</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 绘制 btc 价格曲线</span></span><br><span class="line">df[<span class="string">'ClosePrice'</span>].plot(figsize=(<span class="number">14</span>, <span class="number">7</span>))</span><br></pre></td></tr></table></figure>
-
-<pre><code>    CloseTime  OpenPrice  HighPrice  LowPrice  ClosePrice     Volume  \
-0  1576166400    7159.70    7186.04   7144.03     7182.77  34.414275   
-1  1576170000    7188.04    7208.56   7172.29     7195.71  43.790080   
-2  1576173600    7195.71    7205.00   7190.00     7193.62  25.884217   
-3  1576177200    7192.38    7218.69   7183.42     7207.21  35.922896   
-4  1576180800    7210.00    7210.31   7188.56     7198.78  19.583916   
-
-              NA  
-0  246447.854569  
-1  314855.561069  
-2  186355.827725  
-3  258405.637212  
-4  140999.123537  
-
-
-
-
-
-&lt;matplotlib.axes._subplots.AxesSubplot at 0x11c942c88&gt;</code></pre><h3 id="大量专有库"><a href="#大量专有库" class="headerlink" title="大量专有库"></a>大量专有库</h3><p>除了强大的数据处理能力之外，Python 还有许许多多已经开发成熟的算法交易库可供使用。比如，你可以使用 Zipline 进行策略回测，或者用 Pyfolio 进行投资组合分析。而许多交易所也都提供了基于 Python 的 API 客户端。</p>
-<p>便利的交易平台<br>第三个原因，是因为便利的交易平台。有一些算法交易平台可以执行自定义 Python 策略，无需搭建量化交易框架。算法交易平台，实际上等效于帮用户完成了行情模块和执行模块。用户只需要在其中定义策略模块，即可进行算法交易和回测。</p>
-<p>比如，Quantopian，就提供了基于 Zipline 的标准回测环境。用户可以选择 Python 作为开发语言，并且和社区的网友分享自己的策略。此外，国内也有诸如 BigQuant、果仁网等类似平台，提供不同市场和金融产品的交易。</p>
-<p>广泛的行业应用<br>最后一个原因，则是 Python 本身广泛的行业应用了。目前，越来越多投资机构的交易部门，都开始使用 Python，因此也对优秀的 Python 开发者产生了更多的需求。自然，这也让学习 Python，成为了更有意义的“投资”。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这一节课，我们介绍了交易，以及算法交易中的基本概念，也简单介绍了为什么要学习 Python 来搭建量化交易系统。量化交易是交易行业的大趋势；同时， Python 作为最适合量化从业者的语言之一，对于初学者而言也有着非常重要的地位。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2587,7 +2605,7 @@ AttributeError: module &apos;websocket&apos; has no attribute &apos;WebSocketApp
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">62</span>
+                  <span class="site-state-item-count">63</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
