@@ -258,6 +258,256 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/02/26%E4%B8%A8%E7%B4%A2%E5%BC%95%E7%9A%84%E4%BD%BF%E7%94%A8%E5%8E%9F%E5%88%99%EF%BC%9A%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87%E7%B4%A2%E5%BC%95%E8%AE%A9SQL%E6%9F%A5%E8%AF%A2%E6%95%88%E7%8E%87%E6%9C%80%E5%A4%A7%E5%8C%96%EF%BC%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/04/02/26%E4%B8%A8%E7%B4%A2%E5%BC%95%E7%9A%84%E4%BD%BF%E7%94%A8%E5%8E%9F%E5%88%99%EF%BC%9A%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87%E7%B4%A2%E5%BC%95%E8%AE%A9SQL%E6%9F%A5%E8%AF%A2%E6%95%88%E7%8E%87%E6%9C%80%E5%A4%A7%E5%8C%96%EF%BC%9F/" itemprop="url">26丨索引的使用原则：如何通过索引让SQL查询效率最大化？</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-02T19:40:01+08:00">
+                2020-04-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" itemprop="url" rel="index">
+                    <span itemprop="name">SQL必知必会</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/04/02/26%E4%B8%A8%E7%B4%A2%E5%BC%95%E7%9A%84%E4%BD%BF%E7%94%A8%E5%8E%9F%E5%88%99%EF%BC%9A%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87%E7%B4%A2%E5%BC%95%E8%AE%A9SQL%E6%9F%A5%E8%AF%A2%E6%95%88%E7%8E%87%E6%9C%80%E5%A4%A7%E5%8C%96%EF%BC%9F/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/04/02/26%E4%B8%A8%E7%B4%A2%E5%BC%95%E7%9A%84%E4%BD%BF%E7%94%A8%E5%8E%9F%E5%88%99%EF%BC%9A%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87%E7%B4%A2%E5%BC%95%E8%AE%A9SQL%E6%9F%A5%E8%AF%A2%E6%95%88%E7%8E%87%E6%9C%80%E5%A4%A7%E5%8C%96%EF%BC%9F/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>我之前讲了索引的使用和它的底层原理，今天我来讲一讲索引的使用原则。既然我们的目标是提升 SQL 的查询效率，那么该如何通过索引让效率最大化呢？</p>
+<p>今天的课程主要包括下面几个部分：</p>
+<ol>
+<li>什么情况下使用索引？当我们进行数据表查询的时候，都有哪些特征需要我们创建索引？</li>
+<li>索引不是万能的，索引设计的不合理可能会阻碍数据库和业务处理的性能。那么什么情况下不需要创建索引？</li>
+<li>创建了索引不一定代表一定用得上，甚至在有些情况下索引会失效。哪些情况下，索引会失效呢？又该如何避免这一情况？<h3 id="创建索引有哪些规律？"><a href="#创建索引有哪些规律？" class="headerlink" title="创建索引有哪些规律？"></a>创建索引有哪些规律？</h3>创建索引有一定的规律。当这些规律出现的时候，我们就可以通过创建索引提升查询效率，下面我们来看看什么情况下可以创建索引：</li>
+</ol>
+<h4 id="1-字段的数值有唯一性的限制，比如用户名"><a href="#1-字段的数值有唯一性的限制，比如用户名" class="headerlink" title="1. 字段的数值有唯一性的限制，比如用户名"></a>1. 字段的数值有唯一性的限制，比如用户名</h4><p>索引本身可以起到约束的作用，比如唯一索引、主键索引都是可以起到唯一性约束的，因此在我们的数据表中，如果某个字段是唯一性的，就可以直接创建唯一性索引，或者主键索引。</p>
+<h4 id="2-频繁作为-WHERE-查询条件的字段，尤其在数据表大的情况下"><a href="#2-频繁作为-WHERE-查询条件的字段，尤其在数据表大的情况下" class="headerlink" title="2. 频繁作为 WHERE 查询条件的字段，尤其在数据表大的情况下"></a>2. 频繁作为 WHERE 查询条件的字段，尤其在数据表大的情况下</h4><p>在数据量大的情况下，某个字段在 SQL 查询的 WHERE 条件中经常被使用到，那么就需要给这个字段创建索引了。创建普通索引就可以大幅提升数据查询的效率。</p>
+<p>我之前列举了 product_comment 数据表，这张数据表中一共有 100 万条数据，假设我们想要查询 user_id=785110 的用户对商品的评论。</p>
+<p>如果我们没有对 user_id 字段创建索引，进行如下查询：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT comment_id, product_id, comment_text, comment_time, user_id FROM product_comment WHERE user_id = 785110</span><br></pre></td></tr></table></figure>
+<p>运行时间为 0.699s，你能看到查询效率还是比较低的。当我们对 user_id 字段创建索引之后，运行时间为 0.047s，不到原来查询时间的 1/10，效率提升还是明显的。</p>
+<h4 id="3-需要经常-GROUP-BY-和-ORDER-BY-的列"><a href="#3-需要经常-GROUP-BY-和-ORDER-BY-的列" class="headerlink" title="3. 需要经常 GROUP BY 和 ORDER BY 的列"></a>3. 需要经常 GROUP BY 和 ORDER BY 的列</h4><p>索引就是让数据按照某种顺序进行存储或检索，因此当我们使用 GROUP BY 对数据进行分组查询，或者使用 ORDER BY 对数据进行排序的时候，就需要对分组或者排序的字段进行索引。</p>
+<p>比如我们按照 user_id 对商品评论数据进行分组，显示不同的 user_id 和商品评论的数量，显示 100 个即可。</p>
+<p>如果我们不对 user_id 创建索引，执行下面的 SQL 语句：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT user_id, count(*) as num FROM product_comment group by user_id limit 100</span><br></pre></td></tr></table></figure>
+<p>运行结果（100 条记录，运行时间 1.666s）：</p>
+<p>如果我们对 user_id 创建索引，再执行 SQL 语句：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT user_id, count(*) as num FROM product_comment group by user_id limit 100</span><br></pre></td></tr></table></figure>
+<p>运行结果（100 条记录，运行时间 0.042s）：</p>
+<p>你能看到当对 user_id 创建索引后，得到的结果中 user_id 字段的数值也是按照顺序展示的，运行时间却不到原来时间的 1/40，效率提升很明显。</p>
+<p>同样，如果是 ORDER BY，也需要对字段创建索引。我们再来看下同时有 GROUP BY 和 ORDER BY 的情况。比如我们按照 user_id 进行评论分组，同时按照评论时间降序的方式进行排序，这时我们就需要同时进行 GROUP BY 和 ORDER BY，那么是不是需要单独创建 user_id 的索引和 comment_time 的索引呢？</p>
+<p>当我们对 user_id 和 comment_time 分别创建索引，执行下面的 SQL 查询：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT user_id, count(*) as num FROM product_comment group by user_id order by comment_time desc limit 100</span><br></pre></td></tr></table></figure>
+<p>运行结果（运行时间 &gt;100s）：</p>
+<p>实际上多个单列索引在多条件查询时只会生效一个索引（MySQL 会选择其中一个限制最严格的作为索引），所以在多条件联合查询的时候最好创建联合索引。在这个例子中，我们创建联合索引 (user_id, comment_time)，再来看下查询的时间，查询时间为 0.775s，效率提升了很多。如果我们创建联合索引的顺序为 (comment_time, user_id) 呢？运行时间为 1.990s，同样比两个单列索引要快，但是会比顺序为 (user_id, comment_time) 的索引要慢一些。这是因为在进行 SELECT 查询的时候，先进行 GROUP BY，再对数据进行 ORDER BY 的操作，所以按照这个联合索引的顺序效率是最高的。</p>
+<h4 id="4-UPDATE、DELETE-的-WHERE-条件列，一般也需要创建索引"><a href="#4-UPDATE、DELETE-的-WHERE-条件列，一般也需要创建索引" class="headerlink" title="4.UPDATE、DELETE 的 WHERE 条件列，一般也需要创建索引"></a>4.UPDATE、DELETE 的 WHERE 条件列，一般也需要创建索引</h4><p>我们刚才说的是数据检索的情况。那么当我们对某条数据进行 UPDATE 或者 DELETE 操作的时候，是否也需要对 WHERE 的条件列创建索引呢？</p>
+<p>我们先看一下对数据进行 UPDATE 的情况。</p>
+<p>如果我们想要把 comment_text 为 462eed7ac6e791292a79 对应的 product_id 修改为 10002，当我们没有对 comment_text 进行索引的时候，执行 SQL 语句：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UPDATE product_comment SET product_id = 10002 WHERE comment_text = &apos;462eed7ac6e791292a79&apos;</span><br></pre></td></tr></table></figure>
+<p>运行结果为 Affected rows: 1，运行时间为 1.173s。</p>
+<p>你能看到效率不高，但如果我们对 comment_text 字段创建了索引，然后再把刚才那条记录更新回 product_id=10001，执行 SQL 语句：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UPDATE product_comment SET product_id = 10001 WHERE comment_text = &apos;462eed7ac6e791292a79&apos;</span><br></pre></td></tr></table></figure>
+<p>运行结果为 Affected rows: 1，运行时间仅为 0.1110s。你能看到这个运行时间是之前的 1/10，效率有了大幅的提升。</p>
+<p>如果我们对某条数据进行 DELETE，效率如何呢？</p>
+<p>比如我们想删除 comment_text 为 462eed7ac6e791292a79 的数据。当我们没有对 comment_text 字段进行索引的时候，执行 SQL 语句：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DELETE FROM product_comment WHERE comment_text = &apos;462eed7ac6e791292a79&apos;</span><br></pre></td></tr></table></figure>
+<p>运行结果为 Affected rows: 1，运行时间为 1.027s，效率不高。</p>
+<p>如果我们对 comment_text 创建了索引，再来执行这条 SQL 语句，运行时间为 0.032s，时间是原来的 1/32，效率有了大幅的提升。</p>
+<p>你能看到，对数据按照某个条件进行查询后再进行 UPDATE 或 DELETE 的操作，如果对 WHERE 字段创建了索引，就能大幅提升效率。原理是因为我们需要先根据 WHERE 条件列检索出来这条记录，然后再对它进行更新或删除。如果进行更新的时候，更新的字段是非索引字段，提升的效率会更明显，这是因为非索引字段更新不需要对索引进行维护。</p>
+<p>不过在实际工作中，我们也需要注意平衡，如果索引太多了，在更新数据的时候，如果涉及到索引更新，就会造成负担。</p>
+<h4 id="5-DISTINCT-字段需要创建索引"><a href="#5-DISTINCT-字段需要创建索引" class="headerlink" title="5.DISTINCT 字段需要创建索引"></a>5.DISTINCT 字段需要创建索引</h4><p>有时候我们需要对某个字段进行去重，使用 DISTINCT，那么对这个字段创建索引，也会提升查询效率。</p>
+<p>比如我们想要查询商品评论表中不同的 user_id 都有哪些，如果我们没有对 user_id 创建索引，执行 SQL 语句，看看情况是怎样的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT DISTINCT(user_id) FROM `product_comment`</span><br></pre></td></tr></table></figure>
+<p>运行结果（600637 条记录，运行时间 2.283s）</p>
+<p>如果我们对 user_id 创建索引，再执行 SQL 语句，看看情况又是怎样的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT DISTINCT(user_id) FROM `product_comment`</span><br></pre></td></tr></table></figure>
+<p>运行结果（600637 条记录，运行时间 0.627s）：</p>
+<p>你能看到 SQL 查询效率有了提升，同时显示出来的 user_id 还是按照递增的顺序进行展示的。这是因为索引会对数据按照某种顺序进行排序，所以在去重的时候也会快很多。</p>
+<h4 id="6-做多表-JOIN-连接操作时，创建索引需要注意以下的原则"><a href="#6-做多表-JOIN-连接操作时，创建索引需要注意以下的原则" class="headerlink" title="6. 做多表 JOIN 连接操作时，创建索引需要注意以下的原则"></a>6. 做多表 JOIN 连接操作时，创建索引需要注意以下的原则</h4><p>首先，连接表的数量尽量不要超过 3 张，因为每增加一张表就相当于增加了一次嵌套的循环，数量级增长会非常快，严重影响查询的效率。</p>
+<p>其次，对 WHERE 条件创建索引，因为 WHERE 才是对数据条件的过滤。如果在数据量非常大的情况下，没有 WHERE 条件过滤是非常可怕的。</p>
+<p>最后，对用于连接的字段创建索引，并且该字段在多张表中的类型必须一致。比如 user_id 在 product_comment 表和 user 表中都为 int(11) 类型，而不能一个为 int 另一个为 varchar 类型。</p>
+<p>举个例子，如果我们只对 user_id 创建索引，执行 SQL 语句：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SELECT comment_id, comment_text, product_comment.user_id, user_name FROM product_comment JOIN user ON product_comment.user_id = user.user_id</span><br><span class="line">WHERE comment_text = &apos;462eed7ac6e791292a79&apos;</span><br></pre></td></tr></table></figure>
+<p>运行结果（1 条数据，运行时间 0.810s）：</p>
+<p>这里我们对 comment_text 创建索引，再执行上面的 SQL 语句，运行时间为 0.046s。</p>
+<p>如果我们不使用 WHERE 条件查询，而是直接采用 JOIN…ON…进行连接的话，即使使用了各种优化手段，总的运行时间也会很长（&gt;100s）。</p>
+<h3 id="什么时候不需要创建索引"><a href="#什么时候不需要创建索引" class="headerlink" title="什么时候不需要创建索引"></a>什么时候不需要创建索引</h3><p>我之前讲到过索引不是万能的，有一些情况是不需要创建索引的，这里再进行一下说明。</p>
+<p>WHERE 条件（包括 GROUP BY、ORDER BY）里用不到的字段不需要创建索引，索引的价值是快速定位，如果起不到定位的字段通常是不需要创建索引的。举个例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT comment_id, product_id, comment_time FROM product_comment WHERE user_id = 41251</span><br></pre></td></tr></table></figure>
+<p>因为我们是按照 user_id 来进行检索的，所以不需要对其他字段创建索引，即使这些字段出现在 SELECT 字段中。</p>
+<p>第二种情况是，如果表记录太少，比如少于 1000 个，那么是不需要创建索引的。我之前讲过一个 SQL 查询的例子（第 23 篇中的 heros 数据表查询的例子，一共 69 个英雄不用索引也很快），表记录太少，是否创建索引对查询效率的影响并不大。</p>
+<p>第三种情况是，字段中如果有大量重复数据，也不用创建索引，比如性别字段。不过我们也需要根据实际情况来做判断，这一点我在之前的文章里已经进行了说明，这里不再赘述。</p>
+<p>最后一种情况是，频繁更新的字段不一定要创建索引。因为更新数据的时候，也需要更新索引，如果索引太多，在更新索引的时候也会造成负担，从而影响效率。</p>
+<h3 id="什么情况下索引失效"><a href="#什么情况下索引失效" class="headerlink" title="什么情况下索引失效"></a>什么情况下索引失效</h3><p>我们创建了索引，还要避免索引失效，你可以先思考下都有哪些情况会造成索引失效呢？下面是一些常见的索引失效的例子：</p>
+<h4 id="1-如果索引进行了表达式计算，则会失效"><a href="#1-如果索引进行了表达式计算，则会失效" class="headerlink" title="1. 如果索引进行了表达式计算，则会失效"></a>1. 如果索引进行了表达式计算，则会失效</h4><p>我们可以使用 EXPLAIN 关键字来查看 MySQL 中一条 SQL 语句的执行计划，比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EXPLAIN SELECT comment_id, user_id, comment_text FROM product_comment WHERE comment_id+1 = 900001</span><br></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">+----+-------------+-----------------+------------+------+---------------+------+---------+------+--------+----------+-------------+</span><br><span class="line">| id | select_type | table           | partitions | type | possible_keys | key  | key_len | ref  | rows   | filtered | Extra       |</span><br><span class="line">+----+-------------+-----------------+------------+------+---------------+------+---------+------+--------+----------+-------------+</span><br><span class="line">|  1 | SIMPLE      | product_comment | NULL       | ALL  | NULL          | NULL | NULL    | NULL | 996663 |   100.00 | Using where |</span><br><span class="line">+----+-------------+-----------------+------------+------+---------------+------+---------+------+--------+----------+-------------+</span><br></pre></td></tr></table></figure>
+<p>你能看到如果对索引进行了表达式计算，索引就失效了。这是因为我们需要把索引字段的取值都取出来，然后依次进行表达式的计算来进行条件判断，因此采用的就是全表扫描的方式，运行时间也会慢很多，最终运行时间为 2.538 秒。</p>
+<p>为了避免索引失效，我们对 SQL 进行重写：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT comment_id, user_id, comment_text FROM product_comment WHERE comment_id = 900000</span><br></pre></td></tr></table></figure>
+<p>运行时间为 0.039 秒。</p>
+<h4 id="2-如果对索引使用函数，也会造成失效"><a href="#2-如果对索引使用函数，也会造成失效" class="headerlink" title="2. 如果对索引使用函数，也会造成失效"></a>2. 如果对索引使用函数，也会造成失效</h4><p>比如我们想要对 comment_text 的前三位为 abc 的内容进行条件筛选，这里我们来查看下执行计划：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EXPLAIN SELECT comment_id, user_id, comment_text FROM product_comment WHERE SUBSTRING(comment_text, 1,3)=&apos;abc&apos;</span><br></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">+----+-------------+-----------------+------------+------+---------------+------+---------+------+--------+----------+-------------+</span><br><span class="line">| id | select_type | table           | partitions | type | possible_keys | key  | key_len | ref  | rows   | filtered | Extra       |</span><br><span class="line">+----+-------------+-----------------+------------+------+---------------+------+---------+------+--------+----------+-------------+</span><br><span class="line">|  1 | SIMPLE      | product_comment | NULL       | ALL  | NULL          | NULL | NULL    | NULL | 996663 |   100.00 | Using where |</span><br><span class="line">+----+-------------+-----------------+------------+------+---------------+------+---------+------+--------+----------+-------------+</span><br></pre></td></tr></table></figure>
+<p>你能看到对索引字段进行函数操作，造成了索引失效，这时可以进行查询重写：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT comment_id, user_id, comment_text FROM product_comment WHERE comment_text LIKE &apos;abc%&apos;</span><br></pre></td></tr></table></figure>
+<p>使用 EXPLAIN 对查询语句进行分析：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">+----+-------------+-----------------+------------+-------+---------------+--------------+---------+------+------+----------+-----------------------+</span><br><span class="line">| id | select_type | table           | partitions | type  | possible_keys | key          | key_len | ref  | rows | filtered | Extra                 |</span><br><span class="line">+----+-------------+-----------------+------------+-------+---------------+--------------+---------+------+------+----------+-----------------------+</span><br><span class="line">|  1 | SIMPLE      | product_comment | NULL       | range | comment_text  | comment_text | 767     | NULL |  213 |   100.00 | Using index condition |</span><br><span class="line">+----+-------------+-----------------+------------+-------+---------------+--------------+---------+------+------+----------+-----------------------+</span><br></pre></td></tr></table></figure>
+<p>你能看到经过查询重写后，可以使用索引进行范围检索，从而提升查询效率。</p>
+<h4 id="3-在-WHERE-子句中，如果在-OR-前的条件列进行了索引，而在-OR-后的条件列没有进行索引，那么索引会失效。"><a href="#3-在-WHERE-子句中，如果在-OR-前的条件列进行了索引，而在-OR-后的条件列没有进行索引，那么索引会失效。" class="headerlink" title="3. 在 WHERE 子句中，如果在 OR 前的条件列进行了索引，而在 OR 后的条件列没有进行索引，那么索引会失效。"></a>3. 在 WHERE 子句中，如果在 OR 前的条件列进行了索引，而在 OR 后的条件列没有进行索引，那么索引会失效。</h4><p>比如下面的 SQL 语句，comment_id 是主键，而 comment_text 没有进行索引，因为 OR 的含义就是两个只要满足一个即可，因此只有一个条件列进行了索引是没有意义的，只要有条件列没有进行索引，就会进行全表扫描，因此索引的条件列也会失效：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EXPLAIN SELECT comment_id, user_id, comment_text FROM product_comment WHERE comment_id = 900001 OR comment_text = &apos;462eed7ac6e791292a79&apos;</span><br></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">+----+-------------+-----------------+------------+------+---------------+------+---------+------+--------+----------+-------------+</span><br><span class="line">| id | select_type | table           | partitions | type | possible_keys | key  | key_len | ref  | rows   | filtered | Extra       |</span><br><span class="line">+----+-------------+-----------------+------------+------+---------------+------+---------+------+--------+----------+-------------+</span><br><span class="line">|  1 | SIMPLE      | product_comment | NULL       | ALL  | PRIMARY       | NULL | NULL    | NULL | 996663 |    10.00 | Using where |</span><br><span class="line">+----+-------------+-----------------+------------+------+---------------+------+---------+------+--------+----------+-------------+</span><br></pre></td></tr></table></figure>
+<p>如果我们把 comment_text 创建了索引会是怎样的呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">+----+-------------+-----------------+------------+-------------+----------------------+----------------------+---------+------+------+----------+------------------------------------------------+</span><br><span class="line">| id | select_type | table           | partitions | type        | possible_keys        | key                  | key_len | ref  | rows | filtered | Extra                                          |</span><br><span class="line">+----+-------------+-----------------+------------+-------------+----------------------+----------------------+---------+------+------+----------+------------------------------------------------+</span><br><span class="line">|  1 | SIMPLE      | product_comment | NULL       | index_merge | PRIMARY,comment_text | PRIMARY,comment_text | 4,767   | NULL |    2 |   100.00 | Using union(PRIMARY,comment_text); Using where |</span><br><span class="line">+----+-------------+-----------------+------------+-------------+----------------------+----------------------+---------+------+------+----------+------------------------------------------------+</span><br></pre></td></tr></table></figure>
+<p>你能看到这里使用到了 index merge，简单来说 index merge 就是对 comment_id 和 comment_text 分别进行了扫描，然后将这两个结果集进行了合并。这样做的好处就是避免了全表扫描。</p>
+<h4 id="4-当我们使用-LIKE-进行模糊查询的时候，后面不能是"><a href="#4-当我们使用-LIKE-进行模糊查询的时候，后面不能是" class="headerlink" title="4. 当我们使用 LIKE 进行模糊查询的时候，后面不能是 %"></a>4. 当我们使用 LIKE 进行模糊查询的时候，后面不能是 %</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EXPLAIN SELECT comment_id, user_id, comment_text FROM product_comment WHERE comment_text LIKE &apos;%abc&apos;</span><br></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">+----+-------------+-----------------+------------+------+---------------+------+---------+------+--------+----------+-------------+</span><br><span class="line">| id | select_type | table           | partitions | type | possible_keys | key  | key_len | ref  | rows   | filtered | Extra       |</span><br><span class="line">+----+-------------+-----------------+------------+------+---------------+------+---------+------+--------+----------+-------------+</span><br><span class="line">|  1 | SIMPLE      | product_comment | NULL       | ALL  | NULL          | NULL | NULL    | NULL | 996663 |    11.11 | Using where |</span><br><span class="line">+----+-------------+-----------------+------------+------+---------------+------+---------+------+--------+----------+-------------+</span><br></pre></td></tr></table></figure>
+<p>这个很好理解，如果一本字典按照字母顺序进行排序，我们会从首位开始进行匹配，而不会对中间位置进行匹配，否则索引就失效了。</p>
+<h4 id="5-索引列与-NULL-或者-NOT-NULL-进行判断的时候也会失效。"><a href="#5-索引列与-NULL-或者-NOT-NULL-进行判断的时候也会失效。" class="headerlink" title="5. 索引列与 NULL 或者 NOT NULL 进行判断的时候也会失效。"></a>5. 索引列与 NULL 或者 NOT NULL 进行判断的时候也会失效。</h4><p>这是因为索引并不存储空值，所以最好在设计数据表的时候就将字段设置为 NOT NULL 约束，比如你可以将 INT 类型的字段，默认值设置为 0。将字符类型的默认值设置为空字符串 (’’)。</p>
+<h4 id="6-我们在使用联合索引的时候要注意最左原则"><a href="#6-我们在使用联合索引的时候要注意最左原则" class="headerlink" title="6. 我们在使用联合索引的时候要注意最左原则"></a>6. 我们在使用联合索引的时候要注意最左原则</h4><p>最左原则也就是需要从左到右的使用索引中的字段，一条 SQL 语句可以只使用联合索引的一部分，但是需要从最左侧开始，否则就会失效。我在讲联合索引的时候举过索引失效的例子。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>今天我们对索引的使用原则进行了梳理，使用好索引可以提升 SQL 查询的效率，但同时 也要注意索引不是万能的。为了避免全表扫描，我们还需要注意有哪些情况可能会导致索引失效，这时就需要进行查询重写，让索引发挥作用。</p>
+<p>实际工作中，查询的需求多种多样，创建的索引也会越来越多。这时还需要注意，我们要尽可能扩展索引，而不是新建索引，因为索引数量过多需要维护的成本也会变大，导致写效率变低。同时，我们还需要定期查询使用率低的索引，对于从未使用过的索引可以进行删除，这样才能让索引在 SQL 查询中发挥最大价值。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/01/25%E4%B8%A8Hash%E7%B4%A2%E5%BC%95%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2173,217 +2423,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/27/16%E4%B8%A8%E6%B8%B8%E6%A0%87%EF%BC%9A%E5%BD%93%E6%88%91%E4%BB%AC%E9%9C%80%E8%A6%81%E9%80%90%E6%9D%A1%E5%A4%84%E7%90%86%E6%95%B0%E6%8D%AE%E6%97%B6%EF%BC%8C%E8%AF%A5%E6%80%8E%E4%B9%88%E5%81%9A%EF%BC%9F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LvYang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LvYang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/27/16%E4%B8%A8%E6%B8%B8%E6%A0%87%EF%BC%9A%E5%BD%93%E6%88%91%E4%BB%AC%E9%9C%80%E8%A6%81%E9%80%90%E6%9D%A1%E5%A4%84%E7%90%86%E6%95%B0%E6%8D%AE%E6%97%B6%EF%BC%8C%E8%AF%A5%E6%80%8E%E4%B9%88%E5%81%9A%EF%BC%9F/" itemprop="url">15丨初识事务隔离：隔离的级别有哪些，它们都解决了哪些异常问题？</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-27T20:07:01+08:00">
-                2020-03-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" itemprop="url" rel="index">
-                    <span itemprop="name">SQL必知必会</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/03/27/16%E4%B8%A8%E6%B8%B8%E6%A0%87%EF%BC%9A%E5%BD%93%E6%88%91%E4%BB%AC%E9%9C%80%E8%A6%81%E9%80%90%E6%9D%A1%E5%A4%84%E7%90%86%E6%95%B0%E6%8D%AE%E6%97%B6%EF%BC%8C%E8%AF%A5%E6%80%8E%E4%B9%88%E5%81%9A%EF%BC%9F/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/03/27/16%E4%B8%A8%E6%B8%B8%E6%A0%87%EF%BC%9A%E5%BD%93%E6%88%91%E4%BB%AC%E9%9C%80%E8%A6%81%E9%80%90%E6%9D%A1%E5%A4%84%E7%90%86%E6%95%B0%E6%8D%AE%E6%97%B6%EF%BC%8C%E8%AF%A5%E6%80%8E%E4%B9%88%E5%81%9A%EF%BC%9F/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>我们在编写 SQL 语句的时候通常是面向集合进行思考，这种思考方式更让我们关注结果集的特征，而不是具体的实现过程。面向集合的思考方式与面向过程的思考方式各有特点，我们该如何理解它们呢？</p>
-<p>我们用下面这张图开启今天的学习。这张图中一共有 9 个图形，每个图形有不同的特征，包括形状、纹理、颜色和个数等。<br>当我们看到这张图时，有时候会不由自主地按照某个属性进行分类，比如说按照红色分类，那么 1、4、9 就是一类。这实际上就是属于同一个条件下的查询结果集。或者我们也可以按照物体的个数来划分，比如都有 3 个物体的，那么对应的就是 2、5、6、8，这就是对应着“都包括 3 个物体”的查询结果集。</p>
-<p>你能看出来集合思维更像是从整体的角度来考虑，然后把整个数据集按照不同的属性进行划分，形成不同的子集合。面向集合的思考方式，让我们关注“获取什么”，而不是“如何获取”，这也可以说是 SQL 与传统编程最大的区别之一，因为 SQL 本身是以关系模型和集合论为基础的。</p>
-<p>然而也有一些情况，我们不需要对查询结果集中的所有数据行都采用相同的处理方式，需要每次处理一行或者一部分行，这时就需要面向过程的编程方法了。游标就是这种编程方式的体现。如果你之前已经有了一些面向过程的编程经验，那么对于游标的理解也会比较容易。</p>
-<p>关于游标，你需要掌握以下几个方面的内容：</p>
-<ol>
-<li>什么是游标？我们为什么要使用游标？</li>
-<li>如何使用游标？使用游标的常用步骤都包括哪些？</li>
-<li>如何使用游标来解决一些常见的问题？<h3 id="什么是游标？"><a href="#什么是游标？" class="headerlink" title="什么是游标？"></a>什么是游标？</h3>在数据库中，游标是个重要的概念，它提供了一种灵活的操作方式，可以让我们从数据结果集中每次提取一条数据记录进行操作。游标让 SQL 这种面向集合的语言有了面向过程开发的能力。可以说，游标是面向过程的编程方式，这与面向集合的编程方式有所不同。</li>
-</ol>
-<p>在 SQL 中，游标是一种临时的数据库对象，可以指向存储在数据库表中的数据行指针。这里游标充当了指针的作用，我们可以通过操作游标来对数据行进行操作。</p>
-<p>比如我们查询了 heros 数据表中最大生命值大于 8500 的英雄都有哪些：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT id, name, hp_max FROM heros WHERE hp_max &gt; 8500</span><br></pre></td></tr></table></figure>
-
-<p>这里我们就可以通过游标来操作数据行，如图所示此时游标所在的行是“白起”的记录，我们也可以在结果集上滚动游标，指向结果集中的任意一行。</p>
-<h3 id="如何使用游标？"><a href="#如何使用游标？" class="headerlink" title="如何使用游标？"></a>如何使用游标？</h3><p>游标实际上是一种控制数据集的更加灵活的处理方式。</p>
-<p>如果我们想要使用游标，一般需要经历五个步骤。不同 DBMS 中，使用游标的语法可能略有不同。</p>
-<p>第一步，定义游标。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DECLARE cursor_name CURSOR FOR select_statement</span><br></pre></td></tr></table></figure>
-<p>这个语法适用于 MySQL，SQL Server，DB2 和 MariaDB。如果是用 Oracle 或者 PostgreSQL，需要写成：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DECLARE cursor_name CURSOR IS select_statement</span><br></pre></td></tr></table></figure>
-<p>要使用 SELECT 语句来获取数据结果集，而此时还没有开始遍历数据，这里 select_statement 代表的是 SELECT 语句。</p>
-<p>下面我用 MySQL 举例讲解游标的使用，如果你使用的是其他的 RDBMS，具体的游标语法可能略有差异。我们定义一个能够存储 heros 数据表中的最大生命值的游标，可以写为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DECLARE cur_hero CURSOR FOR </span><br><span class="line">	SELECT hp_max FROM heros;</span><br></pre></td></tr></table></figure>
-<p>第二步，打开游标。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">OPEN cursor_name</span><br></pre></td></tr></table></figure>
-<p>当我们定义好游标之后，如果想要使用游标，必须先打开游标。打开游标的时候 SELECT 语句的查询结果集就会送到游标工作区。</p>
-<p>第三步，从游标中取得数据。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FETCH cursor_name INTO var_name ...</span><br></pre></td></tr></table></figure>
-<p>这句的作用是使用 cursor_name 这个游标来读取当前行，并且将数据保存到 var_name 这个变量中，游标指针指到下一行。如果游标读取的数据行有多个列名，则在 INTO 关键字后面赋值给多个变量名即可。</p>
-<p>第四步，关闭游标。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CLOSE cursor_name</span><br></pre></td></tr></table></figure>
-<p>有 OPEN 就会有 CLOSE，也就是打开和关闭游标。当我们使用完游标后需要关闭掉该游标。关闭游标之后，我们就不能再检索查询结果中的数据行，如果需要检索只能再次打开游标。</p>
-<p>最后一步，释放游标。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DEALLOCATE PREPARE</span><br></pre></td></tr></table></figure>
-
-<p>有 DECLARE 就需要有 DEALLOCATE，DEALLOCATE 的作用是释放游标。我们一定要养成释放游标的习惯，否则游标会一直存在于内存中，直到进程结束后才会自动释放。当你不需要使用游标的时候，释放游标可以减少资源浪费。</p>
-<p>上面就是 5 个常用的游标步骤。我来举一个简单的例子，假设我想用游标来扫描 heros 数据表中的数据行，然后累计最大生命值，那么该怎么做呢？</p>
-<p>我先创建一个存储过程 calc_hp_max，然后在存储过程中定义游标 cur_hero，使用 FETCH 获取每一行的具体数值，然后赋值给变量 hp，再用变量 hp_sum 做累加求和，最后再输出 hp_sum，代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">CREATE PROCEDURE `calc_hp_max`()</span><br><span class="line">BEGIN</span><br><span class="line">       -- 创建接收游标的变量</span><br><span class="line">       DECLARE hp INT;  </span><br><span class="line">       -- 创建总数变量 </span><br><span class="line">       DECLARE hp_sum INT DEFAULT 0;</span><br><span class="line">       -- 创建结束标志变量  </span><br><span class="line">       DECLARE done INT DEFAULT false;</span><br><span class="line">       -- 定义游标     </span><br><span class="line">       DECLARE cur_hero CURSOR FOR SELECT hp_max FROM heros;</span><br><span class="line">       </span><br><span class="line">       OPEN cur_hero;</span><br><span class="line">       read_loop:LOOP </span><br><span class="line">       FETCH cur_hero INTO hp;</span><br><span class="line">       SET hp_sum = hp_sum + hp;</span><br><span class="line">       END LOOP;</span><br><span class="line">       CLOSE cur_hero;</span><br><span class="line">       SELECT hp_sum;</span><br><span class="line">       DEALLOCATE PREPARE cur_hero;</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
-<p>你会发现执行call calc_hp_max()这一句的时候系统会提示 1329 错误，也就是在 LOOP 中当游标没有取到数据时会报的错误。</p>
-<p>当游标溢出时（也就是当游标指向到最后一行数据后继续执行会报的错误），我们可以定义一个 continue 的事件，指定这个事件发生时修改变量 done 的值，以此来判断游标是否已经溢出，即：</p>
-<p>DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = true;<br>同时在循环中我们需要加上对 done 的判断，如果游标的循环已经结束，就需要跳出 read_loop 循环，完善的代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">CREATE PROCEDURE `calc_hp_max`()</span><br><span class="line">BEGIN</span><br><span class="line">       -- 创建接收游标的变量</span><br><span class="line">       DECLARE hp INT;  </span><br><span class="line"> </span><br><span class="line">       -- 创建总数变量 </span><br><span class="line">       DECLARE hp_sum INT DEFAULT 0;</span><br><span class="line">       -- 创建结束标志变量  </span><br><span class="line">     DECLARE done INT DEFAULT false;</span><br><span class="line">       -- 定义游标     </span><br><span class="line">       DECLARE cur_hero CURSOR FOR SELECT hp_max FROM heros;</span><br><span class="line">       -- 指定游标循环结束时的返回值  </span><br><span class="line">     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = true;  </span><br><span class="line">       </span><br><span class="line">       OPEN cur_hero;</span><br><span class="line">       read_loop:LOOP </span><br><span class="line">       FETCH cur_hero INTO hp;</span><br><span class="line">       -- 判断游标的循环是否结束  </span><br><span class="line">       IF done THEN  </span><br><span class="line">                     LEAVE read_loop;</span><br><span class="line">       END IF; </span><br><span class="line">              </span><br><span class="line">       SET hp_sum = hp_sum + hp;</span><br><span class="line">       END LOOP;</span><br><span class="line">       CLOSE cur_hero;</span><br><span class="line">       SELECT hp_sum;</span><br><span class="line">       DEALLOCATE PREPARE cur_hero;</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
-<p>运行结果（1 行数据）：</p>
-<p>在游标中的循环中，除了使用 LOOP 循环以外，你还可以使用 REPEAT… UNTIL…以及 WHILE 循环。它们同样需要设置 CONTINUE 事件来处理游标溢出的情况。</p>
-<p>所以你能看出，使用游标可以让我们对 SELECT 结果集中的每一行数据进行相同或者不同的操作，从而很精细化地管理结果集中的每一条数据。</p>
-<h3 id="使用游标来解决一些常见的问题"><a href="#使用游标来解决一些常见的问题" class="headerlink" title="使用游标来解决一些常见的问题"></a>使用游标来解决一些常见的问题</h3><p>我刚才讲了一个简单的使用案例，实际上如果想要统计 hp_sum，完全可以通过 SQL 语句来完成，比如：</p>
-<p>SELECT SUM(hp_max) FROM heros<br>运行结果（1 行数据）：</p>
-<p>那么游标都有什么用呢？</p>
-<p>当你需要处理一些复杂的数据行计算的时候，游标就会起到作用了。我举个例子，还是针对 heros 数据表，假设我们想要对英雄的物攻成长（对应 attack_growth）进行升级，在新版本中大范围提升英雄的物攻成长数值，但是针对不同的英雄情况，提升的幅度也不同，具体提升的方式如下。</p>
-<p>如果这个英雄原有的物攻成长小于 5，那么将在原有基础上提升 7%-10%。如果物攻成长的提升空间（即最高物攻 attack_max- 初始物攻 attack_start）大于 200，那么在原有的基础上提升 10%；如果物攻成长的提升空间在 150 到 200 之间，则提升 8%；如果物攻成长的提升空间不足 150，则提升 7%。</p>
-<p>如果原有英雄的物攻成长在 5—10 之间，那么将在原有基础上提升 5%。</p>
-<p>如果原有英雄的物攻成长大于 10，则保持不变。</p>
-<p>以上所有的更新后的物攻成长数值，都需要保留小数点后 3 位。</p>
-<p>你能看到上面这个计算的情况相对复杂，实际工作中你可能会遇到比这个更加复杂的情况，这时你可以采用面向过程的思考方式来完成这种任务，也就是说先取出每行的数值，然后针对数值的不同情况采取不同的计算方式。</p>
-<p>针对上面这个情况，你自己可以用游标来完成转换，具体的代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">CREATE PROCEDURE `alter_attack_growth`()</span><br><span class="line">BEGIN</span><br><span class="line">       -- 创建接收游标的变量</span><br><span class="line">       DECLARE temp_id INT;  </span><br><span class="line">       DECLARE temp_growth, temp_max, temp_start, temp_diff FLOAT;  </span><br><span class="line"> </span><br><span class="line">       -- 创建结束标志变量  </span><br><span class="line">       DECLARE done INT DEFAULT false;</span><br><span class="line">       -- 定义游标     </span><br><span class="line">       DECLARE cur_hero CURSOR FOR SELECT id, attack_growth, attack_max, attack_start FROM heros;</span><br><span class="line">       -- 指定游标循环结束时的返回值  </span><br><span class="line">       DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = true;  </span><br><span class="line">       </span><br><span class="line">       OPEN cur_hero;  </span><br><span class="line">       FETCH cur_hero INTO temp_id, temp_growth, temp_max, temp_start;</span><br><span class="line">       REPEAT</span><br><span class="line">                     IF NOT done THEN</span><br><span class="line">                            SET temp_diff = temp_max - temp_start;</span><br><span class="line">                            IF temp_growth &lt; 5 THEN</span><br><span class="line">                                   IF temp_diff &gt; 200 THEN</span><br><span class="line">                                          SET temp_growth = temp_growth * 1.1;</span><br><span class="line">                                   ELSEIF temp_diff &gt;= 150 AND temp_diff &lt;=200 THEN</span><br><span class="line">                                          SET temp_growth = temp_growth * 1.08;</span><br><span class="line">                                   ELSEIF temp_diff &lt; 150 THEN</span><br><span class="line">                                          SET temp_growth = temp_growth * 1.07;</span><br><span class="line">                                   END IF;                       </span><br><span class="line">                            ELSEIF temp_growth &gt;=5 AND temp_growth &lt;=10 THEN</span><br><span class="line">                                   SET temp_growth = temp_growth * 1.05;</span><br><span class="line">                            END IF;</span><br><span class="line">                            UPDATE heros SET attack_growth = ROUND(temp_growth,3) WHERE id = temp_id;</span><br><span class="line">                     END IF;</span><br><span class="line">       FETCH cur_hero INTO temp_id, temp_growth, temp_max, temp_start;</span><br><span class="line">       UNTIL done = true END REPEAT;</span><br><span class="line">       </span><br><span class="line">       CLOSE cur_hero;</span><br><span class="line">       DEALLOCATE PREPARE cur_hero;</span><br><span class="line">END</span><br><span class="line">这里我创建了 alter_attack_growth 这个存储过程，使用了 REPEAT…UNTIL…的循环方式，针对不同的情况计算了新的物攻成长 temp_growth，然后对原有的 attack_growth 进行了更新，最后调用 call alter_attack_growth(); 执行存储过程。</span><br><span class="line"></span><br><span class="line">有一点需要注意的是，我们在对数据表进行更新前，需要备份之前的表，我们可以将备份后的表命名为 heros_copy1。更新完 heros 数据表之后，你可以看下两张表在 attack_growth 字段上的对比，我们使用 SQL 进行查询：</span><br></pre></td></tr></table></figure>
-<p>SELECT heros.id, heros.attack_growth, heros_copy1.attack_growth FROM heros JOIN heros_copy1 WHERE heros.id = heros_copy1.id</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">运行结果（69 条记录）：</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">通过前后两张表的 attack_growth 对比你也能看出来，存储过程通过游标对不同的数据行进行了更新。</span><br><span class="line"></span><br><span class="line">需要说明的是，以上代码适用于 MySQL，如果在 SQL Server 或 Oracle 中，使用方式会有些差别。</span><br><span class="line"></span><br><span class="line">### 总结</span><br><span class="line">今天我们讲解了如何在 SQL 中使用游标，游标实际上是面向过程的思维方式，与面向集合的思维方式不同的地方在于，游标更加关注“如何执行”。我们可以通过游标更加精细、灵活地查询和管理想要的数据行。</span><br><span class="line"></span><br><span class="line">有的时候，我们需要找特定数据，用 SQL 查询写起来会比较困难，比如两表或多表之间的嵌套循环查找，如果用 JOIN 会非常消耗资源，效率也可能不高，而用游标则会比较高效。</span><br><span class="line"></span><br><span class="line">虽然在处理某些复杂的数据情况下，使用游标可以更灵活，但同时也会带来一些性能问题，比如在使用游标的过程中，会对数据行进行加锁，这样在业务并发量大的时候，不仅会影响业务之间的效率，还会消耗系统资源，造成内存不足，这是因为游标是在内存中进行的处理。如果有游标的替代方案，我们可以采用替代方案。</span><br><span class="line">我们今天讲解了游标，你能用自己的语言介绍下游标的作用吗？另外，我们之前提到过，SQL 本身是一门结构化查询语言，但我们也可以在 SQL 的基础上进行面向过程的开发，完成较为复杂的功能，你能说一下面向过程和面向集合这两种编程方式的区别吗？</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">```python</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2434,7 +2473,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">64</span>
+                  <span class="site-state-item-count">65</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
