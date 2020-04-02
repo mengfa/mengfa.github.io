@@ -459,6 +459,207 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/02/27%E4%B8%A8%E4%BB%8E%E6%95%B0%E6%8D%AE%E9%A1%B5%E7%9A%84%E8%A7%92%E5%BA%A6%E7%90%86%E8%A7%A3B+%E6%A0%91%E6%9F%A5%E8%AF%A2%E7%9A%84%E5%89%AF%E6%9C%AC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/04/02/27%E4%B8%A8%E4%BB%8E%E6%95%B0%E6%8D%AE%E9%A1%B5%E7%9A%84%E8%A7%92%E5%BA%A6%E7%90%86%E8%A7%A3B+%E6%A0%91%E6%9F%A5%E8%AF%A2%E7%9A%84%E5%89%AF%E6%9C%AC/" itemprop="url">27丨从数据页的角度理解B+树查询</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-02T20:15:01+08:00">
+                2020-04-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" itemprop="url" rel="index">
+                    <span itemprop="name">SQL必知必会</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/04/02/27%E4%B8%A8%E4%BB%8E%E6%95%B0%E6%8D%AE%E9%A1%B5%E7%9A%84%E8%A7%92%E5%BA%A6%E7%90%86%E8%A7%A3B+%E6%A0%91%E6%9F%A5%E8%AF%A2%E7%9A%84%E5%89%AF%E6%9C%AC/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/04/02/27%E4%B8%A8%E4%BB%8E%E6%95%B0%E6%8D%AE%E9%A1%B5%E7%9A%84%E8%A7%92%E5%BA%A6%E7%90%86%E8%A7%A3B+%E6%A0%91%E6%9F%A5%E8%AF%A2%E7%9A%84%E5%89%AF%E6%9C%AC/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>我们之前已经了解了 B+ 树和 Hash 索引的原理，这些索引结构给我们提供了高效的索引方式，不过这些索引信息以及数据记录都是保存在文件上的，确切说是存储在页结构中。</p>
+<p>对数据库的存储结构以及页结构的底层进行了解，可以加深我们对索引运行机制的认识，从而你对索引的存储、查询原理，以及对 SQL 查询效率有更深的理解。</p>
+<p>今天的课程主要包括下面几个部分：</p>
+<ol>
+<li>数据库中的存储结构是怎样的？页、区、段和表空间分别指的是什么？</li>
+<li>为什么页（Page）是数据库存储空间的基本单位？</li>
+<li>从数据页的角度来看，B+ 树是如何进行查询的？<h3 id="数据库中的存储结构是怎样的"><a href="#数据库中的存储结构是怎样的" class="headerlink" title="数据库中的存储结构是怎样的"></a>数据库中的存储结构是怎样的</h3>记录是按照行来存储的，但是数据库的读取并不以行为单位，否则一次读取（也就是一次 I/O 操作）只能处理一行数据，效率会非常低。因此在数据库中，不论读一行，还是读多行，都是将这些行所在的页进行加载。也就是说，数据库管理存储空间的基本单位是页（Page）。</li>
+</ol>
+<p>一个页中可以存储多个行记录（Row），同时在数据库中，还存在着区（Extent）、段（Segment）和表空间（Tablespace）。行、页、区、段、表空间的关系如下图所示：</p>
+<p>从图中你能看到一个表空间包括了一个或多个段，一个段包括了一个或多个区，一个区包括了多个页，而一个页中可以有多行记录，这些概念我简单给你讲解下。</p>
+<p>区（Extent）是比页大一级的存储结构，在 InnoDB 存储引擎中，一个区会分配 64 个连续的页。因为 InnoDB 中的页大小默认是 16KB，所以一个区的大小是 64*16KB=1MB。</p>
+<p>段（Segment）由一个或多个区组成，区在文件系统是一个连续分配的空间（在 InnoDB 中是连续的 64 个页），不过在段中不要求区与区之间是相邻的。段是数据库中的分配单位，不同类型的数据库对象以不同的段形式存在。当我们创建数据表、索引的时候，就会相应创建对应的段，比如创建一张表时会创建一个表段，创建一个索引时会创建一个索引段。</p>
+<p>表空间（Tablespace）是一个逻辑容器，表空间存储的对象是段，在一个表空间中可以有一个或多个段，但是一个段只能属于一个表空间。数据库由一个或多个表空间组成，表空间从管理上可以划分为系统表空间、用户表空间、撤销表空间、临时表空间等。</p>
+<p>在 InnoDB 中存在两种表空间的类型：共享表空间和独立表空间。如果是共享表空间就意味着多张表共用一个表空间。如果是独立表空间，就意味着每张表有一个独立的表空间，也就是数据和索引信息都会保存在自己的表空间中。独立的表空间可以在不同的数据库之间进行迁移。</p>
+<p>你可以通过下面的命令来查看 InnoDB 的表空间类型：</p>
+<p>mysql &gt; show variables like ‘innodb_file_per_table’;</p>
+<p>你能看到 innodb_file_per_table=ON，这就意味着每张表都会单独保存为一个.ibd 文件。</p>
+<p>数据页内的结构是怎样的<br>页（Page）如果按类型划分的话，常见的有数据页（保存 B+ 树节点）、系统页、Undo 页和事务数据页等。数据页是我们最常使用的页。</p>
+<p>表页的大小限定了表行的最大长度，不同 DBMS 的表页大小不同。比如在 MySQL 的 InnoDB 存储引擎中，默认页的大小是 16KB，我们可以通过下面的命令来进行查看：</p>
+<p>mysql&gt; show variables like ‘%innodb_page_size%’;</p>
+<p>在 SQL Server 的页大小为 8KB，而在 Oracle 中我们用术语“块”（Block）来代表“页”，Oralce 支持的块大小为 2KB，4KB，8KB，16KB，32KB 和 64KB。</p>
+<p>数据库 I/O 操作的最小单位是页，与数据库相关的内容都会存储在页结构里。数据页包括七个部分，分别是文件头（File Header）、页头（Page Header）、最大最小记录（Infimum+supremum）、用户记录（User Records）、空闲空间（Free Space）、页目录（Page Directory）和文件尾（File Tailer）。</p>
+<p>页结构的示意图如下所示：</p>
+<p>这 7 个部分到底有什么作用呢？我简单梳理下：</p>
+<p>实际上，我们可以把这 7 个数据页分成 3 个部分。</p>
+<p>首先是文件通用部分，也就是文件头和文件尾。它们类似集装箱，将页的内容进行封装，通过文件头和文件尾校验的方式来确保页的传输是完整的。</p>
+<p>在文件头中有两个字段，分别是 FIL_PAGE_PREV 和 FIL_PAGE_NEXT，它们的作用相当于指针，分别指向上一个数据页和下一个数据页。连接起来的页相当于一个双向的链表，如下图所示：</p>
+<p>需要说明的是采用链表的结构让数据页之间不需要是物理上的连续，而是逻辑上的连续。</p>
+<p>我们之前讲到过 Hash 算法，这里文件尾的校验方式就是采用 Hash 算法进行校验。举个例子，当我们进行页传输的时候，如果突然断电了，造成了该页传输的不完整，这时通过文件尾的校验和（checksum 值）与文件头的校验和做比对，如果两个值不相等则证明页的传输有问题，需要重新进行传输，否则认为页的传输已经完成。</p>
+<p>第二个部分是记录部分，页的主要作用是存储记录，所以“最小和最大记录”和“用户记录”部分占了页结构的主要空间。另外空闲空间是个灵活的部分，当有新的记录插入时，会从空闲空间中进行分配用于存储新记录，如下图所示：</p>
+<p>第三部分是索引部分，这部分重点指的是页目录，它起到了记录的索引作用，因为在页中，记录是以单向链表的形式进行存储的。单向链表的特点就是插入、删除非常方便，但是检索效率不高，最差的情况下需要遍历链表上的所有节点才能完成检索，因此在页目录中提供了二分查找的方式，用来提高记录的检索效率。这个过程就好比是给记录创建了一个目录：</p>
+<p>将所有的记录分成几个组，这些记录包括最小记录和最大记录，但不包括标记为“已删除”的记录。<br>第 1 组，也就是最小记录所在的分组只有 1 个记录；最后一组，就是最大记录所在的分组，会有 1-8 条记录；其余的组记录数量在 4-8 条之间。这样做的好处是，除了第 1 组（最小记录所在组）以外，其余组的记录数会尽量平分。<br>在每个组中最后一条记录的头信息中会存储该组一共有多少条记录，作为 n_owned 字段。<br>页目录用来存储每组最后一条记录的地址偏移量，这些地址偏移量会按照先后顺序存储起来，每组的地址偏移量也被称之为槽（slot），每个槽相当于指针指向了不同组的最后一个记录。如下图所示：</p>
+<p>页目录存储的是槽，槽相当于分组记录的索引。我们通过槽查找记录，实际上就是在做二分查找。这里我以上面的图示进行举例，5 个槽的编号分别为 0，1，2，3，4，我想查找主键为 9 的用户记录，我们初始化查找的槽的下限编号，设置为 low=0，然后设置查找的槽的上限编号 high=4，然后采用二分查找法进行查找。</p>
+<p>首先找到槽的中间位置 p=(low+high)/2=(0+4)/2=2，这时我们取编号为 2 的槽对应的分组记录中最大的记录，取出关键字为 8。因为 9 大于 8，所以应该会在槽编号为 (p,high] 的范围进行查找</p>
+<p>接着重新计算中间位置 p’=(p+high)/2=(2+4)/2=3，我们查找编号为 3 的槽对应的分组记录中最大的记录，取出关键字为 12。因为 9 小于 12，所以应该在槽 3 中进行查找。</p>
+<p>遍历槽 3 中的所有记录，找到关键字为 9 的记录，取出该条记录的信息即为我们想要查找的内容。</p>
+<p>从数据页的角度看 B+ 树是如何进行查询的<br>MySQL 的 InnoDB 存储引擎采用 B+ 树作为索引，而索引又可以分成聚集索引和非聚集索引（二级索引），这些索引都相当于一棵 B+ 树，如图所示。一棵 B+ 树按照节点类型可以分成两部分：</p>
+<p>叶子节点，B+ 树最底层的节点，节点的高度为 0，存储行记录。<br>非叶子节点，节点的高度大于 0，存储索引键和页面指针，并不存储行记录本身。</p>
+<p>我们刚才学习了页结构的内容，你可以用页结构对比，看下 B+ 树的结构。</p>
+<p>在一棵 B+ 树中，每个节点都是一个页，每次新建节点的时候，就会申请一个页空间。同一层上的节点之间，通过页的结构构成一个双向的链表（页文件头中的两个指针字段）。非叶子节点，包括了多个索引行，每个索引行里存储索引键和指向下一层页面的页面指针。最后是叶子节点，它存储了关键字和行记录，在节点内部（也就是页结构的内部）记录之间是一个单向的链表，但是对记录进行查找，则可以通过页目录采用二分查找的方式来进行。</p>
+<p>当我们从页结构来理解 B+ 树的结构的时候，可以帮我们理解一些通过索引进行检索的原理：</p>
+<p>1.B+ 树是如何进行记录检索的？</p>
+<p>如果通过 B+ 树的索引查询行记录，首先是从 B+ 树的根开始，逐层检索，直到找到叶子节点，也就是找到对应的数据页为止，将数据页加载到内存中，页目录中的槽（slot）采用二分查找的方式先找到一个粗略的记录分组，然后再在分组中通过链表遍历的方式查找记录。</p>
+<ol start="2">
+<li>普通索引和唯一索引在查询效率上有什么不同？</li>
+</ol>
+<p>我们创建索引的时候可以是普通索引，也可以是唯一索引，那么这两个索引在查询效率上有什么不同呢？</p>
+<p>唯一索引就是在普通索引上增加了约束性，也就是关键字唯一，找到了关键字就停止检索。而普通索引，可能会存在用户记录中的关键字相同的情况，根据页结构的原理，当我们读取一条记录的时候，不是单独将这条记录从磁盘中读出去，而是将这个记录所在的页加载到内存中进行读取。InnoDB 存储引擎的页大小为 16KB，在一个页中可能存储着上千个记录，因此在普通索引的字段上进行查找也就是在内存中多几次“判断下一条记录”的操作，对于 CPU 来说，这些操作所消耗的时间是可以忽略不计的。所以对一个索引字段进行检索，采用普通索引还是唯一索引在检索效率上基本上没有差别。</p>
+<p>总结<br>今天我们学习了数据库中的基本存储单位，也就是页（Page），磁盘 I/O 都是基于页来进行读取的，在页之上还有区、段和表空间，它们都是更大的存储单位。我们在分配空间的时候会按照页为单位来进行分配，同一棵树上同一层的页与页之间采用双向链表，而在页里面，记录之间采用的单向链表的方式。</p>
+<p>链表这种数据结构的特点是增加、删除比较方便，所以在对记录进行删除的时候，有时候并不是真的删除了记录，而只是逻辑上的删除，也就是在标记为上标记为“已删除”。但链表还有个问题就是查找效率低，因此在页结构中还专门设计了页目录这个模块，专门给记录做一个目录，通过二分查找法的方式进行检索提升效率。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/02/26%E4%B8%A8%E7%B4%A2%E5%BC%95%E7%9A%84%E4%BD%BF%E7%94%A8%E5%8E%9F%E5%88%99%EF%BC%9A%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87%E7%B4%A2%E5%BC%95%E8%AE%A9SQL%E6%9F%A5%E8%AF%A2%E6%95%88%E7%8E%87%E6%9C%80%E5%A4%A7%E5%8C%96%EF%BC%9F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2184,223 +2385,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/29/18%E4%B8%A8SQLAlchemy%EF%BC%9A%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Python%20ORM%E6%A1%86%E6%9E%B6%E6%9D%A5%E6%93%8D%E4%BD%9CMySQL%EF%BC%9F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LvYang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LvYang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/29/18%E4%B8%A8SQLAlchemy%EF%BC%9A%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Python%20ORM%E6%A1%86%E6%9E%B6%E6%9D%A5%E6%93%8D%E4%BD%9CMySQL%EF%BC%9F/" itemprop="url">18丨SQLAlchemy：如何使用Python ORM框架来操作MySQL？</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-29T15:49:01+08:00">
-                2020-03-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" itemprop="url" rel="index">
-                    <span itemprop="name">SQL必知必会</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/03/29/18%E4%B8%A8SQLAlchemy%EF%BC%9A%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Python%20ORM%E6%A1%86%E6%9E%B6%E6%9D%A5%E6%93%8D%E4%BD%9CMySQL%EF%BC%9F/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/03/29/18%E4%B8%A8SQLAlchemy%EF%BC%9A%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Python%20ORM%E6%A1%86%E6%9E%B6%E6%9D%A5%E6%93%8D%E4%BD%9CMySQL%EF%BC%9F/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>上节课，我介绍了 Python DB API 规范的作用，以及如何使用 MySQL 官方的 mysql-connector 驱动来完成数据库的连接和使用。在项目比较小的时候，我们可以直接使用 SQL 语句，通过 mysql-connector 完成与 MySQL 的交互，但是任何事物都有两面性，随着项目规模的增加，代码会越来越复杂，维护的成本也越来越高，这时 mysql-connector 就不够用了，我们需要更好的设计模式。</p>
-<p>Python 还有另一种方式可以与 MySQL 进行交互，这种方式采用的是 ORM 框架。我们今天就来讲解如何使用 ORM 框架操作 MySQL，那么今天的课程你需要掌握以下几个方面的内容：</p>
-<ol>
-<li>什么是 ORM 框架，以及为什么要使用 ORM 框架？</li>
-<li>Python 中的 ORM 框架都有哪些？</li>
-<li>如何使用 SQLAlchemy 来完成与 MySQL 的交互？<h3 id="我们为什么要使用-ORM-框架？"><a href="#我们为什么要使用-ORM-框架？" class="headerlink" title="我们为什么要使用 ORM 框架？"></a>我们为什么要使用 ORM 框架？</h3>在讲解 ORM 框架之前，我们需要先了解什么是持久化。如下图所示，持久化层在业务逻辑层和数据库层起到了衔接的作用，它可以将内存中的数据模型转化为存储模型，或者将存储模型转化为内存中的数据模型。</li>
-</ol>
-<p>你可能会想到，我们在讲事务的 4 大特性 ACID 时，提到过持久性。你可以简单地理解为，持久性就是将对象数据永久存储在数据库中。通常我们将数据库的作用理解为永久存储，将内存理解为暂时存储。我们在程序的层面操作数据，其实都是把数据放到内存中进行处理，如果需要数据就会通过持久化层，从数据库中取数据；如果需要保存数据，就是将对象数据通过持久化层存储到数据库中。</p>
-<p>那么 ORM 解决的是什么问题呢？它提供了一种持久化模式，可以高效地对数据库进行访问。ORM 的英文是 Object Relation Mapping，中文叫对象关系映射。它是 RDBMS 和业务实体对象之间的一个映射，从图中你也能看到，它可以把底层的 RDBMS 封装成业务实体对象，提供给业务逻辑层使用。程序员往往关注业务逻辑层面，而不是底层数据库该如何访问，以及如何编写 SQL 语句获取数据等等。采用 ORM，就可以从数据库的设计层面转化成面向对象的思维。</p>
-<p>我在开篇的时候提到过，随着项目规模的增大，在代码层编写 SQL 语句访问数据库会降低开发效率，也会提升维护成本，因此越来越多的开发人员会采用基于 ORM 的方式来操作数据库。这样做的好处就是一旦定义好了对象模型，就可以让它们简单可复用，从而不必关注底层的数据库访问细节，我们只要将注意力集中到业务逻辑层面就可以了。由此还可以带来另一点好处，那就是即便数据库本身进行了更换，在业务逻辑代码上也不会有大的调整。这是因为 ORM 抽象了数据的存取，同时也兼容多种 DBMS，我们不用关心底层采用的到底是哪种 DBMS，是 MySQL，SQL Server，PostgreSQL 还是 SQLite。</p>
-<p>但没有一种模式是完美的，采用 ORM 当然也会付出一些代价，比如性能上的一些损失。面对一些复杂的数据查询，ORM 会显得力不从心。虽然可以实现功能，但相比于直接编写 SQL 查询语句来说，ORM 需要编写的代码量和花费的时间会比较多，这种情况下，直接编写 SQL 反而会更简单有效。</p>
-<p>其实你也能看出来，没有一种方式是一劳永逸的，在实际工作中，我们需要根据需求选择适合的方式。</p>
-<h3 id="Python-中的-ORM-框架都有哪些"><a href="#Python-中的-ORM-框架都有哪些" class="headerlink" title="Python 中的 ORM 框架都有哪些"></a>Python 中的 ORM 框架都有哪些</h3><p>ORM 框架帮我们适配了各种 DBMS，同时我们也可以选择不同的 ORM 框架。如果你用 Python 的话，有三种主流的 ORM 框架。</p>
-<p>第一个是 Django，它是 Python 的 WEB 应用开发框架，本身走大而全的方式。Django 采用了 MTV 的框架模式，包括了 Model（模型），View（视图）和 Template（模版）。Model 模型只是 Django 的一部分功能，我们可以通过它来实现数据库的增删改查操作。</p>
-<p>一个 Model 映射到一个数据表，如下图所示：</p>
-<p>从这张图上你能直观地看到，ORM 的作用就是建立了对象关系映射。模型的每个属性代表数据表中的一个字段，我们通过操作类实例对象，对数据表中的数据行进行增删改查等操作。</p>
-<p>第二个是 SQLALchemy，它也是 Python 中常用的 ORM 框架之一。它提供了 SQL 工具包及 ORM 工具，如果你想用支持 ORM 和支持原生 SQL 两种方式的工具，那么 SQLALchemy 是很好的选择。另外 SQLALchemy 的社区更加活跃，这对项目实施会很有帮助。</p>
-<p>第三个是 peewee，这是一个轻量级的 ORM 框架，简单易用。peewee 采用了 Model 类、Field 实例和 Model 实例来与数据库建立映射关系，从而完成面向对象的管理方式。使用起来方便，学习成本也低。</p>
-<h3 id="如何使用-SQLAlchemy-来操作-MySQL"><a href="#如何使用-SQLAlchemy-来操作-MySQL" class="headerlink" title="如何使用 SQLAlchemy 来操作 MySQL"></a>如何使用 SQLAlchemy 来操作 MySQL</h3><p>下面我们来看下如何使用 SQLAlchemy 工具对 player 数据表进行增删改查，在使用前，你需要先安装相应的工具包：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pip install sqlalchemy</span><br><span class="line">初始化数据库连接</span><br><span class="line">from sqlalchemy import create_engine</span><br><span class="line"># 初始化数据库连接，修改为你的数据库用户名和密码</span><br><span class="line">engine = create_engine(&apos;mysql+mysqlconnector://root:password@localhost:3306/wucai&apos;)</span><br></pre></td></tr></table></figure>
-<p>create_engine 的使用方法类似我们在上篇文章中提到的 mysql.connector，都需要提供数据<br>库 + 数据库连接框架，即对应的是mysql+mysqlconnector，后面的是用户名:密码@IP地址:端口号/数据库名称。</p>
-<h3 id="创建模型"><a href="#创建模型" class="headerlink" title="创建模型"></a>创建模型</h3><p>我们已经创建了 player 数据表，这里需要创建相应的 player 模型。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 定义 Player 对象:</span><br><span class="line">class Player(Base):</span><br><span class="line">    # 表的名字:</span><br><span class="line">    __tablename__ = &apos;player&apos;</span><br><span class="line"> </span><br><span class="line">    # 表的结构:</span><br><span class="line">    player_id = Column(Integer, primary_key=True, autoincrement=True)</span><br><span class="line">    team_id = Column(Integer)</span><br><span class="line">    player_name = Column(String(255))</span><br><span class="line">    height = Column(Float(3,2))</span><br></pre></td></tr></table></figure>
-<p>这里需要说明的是，<strong>tablename</strong> 指明了模型对应的数据表名称，即 player 数据表。同时我们在 Player 模型中对采用的变量名进行定义，变量名需要和数据表中的字段名称保持一致，否则会找不到数据表中的字段。在 SQLAlchemy 中，我们采用 Column 对字段进行定义，常用的数据类型如下：</p>
-<p>除了指定 Column 的数据类型以外，我们也可以指定 Column 的参数，这些参数可以帮我们对对象创建列约束：</p>
-<p>这里需要说明的是，如果你使用相应的数据类型，那么需要提前在 SQLAlchemy 中进行引用，比如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">from sqlalchemy import Column, String, Integer, Float</span><br></pre></td></tr></table></figure>
-<p>###对数据表进行增删改查<br>假设我们想给 player 表增加一名新球员，姓名为“约翰·科林斯”，球队 ID 为 1003（即亚特兰大老鹰），身高为 2.08。代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># 创建 DBSession 类型:</span><br><span class="line">DBSession = sessionmaker(bind=engine)</span><br><span class="line"># 创建 session 对象:</span><br><span class="line">session = DBSession()</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"># 创建 Player 对象:</span><br><span class="line">new_player = Player(team_id = 1003, player_name = &quot; 约翰 - 科林斯 &quot;, height = 2.08)</span><br><span class="line"># 添加到 session:</span><br><span class="line">session.add(new_player)</span><br><span class="line"># 提交即保存到数据库:</span><br><span class="line">session.commit()</span><br><span class="line"># 关闭 session:</span><br><span class="line">session.close()</span><br></pre></td></tr></table></figure>
-<p>这里，我们首先需要初始化 DBSession，相当于创建一个数据库的会话实例 session。通过 session 来完成新球员的添加。对于新球员的数据，我们可以通过 Player 类来完成创建，在参数中指定相应的team_id, player_name, height即可。</p>
-<p>然后把创建好的对象 new_player 添加到 session 中，提交到数据库即可完成添加数据的操作。</p>
-<p>接着，我们来看一下如何查询数据。</p>
-<p>添加完插入的新球员之后，我们可以查询下身高 ≥ 2.08m 的球员都有哪些，代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># 增加 to_dict() 方法到 Base 类中</span><br><span class="line">def to_dict(self):</span><br><span class="line">    return &#123;c.name: getattr(self, c.name, None)</span><br><span class="line">            for c in self.__table__.columns&#125;</span><br><span class="line"># 将对象可以转化为 dict 类型</span><br><span class="line">Base.to_dict = to_dict</span><br><span class="line"># 查询身高 &gt;=2.08 的球员有哪些</span><br><span class="line">rows = session.query(Player).filter(Player.height &gt;= 2.08).all()</span><br><span class="line">print([row.to_dict() for row in rows])</span><br></pre></td></tr></table></figure>
-<p>运行结果：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[&#123;&apos;player_id&apos;: 10003, &apos;team_id&apos;: 1001, &apos;player_name&apos;: &apos;安德烈 - 德拉蒙德&apos;, &apos;height&apos;: Decimal(&apos;2.1100000000&apos;)&#125;, &#123;&apos;player_id&apos;: 10004, &apos;team_id&apos;: 1001, &apos;player_name&apos;: &apos;索恩 - 马克&apos;, &apos;height&apos;: Decimal(&apos;2.1600000000&apos;)&#125;, &#123;&apos;player_id&apos;: 10009, &apos;team_id&apos;: 1001, &apos;player_name&apos;: &apos;扎扎 - 帕楚里亚&apos;, &apos;height&apos;: Decimal(&apos;2.1100000000&apos;)&#125;, &#123;&apos;player_id&apos;: 10010, &apos;team_id&apos;: 1001, &apos;player_name&apos;: &apos;乔恩 - 洛伊尔&apos;, &apos;height&apos;: Decimal(&apos;2.0800000000&apos;)&#125;, &#123;&apos;player_id&apos;: 10011, &apos;team_id&apos;: 1001, &apos;player_name&apos;: &apos;布雷克 - 格里芬&apos;, &apos;height&apos;: Decimal(&apos;2.0800000000&apos;)&#125;, &#123;&apos;player_id&apos;: 10015, &apos;team_id&apos;: 1001, &apos;player_name&apos;: &apos;亨利 - 埃伦森&apos;, &apos;height&apos;: Decimal(&apos;2.1100000000&apos;)&#125;, &#123;&apos;player_id&apos;: 10023, &apos;team_id&apos;: 1002, &apos;player_name&apos;: &apos;多曼塔斯 - 萨博尼斯&apos;, &apos;height&apos;: Decimal(&apos;2.1100000000&apos;)&#125;, &#123;&apos;player_id&apos;: 10024, &apos;team_id&apos;: 1002, &apos;player_name&apos;: &apos;迈尔斯 - 特纳&apos;, &apos;height&apos;: Decimal(&apos;2.1100000000&apos;)&#125;, &#123;&apos;player_id&apos;: 10032, &apos;team_id&apos;: 1002, &apos;player_name&apos;: &apos;TJ- 利夫&apos;, &apos;height&apos;: Decimal(&apos;2.0800000000&apos;)&#125;, &#123;&apos;player_id&apos;: 10033, &apos;team_id&apos;: 1002, &apos;player_name&apos;: &apos;凯尔 - 奥奎因&apos;, &apos;height&apos;: Decimal(&apos;2.0800000000&apos;)&#125;, &#123;&apos;player_id&apos;: 10037, &apos;team_id&apos;: 1002, &apos;player_name&apos;: &apos;伊凯·阿尼博古&apos;, &apos;height&apos;: Decimal(&apos;2.0800000000&apos;)&#125;, &#123;&apos;player_id&apos;: 10038, &apos;team_id&apos;: 1003, &apos;player_name&apos;: &apos;约翰 - 科林斯&apos;, &apos;height&apos;: Decimal(&apos;2.0800000000&apos;)&#125;]</span><br></pre></td></tr></table></figure>
-<p>如果我们对整个数据行进行查询，采用的是session.query(Player)，相当于使用的是 SELECT *。这时如果我们想要在 Python 中对 query 结果进行打印，可以对 Base 类增加to_dict()方法，相当于将对象转化成了 Python 的字典类型。</p>
-<p>在进行查询的时候，我们使用的是 filter 方法，对应的是 SQL 中的 WHERE 条件查询。除此之外，filter 也支持多条件查询。</p>
-<p>如果是 AND 的关系，比如我们想要查询身高 ≥ 2.08，同时身高 ≤ 2.10 的球员，可以写成下面这样：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rows = session.query(Player).filter(Player.height &gt;=2.08, Player.height &lt;=2.10).all()</span><br></pre></td></tr></table></figure>
-<p>如果是 OR 的关系，比如我们想要查询身高 ≥ 2.08，或者身高 ≤ 2.10 的球员，可以写成这样：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rows = session.query(Player).filter(or_(Player.height &gt;=2.08, Player.height &lt;=2.10)).all()</span><br></pre></td></tr></table></figure>
-<p>这里我们使用了 SQLAlchemy 的 or_ 操作符，在使用它之前你需要进行引入，即：from sqlalchemy import or_。</p>
-<p>除了多条件查询，SQLAlchemy 也同样支持分组操作、排序和返回指定数量的结果。</p>
-<p>比如我想要按照 team_id 进行分组，同时筛选分组后数据行数大于 5 的分组，并且按照分组后数据行数递增的顺序进行排序，显示 team_id 字段，以及每个分组的数据行数。那么代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from sqlalchemy import func</span><br><span class="line">rows = session.query(Player.team_id, func.count(Player.player_id)).group_by(Player.team_id).having(func.count(Player.player_id)&gt;5).order_by(func.count(Player.player_id).asc()).all()</span><br><span class="line">print(rows)</span><br></pre></td></tr></table></figure>
-<p>运行结果：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[(1001, 20), (1002, 17)]</span><br></pre></td></tr></table></figure>
-<p>这里有几点需要注意：</p>
-<ol>
-<li>我们把需要显示的字段 Player.team_id, func.count(Player.player_id) 作为 query 的参数，其中我们需要用到 sqlalchemy 的 func 类，它提供了各种聚集函数，比如 func.count 函数。</li>
-<li>在 query() 后面使用了 group_by() 进行分组，参数设置为 Player.team_id 字段，再使用 having 对分组条件进行筛选，参数为func.count(Player.player_id)&gt;5。</li>
-<li>使用 order_by 进行排序，参数为func.count(Player.player_id).asc()，也就是按照分组后的数据行数递增的顺序进行排序，最后使用.all() 方法需要返回全部的数据。<br>你能看到 SQLAlchemy 使用的规则和使用 SELECT 语句的规则差不多，只是封装到了类中作为方法进行调用。</li>
-</ol>
-<p>接着，我们再来看下如何删除数据。如果我们想要删除某些数据，需要先进行查询，然后再从 session 中把这些数据删除掉。</p>
-<p>比如我们想要删除姓名为约翰·科林斯的球员，首先我们需要进行查询，然后从 session 对象中进行删除，最后进行 commit 提交，代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">row = session.query(Player).filter(Player.player_name==&apos;约翰 - 科林斯&apos;).first()</span><br><span class="line">session.delete(row)</span><br><span class="line">session.commit()</span><br><span class="line">session.close()</span><br></pre></td></tr></table></figure>
-<p>需要说明的是，判断球员姓名是否为约翰·科林斯，这里需要使用（==）。</p>
-<p>同样，如果我们想要修改某条数据，也需要进行查询，然后再进行修改。比如我想把球员索恩·马克的身高改成 2.17，那么执行完之后直接对 session 对象进行 commit 操作，代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">row = session.query(Player).filter(Player.player_name==&apos;索恩 - 马克&apos;).first()</span><br><span class="line">row.height = 2.17</span><br><span class="line">session.commit()</span><br><span class="line">session.close()</span><br></pre></td></tr></table></figure>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>今天我们使用 SQLAlalchemy 对 MySQL 进行了操作，你能看到这些实现并不复杂，只是需要事先掌握一些使用方法，尤其是如何创建 seesion 对象，以及如何通过 session 对象来完成对数据的增删改查等操作。建议你把文章里的代码都跑一遍，在运行的过程中一定会有更深入的体会。</p>
-<p>当然除了学习掌握 SQLAlalchemy 这个 Python ORM 工具以外，我还希望你能了解到 ORM 的价值和不足。如果项目本身不大，那么自己动手写 SQL 语句会比较简单，你可以不使用 ORM 工具，而是直接使用上节课讲到的 mysql-connector。但是随着项目代码量的增加，为了在业务逻辑层与数据库底层进行松耦合，采用 ORM 框架是更加适合的。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2451,7 +2435,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">66</span>
+                  <span class="site-state-item-count">67</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

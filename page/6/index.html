@@ -258,6 +258,284 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/11/19%20%7C%20%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%92%8C%E7%94%9F%E6%88%90%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/11/19%20%7C%20%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%92%8C%E7%94%9F%E6%88%90%E5%99%A8/" itemprop="url">19 | 深入理解迭代器和生成器</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-11T20:50:07+08:00">
+                2019-12-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
+                    <span itemprop="name">python核心技术与实战</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/12/11/19%20%7C%20%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%92%8C%E7%94%9F%E6%88%90%E5%99%A8/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/12/11/19%20%7C%20%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%92%8C%E7%94%9F%E6%88%90%E5%99%A8/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="你肯定用过的容器、可迭代对象和迭代器"><a href="#你肯定用过的容器、可迭代对象和迭代器" class="headerlink" title="你肯定用过的容器、可迭代对象和迭代器"></a>你肯定用过的容器、可迭代对象和迭代器</h3><p>容器这个概念非常好理解。我们说过，在 Python 中一切皆对象，对象的抽象就是类，而对象的集合就是容器。</p>
+<p>列表（list: [0, 1, 2]），元组（tuple: (0, 1, 2)），字典（dict: {0:0, 1:1, 2:2}），集合（set: set([0, 1, 2])）都是容器。对于容器，你可以很直观地想象成多个元素在一起的单元；而不同容器的区别，正是在于内部数据结构的实现方法。然后，你就可以针对不同场景，选择不同时间和空间复杂度的容器。</p>
+<p>所有的容器都是可迭代的（iterable）。这里的迭代，和枚举不完全一样。迭代可以想象成是你去买苹果，卖家并不告诉你他有多少库存。这样，每次你都需要告诉卖家，你要一个苹果，然后卖家采取行为：要么给你拿一个苹果；要么告诉你，苹果已经卖完了。你并不需要知道，卖家在仓库是怎么摆放苹果的。</p>
+<p>严谨地说，迭代器（iterator）提供了一个 next 的方法。调用这个方法后，你要么得到这个容器的下一个对象，要么得到一个 StopIteration 的错误（苹果卖完了）。你不需要像列表一样指定元素的索引，因为字典和集合这样的容器并没有索引一说。比如，字典采用哈希表实现，那么你就只需要知道，next 函数可以不重复不遗漏地一个一个拿到所有元素即可。</p>
+<p>而可迭代对象，通过 iter() 函数返回一个迭代器，再通过 next() 函数就可以实现遍历。for in 语句将这个过程隐式化，所以，你只需要知道它大概做了什么就行了。</p>
+<p>我们来看下面这段代码，主要向你展示怎么判断一个对象是否可迭代。当然，这还有另一种做法，是 isinstance(obj, Iterable)。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">is_iterable</span><span class="params">(param)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>: </span><br><span class="line">        iter(param) </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">    <span class="keyword">except</span> TypeError:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"> </span><br><span class="line">params = [</span><br><span class="line">    <span class="number">1234</span>,</span><br><span class="line">    <span class="string">'1234'</span>,</span><br><span class="line">    [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>],</span><br><span class="line">    set([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]),</span><br><span class="line">    &#123;<span class="number">1</span>:<span class="number">1</span>, <span class="number">2</span>:<span class="number">2</span>, <span class="number">3</span>:<span class="number">3</span>, <span class="number">4</span>:<span class="number">4</span>&#125;,</span><br><span class="line">    (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)</span><br><span class="line">]</span><br><span class="line">    </span><br><span class="line"><span class="keyword">for</span> param <span class="keyword">in</span> params:</span><br><span class="line">    print(<span class="string">'&#123;&#125; is iterable? &#123;&#125;'</span>.format(param, is_iterable(param)))</span><br></pre></td></tr></table></figure>
+
+<pre><code>1234 is iterable? False
+1234 is iterable? True
+[1, 2, 3, 4] is iterable? True
+{1, 2, 3, 4} is iterable? True
+{1: 1, 2: 2, 3: 3, 4: 4} is iterable? True
+(1, 2, 3, 4) is iterable? True</code></pre><p>通过这段代码，你就可以知道，给出的类型中，除了数字 1234 之外，其它的数据类型都是可迭代的。</p>
+<h3 id="生成器，又是什么？"><a href="#生成器，又是什么？" class="headerlink" title="生成器，又是什么？"></a>生成器，又是什么？</h3><p>据我所知，很多人对生成器这个概念会比较陌生，因为生成器在很多常用语言中，并没有相对应的模型。</p>
+<p>这里，你只需要记着一点：<strong>生成器是懒人版本的迭代器。</strong></p>
+<p>我们知道，在迭代器中，如果我们想要枚举它的元素，这些元素需要事先生成。这里，我们先来看下面这个简单的样例。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> psutil</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 显示当前 python 程序占用的内存大小</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show_memory_info</span><span class="params">(hint)</span>:</span></span><br><span class="line">    pid = os.getpid()</span><br><span class="line">    p = psutil.Process(pid)</span><br><span class="line">    </span><br><span class="line">    info = p.memory_full_info()</span><br><span class="line">    memory = info.uss / <span class="number">1024.</span> / <span class="number">1024</span></span><br><span class="line">    print(<span class="string">'&#123;&#125; memory used: &#123;&#125; MB'</span>.format(hint, memory))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_iterator</span><span class="params">()</span>:</span></span><br><span class="line">    show_memory_info(<span class="string">'initing iterator'</span>)</span><br><span class="line">    list_1 = [i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">100000000</span>)]</span><br><span class="line">    show_memory_info(<span class="string">'after iterator initiated'</span>)</span><br><span class="line">    print(sum(list_1))</span><br><span class="line">    show_memory_info(<span class="string">'after sum called'</span>)</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_generator</span><span class="params">()</span>:</span></span><br><span class="line">    show_memory_info(<span class="string">'initing generator'</span>)</span><br><span class="line">    list_2 = (i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">100000000</span>))</span><br><span class="line">    show_memory_info(<span class="string">'after generator initiated'</span>)</span><br><span class="line">    print(sum(list_2))</span><br><span class="line">    show_memory_info(<span class="string">'after sum called'</span>)</span><br><span class="line"> </span><br><span class="line">%time test_iterator()</span><br><span class="line">%time test_generator()</span><br></pre></td></tr></table></figure>
+
+<pre><code>initing iterator memory used: 27.12109375 MB
+after iterator initiated memory used: 843.48828125 MB
+4999999950000000
+after sum called memory used: 2621.375 MB
+CPU times: user 8.62 s, sys: 8.44 s, total: 17.1 s
+Wall time: 20.4 s
+initing generator memory used: 12.5 MB
+after generator initiated memory used: 12.640625 MB
+4999999950000000
+after sum called memory used: 12.77734375 MB
+CPU times: user 7.29 s, sys: 56.6 ms, total: 7.35 s
+Wall time: 7.92 s</code></pre><p>声明一个迭代器很简单，[i for i in range(100000000)]就可以生成一个包含一亿元素的列表。每个元素在生成后都会保存到内存中，你通过代码可以看到，它们占用了巨量的内存，内存不够的话就会出现 OOM 错误。</p>
+<p>不过，我们并不需要在内存中同时保存这么多东西，比如对元素求和，我们只需要知道每个元素在相加的那一刻是多少就行了，用完就可以扔掉了。</p>
+<p>于是，生成器的概念应运而生，在你调用 next() 函数的时候，才会生成下一个变量。生成器在 Python 的写法是用小括号括起来，(i for i in range(100000000))，即初始化了一个生成器。</p>
+<p>这样一来，你可以清晰地看到，生成器并不会像迭代器一样占用大量内存，只有在被使用的时候才会调用。而且生成器在初始化的时候，并不需要运行一次生成操作，相比于 test_iterator() ，test_generator() 函数节省了一次生成一亿个元素的过程，因此耗时明显比迭代器短。</p>
+<p>到这里，你可能说，生成器不过如此嘛，我有的是钱，不就是多占一些内存和计算资源嘛，我多出点钱就是了呗。</p>
+<p>哪怕你是土豪，请坐下先喝点茶，再听我继续讲完，这次，我们来实现一个自定义的生成器。</p>
+<h3 id="生成器，还能玩什么花样？"><a href="#生成器，还能玩什么花样？" class="headerlink" title="生成器，还能玩什么花样？"></a>生成器，还能玩什么花样？</h3><p>数学中有一个恒等式，(1 + 2 + 3 + … + n)^2 = 1^3 + 2^3 + 3^3 + … + n^3，想必你高中就应该学过它。现在，我们来验证一下这个公式的正确性。老规矩，先放代码，你先自己阅读一下，看不懂的也不要紧，接下来我再来详细讲解。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">generator</span><span class="params">(k)</span>:</span></span><br><span class="line">    i = <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="keyword">yield</span> i ** k</span><br><span class="line">        i += <span class="number">1</span></span><br><span class="line"> </span><br><span class="line">gen_1 = generator(<span class="number">1</span>)</span><br><span class="line">gen_3 = generator(<span class="number">3</span>)</span><br><span class="line">print(gen_1)</span><br><span class="line">print(gen_3)</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_sum</span><span class="params">(n)</span>:</span></span><br><span class="line">    sum_1, sum_3 = <span class="number">0</span>, <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(n):</span><br><span class="line">        next_1 = next(gen_1)</span><br><span class="line">        next_3 = next(gen_3)</span><br><span class="line">        print(<span class="string">'next_1 = &#123;&#125;, next_3 = &#123;&#125;'</span>.format(next_1, next_3))</span><br><span class="line">        sum_1 += next_1</span><br><span class="line">        sum_3 += next_3</span><br><span class="line">    print(sum_1 * sum_1, sum_3)</span><br><span class="line"> </span><br><span class="line">get_sum(<span class="number">8</span>)</span><br></pre></td></tr></table></figure>
+
+<pre><code>&lt;generator object generator at 0x10ba54318&gt;
+&lt;generator object generator at 0x10ba54390&gt;
+next_1 = 1, next_3 = 1
+next_1 = 2, next_3 = 8
+next_1 = 3, next_3 = 27
+next_1 = 4, next_3 = 64
+next_1 = 5, next_3 = 125
+next_1 = 6, next_3 = 216
+next_1 = 7, next_3 = 343
+next_1 = 8, next_3 = 512
+1296 1296</code></pre><p>这段代码中，你首先注意一下 generator() 这个函数，它返回了一个生成器。</p>
+<p>接下来的 yield 是魔术的关键。对于初学者来说，你可以理解为，函数运行到这一行的时候，程序会从这里暂停，然后跳出，不过跳到哪里呢？答案是 next() 函数。那么 i ** k 是干什么的呢？它其实成了 next() 函数的返回值。</p>
+<p>这样，每次 next(gen) 函数被调用的时候，暂停的程序就又复活了，从 yield 这里向下继续执行；同时注意，局部变量 i 并没有被清除掉，而是会继续累加。我们可以看到 next_1 从 1 变到 8，next_3 从 1 变到 512。</p>
+<p>聪明的你应该注意到了，这个生成器居然可以一直进行下去！没错，事实上，迭代器是一个有限集合，生成器则可以成为一个无限集。我只管调用 next()，生成器根据运算会自动生成新的元素，然后返回给你，非常便捷。</p>
+<p>到这里，土豪同志应该也坐不住了吧，那么，还能再给力一点吗？</p>
+<p>别急，我们再来看一个问题：给定一个 list 和一个指定数字，求这个数字在 list 中的位置。</p>
+<p>下面这段代码你应该不陌生，也就是常规做法，枚举每个元素和它的 index，判断后加入 result，最后返回。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index_normal</span><span class="params">(L, target)</span>:</span></span><br><span class="line">    result = []</span><br><span class="line">    <span class="keyword">for</span> i, num <span class="keyword">in</span> enumerate(L):</span><br><span class="line">        <span class="keyword">if</span> num == target:</span><br><span class="line">            result.append(i)</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line"> </span><br><span class="line">print(index_normal([<span class="number">1</span>, <span class="number">6</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">2</span>, <span class="number">8</span>, <span class="number">6</span>, <span class="number">3</span>, <span class="number">2</span>], <span class="number">2</span>))</span><br></pre></td></tr></table></figure>
+
+<pre><code>[2, 5, 9]</code></pre><p>那么使用迭代器可以怎么做呢？二话不说，先看代码。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index_generator</span><span class="params">(L, target)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i, num <span class="keyword">in</span> enumerate(L):</span><br><span class="line">        <span class="keyword">if</span> num == target:</span><br><span class="line">            <span class="keyword">yield</span> i</span><br><span class="line"> </span><br><span class="line">print(list(index_generator([<span class="number">1</span>, <span class="number">6</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">2</span>, <span class="number">8</span>, <span class="number">6</span>, <span class="number">3</span>, <span class="number">2</span>], <span class="number">2</span>)))</span><br></pre></td></tr></table></figure>
+
+<pre><code>[2, 5, 9]</code></pre><p>聪明的你应该看到了明显的区别，我就不做过多解释了。唯一需要强调的是， index_generator 会返回一个 Generator 对象，需要使用 list 转换为列表后，才能用 print 输出。</p>
+<p>这里我再多说两句。在 Python 语言规范中，用更少、更清晰的代码实现相同功能，一直是被推崇的做法，因为这样能够很有效提高代码的可读性，减少出错概率，也方便别人快速准确理解你的意图。当然，要注意，这里“更少”的前提是清晰，而不是使用更多的魔术操作，虽说减少了代码却反而增加了阅读的难度。</p>
+<p>回归正题。接下来我们再来看一个问题：给定两个序列，判定第一个是不是第二个的子序列。（LeetCode 链接如下：<a href="https://leetcode.com/problems/is-subsequence/" target="_blank" rel="noopener">https://leetcode.com/problems/is-subsequence/</a> ）</p>
+<p>先来解读一下这个问题本身。序列就是列表，子序列则指的是，一个列表的元素在第二个列表中都按顺序出现，但是并不必挨在一起。举个例子，[1, 3, 5] 是 [1, 2, 3, 4, 5] 的子序列，[1, 4, 3] 则不是。</p>
+<p>要解决这个问题，常规算法是贪心算法。我们维护两个指针指向两个列表的最开始，然后对第二个序列一路扫过去，如果某个数字和第一个指针指的一样，那么就把第一个指针前进一步。第一个指针移出第一个序列最后一个元素的时候，返回 True，否则返回 False。</p>
+<p>不过，这个算法正常写的话，写下来怎么也得十行左右。</p>
+<p>那么如果我们用迭代器和生成器呢？</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">is_subsequence</span><span class="params">(a, b)</span>:</span></span><br><span class="line">    b = iter(b)</span><br><span class="line">    <span class="keyword">return</span> all(i <span class="keyword">in</span> b <span class="keyword">for</span> i <span class="keyword">in</span> a)</span><br><span class="line"> </span><br><span class="line">print(is_subsequence([<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>], [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]))</span><br><span class="line">print(is_subsequence([<span class="number">1</span>, <span class="number">4</span>, <span class="number">3</span>], [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]))</span><br></pre></td></tr></table></figure>
+
+<pre><code>True
+False</code></pre><p>这简短的几行代码，你是不是看得一头雾水，不知道发生了什么？</p>
+<p>来，我们先把这段代码复杂化，然后一步步看。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">is_subsequence</span><span class="params">(a, b)</span>:</span></span><br><span class="line">    b = iter(b)</span><br><span class="line">    print(b)</span><br><span class="line"> </span><br><span class="line">    gen = (i <span class="keyword">for</span> i <span class="keyword">in</span> a)</span><br><span class="line">    print(gen)</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> gen:</span><br><span class="line">        print(i)</span><br><span class="line"> </span><br><span class="line">    gen = ((i <span class="keyword">in</span> b) <span class="keyword">for</span> i <span class="keyword">in</span> a)</span><br><span class="line">    print(gen)</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> gen:</span><br><span class="line">        print(i)</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">return</span> all(((i <span class="keyword">in</span> b) <span class="keyword">for</span> i <span class="keyword">in</span> a))</span><br><span class="line"> </span><br><span class="line">print(is_subsequence([<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>], [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]))</span><br><span class="line">print(is_subsequence([<span class="number">1</span>, <span class="number">4</span>, <span class="number">3</span>], [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]))</span><br></pre></td></tr></table></figure>
+
+<pre><code>&lt;list_iterator object at 0x10ba5b5c0&gt;
+&lt;generator object is_subsequence.&lt;locals&gt;.&lt;genexpr&gt; at 0x10ba54480&gt;
+1
+3
+5
+&lt;generator object is_subsequence.&lt;locals&gt;.&lt;genexpr&gt; at 0x10ba54570&gt;
+True
+True
+True
+False
+&lt;list_iterator object at 0x10b9ec7f0&gt;
+&lt;generator object is_subsequence.&lt;locals&gt;.&lt;genexpr&gt; at 0x10ba54570&gt;
+1
+4
+3
+&lt;generator object is_subsequence.&lt;locals&gt;.&lt;genexpr&gt; at 0x10ba54660&gt;
+True
+True
+False
+False</code></pre><p>首先，第二行的b = iter(b)，把列表 b 转化成了一个迭代器，这里我先不解释为什么要这么做。</p>
+<p>接下来的gen = (i for i in a)语句很好理解，产生一个生成器，这个生成器可以遍历对象 a，因此能够输出 1, 3, 5。而 (i in b)需要好好揣摩，这里你是不是能联想到 for in 语句？</p>
+<p>没错，这里的(i in b)，大致等价于下面这段代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    val = next(b)</span><br><span class="line">    <span class="keyword">if</span> val == i:</span><br><span class="line">        <span class="keyword">yield</span> <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+
+<p>这里非常巧妙地利用生成器的特性，next() 函数运行的时候，保存了当前的指针。比如再看下面这个示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">b = (i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">5</span>))</span><br><span class="line"> </span><br><span class="line">print(<span class="number">2</span> <span class="keyword">in</span> b)</span><br><span class="line">print(<span class="number">4</span> <span class="keyword">in</span> b)</span><br><span class="line">print(<span class="number">3</span> <span class="keyword">in</span> b)</span><br></pre></td></tr></table></figure>
+
+<pre><code>True
+True
+False</code></pre><p>至于最后的 all() 函数，就很简单了。它用来判断一个迭代器的元素是否全部为 True，如果是则返回 True，否则就返回 False.</p>
+<p>于是到此，我们就很优雅地解决了这道面试题。不过你一定注意，面试的时候尽量不要用这种技巧，因为你的面试官有可能并不知道生成器的用法，他们也没有看过我的极客时间专栏。不过，在这个技术知识点上，在实际工作的应用上，你已经比很多人更加熟练了。继续加油！</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>总结一下，今天我们讲了四种不同的对象，分别是容器、可迭代对象、迭代器和生成器。</p>
+<ul>
+<li>容器是可迭代对象，可迭代对象调用 iter() 函数，可以得到一个迭代器。迭代器可以通过 next() 函数来得到下一个元素，从而支持遍历。</li>
+<li>生成器是一种特殊的迭代器（注意这个逻辑关系反之不成立）。使用生成器，你可以写出来更加清晰的代码；合理使用生成器，可以降低内存占用、优化程序结构、提高程序速度。</li>
+<li>生成器在 Python 2 的版本上，是协程的一种重要实现方式；而 Python 3.5 引入 async await 语法糖后，生成器实现协程的方式就已经落后了。我们会在下节课，继续深入讲解 Python 协程。</li>
+</ul>
+<h3 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h3><p>最后给你留一个思考题。对于一个有限元素的生成器，如果迭代完成后，继续调用 next() ，会发生什么呢？生成器可以遍历多次吗？</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">list_1 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">list_2 = iter(list_1)</span><br><span class="line">next(list_2)</span><br><span class="line">next(list_2)</span><br><span class="line">next(list_2)</span><br><span class="line">next(list_2)</span><br></pre></td></tr></table></figure>
+
+
+<pre><code>---------------------------------------------------------------------------
+
+StopIteration                             Traceback (most recent call last)
+
+&lt;ipython-input-11-4545cf040f80&gt; in &lt;module&gt;
+      4 next(list_2)
+      5 next(list_2)
+----&gt; 6 next(list_2)
+
+
+StopIteration: </code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">---------------------------------------------------------------------------</span><br><span class="line">StopIteration                             Traceback (most recent call last)</span><br><span class="line">&lt;ipython-input<span class="number">-11</span><span class="number">-4545</span>cf040f80&gt; <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">      <span class="number">4</span> next(list_2)</span><br><span class="line">      <span class="number">5</span> next(list_2)</span><br><span class="line">----&gt; 6 next(list_2)</span><br><span class="line"></span><br><span class="line">StopIteration:</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/11/17%20%7C%20%E5%BC%BA%E5%A4%A7%E7%9A%84%E8%A3%85%E9%A5%B0%E5%99%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2472,236 +2750,6 @@ outer: nonlocal</code></pre><p>如果不加上 nonlocal 这个关键字，而内
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/06/08%20%7C%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%EF%BC%9A%E5%A6%82%E4%BD%95%E6%8F%90%E9%AB%98%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%A8%B3%E5%AE%9A%E6%80%A7%EF%BC%9F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LvYang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LvYang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/06/08%20%7C%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%EF%BC%9A%E5%A6%82%E4%BD%95%E6%8F%90%E9%AB%98%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%A8%B3%E5%AE%9A%E6%80%A7%EF%BC%9F/" itemprop="url">08 | 异常处理：如何提高程序的稳定性？</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-06T21:13:07+08:00">
-                2019-12-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
-                    <span itemprop="name">python核心技术与实战</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/12/06/08%20%7C%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%EF%BC%9A%E5%A6%82%E4%BD%95%E6%8F%90%E9%AB%98%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%A8%B3%E5%AE%9A%E6%80%A7%EF%BC%9F/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/12/06/08%20%7C%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%EF%BC%9A%E5%A6%82%E4%BD%95%E6%8F%90%E9%AB%98%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%A8%B3%E5%AE%9A%E6%80%A7%EF%BC%9F/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="错误与异常"><a href="#错误与异常" class="headerlink" title="错误与异常"></a>错误与异常</h3><p>首先要了解，Python 中的错误和异常是什么？两者之间又有什么联系和区别呢？</p>
-<p>通常来说，程序中的错误至少包括两种，一种是语法错误，另一种则是异常。</p>
-<p>所谓语法错误，你应该很清楚，也就是你写的代码不符合编程规范，无法被识别与执行，比如下面这个例子：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法错误少:</span></span><br><span class="line"><span class="keyword">if</span> name <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span></span><br><span class="line">    print(name)</span><br></pre></td></tr></table></figure>
-
-<p>If 语句漏掉了冒号，不符合 Python 的语法规范，所以程序就会报错invalid syntax。</p>
-<p>而异常则是指程序的语法正确，也可以被执行，但在执行过程中遇到了错误，抛出了异常，比如下面的 3 个例子：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">10</span> / <span class="number">0</span></span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">ZeroDivisionError: integer division <span class="keyword">or</span> modulo by zero</span><br><span class="line"> </span><br><span class="line">order * <span class="number">2</span></span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">NameError: name <span class="string">'order'</span> <span class="keyword">is</span> <span class="keyword">not</span> defined</span><br><span class="line"> </span><br><span class="line"><span class="number">1</span> + [<span class="number">1</span>, <span class="number">2</span>]</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">TypeError: unsupported operand type(s) <span class="keyword">for</span> +: <span class="string">'int'</span> <span class="keyword">and</span> <span class="string">'list'</span></span><br></pre></td></tr></table></figure>
-
-
-<pre><code>  File &quot;&lt;ipython-input-1-5c8a1fb0a76b&gt;&quot;, line 2
-    Traceback (most recent call last):
-                         ^
-SyntaxError: invalid syntax</code></pre><p>它们语法完全正确，但显然，我们不能做除法时让分母为 0；也不能使用未定义的变量做运算；而让一个整型和一个列表相加也是不可取的。</p>
-<p>于是，当程序运行到这些地方时，就抛出了异常，并且终止运行。例子中的ZeroDivisionError NameError和TypeError，就是三种常见的异常类型。</p>
-<p>当然，Python 中还有很多其他异常类型，比如KeyError是指字典中的键找不到；FileNotFoundError是指发送了读取文件的请求，但相应的文件不存在等等，我在此不一一赘述，你可以自行参考相应文档。</p>
-<h3 id="如何处理异常"><a href="#如何处理异常" class="headerlink" title="如何处理异常"></a>如何处理异常</h3><p>刚刚讲到，如果执行到程序中某处抛出了异常，程序就会被终止并退出。你可能会问，那有没有什么办法可以不终止程序，让其照样运行下去呢？答案当然是肯定的，这也就是我们所说的异常处理，通常使用 try 和 except 来解决，比如：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    s = input(<span class="string">'please enter two numbers separated by comma: '</span>)</span><br><span class="line">    num1 = int(s.split(<span class="string">','</span>)[<span class="number">0</span>].strip())</span><br><span class="line">    num2 = int(s.split(<span class="string">','</span>)[<span class="number">1</span>].strip())</span><br><span class="line">    ... </span><br><span class="line"><span class="keyword">except</span> ValueError <span class="keyword">as</span> err:</span><br><span class="line">    print(<span class="string">'Value Error: &#123;&#125;'</span>.format(err))</span><br><span class="line"> </span><br><span class="line">print(<span class="string">'continue'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># please enter two numbers separated by comma: a,b</span></span><br><span class="line"><span class="comment"># Value Error: invalid literal for int() with base 10: 'a'</span></span><br><span class="line"><span class="comment"># continue</span></span><br></pre></td></tr></table></figure>
-
-<p>这里默认用户输入以逗号相隔的两个整形数字，将其提取后，做后续的操作（注意 input 函数会将输入转换为字符串类型）。如果我们输入a,b，程序便会抛出异常invalid literal for int() with base 10: ‘a’，然后跳出 try 这个 block。</p>
-<p>由于程序抛出的异常类型是 ValueError，和 except block 所 catch 的异常类型相匹配，所以 except block 便会被执行，最终输出Value Error: invalid literal for int() with base 10: ‘a’，并打印出continue。</p>
-<p>我们知道，except block 只接受与它相匹配的异常类型并执行，如果程序抛出的异常并不匹配，那么程序照样会终止并退出。</p>
-<p>所以，还是刚刚这个例子，如果我们只输入1，程序抛出的异常就是IndexError: list index out of range，与 ValueError 不匹配，那么 except block 就不会被执行，程序便会终止并退出（continue 不会被打印）。</p>
-<p>please enter two numbers separated by comma: 1<br>IndexError Traceback (most recent call last)<br>IndexError: list index out of range</p>
-<p>不过，很显然，这样强调一种类型的写法有很大的局限性。那么，该怎么解决这个问题呢？</p>
-<p>其中一种解决方案，是在 except block 中加入多种异常的类型，比如下面这样的写法：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    s = input(<span class="string">'please enter two numbers separated by comma: '</span>)</span><br><span class="line">    num1 = int(s.split(<span class="string">','</span>)[<span class="number">0</span>].strip())</span><br><span class="line">    num2 = int(s.split(<span class="string">','</span>)[<span class="number">1</span>].strip())</span><br><span class="line">    ...</span><br><span class="line"><span class="keyword">except</span> (ValueError, IndexError) <span class="keyword">as</span> err:</span><br><span class="line">    print(<span class="string">'Error: &#123;&#125;'</span>.format(err))</span><br><span class="line">    </span><br><span class="line">print(<span class="string">'continue'</span>)</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-
-<p>或者第二种写法：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    s = input(<span class="string">'please enter two numbers separated by comma: '</span>)</span><br><span class="line">    num1 = int(s.split(<span class="string">','</span>)[<span class="number">0</span>].strip())</span><br><span class="line">    num2 = int(s.split(<span class="string">','</span>)[<span class="number">1</span>].strip())</span><br><span class="line">    ...</span><br><span class="line"><span class="keyword">except</span> ValueError <span class="keyword">as</span> err:</span><br><span class="line">    print(<span class="string">'Value Error: &#123;&#125;'</span>.format(err))</span><br><span class="line"><span class="keyword">except</span> IndexError <span class="keyword">as</span> err:</span><br><span class="line">    print(<span class="string">'Index Error: &#123;&#125;'</span>.format(err))</span><br><span class="line"> </span><br><span class="line">print(<span class="string">'continue'</span>)</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-
-<p>这样，每次程序执行时，except block 中只要有一个 exception 类型与实际匹配即可。</p>
-<p>不过，很多时候，我们很难保证程序覆盖所有的异常类型，所以，更通常的做法，是在最后一个 except block，声明其处理的异常类型是 Exception。Exception 是其他所有非系统异常的基类，能够匹配任意非系统异常。那么这段代码就可以写成下面这样：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    s = input(<span class="string">'please enter two numbers separated by comma: '</span>)</span><br><span class="line">    num1 = int(s.split(<span class="string">','</span>)[<span class="number">0</span>].strip())</span><br><span class="line">    num2 = int(s.split(<span class="string">','</span>)[<span class="number">1</span>].strip())</span><br><span class="line">    ...</span><br><span class="line"><span class="keyword">except</span> ValueError <span class="keyword">as</span> err:</span><br><span class="line">    print(<span class="string">'Value Error: &#123;&#125;'</span>.format(err))</span><br><span class="line"><span class="keyword">except</span> IndexError <span class="keyword">as</span> err:</span><br><span class="line">    print(<span class="string">'Index Error: &#123;&#125;'</span>.format(err))</span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> err:</span><br><span class="line">    print(<span class="string">'Other error: &#123;&#125;'</span>.format(err))</span><br><span class="line"> </span><br><span class="line">print(<span class="string">'continue'</span>)</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-
-<p>或者，你也可以在 except 后面省略异常类型，这表示与任意异常相匹配（包括系统异常等）：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    s = input(<span class="string">'please enter two numbers separated by comma: '</span>)</span><br><span class="line">    num1 = int(s.split(<span class="string">','</span>)[<span class="number">0</span>].strip())</span><br><span class="line">    num2 = int(s.split(<span class="string">','</span>)[<span class="number">1</span>].strip())</span><br><span class="line">    ...</span><br><span class="line"><span class="keyword">except</span> ValueError <span class="keyword">as</span> err:</span><br><span class="line">    print(<span class="string">'Value Error: &#123;&#125;'</span>.format(err))</span><br><span class="line"><span class="keyword">except</span> IndexError <span class="keyword">as</span> err:</span><br><span class="line">    print(<span class="string">'Index Error: &#123;&#125;'</span>.format(err))</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">    print(<span class="string">'Other error'</span>)</span><br><span class="line"> </span><br><span class="line">print(<span class="string">'continue'</span>)</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-
-<p>需要注意，当程序中存在多个 except block 时，最多只有一个 except block 会被执行。换句话说，如果多个 except 声明的异常类型都与实际相匹配，那么只有最前面的 except block 会被执行，其他则被忽略。</p>
-<p>异常处理中，还有一个很常见的用法是 finally，经常和 try、except 放在一起来用。无论发生什么情况，finally block 中的语句都会被执行，哪怕前面的 try 和 excep block 中使用了 return 语句。</p>
-<p>一个常见的应用场景，便是文件的读取：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    f = open(<span class="string">'file.txt'</span>, <span class="string">'r'</span>)</span><br><span class="line">    .... <span class="comment"># some data processing</span></span><br><span class="line"><span class="keyword">except</span> OSError <span class="keyword">as</span> err:</span><br><span class="line">    print(<span class="string">'OS error: &#123;&#125;'</span>.format(err))</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">    print(<span class="string">'Unexpected error:'</span>, sys.exc_info()[<span class="number">0</span>])</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    f.close()</span><br></pre></td></tr></table></figure>
-
-<p>这段代码中，try block 尝试读取 file.txt 这个文件，并对其中的数据进行一系列的处理，到最后，无论是读取成功还是读取失败，程序都会执行 finally 中的语句——关闭这个文件流，确保文件的完整性。因此，在 finally 中，我们通常会放一些无论如何都要执行的语句。</p>
-<p>值得一提的是，对于文件的读取，我们也常常使用 with open，你也许在前面的例子中已经看到过，with open 会在最后自动关闭文件，让语句更加简洁。</p>
-<h3 id="用户自定义异常"><a href="#用户自定义异常" class="headerlink" title="用户自定义异常"></a>用户自定义异常</h3><p>前面的例子里充斥了很多 Python 内置的异常类型，你可能会问，我可以创建自己的异常类型吗？</p>
-<p>答案是肯定是，Python 当然允许我们这么做。下面这个例子，我们创建了自定义的异常类型 MyInputError，定义并实现了初始化函数和 str 函数（直接 print 时调用）：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyInputError</span><span class="params">(Exception)</span>:</span></span><br><span class="line">    <span class="string">"""Exception raised when there're errors in input"""</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, value)</span>:</span> <span class="comment"># 自定义异常类型的初始化</span></span><br><span class="line">        self.value = value</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__str__</span><span class="params">(self)</span>:</span> <span class="comment"># 自定义异常类型的 string 表达形式</span></span><br><span class="line">        <span class="keyword">return</span> (<span class="string">"&#123;&#125; is invalid input"</span>.format(repr(self.value)))</span><br><span class="line">    </span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">raise</span> MyInputError(<span class="number">1</span>) <span class="comment"># 抛出 MyInputError 这个异常</span></span><br><span class="line"><span class="keyword">except</span> MyInputError <span class="keyword">as</span> err:</span><br><span class="line">    print(<span class="string">'error: &#123;&#125;'</span>.format(err))</span><br></pre></td></tr></table></figure>
-
-<p>如果你执行上述代码块并输出，便会得到下面的结果：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">error: <span class="number">1</span> <span class="keyword">is</span> invalid input</span><br></pre></td></tr></table></figure>
-
-<p>实际工作中，如果内置的异常类型无法满足我们的需求，或者为了让异常更加详细、可读，想增加一些异常类型的其他功能，我们可以自定义所需异常类型。不过，大多数情况下，Python 内置的异常类型就足够好了。</p>
-<h3 id="异常的使用场景与注意点"><a href="#异常的使用场景与注意点" class="headerlink" title="异常的使用场景与注意点"></a>异常的使用场景与注意点</h3><p>学完了前面的基础知识，接下来我们着重谈一下，异常的使用场景与注意点。</p>
-<p>通常来说，在程序中，如果我们不确定某段代码能否成功执行，往往这个地方就需要使用异常处理。除了上述文件读取的例子，我可以再举一个例子来说明。</p>
-<p>大型社交网站的后台，需要针对用户发送的请求返回相应记录。用户记录往往储存在 key-value 结构的数据库中，每次有请求过来后，我们拿到用户的 ID，并用 ID 查询数据库中此人的记录，就能返回相应的结果。</p>
-<p>而数据库返回的原始数据，往往是 json string 的形式，这就需要我们首先对 json string 进行 decode（解码），你可能很容易想到下面的方法：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line">raw_data = queryDB(uid) <span class="comment"># 根据用户的 id，返回相应的信息</span></span><br><span class="line">data = json.loads(raw_data)</span><br></pre></td></tr></table></figure>
-
-<p>这样的代码是不是就足够了呢？</p>
-<p>要知道，在 json.loads() 函数中，输入的字符串如果不符合其规范，那么便无法解码，就会抛出异常，因此加上异常处理十分必要。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">d = &#123;<span class="string">'name'</span>: <span class="string">'jason'</span>, <span class="string">'age'</span>: <span class="number">20</span>&#125;</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    value = d[<span class="string">'dob'</span>]</span><br><span class="line">    ...</span><br><span class="line"><span class="keyword">except</span> KeyError <span class="keyword">as</span> err:</span><br><span class="line">    print(<span class="string">'KeyError: &#123;&#125;'</span>.format(err))</span><br></pre></td></tr></table></figure>
-
-<p>诚然，这样的代码并没有 bug，但是让人看了摸不着头脑，也显得很冗余。如果你的代码中充斥着这种写法，无疑对阅读、协作来说都是障碍。因此，对于 flow-control（流程控制）的代码逻辑，我们一般不用异常处理。</p>
-<p>字典这个例子，写成下面这样就很好。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="string">'dob'</span> <span class="keyword">in</span> d:</span><br><span class="line">    value = d[<span class="string">'dob'</span>]</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
-
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这节课， 我们一起学习了 Python 的异常处理及其使用场景，你需要重点掌握下面几点。</p>
-<p>异常，通常是指程序运行的过程中遇到了错误，终止并退出。我们通常使用 try except 语句去处理异常，这样程序就不会被终止，仍能继续执行。</p>
-<p>处理异常时，如果有必须执行的语句，比如文件打开后必须关闭等等，则可以放在 finally block 中。</p>
-<p>异常处理，通常用在你不确定某段代码能否成功执行，也无法轻易判断的情况下，比如数据库的连接、读取等等。正常的 flow-control 逻辑，不要使用异常处理，直接用条件语句解决就可以了。</p>
-<h3 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h3><p>最后，给你留一个思考题。在异常处理时，如果 try block 中有多处抛出异常，需要我们使用多个 try except block 吗？以数据库的连接、读取为例，下面两种写法，你觉得哪种更好呢？</p>
-<p>第一种：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    db = DB.connect(<span class="string">'&lt;db path&gt;'</span>) <span class="comment"># 可能会抛出异常</span></span><br><span class="line">    raw_data = DB.queryData(<span class="string">'&lt;viewer_id&gt;'</span>) <span class="comment"># 可能会抛出异常</span></span><br><span class="line"><span class="keyword">except</span> (DBConnectionError, DBQueryDataError) err:</span><br><span class="line">    print(<span class="string">'Error: &#123;&#125;'</span>.format(err))</span><br></pre></td></tr></table></figure>
-
-<p>第二种：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    db = DB.connect(<span class="string">'&lt;db path&gt;'</span>) <span class="comment"># 可能会抛出异常</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        raw_data = DB.queryData(<span class="string">'&lt;viewer_id&gt;'</span>)</span><br><span class="line">    <span class="keyword">except</span> DBQueryDataError <span class="keyword">as</span> err:</span><br><span class="line">         print(<span class="string">'DB query data error: &#123;&#125;'</span>.format(err))</span><br><span class="line"><span class="keyword">except</span> DBConnectionError <span class="keyword">as</span> err:</span><br><span class="line">     print(<span class="string">'DB connection error: &#123;&#125;'</span>.format(err))</span><br></pre></td></tr></table></figure>
-
-<p>第一种写法更加简洁，易于阅读。而且except后面的错误类型先抛出数据库连接错误，之后才抛出查询错误，实现的异常处理和第二种一样。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2752,7 +2800,7 @@ SyntaxError: invalid syntax</code></pre><p>它们语法完全正确，但显然�
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">66</span>
+                  <span class="site-state-item-count">67</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
