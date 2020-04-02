@@ -258,6 +258,292 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/06/7python%E6%9D%A1%E4%BB%B6%E4%B8%8E%E5%BE%AA%E7%8E%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/06/7python%E6%9D%A1%E4%BB%B6%E4%B8%8E%E5%BE%AA%E7%8E%AF/" itemprop="url">07 | 修炼基本功：条件与循环</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-06T20:15:59+08:00">
+                2019-12-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
+                    <span itemprop="name">python核心技术与实战</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/12/06/7python%E6%9D%A1%E4%BB%B6%E4%B8%8E%E5%BE%AA%E7%8E%AF/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/12/06/7python%E6%9D%A1%E4%BB%B6%E4%B8%8E%E5%BE%AA%E7%8E%AF/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="条件语句"><a href="#条件语句" class="headerlink" title="条件语句"></a>条件语句</h3><p>首先，我们一起来看一下 Python 的条件语句，用法很简单。比如，我想要表示 y=|x|这个函数，那么相应的代码便是：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># y = |x|</span></span><br><span class="line">x = <span class="number">1</span></span><br><span class="line"><span class="keyword">if</span> x &lt; <span class="number">0</span>:</span><br><span class="line">    y = -x</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    y = x</span><br><span class="line">print(y)</span><br></pre></td></tr></table></figure>
+
+<pre><code>1</code></pre><p>由于 Python 不支持 switch 语句，因此，当存在多个条件判断时，我们需要用 else if 来实现，这在 Python 中的表达是elif。语法如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> condition_1:</span><br><span class="line">    statement_1</span><br><span class="line"><span class="keyword">elif</span> condition_2:</span><br><span class="line">    statement_2</span><br><span class="line"><span class="keyword">elif</span> condition_i:</span><br><span class="line">    statement_i</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    statement_n</span><br></pre></td></tr></table></figure>
+
+
+<pre><code>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-5-fefccca48302&gt; in &lt;module&gt;
+----&gt; 1 if condition_1:
+      2     statement_1
+      3 elif condition_2:
+      4     statement_2
+      5 elif condition_i:
+
+
+NameError: name &apos;condition_1&apos; is not defined</code></pre><p>整个条件语句是顺序执行的，如果遇到一个条件满足，比如 condition_i 满足时，在执行完 statement_i 后，便会退出整个 if、elif、else 条件语句，而不会继续向下执行。这个语句在工作中很常用，比如下面的这个例子。</p>
+<p>实际工作中，我们经常用 ID 表示一个事物的属性，然后进行条件判断并且输出。比如，在 integrity 的工作中，通常用 0、1、2 分别表示一部电影的色情暴力程度。其中，0 的程度最高，是 red 级别；1 其次，是 yellow 级别；2 代表没有质量问题，属于 green。</p>
+<p>如果给定一个 ID，要求输出某部电影的质量评级，则代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> id == <span class="number">0</span>:</span><br><span class="line">    print(<span class="string">'red'</span>)</span><br><span class="line"><span class="keyword">elif</span> id == <span class="number">1</span>:</span><br><span class="line">    print(<span class="string">'yellow'</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    print(<span class="string">'green'</span>)</span><br></pre></td></tr></table></figure>
+
+<p>不过要注意，if 语句是可以单独使用的，但 elif、else 都必须和 if 成对使用。</p>
+<p>另外，在我们进行条件判断时， 不少人喜欢省略判断的条件，比如写成下面这样：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> s: <span class="comment"># s is a string</span></span><br><span class="line">    ...</span><br><span class="line"><span class="keyword">if</span> l: <span class="comment"># l is a list</span></span><br><span class="line">    ...</span><br><span class="line"><span class="keyword">if</span> i: <span class="comment"># i is an int</span></span><br><span class="line">    ...</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>不过，切记，在实际写代码时，我们鼓励，除了 boolean 类型的数据，条件判断最好是显性的。比如，在判断一个整型数是否为 0 时，我们最好写出判断的条件：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">i = <span class="number">1</span></span><br><span class="line"><span class="keyword">if</span> i != <span class="number">0</span>:</span><br><span class="line">    print(i)</span><br><span class="line"><span class="comment"># 而不是只写出变量名：</span></span><br><span class="line"><span class="keyword">if</span> i:</span><br><span class="line">    print(i)</span><br><span class="line">s = <span class="string">"string"</span></span><br><span class="line"><span class="keyword">if</span> s != <span class="number">0</span>:</span><br><span class="line">    print(s)</span><br><span class="line"><span class="comment"># 而不是只写出变量名：</span></span><br><span class="line"><span class="keyword">if</span> s:</span><br><span class="line">    print(s)</span><br><span class="line">    </span><br><span class="line">l = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]    </span><br><span class="line"><span class="keyword">if</span> l != <span class="number">0</span>:</span><br><span class="line">    print(l)</span><br><span class="line"><span class="comment"># 而不是只写出变量名：</span></span><br><span class="line"><span class="keyword">if</span> l:</span><br><span class="line">    print(l)</span><br></pre></td></tr></table></figure>
+
+<pre><code>1
+1
+string
+string
+[1, 2, 3]
+[1, 2, 3]</code></pre><h3 id="循环语句"><a href="#循环语句" class="headerlink" title="循环语句"></a>循环语句</h3><p>讲完了条件语句，我们接着来看循环语句。所谓循环，顾名思义，本质上就是遍历集合中的元素。和其他语言一样，Python 中的循环一般通过 for 循环和 while 循环实现。</p>
+<p>比如，我们有一个列表，需要遍历列表中的所有元素并打印输出，代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">l = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="keyword">for</span> item <span class="keyword">in</span> l:</span><br><span class="line">    print(item)</span><br></pre></td></tr></table></figure>
+
+<p>你看，是不是很简单呢？</p>
+<p>其实，Python 中的数据结构只要是可迭代的（iterable），比如列表、集合等等，那么都可以通过下面这种方式遍历：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> item <span class="keyword">in</span> &lt;iterable&gt;:</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+
+<p>这里需要单独强调一下字典。字典本身只有键是可迭代的，如果我们要遍历它的值或者是键值对，就需要通过其内置的函数 values() 或者 items() 实现。其中，values() 返回字典的值的集合，items() 返回键值对的集合。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">d = &#123;<span class="string">'name'</span>: <span class="string">'jason'</span>, <span class="string">'dob'</span>: <span class="string">'2000-01-01'</span>, <span class="string">'gender'</span>: <span class="string">'male'</span>&#125;</span><br><span class="line"><span class="keyword">for</span> k <span class="keyword">in</span> d: <span class="comment"># 遍历字典的键</span></span><br><span class="line">    print(k)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">for</span> v <span class="keyword">in</span> d.values(): <span class="comment"># 遍历字典的值</span></span><br><span class="line">    print(v)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">for</span> k, v <span class="keyword">in</span> d.items(): <span class="comment"># 遍历字典的键值对</span></span><br><span class="line">    print(<span class="string">'key: &#123;&#125;, value: &#123;&#125;'</span>.format(k, v))</span><br></pre></td></tr></table></figure>
+
+<pre><code>name
+dob
+gender
+jason
+2000-01-01
+male
+key: name, value: jason
+key: dob, value: 2000-01-01
+key: gender, value: male</code></pre><p>看到这里你也许会问，有没有办法通过集合中的索引来遍历元素呢？当然可以，其实这种情况在实际工作中还是很常见的，甚至很多时候，我们还得根据索引来做一些条件判断。</p>
+<p>我们通常通过 range() 这个函数，拿到索引，再去遍历访问集合中的元素。比如下面的代码，遍历一个列表中的元素，当索引小于 5 时，打印输出：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">l = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>]</span><br><span class="line"><span class="keyword">for</span> index <span class="keyword">in</span> range(<span class="number">0</span>, len(l)):</span><br><span class="line">    <span class="keyword">if</span> index &lt; <span class="number">5</span>:</span><br><span class="line">        print(l[index])  </span><br><span class="line"><span class="comment"># enumerate 当我们同时需要索引和元素时，还有一种更简洁的方式，那就是通过 Python 内置的函数 enumerate()。</span></span><br><span class="line"><span class="comment"># 用它来遍历集合，不仅返回每个元素，并且还返回其对应的索引，这样一来，上面的例子就可以写成:       </span></span><br><span class="line">l = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>]</span><br><span class="line"><span class="keyword">for</span> index, item <span class="keyword">in</span> enumerate(l):</span><br><span class="line">    <span class="keyword">if</span> index &lt; <span class="number">5</span>:</span><br><span class="line">        print(item)</span><br></pre></td></tr></table></figure>
+
+<p>在循环语句中，我们还常常搭配 continue 和 break 一起使用。所谓 continue，就是让程序跳过当前这层循环，继续执行下面的循环；而 break 则是指完全跳出所在的整个循环体。在循环中适当加入 continue 和 break，往往能使程序更加简洁、易读。</p>
+<p>比如，给定两个字典，分别是产品名称到价格的映射，和产品名称到颜色列表的映射。我们要找出价格小于 1000，并且颜色不是红色的所有产品名称和颜色的组合。如果不用 continue，代码应该是下面这样的：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># name_price: 产品名称 (str) 到价格 (int) 的映射字典</span></span><br><span class="line"><span class="comment"># name_color: 产品名字 (str) 到颜色 (list of str) 的映射字典</span></span><br><span class="line"><span class="keyword">for</span> name, price <span class="keyword">in</span> name_price.items():</span><br><span class="line">    <span class="keyword">if</span> price &lt; <span class="number">1000</span>:</span><br><span class="line">        <span class="keyword">if</span> name <span class="keyword">in</span> name_color:</span><br><span class="line">            <span class="keyword">for</span> color <span class="keyword">in</span> name_color[name]:</span><br><span class="line">                <span class="keyword">if</span> color != <span class="string">'red'</span>:</span><br><span class="line">                    print(<span class="string">'name: &#123;&#125;, color: &#123;&#125;'</span>.format(name, color))</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            print(<span class="string">'name: &#123;&#125;, color: &#123;&#125;'</span>.format(name, <span class="string">'None'</span>))</span><br></pre></td></tr></table></figure>
+
+<p>而加入 continue 后，代码显然清晰了很多：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># name_price: 产品名称 (str) 到价格 (int) 的映射字典</span></span><br><span class="line"><span class="comment"># name_color: 产品名字 (str) 到颜色 (list of str) 的映射字典</span></span><br><span class="line"><span class="keyword">for</span> name, price <span class="keyword">in</span> name_price.items():</span><br><span class="line">    <span class="keyword">if</span> price &gt;= <span class="number">1000</span>:</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line">    <span class="keyword">if</span> name <span class="keyword">not</span> <span class="keyword">in</span> name_color:</span><br><span class="line">        print(<span class="string">'name: &#123;&#125;, color: &#123;&#125;'</span>.format(name, <span class="string">'None'</span>))</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line">    <span class="keyword">for</span> color <span class="keyword">in</span> name_color[name]:</span><br><span class="line">        <span class="keyword">if</span> color == <span class="string">'red'</span>:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        print(<span class="string">'name: &#123;&#125;, color: &#123;&#125;'</span>.format(name, color))</span><br></pre></td></tr></table></figure>
+
+<p>我们可以看到，按照第一个版本的写法，从开始一直到打印输出符合条件的产品名称和颜色，共有 5 层 for 或者 if 的嵌套；但第二个版本加入了 continue 后，只有 3 层嵌套。</p>
+<p>显然，如果代码中出现嵌套里还有嵌套的情况，代码便会变得非常冗余、难读，也不利于后续的调试、修改。因此，我们要尽量避免这种多层嵌套的情况。</p>
+<p>前面讲了 for 循环，对于 while 循环，原理也是一样的。它表示当 condition 满足时，一直重复循环内部的操作，直到 condition 不再满足，就跳出循环体。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> condition:</span><br><span class="line">    ....</span><br></pre></td></tr></table></figure>
+
+<p>很多时候，for 循环和 while 循环可以互相转换，比如要遍历一个列表，我们用 while 循环同样可以完成：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">l = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line">index = <span class="number">0</span></span><br><span class="line"><span class="keyword">while</span> index &lt; len(l):</span><br><span class="line">    print(l[index])</span><br><span class="line">    index += <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>那么，两者的使用场景又有什么区别呢？</p>
+<p>通常来说，如果你只是遍历一个已知的集合，找出满足条件的元素，并进行相应的操作，那么使用 for 循环更加简洁。但如果你需要在满足某个条件前，不停地重复某些操作，并且没有特定的集合需要去遍历，那么一般则会使用 while 循环。</p>
+<p>比如，某个交互式问答系统，用户输入文字，系统会根据内容做出相应的回答。为了实现这个功能，我们一般会使用 while 循环，大致代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        text = input(<span class="string">'Please enter your questions, enter "q" to exit'</span>)</span><br><span class="line">        <span class="keyword">if</span> text == <span class="string">'q'</span>:</span><br><span class="line">            print(<span class="string">'Exit system'</span>)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        ...</span><br><span class="line">        ...</span><br><span class="line">        print(response)</span><br><span class="line">    <span class="keyword">except</span> <span class="keyword">as</span> err:</span><br><span class="line">        print(<span class="string">'Encountered error: &#123;&#125;'</span>.format(err))</span><br><span class="line">        <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+
+<p>同时需要注意的是，for 循环和 while 循环的效率问题。比如下面的 while 循环：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">i = <span class="number">0</span></span><br><span class="line"><span class="keyword">while</span> i &lt; <span class="number">1000000</span>:</span><br><span class="line">    i += <span class="number">1</span></span><br><span class="line"><span class="comment"># 将这个表达式分解开来，其实就等同于下面这样的嵌套结构：    </span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, <span class="number">1000000</span>):</span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+<p>究竟哪个效率高呢？</p>
+<p>要知道，range() 函数是直接由 C 语言写的，调用它速度非常快。而 while 循环中的“i += 1”这个操作，得通过 Python 的解释器间接调用底层的 C 语言；并且这个简单的操作，又涉及到了对象的创建和删除（因为 i 是整型，是 immutable，i += 1 相当于 i = new int(i + 1)）。所以，显然，for 循环的效率更胜一筹。</p>
+<h3 id="条件与循环的复用"><a href="#条件与循环的复用" class="headerlink" title="条件与循环的复用"></a>条件与循环的复用</h3><p>前面两部分讲了条件与循环的一些基本操作，接下来，我们重点来看它们的进阶操作，让程序变得更简洁高效。</p>
+<p>在阅读代码的时候，你应该常常会发现，有很多将条件与循环并做一行的操作，例如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">expression1 <span class="keyword">if</span> condition <span class="keyword">else</span> expression2 <span class="keyword">for</span> item <span class="keyword">in</span> iterable</span><br></pre></td></tr></table></figure>
+
+<p>将这个表达式分解开来，其实就等同于下面这样的嵌套结构：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> item <span class="keyword">in</span> iterable:</span><br><span class="line">    <span class="keyword">if</span> condition:</span><br><span class="line">        expression1</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        expression2</span><br></pre></td></tr></table></figure>
+
+<p>而如果没有 else 语句，则需要写成：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">expression <span class="keyword">for</span> item <span class="keyword">in</span> iterable <span class="keyword">if</span> condition</span><br></pre></td></tr></table></figure>
+
+<p>举个例子，比如我们要绘制 y = 2*|x| + 5 的函数图像，给定集合 x 的数据点，需要计算出 y 的数据集合，那么只用一行代码，就可以很轻松地解决问题了：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">y = [value * <span class="number">2</span> + <span class="number">5</span> <span class="keyword">if</span> value &gt; <span class="number">0</span> <span class="keyword">else</span> -value * <span class="number">2</span> + <span class="number">5</span> <span class="keyword">for</span> value <span class="keyword">in</span> x]</span><br></pre></td></tr></table></figure>
+
+<p>再比如我们在处理文件中的字符串时，常常遇到的一个场景：将文件中逐行读取的一个完整语句，按逗号分割单词，去掉首位的空字符，并过滤掉长度小于等于 3 的单词，最后返回由单词组成的列表。这同样可以简洁地表达成一行：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">text = <span class="string">' Today,  is, Sunday'</span></span><br><span class="line">text_list = [s.strip() <span class="keyword">for</span> s <span class="keyword">in</span> text.split(<span class="string">','</span>) <span class="keyword">if</span> len(s.strip()) &gt; <span class="number">3</span>]</span><br><span class="line">print(text_list)</span><br></pre></td></tr></table></figure>
+
+<pre><code>[&apos;Today&apos;, &apos;Sunday&apos;]</code></pre><p>当然，这样的复用并不仅仅局限于一个循环。比如，给定两个列表 x、y，要求返回 x、y 中所有元素对组成的元祖，相等情况除外。那么，你也可以很容易表示出来：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[(xx, yy) <span class="keyword">for</span> xx <span class="keyword">in</span> x <span class="keyword">for</span> yy <span class="keyword">in</span> y <span class="keyword">if</span> xx != yy]</span><br></pre></td></tr></table></figure>
+
+<p>这样的写法就等价于：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">l = []</span><br><span class="line"><span class="keyword">for</span> xx <span class="keyword">in</span> x:</span><br><span class="line">    <span class="keyword">for</span> yy <span class="keyword">in</span> y:</span><br><span class="line">        <span class="keyword">if</span> xx != yy:</span><br><span class="line">            l.append((xx, yy))</span><br></pre></td></tr></table></figure>
+
+<p>熟练之后，你会发现这种写法非常方便。当然，如果遇到逻辑很复杂的复用，你可能会觉得写成一行难以理解、容易出错。那种情况下，用正常的形式表达，也不失为一种好的规范和选择。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>今天这节课，我们一起学习了条件与循环的基本概念、进阶用法以及相应的应用。这里，我重点强调几个易错的地方。</p>
+<ul>
+<li><p>在条件语句中，if 可以单独使用，但是 elif 和 else 必须和 if 同时搭配使用；而 If 条件语句的判断，除了 boolean 类型外，其他的最好显示出来。</p>
+</li>
+<li><p>在 for 循环中，如果需要同时访问索引和元素，你可以使用 enumerate() 函数来简化代码。</p>
+</li>
+<li><p>写条件与循环时，合理利用 continue 或者 break 来避免复杂的嵌套，是十分重要的。</p>
+</li>
+<li><p>要注意条件与循环的复用，简单功能往往可以用一行直接完成，极大地提高代码质量与效率。</p>
+</li>
+</ul>
+<h3 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h3><p>最后给你留一个思考题。给定下面两个列表 attributes 和 values，要求针对 values 中每一组子列表 value，输出其和 attributes 中的键对应后的字典，最后返回字典组成的列表。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">attributes = [<span class="string">'name'</span>, <span class="string">'dob'</span>, <span class="string">'gender'</span>]</span><br><span class="line">values = [[<span class="string">'jason'</span>, <span class="string">'2000-01-01'</span>, <span class="string">'male'</span>], </span><br><span class="line">[<span class="string">'mike'</span>, <span class="string">'1999-01-01'</span>, <span class="string">'male'</span>],</span><br><span class="line">[<span class="string">'nancy'</span>, <span class="string">'2001-02-01'</span>, <span class="string">'female'</span>]</span><br><span class="line">]</span><br><span class="line"> </span><br><span class="line"><span class="comment"># expected outout:</span></span><br><span class="line">[&#123;<span class="string">'name'</span>: <span class="string">'jason'</span>, <span class="string">'dob'</span>: <span class="string">'2000-01-01'</span>, <span class="string">'gender'</span>: <span class="string">'male'</span>&#125;, </span><br><span class="line">&#123;<span class="string">'name'</span>: <span class="string">'mike'</span>, <span class="string">'dob'</span>: <span class="string">'1999-01-01'</span>, <span class="string">'gender'</span>: <span class="string">'male'</span>&#125;, </span><br><span class="line">&#123;<span class="string">'name'</span>: <span class="string">'nancy'</span>, <span class="string">'dob'</span>: <span class="string">'2001-02-01'</span>, <span class="string">'gender'</span>: <span class="string">'female'</span>&#125;]</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>[{&apos;name&apos;: &apos;jason&apos;, &apos;dob&apos;: &apos;2000-01-01&apos;, &apos;gender&apos;: &apos;male&apos;},
+ {&apos;name&apos;: &apos;mike&apos;, &apos;dob&apos;: &apos;1999-01-01&apos;, &apos;gender&apos;: &apos;male&apos;},
+ {&apos;name&apos;: &apos;nancy&apos;, &apos;dob&apos;: &apos;2001-02-01&apos;, &apos;gender&apos;: &apos;female&apos;}]</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">attributes = [<span class="string">'name'</span>, <span class="string">'dob'</span>, <span class="string">'gender'</span>]</span><br><span class="line">values = [[<span class="string">'jason'</span>, <span class="string">'2000-01-01'</span>, <span class="string">'male'</span>], </span><br><span class="line">[<span class="string">'mike'</span>, <span class="string">'1999-01-01'</span>, <span class="string">'male'</span>],</span><br><span class="line">[<span class="string">'nancy'</span>, <span class="string">'2001-02-01'</span>, <span class="string">'female'</span>]</span><br><span class="line">]</span><br><span class="line">result = [&#123;attributes[index]:value[index] <span class="keyword">for</span> index <span class="keyword">in</span> range(len(attributes))&#125; <span class="keyword">for</span> value <span class="keyword">in</span> values]</span><br><span class="line">print(result)</span><br><span class="line"></span><br><span class="line">result2 = [dict(zip(attributes,value)) <span class="keyword">for</span> value <span class="keyword">in</span> values]</span><br><span class="line">print(result2)</span><br></pre></td></tr></table></figure>
+
+<pre><code>[{&apos;name&apos;: &apos;jason&apos;, &apos;dob&apos;: &apos;2000-01-01&apos;, &apos;gender&apos;: &apos;male&apos;}, {&apos;name&apos;: &apos;mike&apos;, &apos;dob&apos;: &apos;1999-01-01&apos;, &apos;gender&apos;: &apos;male&apos;}, {&apos;name&apos;: &apos;nancy&apos;, &apos;dob&apos;: &apos;2001-02-01&apos;, &apos;gender&apos;: &apos;female&apos;}]
+[{&apos;name&apos;: &apos;jason&apos;, &apos;dob&apos;: &apos;2000-01-01&apos;, &apos;gender&apos;: &apos;male&apos;}, {&apos;name&apos;: &apos;mike&apos;, &apos;dob&apos;: &apos;1999-01-01&apos;, &apos;gender&apos;: &apos;male&apos;}, {&apos;name&apos;: &apos;nancy&apos;, &apos;dob&apos;: &apos;2001-02-01&apos;, &apos;gender&apos;: &apos;female&apos;}]</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt;dict()                        <span class="comment"># 创建空字典</span></span><br><span class="line">&#123;&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>dict(a=<span class="string">'a'</span>, b=<span class="string">'b'</span>, t=<span class="string">'t'</span>)     <span class="comment"># 传入关键字</span></span><br><span class="line">&#123;<span class="string">'a'</span>: <span class="string">'a'</span>, <span class="string">'b'</span>: <span class="string">'b'</span>, <span class="string">'t'</span>: <span class="string">'t'</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>dict(zip([<span class="string">'one'</span>, <span class="string">'two'</span>, <span class="string">'three'</span>], [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]))   <span class="comment"># 映射函数方式来构造字典</span></span><br><span class="line">&#123;<span class="string">'three'</span>: <span class="number">3</span>, <span class="string">'two'</span>: <span class="number">2</span>, <span class="string">'one'</span>: <span class="number">1</span>&#125; </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>dict([(<span class="string">'one'</span>, <span class="number">1</span>), (<span class="string">'two'</span>, <span class="number">2</span>), (<span class="string">'three'</span>, <span class="number">3</span>)])    <span class="comment"># 可迭代对象方式来构造字典</span></span><br><span class="line">&#123;<span class="string">'three'</span>: <span class="number">3</span>, <span class="string">'two'</span>: <span class="number">2</span>, <span class="string">'one'</span>: <span class="number">1</span>&#125;</span><br></pre></td></tr></table></figure>
+
+
+<pre><code>  File &quot;&lt;ipython-input-31-88ea8d10853c&gt;&quot;, line 4
+    b = dict(&apos;one&apos;= 1)
+            ^
+SyntaxError: keyword can&apos;t be an expression</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/05/06Python%E9%BB%91%E7%AE%B1%E8%BE%93%E5%85%A5%E4%B8%8E%E8%BE%93/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1614,7 +1900,7 @@ SyntaxError: invalid syntax</code></pre><p>不难想象，随着哈希表的扩�
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-count">66</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

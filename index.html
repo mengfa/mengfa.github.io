@@ -258,6 +258,207 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/02/27%E4%B8%A8%E4%BB%8E%E6%95%B0%E6%8D%AE%E9%A1%B5%E7%9A%84%E8%A7%92%E5%BA%A6%E7%90%86%E8%A7%A3B+%E6%A0%91%E6%9F%A5%E8%AF%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/04/02/27%E4%B8%A8%E4%BB%8E%E6%95%B0%E6%8D%AE%E9%A1%B5%E7%9A%84%E8%A7%92%E5%BA%A6%E7%90%86%E8%A7%A3B+%E6%A0%91%E6%9F%A5%E8%AF%A2/" itemprop="url">27丨从数据页的角度理解B+树查询</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-02T20:15:01+08:00">
+                2020-04-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" itemprop="url" rel="index">
+                    <span itemprop="name">SQL必知必会</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/04/02/27%E4%B8%A8%E4%BB%8E%E6%95%B0%E6%8D%AE%E9%A1%B5%E7%9A%84%E8%A7%92%E5%BA%A6%E7%90%86%E8%A7%A3B+%E6%A0%91%E6%9F%A5%E8%AF%A2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/04/02/27%E4%B8%A8%E4%BB%8E%E6%95%B0%E6%8D%AE%E9%A1%B5%E7%9A%84%E8%A7%92%E5%BA%A6%E7%90%86%E8%A7%A3B+%E6%A0%91%E6%9F%A5%E8%AF%A2/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>我们之前已经了解了 B+ 树和 Hash 索引的原理，这些索引结构给我们提供了高效的索引方式，不过这些索引信息以及数据记录都是保存在文件上的，确切说是存储在页结构中。</p>
+<p>对数据库的存储结构以及页结构的底层进行了解，可以加深我们对索引运行机制的认识，从而你对索引的存储、查询原理，以及对 SQL 查询效率有更深的理解。</p>
+<p>今天的课程主要包括下面几个部分：</p>
+<ol>
+<li>数据库中的存储结构是怎样的？页、区、段和表空间分别指的是什么？</li>
+<li>为什么页（Page）是数据库存储空间的基本单位？</li>
+<li>从数据页的角度来看，B+ 树是如何进行查询的？<h3 id="数据库中的存储结构是怎样的"><a href="#数据库中的存储结构是怎样的" class="headerlink" title="数据库中的存储结构是怎样的"></a>数据库中的存储结构是怎样的</h3>记录是按照行来存储的，但是数据库的读取并不以行为单位，否则一次读取（也就是一次 I/O 操作）只能处理一行数据，效率会非常低。因此在数据库中，不论读一行，还是读多行，都是将这些行所在的页进行加载。也就是说，数据库管理存储空间的基本单位是页（Page）。</li>
+</ol>
+<p>一个页中可以存储多个行记录（Row），同时在数据库中，还存在着区（Extent）、段（Segment）和表空间（Tablespace）。行、页、区、段、表空间的关系如下图所示：</p>
+<p>从图中你能看到一个表空间包括了一个或多个段，一个段包括了一个或多个区，一个区包括了多个页，而一个页中可以有多行记录，这些概念我简单给你讲解下。</p>
+<p>区（Extent）是比页大一级的存储结构，在 InnoDB 存储引擎中，一个区会分配 64 个连续的页。因为 InnoDB 中的页大小默认是 16KB，所以一个区的大小是 64*16KB=1MB。</p>
+<p>段（Segment）由一个或多个区组成，区在文件系统是一个连续分配的空间（在 InnoDB 中是连续的 64 个页），不过在段中不要求区与区之间是相邻的。段是数据库中的分配单位，不同类型的数据库对象以不同的段形式存在。当我们创建数据表、索引的时候，就会相应创建对应的段，比如创建一张表时会创建一个表段，创建一个索引时会创建一个索引段。</p>
+<p>表空间（Tablespace）是一个逻辑容器，表空间存储的对象是段，在一个表空间中可以有一个或多个段，但是一个段只能属于一个表空间。数据库由一个或多个表空间组成，表空间从管理上可以划分为系统表空间、用户表空间、撤销表空间、临时表空间等。</p>
+<p>在 InnoDB 中存在两种表空间的类型：共享表空间和独立表空间。如果是共享表空间就意味着多张表共用一个表空间。如果是独立表空间，就意味着每张表有一个独立的表空间，也就是数据和索引信息都会保存在自己的表空间中。独立的表空间可以在不同的数据库之间进行迁移。</p>
+<p>你可以通过下面的命令来查看 InnoDB 的表空间类型：</p>
+<p>mysql &gt; show variables like ‘innodb_file_per_table’;</p>
+<p>你能看到 innodb_file_per_table=ON，这就意味着每张表都会单独保存为一个.ibd 文件。</p>
+<p>数据页内的结构是怎样的<br>页（Page）如果按类型划分的话，常见的有数据页（保存 B+ 树节点）、系统页、Undo 页和事务数据页等。数据页是我们最常使用的页。</p>
+<p>表页的大小限定了表行的最大长度，不同 DBMS 的表页大小不同。比如在 MySQL 的 InnoDB 存储引擎中，默认页的大小是 16KB，我们可以通过下面的命令来进行查看：</p>
+<p>mysql&gt; show variables like ‘%innodb_page_size%’;</p>
+<p>在 SQL Server 的页大小为 8KB，而在 Oracle 中我们用术语“块”（Block）来代表“页”，Oralce 支持的块大小为 2KB，4KB，8KB，16KB，32KB 和 64KB。</p>
+<p>数据库 I/O 操作的最小单位是页，与数据库相关的内容都会存储在页结构里。数据页包括七个部分，分别是文件头（File Header）、页头（Page Header）、最大最小记录（Infimum+supremum）、用户记录（User Records）、空闲空间（Free Space）、页目录（Page Directory）和文件尾（File Tailer）。</p>
+<p>页结构的示意图如下所示：</p>
+<p>这 7 个部分到底有什么作用呢？我简单梳理下：</p>
+<p>实际上，我们可以把这 7 个数据页分成 3 个部分。</p>
+<p>首先是文件通用部分，也就是文件头和文件尾。它们类似集装箱，将页的内容进行封装，通过文件头和文件尾校验的方式来确保页的传输是完整的。</p>
+<p>在文件头中有两个字段，分别是 FIL_PAGE_PREV 和 FIL_PAGE_NEXT，它们的作用相当于指针，分别指向上一个数据页和下一个数据页。连接起来的页相当于一个双向的链表，如下图所示：</p>
+<p>需要说明的是采用链表的结构让数据页之间不需要是物理上的连续，而是逻辑上的连续。</p>
+<p>我们之前讲到过 Hash 算法，这里文件尾的校验方式就是采用 Hash 算法进行校验。举个例子，当我们进行页传输的时候，如果突然断电了，造成了该页传输的不完整，这时通过文件尾的校验和（checksum 值）与文件头的校验和做比对，如果两个值不相等则证明页的传输有问题，需要重新进行传输，否则认为页的传输已经完成。</p>
+<p>第二个部分是记录部分，页的主要作用是存储记录，所以“最小和最大记录”和“用户记录”部分占了页结构的主要空间。另外空闲空间是个灵活的部分，当有新的记录插入时，会从空闲空间中进行分配用于存储新记录，如下图所示：</p>
+<p>第三部分是索引部分，这部分重点指的是页目录，它起到了记录的索引作用，因为在页中，记录是以单向链表的形式进行存储的。单向链表的特点就是插入、删除非常方便，但是检索效率不高，最差的情况下需要遍历链表上的所有节点才能完成检索，因此在页目录中提供了二分查找的方式，用来提高记录的检索效率。这个过程就好比是给记录创建了一个目录：</p>
+<p>将所有的记录分成几个组，这些记录包括最小记录和最大记录，但不包括标记为“已删除”的记录。<br>第 1 组，也就是最小记录所在的分组只有 1 个记录；最后一组，就是最大记录所在的分组，会有 1-8 条记录；其余的组记录数量在 4-8 条之间。这样做的好处是，除了第 1 组（最小记录所在组）以外，其余组的记录数会尽量平分。<br>在每个组中最后一条记录的头信息中会存储该组一共有多少条记录，作为 n_owned 字段。<br>页目录用来存储每组最后一条记录的地址偏移量，这些地址偏移量会按照先后顺序存储起来，每组的地址偏移量也被称之为槽（slot），每个槽相当于指针指向了不同组的最后一个记录。如下图所示：</p>
+<p>页目录存储的是槽，槽相当于分组记录的索引。我们通过槽查找记录，实际上就是在做二分查找。这里我以上面的图示进行举例，5 个槽的编号分别为 0，1，2，3，4，我想查找主键为 9 的用户记录，我们初始化查找的槽的下限编号，设置为 low=0，然后设置查找的槽的上限编号 high=4，然后采用二分查找法进行查找。</p>
+<p>首先找到槽的中间位置 p=(low+high)/2=(0+4)/2=2，这时我们取编号为 2 的槽对应的分组记录中最大的记录，取出关键字为 8。因为 9 大于 8，所以应该会在槽编号为 (p,high] 的范围进行查找</p>
+<p>接着重新计算中间位置 p’=(p+high)/2=(2+4)/2=3，我们查找编号为 3 的槽对应的分组记录中最大的记录，取出关键字为 12。因为 9 小于 12，所以应该在槽 3 中进行查找。</p>
+<p>遍历槽 3 中的所有记录，找到关键字为 9 的记录，取出该条记录的信息即为我们想要查找的内容。</p>
+<p>从数据页的角度看 B+ 树是如何进行查询的<br>MySQL 的 InnoDB 存储引擎采用 B+ 树作为索引，而索引又可以分成聚集索引和非聚集索引（二级索引），这些索引都相当于一棵 B+ 树，如图所示。一棵 B+ 树按照节点类型可以分成两部分：</p>
+<p>叶子节点，B+ 树最底层的节点，节点的高度为 0，存储行记录。<br>非叶子节点，节点的高度大于 0，存储索引键和页面指针，并不存储行记录本身。</p>
+<p>我们刚才学习了页结构的内容，你可以用页结构对比，看下 B+ 树的结构。</p>
+<p>在一棵 B+ 树中，每个节点都是一个页，每次新建节点的时候，就会申请一个页空间。同一层上的节点之间，通过页的结构构成一个双向的链表（页文件头中的两个指针字段）。非叶子节点，包括了多个索引行，每个索引行里存储索引键和指向下一层页面的页面指针。最后是叶子节点，它存储了关键字和行记录，在节点内部（也就是页结构的内部）记录之间是一个单向的链表，但是对记录进行查找，则可以通过页目录采用二分查找的方式来进行。</p>
+<p>当我们从页结构来理解 B+ 树的结构的时候，可以帮我们理解一些通过索引进行检索的原理：</p>
+<p>1.B+ 树是如何进行记录检索的？</p>
+<p>如果通过 B+ 树的索引查询行记录，首先是从 B+ 树的根开始，逐层检索，直到找到叶子节点，也就是找到对应的数据页为止，将数据页加载到内存中，页目录中的槽（slot）采用二分查找的方式先找到一个粗略的记录分组，然后再在分组中通过链表遍历的方式查找记录。</p>
+<ol start="2">
+<li>普通索引和唯一索引在查询效率上有什么不同？</li>
+</ol>
+<p>我们创建索引的时候可以是普通索引，也可以是唯一索引，那么这两个索引在查询效率上有什么不同呢？</p>
+<p>唯一索引就是在普通索引上增加了约束性，也就是关键字唯一，找到了关键字就停止检索。而普通索引，可能会存在用户记录中的关键字相同的情况，根据页结构的原理，当我们读取一条记录的时候，不是单独将这条记录从磁盘中读出去，而是将这个记录所在的页加载到内存中进行读取。InnoDB 存储引擎的页大小为 16KB，在一个页中可能存储着上千个记录，因此在普通索引的字段上进行查找也就是在内存中多几次“判断下一条记录”的操作，对于 CPU 来说，这些操作所消耗的时间是可以忽略不计的。所以对一个索引字段进行检索，采用普通索引还是唯一索引在检索效率上基本上没有差别。</p>
+<p>总结<br>今天我们学习了数据库中的基本存储单位，也就是页（Page），磁盘 I/O 都是基于页来进行读取的，在页之上还有区、段和表空间，它们都是更大的存储单位。我们在分配空间的时候会按照页为单位来进行分配，同一棵树上同一层的页与页之间采用双向链表，而在页里面，记录之间采用的单向链表的方式。</p>
+<p>链表这种数据结构的特点是增加、删除比较方便，所以在对记录进行删除的时候，有时候并不是真的删除了记录，而只是逻辑上的删除，也就是在标记为上标记为“已删除”。但链表还有个问题就是查找效率低，因此在页结构中还专门设计了页目录这个模块，专门给记录做一个目录，通过二分查找法的方式进行检索提升效率。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/02/26%E4%B8%A8%E7%B4%A2%E5%BC%95%E7%9A%84%E4%BD%BF%E7%94%A8%E5%8E%9F%E5%88%99%EF%BC%9A%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87%E7%B4%A2%E5%BC%95%E8%AE%A9SQL%E6%9F%A5%E8%AF%A2%E6%95%88%E7%8E%87%E6%9C%80%E5%A4%A7%E5%8C%96%EF%BC%9F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2200,229 +2401,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/27/17%E4%B8%A8%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Python%E6%93%8D%E4%BD%9CMySQL%EF%BC%9F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LvYang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LvYang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/27/17%E4%B8%A8%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Python%E6%93%8D%E4%BD%9CMySQL%EF%BC%9F/" itemprop="url">17丨如何使用Python操作MySQL？</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-27T20:30:01+08:00">
-                2020-03-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" itemprop="url" rel="index">
-                    <span itemprop="name">SQL必知必会</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/03/27/17%E4%B8%A8%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Python%E6%93%8D%E4%BD%9CMySQL%EF%BC%9F/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/03/27/17%E4%B8%A8%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Python%E6%93%8D%E4%BD%9CMySQL%EF%BC%9F/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>我们之前都是直接在 DBMS 里面进行 SQL 的操作，实际上我们还可以通过后端语言对 DBMS 进行访问以及进行相应的操作，这样更具有灵活性，可以实现一些较为复杂的操作。作为一个后端开发人员，掌握一些 SQL 技术是必须的；作为一个数据库管理人员，了解后端语言如何开发和管理数据库也是很有必要的。</p>
-<p>今天我以 Python 为例，讲解下如何对 MySQL 数据库进行操作。你需要掌握以下几个方面的内容：</p>
-<p>Python 的 DB API 规范是什么，遵守这个规范有什么用？<br>基于 DB API，MySQL 官方提供了驱动器 mysql-connector，如何使用它来完成对数据库管理系统的操作？<br>CRUD 是最常见的数据库的操作，分别对应数据的增加、读取、修改和删除。在掌握了 mysql-connector 的使用方法之后，如何完成对数据表的 CRUD 操作？</p>
-<h3 id="Python-DB-API-规范"><a href="#Python-DB-API-规范" class="headerlink" title="Python DB API 规范"></a>Python DB API 规范</h3><p>Python 可以支持非常多的数据库管理系统，比如 MySQL、Oracle、SQL Server 和 PostgreSQL 等。为了实现对这些 DBMS 的统一访问，Python 需要遵守一个规范，这就是 DB API 规范。我在下图中列出了 DB API 规范的作用，这个规范给我们提供了数据库对象连接、对象交互和异常处理的方式，为各种 DBMS 提供了统一的访问接口。这样做的好处就是如果项目需要切换数据库，Python 层的代码移植会比较简单。<br>我们在使用 Python 对 DBMS 进行操作的时候，需要经过下面的几个步骤：</p>
-<p>引入 API 模块；<br>与数据库建立连接；<br>执行 SQL 语句；<br>关闭数据库连接。<br>如何使用 mysql-connector<br>使用 Python 对数据库进行访问需要基于 DB API 规范，这里有不少库供我们选择，比如 MySQLdb、mysqlclient、PyMySQL、peewee 和 SQLAIchemy 等。今天我讲解的是 mysql-connector，它是 MySQL 官方提供的驱动器，用来给后端语言，比如 Python 提供连接。</p>
-<p>下面我们看下如何用 Python 使用 mysql-connector，以完成数据库的连接和使用。</p>
-<p>首先安装 mysql-connector。在使用前，你需要先使用下面这句命令进行安装：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install mysql-connector</span><br></pre></td></tr></table></figure>
-<p>在安装之后，你可以创建数据库连接，然后查看下数据库的版本号，来验证下数据库是否连接成功。代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding: UTF-8 -*-</span><br><span class="line">import mysql.connector</span><br><span class="line"># 打开数据库连接</span><br><span class="line">db = mysql.connector.connect(</span><br><span class="line">       host=&quot;localhost&quot;,</span><br><span class="line">       user=&quot;root&quot;,</span><br><span class="line">       passwd=&quot;XXX&quot;, # 写上你的数据库密码</span><br><span class="line">       database=&apos;wucai&apos;, </span><br><span class="line">       auth_plugin=&apos;mysql_native_password&apos;</span><br><span class="line">)</span><br><span class="line"># 获取操作游标 </span><br><span class="line">cursor = db.cursor()</span><br><span class="line"># 执行 SQL 语句</span><br><span class="line">cursor.execute(&quot;SELECT VERSION()&quot;)</span><br><span class="line"># 获取一条数据</span><br><span class="line">data = cursor.fetchone()</span><br><span class="line">print(&quot;MySQL 版本: %s &quot; % data)</span><br><span class="line"># 关闭游标 &amp; 数据库连接</span><br><span class="line">cursor.close()</span><br><span class="line">db.close()</span><br></pre></td></tr></table></figure>
-<p>运行结果：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MySQL 版本: 5.7.22</span><br></pre></td></tr></table></figure>
-
-<p>上面这段代码中有两个重要的对象你需要了解下，分别是 Connection 和 Cursor。</p>
-<p>Connection 就是对数据库的当前连接进行管理，我们可以通过它来进行以下操作：</p>
-<ol>
-<li><p>通过指定 host、user、passwd 和 port 等参数来创建数据库连接，这些参数分别对应着数据库 IP 地址、用户名、密码和端口号；</p>
-</li>
-<li><p>使用 db.close() 关闭数据库连接；</p>
-</li>
-<li><p>使用 db.cursor() 创建游标，操作数据库中的数据；</p>
-</li>
-<li><p>使用 db.begin() 开启事务；</p>
-</li>
-<li><p>使用 db.commit() 和 db.rollback()，对事务进行提交以及回滚。<br>当我们通过cursor = db.cursor()创建游标后，就可以通过面向过程的编程方式对数据库中的数据进行操作：</p>
-</li>
-<li><p>使用cursor.execute(query_sql)，执行数据库查询；</p>
-</li>
-<li><p>使用cursor.fetchone()，读取数据集中的一条数据；</p>
-</li>
-<li><p>使用cursor.fetchall()，取出数据集中的所有行，返回一个元组 tuples 类型；</p>
-</li>
-<li><p>使用cursor.fetchmany(n)，取出数据集中的多条数据，同样返回一个元组 tuples；</p>
-</li>
-<li><p>使用cursor.rowcount，返回查询结果集中的行数。如果没有查询到数据或者还没有查询，则结果为 -1，否则会返回查询得到的数据行数；</p>
-</li>
-<li><p>使用cursor.close()，关闭游标。</p>
-<h3 id="对数据表进行增删改查"><a href="#对数据表进行增删改查" class="headerlink" title="对数据表进行增删改查"></a>对数据表进行增删改查</h3><p>了解了 Connection 和 Cursor 的使用方式之后，我们来看下如何来对 heros 数据表进行 CRUD 的操作，即增加、读取、更新和删除。</p>
-</li>
-</ol>
-<p>首先是增加数据。</p>
-<p>假设我们想在 player 表中增加一名新球员，姓名为“约翰·科林斯”，球队 ID 为 1003（即亚特兰大老鹰），身高为 2.08m。代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 插入新球员</span><br><span class="line">sql = &quot;INSERT INTO player (team_id, player_name, height) VALUES (%s, %s, %s)&quot;</span><br><span class="line">val = (1003, &quot; 约翰 - 科林斯 &quot;, 2.08)</span><br><span class="line">cursor.execute(sql, val)</span><br><span class="line">db.commit()</span><br><span class="line">print(cursor.rowcount, &quot; 记录插入成功。&quot;)</span><br></pre></td></tr></table></figure>
-<p>我们使用 cursor.execute 来执行相应的 SQL 语句，val 为 SQL 语句中的参数，SQL 执行后使用 db.commit() 进行提交。需要说明的是，我们在使用 SQL 语句的时候，可以向 SQL 语句传递参数，这时 SQL 语句里要统一用（%s）进行占位，否则就会报错。不论插入的数值为整数类型，还是浮点类型，都需要统一用（%s）进行占位。</p>
-<p>另外在用游标进行 SQL 操作之后，还需要使用 db.commit() 进行提交，否则数据不会被插入。</p>
-<p>然后是读取数据。我们来看下数据是否被插入成功，这里我们查询下身高大于等于 2.08m 的球员都有哪些，代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 查询身高大于等于 2.08 的球员</span><br><span class="line">sql = &apos;SELECT player_id, player_name, height FROM player WHERE height&gt;=2.08&apos;</span><br><span class="line">cursor.execute(sql)</span><br><span class="line">data = cursor.fetchall()</span><br><span class="line">for each_player in data:</span><br><span class="line">  print(each_player)</span><br></pre></td></tr></table></figure>
-<p>运行结果：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">(10003, &apos;安德烈 - 德拉蒙德&apos;, 2.11)</span><br><span class="line">(10004, &apos;索恩 - 马克&apos;, 2.16)</span><br><span class="line">(10009, &apos;扎扎 - 帕楚里亚&apos;, 2.11)</span><br><span class="line">(10010, &apos;乔恩 - 洛伊尔&apos;, 2.08)</span><br><span class="line">(10011, &apos;布雷克 - 格里芬&apos;, 2.08)</span><br><span class="line">(10015, &apos;亨利 - 埃伦森&apos;, 2.11)</span><br><span class="line">(10023, &apos;多曼塔斯 - 萨博尼斯&apos;, 2.11)</span><br><span class="line">(10024, &apos;迈尔斯 - 特纳&apos;, 2.11)</span><br><span class="line">(10032, &apos;TJ- 利夫&apos;, 2.08)</span><br><span class="line">(10033, &apos;凯尔 - 奥奎因&apos;, 2.08)</span><br><span class="line">(10037, &apos;伊凯·阿尼博古&apos;, 2.08)</span><br><span class="line">(10038, &apos;约翰 - 科林斯&apos;, 2.08)</span><br></pre></td></tr></table></figure>
-<p>你能看到球员约翰·科林斯被正确插入。</p>
-<p>那么如何修改数据呢？</p>
-<p>假如我想修改刚才插入的球员约翰·科林斯的身高，将身高修改成 2.09，代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 修改球员约翰 - 科林斯</span><br><span class="line">sql = &apos;UPDATE player SET height = %s WHERE player_name = %s&apos;</span><br><span class="line">val = (2.09, &quot; 约翰 - 科林斯 &quot;)</span><br><span class="line">cursor.execute(sql, val)</span><br><span class="line">db.commit()</span><br><span class="line">print(cursor.rowcount, &quot; 记录被修改。&quot;)</span><br></pre></td></tr></table></figure>
-<p>最后我们看下如何删除约翰·科林斯这个球员的数据，代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sql = &apos;DELETE FROM player WHERE player_name = %s&apos;</span><br><span class="line">val = (&quot; 约翰 - 科林斯 &quot;,)</span><br><span class="line">cursor.execute(sql, val)</span><br><span class="line">db.commit()</span><br><span class="line">print(cursor.rowcount, &quot; 记录删除成功。&quot;)</span><br></pre></td></tr></table></figure>
-<p>最后都执行完了，我们来关闭游标和数据库的连接，使用以下代码即可：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cursor.close()</span><br><span class="line">db.close()</span><br></pre></td></tr></table></figure>
-<p>针对上面的操作过程，你可以模拟下数据的 CRUD 操作，但有几点你需要注意。</p>
-<ol>
-<li><p>打开数据库连接以后，如果不再使用，则需要关闭数据库连接，以免造成资源浪费。</p>
-</li>
-<li><p>在对数据进行增加、删除和修改的时候，可能会出现异常，这时就需要用try…except捕获异常信息。比如针对插入球员约翰·科林斯这个操作，你可以写成下面这样：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">import traceback</span><br><span class="line">try:</span><br><span class="line">  sql = &quot;INSERT INTO player (team_id, player_name, height) VALUES (%s, %s, %s)&quot;</span><br><span class="line">  val = (1003, &quot; 约翰 - 科林斯 &quot;, 2.08)</span><br><span class="line">  cursor.execute(sql, val)</span><br><span class="line">  db.commit()</span><br><span class="line">  print(cursor.rowcount, &quot; 记录插入成功。&quot;)</span><br><span class="line">except Exception as e:</span><br><span class="line">  # 打印异常信息</span><br><span class="line">  traceback.print_exc()</span><br><span class="line">  # 回滚  </span><br><span class="line">  db.rollback()</span><br><span class="line">finally:</span><br><span class="line">  # 关闭数据库连接</span><br><span class="line">  db.close()</span><br></pre></td></tr></table></figure>
-<p>运行结果告诉我们记录插入成功。</p>
-</li>
-<li><p>如果你在使用 mysql-connector 连接的时候，系统报的错误为authentication plugin caching_sha2，这时你需要下载最新的版本更新来解决，点击这里进行更新。</p>
-</li>
-</ol>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>我今天讲解了如何使用 Python 来操作 MySQL，这里我们使用的是官方提供的 mysql-connector，当然除了它之外，还有很多库可以进行选择。</p>
-<p>在使用基于 DB API 规范的协议时，重点需要掌握 Connection 和 Cursor 这两个对象，Connection 就是对数据库的连接进行管理，而 Cursor 是对数据库的游标进行管理，通过它们，我们可以执行具体的 SQL 语句，以及处理复杂的数据。</p>
-<p>用 Python 操作 MySQL，还有很多种姿势，mysql-connector 只是其中一种，实际上还有另外一种方式，就是采用 ORM 框架。ORM 的英文是 Object Relational Mapping，也就是采用对象关系映射的模式，使用这种模式可以将数据库中各种数据表之间的关系映射到程序中的对象。这种模式可以屏蔽底层的数据库的细节，不需要我们与复杂的 SQL 语句打交道，直接采用操作对象的形式操作就可以。</p>
-<p>不过如果应用数据实体少，其实没有必要使用 ORM 框架，针对少量对象的管理，自己实现起来也很简单，比如本篇文章中我讲到的采用官方提供的 mysql-connector 驱动的方式来实现 CRUD。引入一个框架的学习成本很高，代码膨胀也很厉害，所以如果是相对简单的操作，完全可以自己动手来实现。<br>使用 Python 对数据库进行操作，关键在于实战，所以这里我出一个练习题。请你使用 Python 对 heros 表中最大生命值大于 6000 的英雄进行查询，并且输出相应的属性值。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2473,7 +2451,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-count">66</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
