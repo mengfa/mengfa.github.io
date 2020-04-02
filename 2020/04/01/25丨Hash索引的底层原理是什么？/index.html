@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="数组&链表," />
+  <meta name="keywords" content="sql,极客时间," />
 
 
 
@@ -79,18 +79,16 @@
 
 
 
-<meta name="description" content="英文题目Given a linked list, swap every two adjacent nodes and return its head. You may not modify the values in the list’s nodes, only nodes itself may be changed. Example: 1Given 1-&amp;gt;2-&amp;gt;3-&amp;gt;4, yo">
-<meta name="keywords" content="数组&amp;链表">
+<meta name="description" content="我们上节课讲解了 B+ 树的原理，今天我们来学习下 Hash 的原理和使用。Hash 本身是一个函数，又被称为散列函数，它可以帮助我们大幅提升检索数据的效率。打个比方，Hash 就好像一个智能前台，你只要告诉它想要查找的人的姓名，它就会告诉你那个人坐在哪个位置，只需要一次交互就可以完成查找，效率非常高。大名鼎鼎的 MD5 就是 Hash 函数的一种。 Hash 算法是通过某种确定性的算法（比如 M">
+<meta name="keywords" content="sql,极客时间">
 <meta property="og:type" content="article">
-<meta property="og:title" content="24. Swap Nodes in Pairs">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;15&#x2F;24.%20Swap%20Nodes%20in%20Pairs&#x2F;index.html">
+<meta property="og:title" content="25丨Hash索引的底层原理是什么？">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;04&#x2F;01&#x2F;25%E4%B8%A8Hash%E7%B4%A2%E5%BC%95%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F&#x2F;index.html">
 <meta property="og:site_name" content="LvYang">
-<meta property="og:description" content="英文题目Given a linked list, swap every two adjacent nodes and return its head. You may not modify the values in the list’s nodes, only nodes itself may be changed. Example: 1Given 1-&amp;gt;2-&amp;gt;3-&amp;gt;4, yo">
+<meta property="og:description" content="我们上节课讲解了 B+ 树的原理，今天我们来学习下 Hash 的原理和使用。Hash 本身是一个函数，又被称为散列函数，它可以帮助我们大幅提升检索数据的效率。打个比方，Hash 就好像一个智能前台，你只要告诉它想要查找的人的姓名，它就会告诉你那个人坐在哪个位置，只需要一次交互就可以完成查找，效率非常高。大名鼎鼎的 MD5 就是 Hash 函数的一种。 Hash 算法是通过某种确定性的算法（比如 M">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;15&#x2F;24.%20Swap%20Nodes%20in%20Pairs&#x2F;24.webp">
-<meta property="og:updated_time" content="2019-12-15T13:02:22.017Z">
+<meta property="og:updated_time" content="2020-04-01T12:13:08.557Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;15&#x2F;24.%20Swap%20Nodes%20in%20Pairs&#x2F;24.webp">
 
 
 
@@ -120,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/12/15/24. Swap Nodes in Pairs/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/04/01/25丨Hash索引的底层原理是什么？/"/>
 
 
 
 
 
-  <title>24. Swap Nodes in Pairs | LvYang</title>
+  <title>25丨Hash索引的底层原理是什么？ | LvYang</title>
   
 
 
@@ -263,7 +261,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/15/24.%20Swap%20Nodes%20in%20Pairs/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/01/25%E4%B8%A8Hash%E7%B4%A2%E5%BC%95%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="LvYang">
@@ -280,7 +278,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">24. Swap Nodes in Pairs</h1>
+          <h1 class="post-title" itemprop="name headline">25丨Hash索引的底层原理是什么？</h1>
         
 
         <div class="post-meta">
@@ -292,8 +290,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-15T10:15:07+08:00">
-                2019-12-15
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-01T20:44:01+08:00">
+                2020-04-01
               </time>
             
 
@@ -315,8 +313,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/leetcode/" itemprop="url" rel="index">
-                    <span itemprop="name">leetcode</span>
+                  <a href="/categories/SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" itemprop="url" rel="index">
+                    <span itemprop="name">SQL必知必会</span>
                   </a>
                 </span>
 
@@ -333,8 +331,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/12/15/24.%20Swap%20Nodes%20in%20Pairs/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count gitment-comments-count" data-xid="/2019/12/15/24.%20Swap%20Nodes%20in%20Pairs/" itemprop="commentsCount"></span>
+                <a href="/2020/04/01/25%E4%B8%A8Hash%E7%B4%A2%E5%BC%95%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2020/04/01/25%E4%B8%A8Hash%E7%B4%A2%E5%BC%95%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -362,38 +360,39 @@
       
 
       
-        <h3 id="英文题目"><a href="#英文题目" class="headerlink" title="英文题目"></a>英文题目</h3><p>Given a linked list, swap every two adjacent nodes and return its head.</p>
-<p>You may not modify the values in the list’s nodes, only nodes itself may be changed.</p>
-<p>Example:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Given 1-&gt;2-&gt;3-&gt;4, you should return the list as 2-&gt;1-&gt;4-&gt;3.</span><br></pre></td></tr></table></figure>
+        <p>我们上节课讲解了 B+ 树的原理，今天我们来学习下 Hash 的原理和使用。Hash 本身是一个函数，又被称为散列函数，它可以帮助我们大幅提升检索数据的效率。打个比方，Hash 就好像一个智能前台，你只要告诉它想要查找的人的姓名，它就会告诉你那个人坐在哪个位置，只需要一次交互就可以完成查找，效率非常高。大名鼎鼎的 MD5 就是 Hash 函数的一种。</p>
+<p>Hash 算法是通过某种确定性的算法（比如 MD5、SHA1、SHA2、SHA3）将输入转变为输出。相同的输入永远可以得到相同的输出，假设输入内容有微小偏差，在输出中通常会有不同的结果。如果你想要验证两个文件是否相同，那么你不需要把两份文件直接拿来比对，只需要让对方把 Hash 函数计算得到的结果告诉你即可，然后在本地同样对文件进行 Hash 函数的运算，最后通过比较这两个 Hash 函数的结果是否相同，就可以知道这两个文件是否相同。</p>
+<p>Hash 可以高效地帮我们完成验证的工作，它在数据库中有广泛的应用。今天的课程主要包括下面几个部分：</p>
+<ol>
+<li>动手写程序统计一下 Hash 检索的效率。</li>
+<li>了解 MySQL 中的 Hash 索引，理解使用它的优点和不足。</li>
+<li>Hash 索引和 B+ 树索引的区别以及使用场景。<h3 id="动手统计-Hash-检索效率"><a href="#动手统计-Hash-检索效率" class="headerlink" title="动手统计 Hash 检索效率"></a>动手统计 Hash 检索效率</h3>我们知道 Python 的数据结构中有数组和字典两种，其中数组检索数据类似于全表扫描，需要对整个数组的内容进行检索；而字典是由 Hash 表实现的，存储的是 key-value 值，对于数据检索来说效率非常快。</li>
+</ol>
+<p>对于 Hash 的检索效率，我们来个更直观的认知。下面我们分别看一下采用数组检索数据和采用字典（Hash）检索数据的效率到底有怎样的差别。</p>
+<p>实验 1：在数组中添加 10000 个元素，然后分别对这 10000 个元素进行检索，最后统计检索的时间。</p>
+<p>代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import time</span><br><span class="line"># 插入数据</span><br><span class="line">result = []</span><br><span class="line">for i in range(10000):</span><br><span class="line">       result.append(i)</span><br><span class="line"># 检索数据</span><br><span class="line">time_start=time.time()</span><br><span class="line">for i in range(10000):</span><br><span class="line">       temp = result.index(i)</span><br><span class="line">time_end=time.time()</span><br><span class="line">print(&apos;检索时间&apos;, time_end-time_start)</span><br></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<p>检索时间为 1.2436728477478027 秒</p>
+<p>实验 2：采用 Hash 表的形式存储数据，即在 Python 中采用字典方式添加 10000 个元素，然后检索这 10000 个数据，最后再统计一下时间。代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import time</span><br><span class="line"># 插入数据</span><br><span class="line">result = &#123;&#125;</span><br><span class="line">for i in range(1000000):</span><br><span class="line">       result[i] = i</span><br><span class="line"># 检索数据</span><br><span class="line">time_start=time.time()</span><br><span class="line">for i in range(10000):</span><br><span class="line">       temp = result[i]</span><br><span class="line">time_end=time.time()</span><br><span class="line">print(&apos;检索时间：&apos;,time_end-time_start)</span><br></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<p>检索时间为 0.0019941329956054688 秒。</p>
+<p>你能看到 Hash 方式检索差不多用了 2 毫秒的时间，检索效率提升得非常明显。这是因为 Hash 只需要一步就可以找到对应的取值，算法复杂度为 O(1)，而数组检索数据的算法复杂度为 O(n)。</p>
+<h3 id="MySQL-中的-Hash-索引"><a href="#MySQL-中的-Hash-索引" class="headerlink" title="MySQL 中的 Hash 索引"></a>MySQL 中的 Hash 索引</h3><p>采用 Hash 进行检索效率非常高，基本上一次检索就可以找到数据，而 B+ 树需要自顶向下依次查找，多次访问节点才能找到数据，中间需要多次 I/O 操作，从效率来说 Hash 比 B+ 树更快。</p>
+<p>我们来看下 Hash 索引的示意图：</p>
+<p>键值 key 通过 Hash 映射找到桶 bucket。在这里桶（bucket）指的是一个能存储一条或多条记录的存储单位。一个桶的结构包含了一个内存指针数组，桶中的每行数据都会指向下一行，形成链表结构，当遇到 Hash 冲突时，会在桶中进行键值的查找。</p>
+<p>那么什么是 Hash 冲突呢？</p>
+<p>如果桶的空间小于输入的空间，不同的输入可能会映射到同一个桶中，这时就会产生 Hash 冲突，如果 Hash 冲突的量很大，就会影响读取的性能。</p>
+<p>通常 Hash 值的字节数比较少，简单的 4 个字节就够了。在 Hash 值相同的情况下，就会进一步比较桶（Bucket）中的键值，从而找到最终的数据行。</p>
+<p>Hash 值的字节数多的话可以是 16 位、32 位等，比如采用 MD5 函数就可以得到一个 16 位或者 32 位的数值，32 位的 MD5 已经足够安全，重复率非常低。</p>
+<p>我们模拟一下 Hash 索引。关键字如下所示，每个字母的内部编码为字母的序号，比如 A 为 01，Y 为 25。我们统计内部编码平方的第 8-11 位（从前向后）作为 Hash 值：</p>
+<h3 id="Hash-索引与-B-树索引的区别"><a href="#Hash-索引与-B-树索引的区别" class="headerlink" title="Hash 索引与 B+ 树索引的区别"></a>Hash 索引与 B+ 树索引的区别</h3><p>我们之前讲到过 B+ 树索引的结构，Hash 索引结构和 B+ 树的不同，因此在索引使用上也会有差别。</p>
+<p>Hash 索引不能进行范围查询，而 B+ 树可以。这是因为 Hash 索引指向的数据是无序的，而 B+ 树的叶子节点是个有序的链表。<br>Hash 索引不支持联合索引的最左侧原则（即联合索引的部分索引无法使用），而 B+ 树可以。对于联合索引来说，Hash 索引在计算 Hash 值的时候是将索引键合并后再一起计算 Hash 值，所以不会针对每个索引单独计算 Hash 值。因此如果用到联合索引的一个或者几个索引时，联合索引无法被利用。<br>Hash 索引不支持 ORDER BY 排序，因为 Hash 索引指向的数据是无序的，因此无法起到排序优化的作用，而 B+ 树索引数据是有序的，可以起到对该字段 ORDER BY 排序优化的作用。同理，我们也无法用 Hash 索引进行模糊查询，而 B+ 树使用 LIKE 进行模糊查询的时候，LIKE 后面前模糊查询（比如 % 开头）的话就可以起到优化作用。<br>对于等值查询来说，通常 Hash 索引的效率更高，不过也存在一种情况，就是索引列的重复值如果很多，效率就会降低。这是因为遇到 Hash 冲突时，需要遍历桶中的行指针来进行比较，找到查询的关键字，非常耗时。所以，Hash 索引通常不会用到重复值多的列上，比如列为性别、年龄的情况等。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>我今天讲了 Hash 索引的底层原理，你能看到 Hash 索引存在着很多限制，相比之下在数据库中 B+ 树索引的使用面会更广，不过也有一些场景采用 Hash 索引效率更高，比如在键值型（Key-Value）数据库中，Redis 存储的核心就是 Hash 表。</p>
+<p>另外 MySQL 中的 Memory 存储引擎支持 Hash 存储，如果我们需要用到查询的临时表时，就可以选择 Memory 存储引擎，把某个字段设置为 Hash 索引，比如字符串类型的字段，进行 Hash 计算之后长度可以缩短到几个字节。当字段的重复度低，而且经常需要进行等值查询的时候，采用 Hash 索引是个不错的选择。</p>
+<p>另外 MySQL 的 InnoDB 存储引擎还有个“自适应 Hash 索引”的功能，就是当某个索引值使用非常频繁的时候，它会在 B+ 树索引的基础上再创建一个 Hash 索引，这样让 B+ 树也具备了 Hash 索引的优点。</p>
 
-<h3 id="中文题目"><a href="#中文题目" class="headerlink" title="中文题目"></a>中文题目</h3><p>给定一个链表，两两交换其中相邻的节点，并返回交换后的链表。</p>
-<p>你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。</p>
-<p>示例:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">给定 1-&gt;2-&gt;3-&gt;4, 你应该返回 2-&gt;1-&gt;4-&gt;3.</span><br></pre></td></tr></table></figure>
-
-<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>给定一个链表，两两交换其中相邻的节点，并返回交换后的链表。</p>
-<p>示例:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">给定 1-&gt;2-&gt;3-&gt;4, 你应该返回 2-&gt;1-&gt;4-&gt;3.</span><br></pre></td></tr></table></figure>
-<p>说明:</p>
-<ul>
-<li>你的算法只能使用常数的额外空间。</li>
-<li>你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。</li>
-</ul>
-<p>解题思路:</p>
-<p>我们首先需要建立pre、node1、node2和lat四个指针即可。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pre   node1  node2   lat</span><br><span class="line"> h  -&gt;  1  -&gt;  2  -&gt;  3  -&gt;  4</span><br></pre></td></tr></table></figure>
-
-<p> 然后pre-&gt;next=node2;node2.next=node1;node1.next=lat</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">      -----------</span><br><span class="line">     |         |</span><br><span class="line">h    1 &lt;- 2 -&gt; 3 -&gt; 4</span><br><span class="line">|         |</span><br><span class="line">-----------</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2-&gt;1-&gt;4-&gt;3.</span><br></pre></td></tr></table></figure>
-
-<h3 id="图解"><a href="#图解" class="headerlink" title="图解"></a>图解</h3><p><img src="/2019/12/15/24.%20Swap%20Nodes%20in%20Pairs/24.webp" alt="jupyter"></p>
-<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ListNode</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, x)</span>:</span></span><br><span class="line">        self.val = x</span><br><span class="line">        self.next = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">createList</span><span class="params">()</span>:</span></span><br><span class="line">    head = ListNode(<span class="number">1</span>)</span><br><span class="line">    cur = head</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">2</span>, <span class="number">5</span>):</span><br><span class="line">        cur.next = ListNode(i)</span><br><span class="line">        cur = cur.next</span><br><span class="line">    <span class="keyword">return</span> head</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">printList</span><span class="params">(head)</span>:</span></span><br><span class="line">    cur = head</span><br><span class="line">    <span class="keyword">while</span> cur != <span class="literal">None</span>:</span><br><span class="line">        print(cur.val, <span class="string">'--&gt;'</span>, end=<span class="string">''</span>)</span><br><span class="line">        cur = cur.next</span><br><span class="line">    print(<span class="string">'NULL'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">swapPairs</span><span class="params">(self, head)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :type head: ListNode</span></span><br><span class="line"><span class="string">        :rtype: ListNode</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        h = ListNode(<span class="number">-1</span>)</span><br><span class="line">        h.next = head</span><br><span class="line">        pre = h</span><br><span class="line">        <span class="keyword">while</span> pre.next != <span class="literal">None</span> <span class="keyword">and</span> pre.next.next != <span class="literal">None</span>:</span><br><span class="line">            <span class="comment"># 定义node1， node2.所以要node1， node2.</span></span><br><span class="line">            node1 = pre.next</span><br><span class="line">            node2 = node1.next</span><br><span class="line">            lat = node2.next</span><br><span class="line">            <span class="comment">#变换顺序，重新赋值next，所以都是给next赋值。</span></span><br><span class="line">            pre.next = node2</span><br><span class="line">            node2.next = node1</span><br><span class="line">            node1.next = lat</span><br><span class="line"></span><br><span class="line">            pre = node1</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> h.next</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    head = createList()</span><br><span class="line">    printList(head)</span><br><span class="line">    res = Solution().swapPairs(head)</span><br><span class="line">    printList(res)</span><br></pre></td></tr></table></figure>
-
-<pre><code>1 --&gt;2 --&gt;3 --&gt;4 --&gt;NULL
-2 --&gt;1 --&gt;4 --&gt;3 --&gt;NULL</code></pre>
       
     </div>
     
@@ -410,7 +409,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/%E6%95%B0%E7%BB%84-%E9%93%BE%E8%A1%A8/" rel="tag"># 数组&链表</a>
+            <a href="/tags/sql/" rel="tag"># sql</a>
+          
+            <a href="/tags/%E6%9E%81%E5%AE%A2%E6%97%B6%E9%97%B4/" rel="tag"># 极客时间</a>
           
         </div>
       
@@ -423,8 +424,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/12/15/25.%20Reverse%20Nodes%20in%20k-Group/" rel="next" title="25. Reverse Nodes in k-Group">
-                <i class="fa fa-chevron-left"></i> 25. Reverse Nodes in k-Group
+              <a href="/2020/04/01/23%E4%B8%A8%E7%B4%A2%E5%BC%95%E7%9A%84%E6%A6%82%E8%A7%88%EF%BC%9A%E7%94%A8%E8%BF%98%E6%98%AF%E4%B8%8D%E7%94%A8%E7%B4%A2%E5%BC%95%EF%BC%8C%E8%BF%99%E6%98%AF%E4%B8%80%E4%B8%AA%E9%97%AE%E9%A2%98/" rel="next" title="23丨索引的概览：用还是不用索引，这是一个问题">
+                <i class="fa fa-chevron-left"></i> 23丨索引的概览：用还是不用索引，这是一个问题
               </a>
             
           </div>
@@ -432,10 +433,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/12/15/141.%20Linked%20List%20Cycle/" rel="prev" title="141. Linked List Cycle">
-                141. Linked List Cycle <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -574,7 +571,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#英文题目"><span class="nav-number">1.</span> <span class="nav-text">英文题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#中文题目"><span class="nav-number">2.</span> <span class="nav-text">中文题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#思路"><span class="nav-number">3.</span> <span class="nav-text">思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#图解"><span class="nav-number">4.</span> <span class="nav-text">图解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码"><span class="nav-number">5.</span> <span class="nav-text">代码</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#动手统计-Hash-检索效率"><span class="nav-number">1.</span> <span class="nav-text">动手统计 Hash 检索效率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL-中的-Hash-索引"><span class="nav-number">2.</span> <span class="nav-text">MySQL 中的 Hash 索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hash-索引与-B-树索引的区别"><span class="nav-number">3.</span> <span class="nav-text">Hash 索引与 B+ 树索引的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
 
           </div>

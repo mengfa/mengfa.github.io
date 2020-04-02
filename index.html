@@ -258,6 +258,189 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/01/25%E4%B8%A8Hash%E7%B4%A2%E5%BC%95%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/04/01/25%E4%B8%A8Hash%E7%B4%A2%E5%BC%95%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F/" itemprop="url">25丨Hash索引的底层原理是什么？</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-01T20:44:01+08:00">
+                2020-04-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" itemprop="url" rel="index">
+                    <span itemprop="name">SQL必知必会</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/04/01/25%E4%B8%A8Hash%E7%B4%A2%E5%BC%95%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/04/01/25%E4%B8%A8Hash%E7%B4%A2%E5%BC%95%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>我们上节课讲解了 B+ 树的原理，今天我们来学习下 Hash 的原理和使用。Hash 本身是一个函数，又被称为散列函数，它可以帮助我们大幅提升检索数据的效率。打个比方，Hash 就好像一个智能前台，你只要告诉它想要查找的人的姓名，它就会告诉你那个人坐在哪个位置，只需要一次交互就可以完成查找，效率非常高。大名鼎鼎的 MD5 就是 Hash 函数的一种。</p>
+<p>Hash 算法是通过某种确定性的算法（比如 MD5、SHA1、SHA2、SHA3）将输入转变为输出。相同的输入永远可以得到相同的输出，假设输入内容有微小偏差，在输出中通常会有不同的结果。如果你想要验证两个文件是否相同，那么你不需要把两份文件直接拿来比对，只需要让对方把 Hash 函数计算得到的结果告诉你即可，然后在本地同样对文件进行 Hash 函数的运算，最后通过比较这两个 Hash 函数的结果是否相同，就可以知道这两个文件是否相同。</p>
+<p>Hash 可以高效地帮我们完成验证的工作，它在数据库中有广泛的应用。今天的课程主要包括下面几个部分：</p>
+<ol>
+<li>动手写程序统计一下 Hash 检索的效率。</li>
+<li>了解 MySQL 中的 Hash 索引，理解使用它的优点和不足。</li>
+<li>Hash 索引和 B+ 树索引的区别以及使用场景。<h3 id="动手统计-Hash-检索效率"><a href="#动手统计-Hash-检索效率" class="headerlink" title="动手统计 Hash 检索效率"></a>动手统计 Hash 检索效率</h3>我们知道 Python 的数据结构中有数组和字典两种，其中数组检索数据类似于全表扫描，需要对整个数组的内容进行检索；而字典是由 Hash 表实现的，存储的是 key-value 值，对于数据检索来说效率非常快。</li>
+</ol>
+<p>对于 Hash 的检索效率，我们来个更直观的认知。下面我们分别看一下采用数组检索数据和采用字典（Hash）检索数据的效率到底有怎样的差别。</p>
+<p>实验 1：在数组中添加 10000 个元素，然后分别对这 10000 个元素进行检索，最后统计检索的时间。</p>
+<p>代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import time</span><br><span class="line"># 插入数据</span><br><span class="line">result = []</span><br><span class="line">for i in range(10000):</span><br><span class="line">       result.append(i)</span><br><span class="line"># 检索数据</span><br><span class="line">time_start=time.time()</span><br><span class="line">for i in range(10000):</span><br><span class="line">       temp = result.index(i)</span><br><span class="line">time_end=time.time()</span><br><span class="line">print(&apos;检索时间&apos;, time_end-time_start)</span><br></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<p>检索时间为 1.2436728477478027 秒</p>
+<p>实验 2：采用 Hash 表的形式存储数据，即在 Python 中采用字典方式添加 10000 个元素，然后检索这 10000 个数据，最后再统计一下时间。代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import time</span><br><span class="line"># 插入数据</span><br><span class="line">result = &#123;&#125;</span><br><span class="line">for i in range(1000000):</span><br><span class="line">       result[i] = i</span><br><span class="line"># 检索数据</span><br><span class="line">time_start=time.time()</span><br><span class="line">for i in range(10000):</span><br><span class="line">       temp = result[i]</span><br><span class="line">time_end=time.time()</span><br><span class="line">print(&apos;检索时间：&apos;,time_end-time_start)</span><br></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<p>检索时间为 0.0019941329956054688 秒。</p>
+<p>你能看到 Hash 方式检索差不多用了 2 毫秒的时间，检索效率提升得非常明显。这是因为 Hash 只需要一步就可以找到对应的取值，算法复杂度为 O(1)，而数组检索数据的算法复杂度为 O(n)。</p>
+<h3 id="MySQL-中的-Hash-索引"><a href="#MySQL-中的-Hash-索引" class="headerlink" title="MySQL 中的 Hash 索引"></a>MySQL 中的 Hash 索引</h3><p>采用 Hash 进行检索效率非常高，基本上一次检索就可以找到数据，而 B+ 树需要自顶向下依次查找，多次访问节点才能找到数据，中间需要多次 I/O 操作，从效率来说 Hash 比 B+ 树更快。</p>
+<p>我们来看下 Hash 索引的示意图：</p>
+<p>键值 key 通过 Hash 映射找到桶 bucket。在这里桶（bucket）指的是一个能存储一条或多条记录的存储单位。一个桶的结构包含了一个内存指针数组，桶中的每行数据都会指向下一行，形成链表结构，当遇到 Hash 冲突时，会在桶中进行键值的查找。</p>
+<p>那么什么是 Hash 冲突呢？</p>
+<p>如果桶的空间小于输入的空间，不同的输入可能会映射到同一个桶中，这时就会产生 Hash 冲突，如果 Hash 冲突的量很大，就会影响读取的性能。</p>
+<p>通常 Hash 值的字节数比较少，简单的 4 个字节就够了。在 Hash 值相同的情况下，就会进一步比较桶（Bucket）中的键值，从而找到最终的数据行。</p>
+<p>Hash 值的字节数多的话可以是 16 位、32 位等，比如采用 MD5 函数就可以得到一个 16 位或者 32 位的数值，32 位的 MD5 已经足够安全，重复率非常低。</p>
+<p>我们模拟一下 Hash 索引。关键字如下所示，每个字母的内部编码为字母的序号，比如 A 为 01，Y 为 25。我们统计内部编码平方的第 8-11 位（从前向后）作为 Hash 值：</p>
+<h3 id="Hash-索引与-B-树索引的区别"><a href="#Hash-索引与-B-树索引的区别" class="headerlink" title="Hash 索引与 B+ 树索引的区别"></a>Hash 索引与 B+ 树索引的区别</h3><p>我们之前讲到过 B+ 树索引的结构，Hash 索引结构和 B+ 树的不同，因此在索引使用上也会有差别。</p>
+<p>Hash 索引不能进行范围查询，而 B+ 树可以。这是因为 Hash 索引指向的数据是无序的，而 B+ 树的叶子节点是个有序的链表。<br>Hash 索引不支持联合索引的最左侧原则（即联合索引的部分索引无法使用），而 B+ 树可以。对于联合索引来说，Hash 索引在计算 Hash 值的时候是将索引键合并后再一起计算 Hash 值，所以不会针对每个索引单独计算 Hash 值。因此如果用到联合索引的一个或者几个索引时，联合索引无法被利用。<br>Hash 索引不支持 ORDER BY 排序，因为 Hash 索引指向的数据是无序的，因此无法起到排序优化的作用，而 B+ 树索引数据是有序的，可以起到对该字段 ORDER BY 排序优化的作用。同理，我们也无法用 Hash 索引进行模糊查询，而 B+ 树使用 LIKE 进行模糊查询的时候，LIKE 后面前模糊查询（比如 % 开头）的话就可以起到优化作用。<br>对于等值查询来说，通常 Hash 索引的效率更高，不过也存在一种情况，就是索引列的重复值如果很多，效率就会降低。这是因为遇到 Hash 冲突时，需要遍历桶中的行指针来进行比较，找到查询的关键字，非常耗时。所以，Hash 索引通常不会用到重复值多的列上，比如列为性别、年龄的情况等。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>我今天讲了 Hash 索引的底层原理，你能看到 Hash 索引存在着很多限制，相比之下在数据库中 B+ 树索引的使用面会更广，不过也有一些场景采用 Hash 索引效率更高，比如在键值型（Key-Value）数据库中，Redis 存储的核心就是 Hash 表。</p>
+<p>另外 MySQL 中的 Memory 存储引擎支持 Hash 存储，如果我们需要用到查询的临时表时，就可以选择 Memory 存储引擎，把某个字段设置为 Hash 索引，比如字符串类型的字段，进行 Hash 计算之后长度可以缩短到几个字节。当字段的重复度低，而且经常需要进行等值查询的时候，采用 Hash 索引是个不错的选择。</p>
+<p>另外 MySQL 的 InnoDB 存储引擎还有个“自适应 Hash 索引”的功能，就是当某个索引值使用非常频繁的时候，它会在 B+ 树索引的基础上再创建一个 Hash 索引，这样让 B+ 树也具备了 Hash 索引的优点。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/01/23%E4%B8%A8%E7%B4%A2%E5%BC%95%E7%9A%84%E6%A6%82%E8%A7%88%EF%BC%9A%E7%94%A8%E8%BF%98%E6%98%AF%E4%B8%8D%E7%94%A8%E7%B4%A2%E5%BC%95%EF%BC%8C%E8%BF%99%E6%98%AF%E4%B8%80%E4%B8%AA%E9%97%AE%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2201,236 +2384,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/27/15%E4%B8%A8%E5%88%9D%E8%AF%86%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%EF%BC%9A%E9%9A%94%E7%A6%BB%E7%9A%84%E7%BA%A7%E5%88%AB%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%8C%E5%AE%83%E4%BB%AC%E9%83%BD%E8%A7%A3%E5%86%B3%E4%BA%86%E5%93%AA%E4%BA%9B%E5%BC%82%E5%B8%B8%E9%97%AE%E9%A2%98%EF%BC%9F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LvYang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LvYang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/27/15%E4%B8%A8%E5%88%9D%E8%AF%86%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%EF%BC%9A%E9%9A%94%E7%A6%BB%E7%9A%84%E7%BA%A7%E5%88%AB%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%8C%E5%AE%83%E4%BB%AC%E9%83%BD%E8%A7%A3%E5%86%B3%E4%BA%86%E5%93%AA%E4%BA%9B%E5%BC%82%E5%B8%B8%E9%97%AE%E9%A2%98%EF%BC%9F/" itemprop="url">15丨初识事务隔离：隔离的级别有哪些，它们都解决了哪些异常问题？</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-27T19:39:01+08:00">
-                2020-03-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" itemprop="url" rel="index">
-                    <span itemprop="name">SQL必知必会</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/03/27/15%E4%B8%A8%E5%88%9D%E8%AF%86%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%EF%BC%9A%E9%9A%94%E7%A6%BB%E7%9A%84%E7%BA%A7%E5%88%AB%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%8C%E5%AE%83%E4%BB%AC%E9%83%BD%E8%A7%A3%E5%86%B3%E4%BA%86%E5%93%AA%E4%BA%9B%E5%BC%82%E5%B8%B8%E9%97%AE%E9%A2%98%EF%BC%9F/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/03/27/15%E4%B8%A8%E5%88%9D%E8%AF%86%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%EF%BC%9A%E9%9A%94%E7%A6%BB%E7%9A%84%E7%BA%A7%E5%88%AB%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%8C%E5%AE%83%E4%BB%AC%E9%83%BD%E8%A7%A3%E5%86%B3%E4%BA%86%E5%93%AA%E4%BA%9B%E5%BC%82%E5%B8%B8%E9%97%AE%E9%A2%98%EF%BC%9F/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>上一篇文章中，我们讲到了事务的四大特性 ACID，分别是原子性、一致性、隔离性和持久性，其中隔离性是事务的基本特性之一，它可以防止数据库在并发处理时出现数据不一致的情况。最严格的情况下，我们可以采用串行化的方式来执行每一个事务，这就意味着事务之间是相互独立的，不存在并发的情况。然而在实际生产环境下，考虑到随着用户量的增多，会存在大规模并发访问的情况，这就要求数据库有更高的吞吐能力，这个时候串行化的方式就无法满足数据库高并发访问的需求，我们还需要降低数据库的隔离标准，来换取事务之间的并发能力。</p>
-<p>有时候我们需要牺牲一定的正确性来换取效率的提升，也就是说，我们需要通过设置不同的隔离等级，以便在正确性和效率之间进行平衡。同时，随着 RDBMS 种类和应用场景的增多，数据库的设计者需要统一对数据库隔离级别进行定义，说明这些隔离标准都解决了哪些问题。</p>
-<p>我们今天主要讲解事务的异常以及隔离级别都有哪些，如果你已经对它们有所了解，可以跳过本次章节，当然你也可以通过今天的课程快速复习一遍：</p>
-<ol>
-<li>事务并发处理可能存在的三种异常有哪些？什么是脏读、不可重复读和幻读？</li>
-<li>针对可能存在的异常情况，四种事务隔离的级别分别是什么？</li>
-<li>如何使用 MySQL 客户端来模拟脏读、不可重复读和幻读？<h3 id="事务并发处理可能存在的异常都有哪些？"><a href="#事务并发处理可能存在的异常都有哪些？" class="headerlink" title="事务并发处理可能存在的异常都有哪些？"></a>事务并发处理可能存在的异常都有哪些？</h3>在了解数据库隔离级别之前，我们需要了解设定事务的隔离级别都要解决哪些可能存在的问题，也就是事务并发处理时会存在哪些异常情况。实际上，SQL-92 标准中已经对 3 种异常情况进行了定义，这些异常情况级别分别为脏读（Dirty Read）、不可重复读（Nnrepeatable Read）和幻读（Phantom Read）。</li>
-</ol>
-<p>脏读、不可重复读和幻读都代表了什么，我用一个例子来给你讲解下。比如说我们有个英雄表 heros_temp，如下所示：</p>
-<p>这张英雄表，我们会记录很多英雄的姓名，假设我们不对事务进行隔离操作，那么数据库在进行事务的并发处理时会出现怎样的情况？</p>
-<p>第一天，小张访问数据库，正在进行事务操作，往里面写入一个新的英雄“吕布”：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; BEGIN;</span><br><span class="line">SQL&gt; INSERT INTO heros_temp values(4, &apos;吕布&apos;);</span><br></pre></td></tr></table></figure>
-<p>当小张还没有提交该事务的时候，小李又对数据表进行了访问，他想看下这张英雄表里都有哪些英雄：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; SELECT * FROM heros_temp;</span><br></pre></td></tr></table></figure>
-<p>这时，小李看到的结果如下：</p>
-<p>你有没有发现什么异常？这个时候小张还没有提交事务，但是小李却读到了小张还没有提交的数据，这种现象我们称之为“脏读”。</p>
-<p>那么什么是不可重复读呢？</p>
-<p>第二天，小张想查看 id=1 的英雄是谁，于是他进行了 SQL 查询：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; SELECT name FROM heros_temp WHERE id = 1;</span><br></pre></td></tr></table></figure>
-<p>运行结果：</p>
-<p>然而此时，小李开始了一个事务操作，他对 id=1 的英雄姓名进行了修改，把原来的“张飞”改成了“张翼德”：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; BEGIN;</span><br><span class="line">SQL&gt; UPDATE heros_temp SET name = &apos;张翼德&apos; WHERE id = 1;</span><br></pre></td></tr></table></figure>
-<p>然后小张再一次进行查询，同样也是查看 id=1 的英雄是谁：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; SELECT name FROM heros_temp WHERE id = 1;</span><br></pre></td></tr></table></figure>
-<p>运行结果：</p>
-<p>这个时候你会发现，两次查询的结果并不一样。小张会想这是怎么回事呢？他明明刚执行了一次查询，马上又进行了一次查询，结果两次的查询结果不同。实际上小张遇到的情况我们称之为“不可重复读”，也就是同一条记录，两次读取的结果不同。</p>
-<p>什么是幻读？</p>
-<p>第三天，小张想要看下数据表里都有哪些英雄，他开始执行下面这条语句：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; SELECT * FROM heros_temp;</span><br></pre></td></tr></table></figure>
-<p>这时当小张执行完之后，小李又开始了一个事务，往数据库里插入一个新的英雄“吕布”：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; BEGIN;</span><br><span class="line">SQL&gt; INSERT INTO heros_temp values(4, &apos;吕布&apos;);</span><br></pre></td></tr></table></figure>
-<p>不巧的是，小张这时忘记了英雄都有哪些，又重新执行了一遍查询：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; SELECT * FROM heros_temp;</span><br></pre></td></tr></table></figure>
-<p>他发现这一次查询多了一个英雄，原来只有 3 个，现在变成了 4 个。这种异常情况我们称之为“幻读”。</p>
-<p>我来总结下这三种异常情况的特点：</p>
-<ol>
-<li>脏读：读到了其他事务还没有提交的数据。</li>
-<li>不可重复读：对某数据进行读取，发现两次读取的结果不同，也就是说没有读到相同的内容。这是因为有其他事务对这个数据同时进行了修改或删除。</li>
-<li>幻读：事务 A 根据条件查询得到了 N 条数据，但此时事务 B 更改或者增加了 M 条符合事务 A 查询条件的数据，这样当事务 A 再次进行查询的时候发现会有 N+M 条数据，产生了幻读。<h3 id="事务隔离的级别有哪些？"><a href="#事务隔离的级别有哪些？" class="headerlink" title="事务隔离的级别有哪些？"></a>事务隔离的级别有哪些？</h3>脏读、不可重复读和幻读这三种异常情况，是在 SQL-92 标准中定义的，同时 SQL-92 标准还定义了 4 种隔离级别来解决这些异常情况。</li>
-</ol>
-<p>解决异常数量从少到多的顺序（比如读未提交可能存在 3 种异常，可串行化则不会存在这些异常）决定了隔离级别的高低，这四种隔离级别从低到高分别是：读未提交（READ UNCOMMITTED ）、读已提交（READ COMMITTED）、可重复读（REPEATABLE READ）和可串行化（SERIALIZABLE）。这些隔离级别能解决的异常情况如下表所示：</p>
-<p>你能看到可串行化能避免所有的异常情况，而读未提交则允许异常情况发生。</p>
-<p>关于这四种级别，我来简单讲解下。</p>
-<p>读未提交，也就是允许读到未提交的数据，这种情况下查询是不会使用锁的，可能会产生脏读、不可重复读、幻读等情况。</p>
-<p>读已提交就是只能读到已经提交的内容，可以避免脏读的产生，属于 RDBMS 中常见的默认隔离级别（比如说 Oracle 和 SQL Server），但如果想要避免不可重复读或者幻读，就需要我们在 SQL 查询的时候编写带加锁的 SQL 语句（我会在进阶篇里讲加锁）。</p>
-<p>可重复读，保证一个事务在相同查询条件下两次查询得到的数据结果是一致的，可以避免不可重复读和脏读，但无法避免幻读。MySQL 默认的隔离级别就是可重复读。</p>
-<p>可串行化，将事务进行串行化，也就是在一个队列中按照顺序执行，可串行化是最高级别的隔离等级，可以解决事务读取中所有可能出现的异常情况，但是它牺牲了系统的并发性。</p>
-<h3 id="使用-MySQL-客户端来模拟三种异常"><a href="#使用-MySQL-客户端来模拟三种异常" class="headerlink" title="使用 MySQL 客户端来模拟三种异常"></a>使用 MySQL 客户端来模拟三种异常</h3><p>我在讲解这三种异常的时候举了一个英雄数据表查询的例子，你还可以自己写 SQL 来模拟一下这三种异常。</p>
-<p>首先我们需要一个英雄数据表 heros_temp，具体表结构和数据，你可以从GitHub上下载 heros_temp.sql 文件。</p>
-<p>你也可以执行下面的 SQL 文件，来完成 heros_temp 数据表的创建。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">-- ----------------------------</span><br><span class="line">-- Table structure for heros_temp</span><br><span class="line">-- ----------------------------</span><br><span class="line">DROP TABLE IF EXISTS `heros_temp`;</span><br><span class="line">CREATE TABLE `heros_temp`  (</span><br><span class="line">  `id` int(11) NOT NULL,</span><br><span class="line">  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,</span><br><span class="line">  PRIMARY KEY (`id`) USING BTREE</span><br><span class="line">) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;</span><br><span class="line"> </span><br><span class="line">-- ----------------------------</span><br><span class="line">-- Records of heros_temp</span><br><span class="line">-- ----------------------------</span><br><span class="line">INSERT INTO `heros_temp` VALUES (1, &apos;张飞&apos;);</span><br><span class="line">INSERT INTO `heros_temp` VALUES (2, &apos;关羽&apos;);</span><br><span class="line">INSERT INTO `heros_temp` VALUES (3, &apos;刘备&apos;);</span><br></pre></td></tr></table></figure>
-<p>模拟的时候我们需要开两个 MySQL 客户端，分别是客户端 1 和客户端 2。</p>
-<p>在客户端 1 中，我们先来查看下当前会话的隔离级别，使用命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SHOW VARIABLES LIKE &apos;transaction_isolation&apos;;</span><br></pre></td></tr></table></figure>
-<p>然后你能看到当前的隔离级别是 REPEATABLE-READ，也就是可重复读。</p>
-<p>现在我们把隔离级别降到最低，设置为 READ UNCOMMITTED（读未提交）。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;</span><br></pre></td></tr></table></figure>
-<p>然后再查看下当前会话（SESSION）下的隔离级别，结果如下：</p>
-<p>因为 MySQL 默认是事务自动提交，这里我们还需要将 autocommit 参数设置为 0，命令如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SET autocommit = 0;</span><br></pre></td></tr></table></figure>
-<p>然后我们再来查看 SESSION 中的 autocommit 取值，结果如下：</p>
-<p>接着我们以同样的操作启动客户端 2，也就是将隔离级别设置为 READ UNCOMMITTED（读未提交），autocommit 设置为 0。</p>
-<p>模拟“脏读”<br>我们在客户端 2 中开启一个事务，在 heros_temp 表中写入一个新的英雄“吕布”，注意这个时候不要提交。</p>
-<p>然后我们在客户端 1 中，查看当前的英雄表：</p>
-<p>你能发现客户端 1 中读取了客户端 2 未提交的新英雄“吕布”，实际上客户端 2 可能马上回滚，从而造成了“脏读”。</p>
-<h3 id="模拟“不可重复读”"><a href="#模拟“不可重复读”" class="headerlink" title="模拟“不可重复读”"></a>模拟“不可重复读”</h3><p>我们用客户端 1 来查看 id=1 的英雄：</p>
-<p>然后用客户端 2 对 id=1 的英雄姓名进行修改：</p>
-<p>这时用客户端 1 再次进行查询：</p>
-<p>你能发现对于客户端 1 来说，同一条查询语句出现了“不可重复读”。</p>
-<h3 id="模拟“幻读”"><a href="#模拟“幻读”" class="headerlink" title="模拟“幻读”"></a>模拟“幻读”</h3><p>我们先用客户端 1 查询数据表中的所有英雄：</p>
-<p>然后用客户端 2，开始插入新的英雄“吕布”：</p>
-<p>这时，我们再用客户端 1 重新进行查看：</p>
-<p>你会发现数据表多出一条数据。</p>
-<p>如果你是初学者，那么你可以采用 heros_temp 数据表简单模拟一下以上的过程，加深对脏读、不可重复读以及幻读的理解。对应的，你也会更了解不同的隔离级别解决的异常问题。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>我们今天只是简单讲解了 4 种隔离级别，以及对应的要解决的三种异常问题。我会在优化篇这一模块里继续讲解隔离级别以及锁的使用。</p>
-<p>你能看到，标准的价值在于，即使是不同的 RDBMS 都需要达成对异常问题和隔离级别定义的共识。这就意味着一个隔离级别的实现满足了下面的两个条件：</p>
-<p>正确性：只要能满足某一个隔离级别，一定能解决这个隔离级别对应的异常问题。<br>与实现无关：实际上 RDBMS 种类很多，这就意味着有多少种 RDBMS，就有多少种锁的实现方式，因此它们实现隔离级别的原理可能不同，然而一个好的标准不应该限制其实现的方式。<br>隔离级别越低，意味着系统吞吐量（并发程度）越大，但同时也意味着出现异常问题的可能性会更大。在实际使用过程中我们往往需要在性能和正确性上进行权衡和取舍，没有完美的解决方案，只有适合与否。</p>
-<p>今天的内容到这里就结束了，你能思考一下为什么隔离级别越高，就越影响系统的并发性能吗？以及不可重复读和幻读的区别是什么？</p>
-<p>欢迎你在评论区写下你的思考，也欢迎把这篇文章分享给你的朋友或者同事。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2481,7 +2434,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">63</span>
+                  <span class="site-state-item-count">64</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
