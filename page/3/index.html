@@ -258,6 +258,234 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/25/09%E4%B8%A8%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%9A%E5%AD%90%E6%9F%A5%E8%AF%A2%E7%9A%84%E7%A7%8D%E7%B1%BB%E9%83%BD%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%8C%E5%A6%82%E4%BD%95%E6%8F%90%E9%AB%98%E5%AD%90%E6%9F%A5%E8%AF%A2%E7%9A%84%E6%80%A7%E8%83%BD%EF%BC%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/25/09%E4%B8%A8%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%9A%E5%AD%90%E6%9F%A5%E8%AF%A2%E7%9A%84%E7%A7%8D%E7%B1%BB%E9%83%BD%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%8C%E5%A6%82%E4%BD%95%E6%8F%90%E9%AB%98%E5%AD%90%E6%9F%A5%E8%AF%A2%E7%9A%84%E6%80%A7%E8%83%BD%EF%BC%9F/" itemprop="url">09丨子查询：子查询的种类都有哪些，如何提高子查询的性能？</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-25T20:22:07+08:00">
+                2020-03-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" itemprop="url" rel="index">
+                    <span itemprop="name">SQL必知必会</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/25/09%E4%B8%A8%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%9A%E5%AD%90%E6%9F%A5%E8%AF%A2%E7%9A%84%E7%A7%8D%E7%B1%BB%E9%83%BD%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%8C%E5%A6%82%E4%BD%95%E6%8F%90%E9%AB%98%E5%AD%90%E6%9F%A5%E8%AF%A2%E7%9A%84%E6%80%A7%E8%83%BD%EF%BC%9F/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/03/25/09%E4%B8%A8%E5%AD%90%E6%9F%A5%E8%AF%A2%EF%BC%9A%E5%AD%90%E6%9F%A5%E8%AF%A2%E7%9A%84%E7%A7%8D%E7%B1%BB%E9%83%BD%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%8C%E5%A6%82%E4%BD%95%E6%8F%90%E9%AB%98%E5%AD%90%E6%9F%A5%E8%AF%A2%E7%9A%84%E6%80%A7%E8%83%BD%EF%BC%9F/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>上节课我讲到了聚集函数，以及如何对数据进行分组统计，可以说我们之前讲的内容都是围绕单个表的 SELECT 查询展开的，实际上 SQL 还允许我们进行子查询，也就是嵌套在查询中的查询。这样做的好处是可以让我们进行更复杂的查询，同时更加容易理解查询的过程。因为很多时候，我们无法直接从数据表中得到查询结果，需要从查询结果集中再次进行查询，才能得到想要的结果。这个“查询结果集”就是今天我们要讲的子查询。</p>
+<p>通过今天的文章，我希望你可以掌握以下的内容：</p>
+<ol>
+<li>子查询可以分为关联子查询和非关联子查询。我会举一个 NBA 数据库查询的例子，告诉你什么是关联子查询，什么是非关联子查询；</li>
+<li>子查询中有一些关键词，可以方便我们对子查询的结果进行比较。比如存在性检测子查询，也就是 EXISTS 子查询，以及集合比较子查询，其中集合比较子查询关键词有 IN、SOME、 ANY 和 ALL，这些关键词在子查询中的作用是什么；</li>
+<li>子查询也可以作为主查询的列，我们如何使用子查询作为计算字段出现在 SELECT 查询中呢？<h3 id="什么是关联子查询，什么是非关联子查询"><a href="#什么是关联子查询，什么是非关联子查询" class="headerlink" title="什么是关联子查询，什么是非关联子查询"></a>什么是关联子查询，什么是非关联子查询</h3>子查询虽然是一种嵌套查询的形式，不过我们依然可以依据子查询是否执行多次，从而将子查询划分为关联子查询和非关联子查询。</li>
+</ol>
+<p>子查询从数据表中查询了数据结果，如果这个数据结果只执行一次，然后这个数据结果作为主查询的条件进行执行，那么这样的子查询叫做非关联子查询。</p>
+<p>同样，如果子查询需要执行多次，即采用循环的方式，先从外部查询开始，每次都传入子查询进行查询，然后再将结果反馈给外部，这种嵌套的执行方式就称为关联子查询。</p>
+<p>单说概念有点抽象，我们用数据表举例说明一下。这里我创建了 NBA 球员数据库，SQL 文件你可以从GitHub上下载。</p>
+<p>文件中一共包括了 5 张表，player 表为球员表，team 为球队表，team_score 为球队比赛表，player_score 为球员比赛成绩表，height_grades 为球员身高对应的等级表。</p>
+<p>其中 player 表，也就是球员表，一共有 37 个球员，如下所示:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">player_id team_id player_name height</span><br><span class="line">10001	1001	韦恩-艾灵顿	1.93</span><br><span class="line">10002	1001	雷吉-杰克逊	1.91</span><br><span class="line">10003	1001	安德烈-德拉蒙德	2.11</span><br><span class="line">10004	1001	索恩-马克	2.16</span><br><span class="line">10005	1001	布鲁斯-布朗	1.96</span><br><span class="line">10006	1001	兰斯顿-加洛韦	1.88</span><br><span class="line">10007	1001	格伦-罗宾逊三世	1.98</span><br></pre></td></tr></table></figure>
+
+
+<p>team 表为球队表，一共有 3 支球队，如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">team_id. team_name</span><br><span class="line">1001	底特律活塞</span><br><span class="line">1002	印第安纳步行者</span><br><span class="line">1003	亚特兰大老鹰</span><br></pre></td></tr></table></figure>
+<p>team_score 表为球队比赛成绩表，一共记录了两场比赛的成绩，如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">game_id h_team_id v_team_id h_team_score v_team_score game_date</span><br><span class="line">10001	   1001	    1002	   102	      111	     2019-04-01</span><br><span class="line">10002	   1002	    1003	   135	      134	     2019-04-10</span><br></pre></td></tr></table></figure>
+<p>player_score 表为球员比赛成绩表，记录了一场比赛中球员的表现。这张表一共包括 19 个字段，代表的含义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">game_id player_id is_first playing_time </span><br><span class="line">10001	  10001	      1	    38	4	1	3	2	26	0	1	0	3	19	10	13	4	4	2</span><br><span class="line"></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+
+<p>其中 shoot_attempts 代表总出手的次数，它等于二分球出手和三分球出手次数的总和。比如 2019 年 4 月 1 日，韦恩·艾灵顿在底特律活塞和印第安纳步行者的比赛中，总出手次数为 19，总命中 10，三分球 13 投 4 中，罚球 4 罚 2 中，因此总分 score=(10-4)×2+4×3+2=26，也就是二分球得分 12+ 三分球得分 12+ 罚球得分 2=26。</p>
+<p>需要说明的是，通常在工作中，数据表的字段比较多，一开始创建的时候会知道每个字段的定义，过了一段时间再回过头来看，对当初的定义就不那么确定了，容易混淆字段，解决这一问题最好的方式就是做个说明文档，用实例举例。</p>
+<p>比如 shoot_attempts 是总出手次数（这里的总出手次数 = 二分球出手次数 + 三分球出手次数，不包括罚球的次数），用上面提到的韦恩·艾灵顿的例子做补充说明，再回过头来看这张表的时候，就可以很容易理解每个字段的定义了。</p>
+<p>我们以 NBA 球员数据表为例，假设我们想要知道哪个球员的身高最高，最高身高是多少，就可以采用子查询的方式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL: SELECT player_name, height FROM player WHERE height = (SELECT max(height) FROM player)</span><br></pre></td></tr></table></figure>
+<p>运行结果：（1 条记录）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">索恩-马克	2.16</span><br></pre></td></tr></table></figure>
+<p>你能看到，通过SELECT max(height) FROM player可以得到最高身高这个数值，结果为 2.16，然后我们再通过 player 这个表，看谁具有这个身高，再进行输出，这样的子查询就是非关联子查询。</p>
+<p>如果子查询的执行依赖于外部查询，通常情况下都是因为子查询中的表用到了外部的表，并进行了条件关联，因此每执行一次外部查询，子查询都要重新计算一次，这样的子查询就称之为关联子查询。比如我们想要查找每个球队中大于平均身高的球员有哪些，并显示他们的球员姓名、身高以及所在球队 ID。</p>
+<p>首先我们需要统计球队的平均身高，即SELECT avg(height) FROM player AS b WHERE a.team_id = b.team_id，然后筛选身高大于这个数值的球员姓名、身高和球队 ID，即：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT player_name, height, team_id FROM player AS a WHERE height &gt; (SELECT avg(height) FROM player AS b WHERE a.team_id = b.team_id)</span><br></pre></td></tr></table></figure>
+<p>运行结果：（18 条记录）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">player_name     height   team_id</span><br><span class="line">安德烈-德拉蒙德	2.11	1001</span><br><span class="line">索恩-马克	2.16	1001</span><br><span class="line">扎扎-帕楚里亚	2.11	1001</span><br><span class="line">乔恩-洛伊尔	2.08	1001</span><br><span class="line">布雷克-格里芬	2.08	1001</span><br><span class="line">雷吉-巴洛克	2.01	1001</span><br><span class="line">斯坦利-约翰逊	2.01	1001</span><br><span class="line">亨利-埃伦森	2.11	1001</span><br><span class="line">斯维亚托斯拉夫-米凯卢克	2.03	1001</span><br><span class="line">博扬-博格达诺维奇	2.03	1002</span><br></pre></td></tr></table></figure>
+<h3 id="EXISTS-子查询"><a href="#EXISTS-子查询" class="headerlink" title="EXISTS 子查询"></a>EXISTS 子查询</h3><p>关联子查询通常也会和 EXISTS 一起来使用，EXISTS 子查询用来判断条件是否满足，满足的话为 True，不满足为 False。</p>
+<p>比如我们想要看出场过的球员都有哪些，并且显示他们的姓名、球员 ID 和球队 ID。在这个统计中，是否出场是通过 player_score 这张表中的球员出场表现来统计的，如果某个球员在 player_score 中有出场记录则代表他出场过，这里就使用到了 EXISTS 子查询，即EXISTS (SELECT player_id FROM player_score WHERE player.player_id = player_score.player_id)，然后将它作为筛选的条件，实际上也是关联子查询，即：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">SQL：SELECT player_id, team_id, player_name FROM player WHERE EXISTS (SELECT player_id FROM player_score WHERE player.player_id = player_score.player_id)</span><br></pre></td></tr></table></figure>
+<p>运行结果：（19 条记录）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">player_id team_id  player_name</span><br><span class="line">10001	1001	韦恩-艾灵顿</span><br><span class="line">10002	1001	雷吉-杰克逊</span><br><span class="line">10003	1001	安德烈-德拉蒙德</span><br><span class="line">10004	1001	索恩-马克</span><br><span class="line">10005	1001	布鲁斯-布朗</span><br><span class="line">10006	1001	兰斯顿-加洛韦</span><br><span class="line">10007	1001	格伦-罗宾逊三世</span><br><span class="line">10008	1001	伊斯梅尔-史密斯</span><br><span class="line">10009	1001	扎扎-帕楚里亚</span><br><span class="line">10010	1001	乔恩-洛伊尔</span><br></pre></td></tr></table></figure>
+<p>同样，NOT EXISTS 就是不存在的意思，我们也可以通过 NOT EXISTS 查询不存在于 player_score 表中的球员信息，比如主表中的 player_id 不在子表 player_score 中，判断语句为NOT EXISTS (SELECT player_id FROM player_score WHERE player.player_id = player_score.player_id)。整体的 SQL 语句为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL: SELECT player_id, team_id, player_name FROM player WHERE NOT EXISTS (SELECT player_id FROM player_score WHERE player.player_id = player_score.player_id)</span><br></pre></td></tr></table></figure>
+
+<h3 id="集合比较子查询"><a href="#集合比较子查询" class="headerlink" title="集合比较子查询"></a>集合比较子查询</h3><p>集合比较子查询的作用是与另一个查询结果集进行比较，我们可以在子查询中使用 IN、ANY、ALL 和 SOME 操作符，它们的含义和英文意义一样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">IN  判断是否在集合中</span><br><span class="line">ANY 需要与比较操作符一起使用,与子查询返回的任何值做比较</span><br><span class="line">ALL 需要与比较操作符一起使用,与子查询返回的所有值做比较</span><br><span class="line">SOME 实际上是ANY的别名,作用相同,一般使用ANY</span><br></pre></td></tr></table></figure>
+
+<p>还是通过上面那个例子，假设我们想要看出场过的球员都有哪些，可以采用 IN 子查询来进行操作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT player_id, team_id, player_name FROM player WHERE player_id in (SELECT player_id FROM player_score WHERE player.player_id = player_score.player_id)</span><br></pre></td></tr></table></figure>
+<p>你会发现运行结果和上面的是一样的，那么问题来了，既然 IN 和 EXISTS 都可以得到相同的结果，那么我们该使用 IN 还是 EXISTS 呢？</p>
+<p>我们可以把这个模式抽象为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM A WHERE cc IN (SELECT cc FROM B)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM A WHERE EXIST (SELECT cc FROM B WHERE B.cc=A.cc)</span><br></pre></td></tr></table></figure>
+<p>实际上在查询过程中，在我们对 cc 列建立索引的情况下，我们还需要判断表 A 和表 B 的大小。在这里例子当中，表 A 指的是 player 表，表 B 指的是 player_score 表。如果表 A 比表 B 大，那么 IN 子查询的效率要比 EXIST 子查询效率高，因为这时 B 表中如果对 cc 列进行了索引，那么 IN 子查询的效率就会比较高。</p>
+<p>同样，如果表 A 比表 B 小，那么使用 EXISTS 子查询效率会更高，因为我们可以使用到 A 表中对 cc 列的索引，而不用从 B 中进行 cc 列的查询。</p>
+<p>了解了 IN 查询后，我们来看下 ANY 和 ALL 子查询。刚才讲到了 ANY 和 ALL 都需要使用比较符，比较符包括了（&gt;）（=）（&lt;）（&gt;=）（&lt;=）和（&lt;&gt;）等。</p>
+<p>如果我们想要查询球员表中，比印第安纳步行者（对应的 team_id 为 1002）中任何一个球员身高高的球员的信息，并且输出他们的球员 ID、球员姓名和球员身高，该怎么写呢？首先我们需要找出所有印第安纳步行者队中的球员身高，即SELECT height FROM player WHERE team_id = 1002，然后使用 ANY 子查询即：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL: SELECT player_id, player_name, height FROM player WHERE height &gt; ANY (SELECT height FROM player WHERE team_id = 1002)</span><br></pre></td></tr></table></figure>
+
+<p>运行结果为 35 条，你发现有 2 个人的身高是不如印第安纳步行者的所有球员的。</p>
+<p>同样，如果我们想要知道比印第安纳步行者（对应的 team_id 为 1002）中所有球员身高都高的球员的信息，并且输出球员 ID、球员姓名和球员身高，该怎么写呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL: SELECT player_id, player_name, height FROM player WHERE height &gt; ALL (SELECT height FROM player WHERE team_id = 1002)</span><br></pre></td></tr></table></figure>
+
+<p>我们能看到比印第安纳步行者所有球员都高的球员，在 player 这张表（一共 37 个球员）中只有索恩·马克。</p>
+<p>需要强调的是 ANY、ALL 关键字必须与一个比较操作符一起使用。因为如果你不使用比较操作符，就起不到集合比较的作用，那么使用 ANY 和 ALL 就没有任何意义。</p>
+<h3 id="将子查询作为计算字段"><a href="#将子查询作为计算字段" class="headerlink" title="将子查询作为计算字段"></a>将子查询作为计算字段</h3><p>我刚才讲了子查询的几种用法，实际上子查询也可以作为主查询的计算字段。比如我想查询每个球队的球员数，也就是对应 team 这张表，我需要查询相同的 team_id 在 player 这张表中所有的球员数量是多少。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL: SELECT team_name, (SELECT count(*) FROM player WHERE player.team_id = team.team_id) AS player_num FROM team</span><br></pre></td></tr></table></figure>
+
+<p>你能看到，在 player 表中只有底特律活塞和印第安纳步行者的球员数据，所以它们的 player_num 不为 0，而亚特兰大老鹰的 player_num 等于 0。在查询的时候，我将子查询SELECT count(*) FROM player WHERE player.team_id = team.team_id作为了计算字段，通常我们需要给这个计算字段起一个别名，这里我用的是 player_num，因为子查询的语句比较长，使用别名更容易理解。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>今天我讲解了子查询的使用，按照子查询执行的次数，我们可以将子查询分成关联子查询和非关联子查询，其中非关联子查询与主查询的执行无关，只需要执行一次即可，而关联子查询，则需要将主查询的字段值传入子查询中进行关联查询。</p>
+<p>同时，在子查询中你可能会使用到 EXISTS、IN、ANY、ALL 和 SOME 等关键字。在某些情况下使用 EXISTS 和 IN 可以得到相同的效果，具体使用哪个执行效率更高，则需要看字段的索引情况以及表 A 和表 B 哪个表更大。同样，IN、ANY、ALL、SOME 这些关键字是用于集合比较的，SOME 是 ANY 的别名，当我们使用 ANY 或 ALL 的时候，一定要使用比较操作符。</p>
+<p>最后，我讲解了如何使用子查询作为计算字段，把子查询的结果作为主查询的列。</p>
+<p>SQL 中，子查询的使用大大增强了 SELECT 查询的能力，因为很多时候查询需要从结果集中获取数据，或者需要从同一个表中先计算得出一个数据结果，然后与这个数据结果（可能是某个标量，也可能是某个集合）进行比较。</p>
+<p>我今天讲解了子查询的使用，其中讲到了 EXISTS 和 IN 子查询效率的比较，当查询字段进行了索引时，主表 A 大于从表 B，使用 IN 子查询效率更高，相反主表 A 小于从表 B 时，使用 EXISTS 子查询效率更高，同样，如果使用 NOT IN 子查询和 NOT EXISTS 子查询，在什么情况下，哪个效率更高呢？</p>
+<p>最后请你使用子查询，编写 SQL 语句，得到场均得分大于 20 的球员。场均得分从 player_score 表中获取，同时你需要输出球员的 ID、球员姓名以及所在球队的 ID 信息。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT t1.player_id, t1.player_name,t1.team_id FROM player t1 WHERE t1.player_id IN ( SELECT t2.player_id FROM player_score t2 GROUP BY t2.player_id HAVING ( AVG( t2.score ) &gt; 20 ))</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">10001	韦恩-艾灵顿	1001</span><br><span class="line">10002	雷吉-杰克逊	1001</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/24/08%E4%B8%A8%E4%BB%80%E4%B9%88%E6%98%AFSQL%E7%9A%84%E8%81%9A%E9%9B%86%E5%87%BD%E6%95%B0%EF%BC%8C%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8%E5%AE%83%E4%BB%AC%E6%B1%87%E6%80%BB%E8%A1%A8%E7%9A%84%E6%95%B0%E6%8D%AE%EF%BC%9F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2279,221 +2507,6 @@ SyntaxError: invalid syntax</code></pre><p>这里我定义了 heros 数据表，
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/09/38%20%7C%20MySQL%EF%BC%9A%E6%97%A5%E5%BF%97%E5%92%8C%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LvYang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LvYang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/09/38%20%7C%20MySQL%EF%BC%9A%E6%97%A5%E5%BF%97%E5%92%8C%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9F/" itemprop="url">38 | MySQL：日志和数据存储系统</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-09T20:10:07+08:00">
-                2020-01-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
-                    <span itemprop="name">python核心技术与实战</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/01/09/38%20%7C%20MySQL%EF%BC%9A%E6%97%A5%E5%BF%97%E5%92%8C%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9F/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/01/09/38%20%7C%20MySQL%EF%BC%9A%E6%97%A5%E5%BF%97%E5%92%8C%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9F/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>于简单的、小规模的数据，例如 orderbook 信息，我们完全可以把数据存在 txt、csv 文件中，这样做简单高效。不过，缺点是，随着数据量上升，一个文件将会变得非常大，检索起来也不容易。这时，一个很直观的方式出现了，我们可以把每天的数据存在一个文件中，这样就暂时缓解了尴尬。</p>
-<p>但是，随着数据量的上升，或者是你的算法逐渐来到高频交易领域时，简单地把数据存在文件上，已经不足以满足新的需求，更无法应对分布式量化交易系统的需求。于是，一个显而易见的想法就是，我们可以把日志存在数据库系统中。</p>
-<p>这节课，我们就以 MySQL 这种传统型关系数据库为例，讲解一下数据库在日志中的运用。</p>
-<p>快速理解 MySQL<br>担心一些同学没有数据库的基础，我先来简单介绍一下 MySQL 数据库。</p>
-<p>MySQL 属于典型的关系型数据库（RDBMS），所谓的关系型数据库，就是指建立在关系模型基础上的数据库，借助于集合代数等数学概念和方法，来处理数据库中的数据。基本上任何学习资料都会告诉你，它有着下面这几个特征：</p>
-<p>数据是以表格的形式出现的；<br>每一行是各种记录名称；<br>每一列是记录名称所对应的数据域；<br>许多的行和列，组成一张表单；<br>若干的表单，组成数据库（database）这个整体。<br>不过，抛开这些抽象的特征不谈，你首先需要掌握的，是下面这些术语的概念。</p>
-<p>数据库，是一些关联表的集合；而数据表则是数据的矩阵。在一个数据库中，数据表看起来就像是一个简单的电子表格。<br>在数据表中，每一列包含的是相同类型的数据；每一行则是一组相关的数据。<br>主键也是数据表中的一个列，只不过，这一列的每行元素都是唯一的，且一个数据表中只能包含一个主键；而外键则用于关联两个表。<br>除此之外，你还需要了解索引。索引是对数据库表中一列或多列的值进行排序的一种结构。使用索引，我们可以快速访问数据库表中的特定信息。一般来说，你可以对很多列设置索引，这样在检索指定列的时候，就大大加快了速度，当然，代价是插入数据会变得更慢。</p>
-<p>至于操作 MySQL，一般用的是结构化查询语言 SQL。SQL 是一种典型的领域专用语言（domain-specific language，简称 DSL），这里我就不做过多介绍了，如果你感兴趣，可以学习极客时间平台上的“SQL 必知必会”专栏。</p>
-<p>接下来，我们就来简单看一下，如何使用 Python 来操作 MySQL 数据库。</p>
-<p>Python 连接数据库的方式有好多种，这里我简单介绍其中两种。我们以 Ubuntu 为例，假设你的系统中已经安装过 MySQL Server。（安装 MySQL 可以参考这篇文章 <a href="https://www.jianshu.com/p/3111290b87f4，或者你可以自行搜索解决）" target="_blank" rel="noopener">https://www.jianshu.com/p/3111290b87f4，或者你可以自行搜索解决）</a></p>
-<h3 id="mysqlclient"><a href="#mysqlclient" class="headerlink" title="mysqlclient"></a>mysqlclient</h3><p>事实上， Python 连接 MySQL 最流行的一个驱动是 MySQL-python，又叫 MySQLdb，很多框架都也是基于此库进行开发。不过，遗憾的是，它只支持 Python2.x，而且安装的时候有很多前置条件。因为它是基于 C 开发的库，在 Windows 平台安装非常不友好，经常出现失败的情况。所以，现在我们基本不再推荐使用，取代者是它的衍生版本——mysqlclient。</p>
-<p>mysqlclient 完全兼容 MySQLdb，同时支持 Python3.x，是 Django ORM 的依赖工具。如果你想使用原生 SQL 来操作数据库，那么我优先推荐使用这个框架。</p>
-<p>它的安装方式很简单：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install python3-dev</span><br><span class="line">pip install mysqlclient</span><br></pre></td></tr></table></figure>
-
-<p>我们来看一个样例代码：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> MySQLdb</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_pymysql</span><span class="params">()</span>:</span></span><br><span class="line">    conn = MySQLdb.connect(</span><br><span class="line">        host=<span class="string">'localhost'</span>,</span><br><span class="line">        port=<span class="number">3306</span>,</span><br><span class="line">        user=<span class="string">'your_username'</span>,</span><br><span class="line">        passwd=your_password’,</span><br><span class="line">        db=<span class="string">'mysql'</span></span><br><span class="line">    )</span><br><span class="line"> </span><br><span class="line">    cur = conn.cursor()</span><br><span class="line">    cur.execute(<span class="string">'''</span></span><br><span class="line"><span class="string">            CREATE TABLE price (</span></span><br><span class="line"><span class="string">                timestamp TIMESTAMP NOT NULL,</span></span><br><span class="line"><span class="string">                BTCUSD FLOAT(8,2),</span></span><br><span class="line"><span class="string">                PRIMARY KEY (timestamp)</span></span><br><span class="line"><span class="string">            );</span></span><br><span class="line"><span class="string">        '''</span>)</span><br><span class="line">    cur.execute(<span class="string">'''</span></span><br><span class="line"><span class="string">            INSERT INTO price VALUES(</span></span><br><span class="line"><span class="string">                "2019-07-14 14:12:17",</span></span><br><span class="line"><span class="string">                11234.56</span></span><br><span class="line"><span class="string">            );</span></span><br><span class="line"><span class="string">        '''</span>)</span><br><span class="line"> </span><br><span class="line">    conn.commit()</span><br><span class="line">    conn.close()</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">test_pymy</span><br></pre></td></tr></table></figure>
-
-<p>代码的思路很清晰明了，首先是通过 connect 命令连接数据库，来创建一个连接；之后，通过 conn.cursor() 函数创建一个游标。这里你可能会问，为什么要使用游标呢？</p>
-<p>一个主要的原因就是，这样可以把集合操作转换成单个记录处理的方式。如果用 SQL 语言从数据库中检索数据，结果会放在内存的一块区域中，并且这个结果往往是一个含有多个记录的集合。而游标机制，则允许用户在 MySQL 内逐行地访问这些记录，这样你就可以按照自己的意愿，来显示和处理这些记录。</p>
-<p>继续回到代码中，再往下走，我们创建了一个 price table，同时向里面插入一条 orderbook 数据。这里为了简化代码突出重点，我只保留了 timestamp 和 price。</p>
-<p>最后，我们使用 conn.commit() 来提交更改，然后 close() 掉连接就可以了。</p>
-<h3 id="peewee"><a href="#peewee" class="headerlink" title="peewee"></a>peewee</h3><p>不过，大家逐渐发现，写原生的 SQL 命令很麻烦。因为你需要根据特定的业务逻辑，来构造特定的插入和查询语句，这样可以说就完全抛弃了面向对象的思维。因此，又诞生了很多封装 wrapper 包和 ORM 框架。</p>
-<p>这里所说的 ORM（Object Relational Mapping，简称 ORM） ，是 Python 对象与数据库关系表的一种映射关系，有了 ORM 后，我们就不再需要写 SQL 语句，而可以直接使用 Python 的数据结构了。</p>
-<p>ORM 框架的优点，是提高了写代码的速度，同时兼容多种数据库系统，如 SQLite、MySQL、PostgreSQL 等这些数据库；而付出的代价，可能就是性能上的一些损失。</p>
-<p>接下来要讲的 peewee，正是其中一种基于 Python 的 ORM 框架，它的学习成本非常低，可以说是 Python 中最流行的 ORM 框架。</p>
-<p>它的安装方式也很简单：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install peewee</span><br></pre></td></tr></table></figure>
-
-<p>我们来看一个样例代码：</p>
-<p>import peewee<br>from peewee import *</p>
-<p>db = MySQLDatabase(‘mysql’, user=’your_username’, passwd=your_password’)</p>
-<p>class Price(peewee.Model):<br>    timestamp = peewee.DateTimeField(primary_key=True)<br>    BTCUSD = peewee.FloatField()</p>
-<pre><code>class Meta:
-    database = db</code></pre><p>def test_peewee():<br>    Price.create_table()<br>    price = Price(timestamp=’2019-06-07 13:17:18’, BTCUSD=’12345.67’)<br>    price.save()</p>
-<p>test_p</p>
-<p>如果你写过 Django，你会发现，这个写法和 Django 简直一摸一样。我们通过一个 Python class ，映射了 MySQL 中的一张数据表；只要对其中每一列数据格式进行定义，便可按照 Python 的方式进行操作。</p>
-<p>显而易见，peewee 的最大优点，就是让 SQL 语言瞬间变成强类型语言，这样不仅极大地增强了可读性，也能有效减少出 bug 的概率。</p>
-<p>不过，事实上，作为一名数据科学家，或者作为一名量化从业者（quant ），你要处理的数据远比这些复杂很多。互联网工业界有大量的脏数据，金融行业的信噪比更是非常之低，数据处理只能算是基本功。</p>
-<p>如果你对数据分析有兴趣和志向，在学生时期就应该先打牢数学和统计的基础，之后在实习和工作中快速掌握数据处理的方法。当然，如果你已经错过学生时期的话，现在开始也是个不错的选择，毕竟，逐渐形成自己的核心竞争力，才是我们每个人的正道。</p>
-<h3 id="量化数据分析系统"><a href="#量化数据分析系统" class="headerlink" title="量化数据分析系统"></a>量化数据分析系统</h3><p>数据库有了量化数据存入后，接下来，我们便可以开始进行一些量化分析了。这一块儿也是一个很大的学术领域，叫做时间序列分析，不过就今天这节课的主题来说，我们仅做抛砖引玉，列举一个非常简单的例子，即求过去一个小时 BTC/USD 的最高价和最低价。</p>
-<p>我们来看下面这段代码：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> MySQLdb</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_pymysql</span><span class="params">()</span>:</span></span><br><span class="line">    conn = MySQLdb.connect(</span><br><span class="line">        host=<span class="string">'localhost'</span>,</span><br><span class="line">        port=<span class="number">3306</span>,</span><br><span class="line">        user=<span class="string">'your_username'</span>,</span><br><span class="line">        passwd=<span class="string">'your_password'</span>,</span><br><span class="line">        db=<span class="string">'mysql'</span></span><br><span class="line">    )</span><br><span class="line"> </span><br><span class="line">    cur = conn.cursor()</span><br><span class="line">    cur.execute(<span class="string">'''</span></span><br><span class="line"><span class="string">            SELECT</span></span><br><span class="line"><span class="string">              BTCUSD</span></span><br><span class="line"><span class="string">            FROM</span></span><br><span class="line"><span class="string">              price</span></span><br><span class="line"><span class="string">            WHERE</span></span><br><span class="line"><span class="string">              timestamp &gt; now() - interval 60 minute</span></span><br><span class="line"><span class="string">    '''</span>)</span><br><span class="line"> </span><br><span class="line">    BTCUSD = np.array(cur.fetchall())</span><br><span class="line">    print(BTCUSD.max(), BTCUSD.min())</span><br><span class="line"> </span><br><span class="line">    conn.close()</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">test_pym</span><br></pre></td></tr></table></figure>
-
-<p>代码看起来很简单吧！显然，通过 SQL 语句，我们可以抓取到过去一小时的时间序列片段，拿到我们想要的 BTC/USD 价格向量，然后通过 numpy 处理一下即可。不过这里需要注意一点，我们并不需要调用 conn.commit()，因为我们的操作是只读的，对数据库没有任何影响。</p>
-<h3 id="分布式日志系统"><a href="#分布式日志系统" class="headerlink" title="分布式日志系统"></a>分布式日志系统</h3><p>明白了上面的内容后，我们现在来看一下分布式日志系统。</p>
-<p>对量化交易而言，我们需要的模块主要有数据系统、策略系统、交易执行系统、线下模型训练、线上风控系统以及实时监控系统。它们之间的对应关系，我画了一张图，你可以参考来理解。</p>
-<p>这里的每个子系统都是独立运行的，并且还有许多模块需要迭代更新，所以我们简单保存本地日志显然不是一个明智之举。于是，我们可以专门开一台服务器来运行 MySQL server，并且开放指定端口和其他系统进行交互。</p>
-<p>另外，图中的收集系统，其实类似于上一节我们所讲的消息队列体系，在各个上游系统中运行代理工具，负责将各个模块的 log 收集起来，然后发送到收集系统中。收集系统整理过后，再将信息存到日志系统。当然，除了简单的消息队列，我们还能用很多工具，比如阿里云的 Logtail、 Apache 的 Flume Agent 等等。</p>
-<p>而到了后期，对于日志系统来说，越来越需要注意的就是存储效率和分析效率。随着使用的增加，数据会越来越多，因此我们可以考虑对一些数据进行压缩和保存。而越是久远的数据，越是粗粒度的数据，被调用的概率也就越低，所以它们也就首当其冲，成了我们压缩、保存的目标。</p>
-<h3 id="日志分析"><a href="#日志分析" class="headerlink" title="日志分析"></a>日志分析</h3><p>最后，我再来补充讲一讲日志的分析。前面提到过，分析一般分为两种，离线分析和在线分析。</p>
-<p>在离线分析中，比较常见的是生成报告。</p>
-<p>比如，总结某天某月或某季度内的，收益亏损情况（PnL）、最大回撤、夏普比率等数据。这种基于时间窗口的统计，在关系型数据库中也能得到很方便的支持。</p>
-<p>而另一类常见的离线使用方式，则是回测系统。在一个新策略研发的周期中，我们需要对历史数据进行回测，这样就可以得到历史数据中交易的收益率等数据。回测系统对于评估一个新的策略非常重要，然而，回测往往需要大量的资源，所以选取好数据库、数据存储方式，优化数据连接和计算，就显得至关重要。</p>
-<p>在线分析，则更多应用于风控和警报系统。这种方式，对数据的实时性要求更高一些，于是，一种方法就是，从消息队列中直接拿最快的数据进行操作。当然，这个前提是时间窗口较小，这样你就不需要风控系统来维护大量的本地数据。</p>
-<p>至于实时警报，最关键的依然是数据。</p>
-<ul>
-<li>比如，数据系统异常停止，被监视的表没有更新；</li>
-<li>或者，交易系统的连接出了故障，委托订单的某些状态超过了一定的阈值；</li>
-<li>再或者，仓位信息出现了较大的、预计之外的变动。</li>
-</ul>
-<p>这些情况都需要进行报警，也就是硅谷大公司所说的“oncall”。一旦发生意外，负责人会迅速收到电话、短信和邮件，然后通过监控平台来确认，是真的出了事故还是监控误报。</p>
-<p>当然，现在已经有了不少开源的工具可以在云端使用，其中 AWS 属于全球领先的云计算平台。如果你的服务器架设在美国，那就可以考虑选择它家的各种各样的云服务。这样做的好处是，对于小型量化交易团队而言，避免自己搭建复杂的日志系统，而是把主要精力放在策略的开发迭代之上，提高了不少效率。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这一节课，我从工程的角度，为你介绍了量化系统中的存储系统。我们从基础的 MySQL 的使用方法讲起，再讲到后面的量化系统框架。数据库和数据在绝大部分互联网行业都是核心，对量化从业者来说也是重要的生产资料。而搭建一套负载合理、数据可靠的数据系统，也需要一个量化团队长期打磨，并根据需求进行迭代。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2544,7 +2557,7 @@ SyntaxError: invalid syntax</code></pre><p>这里我定义了 heros 数据表，
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">67</span>
+                  <span class="site-state-item-count">68</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
