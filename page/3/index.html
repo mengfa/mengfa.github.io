@@ -258,6 +258,220 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/26/14%E4%B8%A8%E4%BB%80%E4%B9%88%E6%98%AF%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86%EF%BC%8C%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8COMMIT%E5%92%8CROLLBACK%E8%BF%9B%E8%A1%8C%E6%93%8D%E4%BD%9C%EF%BC%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/26/14%E4%B8%A8%E4%BB%80%E4%B9%88%E6%98%AF%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86%EF%BC%8C%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8COMMIT%E5%92%8CROLLBACK%E8%BF%9B%E8%A1%8C%E6%93%8D%E4%BD%9C%EF%BC%9F/" itemprop="url">14丨什么是事务处理，如何使用COMMIT和ROLLBACK进行操作？</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-26T20:39:01+08:00">
+                2020-03-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" itemprop="url" rel="index">
+                    <span itemprop="name">SQL必知必会</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/26/14%E4%B8%A8%E4%BB%80%E4%B9%88%E6%98%AF%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86%EF%BC%8C%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8COMMIT%E5%92%8CROLLBACK%E8%BF%9B%E8%A1%8C%E6%93%8D%E4%BD%9C%EF%BC%9F/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/03/26/14%E4%B8%A8%E4%BB%80%E4%B9%88%E6%98%AF%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86%EF%BC%8C%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8COMMIT%E5%92%8CROLLBACK%E8%BF%9B%E8%A1%8C%E6%93%8D%E4%BD%9C%EF%BC%9F/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>我们知道在 MySQL 5.5 版本之前，默认的存储引擎是 MyISAM，在 5.5 版本之后默认存储引擎是 InnoDB。InnoDB 和 MyISAM 区别之一就是 InnoDB 支持事务，也可以说这是 InnoDB 取代 MyISAM 的重要原因。那么什么是事务呢？事务的英文是 transaction，从英文中你也能看出来它是进行一次处理的基本单元，要么完全执行，要么都不执行。</p>
+<p>这么讲，你可能觉得有些抽象，我换一种方式讲。</p>
+<p>不知道你是否遇到过这样的情况，你去家门口的小卖铺买东西，已经交了钱，但是老板比较忙接了个电话，忘记你是否交过钱，然后让你重新付款，这时你还要找之前的付款记录证明你已经完成了付款。</p>
+<p>实际上如果我们线下的交易也能支持事务（满足事务的特性），就不会出现交了钱却拿不到商品的烦恼了，同样，对于小卖铺的老板来说，也不存在给出了商品但没有收到款的风险。总之，事务保证了一次处理的完整性，也保证了数据库中的数据一致性。它是一种高级的数据处理方式，如果我们在增加、删除、修改的时候某一个环节出了错，它允许我们回滚还原。正是因为这个特点，事务非常适合应用在安全性高的场景里，比如金融行业等。</p>
+<p>我们今天就来学习下 SQL 中的事务。今天的课程你将重点掌握以下的内容：</p>
+<ol>
+<li><p>事务的特性是什么？如何理解它们？</p>
+</li>
+<li><p>如何对事务进行控制？控制的命令都有哪些？</p>
+</li>
+<li><p>为什么我们执行 COMMIT、ROLLBACK 这些命令的时候，有时会成功，有时会失败？</p>
+<h3 id="事务的特性：ACID"><a href="#事务的特性：ACID" class="headerlink" title="事务的特性：ACID"></a>事务的特性：ACID</h3><p>我刚才提到了事务的特性：要么完全执行，要么都不执行。不过要对事务进行更深一步的理解，还要从事务的 4 个特性说起，这 4 个特性用英文字母来表达就是 ACID。</p>
+</li>
+<li><p>A，也就是原子性（Atomicity）。原子的概念就是不可分割，你可以把它理解为组成物质的基本单位，也是我们进行数据处理操作的基本单位。</p>
+</li>
+<li><p>C，就是一致性（Consistency）。一致性指的就是数据库在进行事务操作后，会由原来的一致状态，变成另一种一致的状态。也就是说当事务提交后，或者当事务发生回滚后，数据库的完整性约束不能被破坏。</p>
+</li>
+<li><p>I，就是隔离性（Isolation）。它指的是每个事务都是彼此独立的，不会受到其他事务的执行影响。也就是说一个事务在提交之前，对其他事务都是不可见的。</p>
+</li>
+<li><p>最后一个 D，指的是持久性（Durability）。事务提交之后对数据的修改是持久性的，即使在系统出故障的情况下，比如系统崩溃或者存储介质发生故障，数据的修改依然是有效的。因为当事务完成，数据库的日志就会被更新，这时可以通过日志，让系统恢复到最后一次成功的更新状态。<br>ACID 可以说是事务的四大特性，在这四个特性中，原子性是基础，隔离性是手段，一致性是约束条件，而持久性是我们的目的。原子性和隔离性比较好理解，这里我讲下对一致性的理解（国内很多网站上对一致性的阐述有误，具体你可以参考 Wikipedia 对Consistency的阐述）。</p>
+</li>
+</ol>
+<p>我之前讲到过数据表的 7 种常见约束（对应 04 篇）。这里指的一致性本身是由具体的业务定义的，也就是说，任何写入数据库中的数据都需要满足我们事先定义的约束规则。</p>
+<p>比如说，在数据表中我们将姓名字段设置为唯一性约束，这时当事务进行提交或者事务发生回滚的时候，如果数据表中的姓名非唯一，就破坏了事务的一致性要求。所以说，事务操作会让数据表的状态变成另一种一致的状态，如果事务中的某个操作失败了，系统就会自动撤销当前正在执行的事务，返回到事务操作之前的状态。</p>
+<p>事务的另一个特点就是持久性，持久性是通过事务日志来保证的。日志包括了回滚日志和重做日志。当我们通过事务对数据进行修改的时候，首先会将数据库的变化信息记录到重做日志中，然后再对数据库中对应的行进行修改。这样做的好处是，即使数据库系统崩溃，数据库重启后也能找到没有更新到数据库系统中的重做日志，重新执行，从而使事务具有持久性。</p>
+<h3 id="事务的控制"><a href="#事务的控制" class="headerlink" title="事务的控制"></a>事务的控制</h3><p>当我们了解了事务的特性后，再来看下如何使用事务。我们知道 Oracle 是支持事务的，而在 MySQL 中，则需要选择适合的存储引擎才可以支持事务。如果你使用的是 MySQL，可以通过 SHOW ENGINES 命令来查看当前 MySQL 支持的存储引擎都有哪些，以及这些存储引擎是否支持事务。</p>
+<p>你能看出在 MySQL 中，InnoDB 是支持事务的，而 MyISAM 存储引擎不支持事务。</p>
+<p>看到这里，我们已经对事务有了一定的了解，现在我们再来看下事务的常用控制语句都有哪些。</p>
+<ol>
+<li>START TRANSACTION 或者 BEGIN，作用是显式开启一个事务。</li>
+<li>COMMIT：提交事务。当提交事务后，对数据库的修改是永久性的。</li>
+<li>ROLLBACK 或者 ROLLBACK TO [SAVEPOINT]，意为回滚事务。意思是撤销正在进行的所有没有提交的修改，或者将事务回滚到某个保存点。</li>
+<li>SAVEPOINT：在事务中创建保存点，方便后续针对保存点进行回滚。一个事务中可以存在多个保存点。</li>
+<li>RELEASE SAVEPOINT：删除某个保存点。</li>
+<li>SET TRANSACTION，设置事务的隔离级别。<br>需要说明的是，使用事务有两种方式，分别为隐式事务和显式事务。隐式事务实际上就是自动提交，Oracle 默认不自动提交，需要手写 COMMIT 命令，而 MySQL 默认自动提交，当然我们可以配置 MySQL 的参数：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; set autocommit =0;  // 关闭自动提交</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ysql&gt; set autocommit =1;  // 开启自动提交</span><br></pre></td></tr></table></figure>
+我们看下在 MySQL 的默认状态下，下面这个事务最后的处理结果是什么：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE test(name varchar(255), PRIMARY KEY (name)) ENGINE=InnoDB;</span><br><span class="line">BEGIN;</span><br><span class="line">INSERT INTO test SELECT &apos;关羽&apos;;</span><br><span class="line">COMMIT;</span><br><span class="line">BEGIN;</span><br><span class="line">INSERT INTO test SELECT &apos;张飞&apos;;</span><br><span class="line">INSERT INTO test SELECT &apos;张飞&apos;;</span><br><span class="line">ROLLBACK;</span><br><span class="line">SELECT * FROM test;</span><br><span class="line">运行结果（1 行数据）：</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ol>
+<p>在这个事务中，整个 SQL 一共执行了 2 个事务，第一个是插入“关羽”，提交后执行成功，第二个是插入两次“张飞”，这里需要注意的是，我们将 name 设置为了主键，也就是说主键的值是唯一的，那么第二次插入“张飞”时就会产生错误，然后执行 ROLLBACK 相当于对事务进行了回滚，所以我们看到最终结果只有一行数据，也就是第一个事务执行之后的结果，即“关羽”。</p>
+<p>那么如果我们进行下面的操作又会怎样呢？</p>
+<p>CREATE TABLE test(name varchar(255), PRIMARY KEY (name)) ENGINE=InnoDB;<br>BEGIN;<br>INSERT INTO test SELECT ‘关羽’;<br>COMMIT;<br>INSERT INTO test SELECT ‘张飞’;<br>INSERT INTO test SELECT ‘张飞’;<br>ROLLBACK;<br>SELECT * FROM test;<br>运行结果（2 行数据）：</p>
+<p>你能看到这次数据是 2 行，上一次操作我把两次插入“张飞”放到一个事务里，而这次操作它们不在同一个事务里，那么对于 MySQL 来说，默认情况下这实际上就是两个事务，因为在 autocommit=1 的情况下，MySQL 会进行隐式事务，也就是自动提交，因此在进行第一次插入“张飞”后，数据表里就存在了两行数据，而第二次插入“张飞”就会报错：1062 - Duplicate entry ‘张飞’ for key ‘PRIMARY’。</p>
+<p>最后我们在执行 ROLLBACK 的时候，实际上事务已经自动提交了，就没法进行回滚了。</p>
+<p>同样的我们再来看下这段代码，你又能发现什么不同呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE test(name varchar(255), PRIMARY KEY (name)) ENGINE=InnoDB;</span><br><span class="line">SET @@completion_type = 1;</span><br><span class="line">BEGIN;</span><br><span class="line">INSERT INTO test SELECT &apos;关羽&apos;;</span><br><span class="line">COMMIT;</span><br><span class="line">INSERT INTO test SELECT &apos;张飞&apos;;</span><br><span class="line">INSERT INTO test SELECT &apos;张飞&apos;;</span><br><span class="line">ROLLBACK;</span><br><span class="line">SELECT * FROM test;</span><br></pre></td></tr></table></figure>
+<p>运行结果（1 行数据）：</p>
+<p>你能看到还是相同的 SQL 代码，只是我在事务开始之前设置了SET @@completion_type = 1;，结果就和我们第一次处理的一样，只有一个“关羽”。这是为什么呢？</p>
+<p>这里我讲解下 MySQL 中 completion_type 参数的作用，实际上这个参数有 3 种可能：</p>
+<ol>
+<li>completion=0，这是默认情况。也就是说当我们执行 COMMIT 的时候会提交事务，在执行下一个事务时，还需要我们使用 START TRANSACTION 或者 BEGIN 来开启。</li>
+<li>completion=1，这种情况下，当我们提交事务后，相当于执行了 COMMIT AND CHAIN，也就是开启一个链式事务，即当我们提交事务之后会开启一个相同隔离级别的事务（隔离级别会在下一节中进行介绍）。</li>
+<li>completion=2，这种情况下 COMMIT=COMMIT AND RELEASE，也就是当我们提交后，会自动与服务器断开连接。</li>
+</ol>
+<p>在上面这段代码里，我使用了 completion=1，也就是说当我提交之后，相当于在下一行写了一个 START TRANSACTION 或 BEGIN。这时两次插入“张飞”会被认为是在同一个事务之内的操作，那么第二次插入“张飞”就会导致事务失败，而回滚也将这次事务进行了撤销，所以你能看到的结果就只有一个“关羽”。</p>
+<p>通过这样简单的练习，你应该能体会到事务提交和回滚的操作。</p>
+<p>当我们设置 autocommit=0 时，不论是否采用 START TRANSACTION 或者 BEGIN 的方式来开启事务，都需要用 COMMIT 进行提交，让事务生效，使用 ROLLBACK 对事务进行回滚。</p>
+<p>当我们设置 autocommit=1 时，每条 SQL 语句都会自动进行提交。<br>不过这时，如果你采用 START TRANSACTION 或者 BEGIN 的方式来显式地开启事务，那么这个事务只有在 COMMIT 时才会生效，在 ROLLBACK 时才会回滚。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>关于 SQL 中的事务处理，内容相对比较多，因此我会采用两节来进行讲解。今天我们对事务的概念进行了理解，并进行了简单的事务操作。我们在做数据库操作的时候，可能会失败，但正是因为有事务的存在，即使在数据库操作失败的情况下，也能保证数据的一致性。同样，多个应用程序访问数据库的时候，事务可以提供隔离，保证事务之间不被干扰。最后，事务一旦提交，结果就会是永久性的，这就意味着，即使系统崩溃了，数据库也可以对数据进行恢复。</p>
+<p>在使用事务的过程中，我们会采用控制流语句对事务进行操作，不过在实际操作中，不一定每次使用 COMMIT 或 ROLLBACK 都会成功，你还需要知道当前系统的事务执行方式，也就是一些常用的参数情况，比如 MySQL 中的 autocommit 和 completion_type 等。</p>
+<p>事务是数据库区别于文件系统的重要特性之一，当我们有了事务就会让数据库始终保持一致性，同时我们还能通过事务的机制恢复到某个时间点，这样可以保证已提交到数据库的修改不会因为系统崩溃而丢失。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/26/13%E4%B8%A8%E4%BB%80%E4%B9%88%E6%98%AF%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%EF%BC%8C%E5%9C%A8%E5%AE%9E%E9%99%85%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%94%A8%E5%BE%97%E5%A4%9A%E4%B9%88%EF%BC%9F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2312,246 +2526,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/23/04%E4%B8%A8%E4%BD%BF%E7%94%A8DDL%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93&%E6%95%B0%E6%8D%AE%E8%A1%A8%E6%97%B6%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E4%BB%80%E4%B9%88%EF%BC%9F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LvYang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LvYang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/23/04%E4%B8%A8%E4%BD%BF%E7%94%A8DDL%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93&%E6%95%B0%E6%8D%AE%E8%A1%A8%E6%97%B6%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E4%BB%80%E4%B9%88%EF%BC%9F/" itemprop="url">04丨使用DDL创建数据库&数据表时需要注意什么？</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-23T20:52:07+08:00">
-                2020-03-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" itemprop="url" rel="index">
-                    <span itemprop="name">SQL必知必会</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/03/23/04%E4%B8%A8%E4%BD%BF%E7%94%A8DDL%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93&%E6%95%B0%E6%8D%AE%E8%A1%A8%E6%97%B6%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E4%BB%80%E4%B9%88%EF%BC%9F/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/03/23/04%E4%B8%A8%E4%BD%BF%E7%94%A8DDL%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93&%E6%95%B0%E6%8D%AE%E8%A1%A8%E6%97%B6%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E4%BB%80%E4%B9%88%EF%BC%9F/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>DDL 是 DBMS 的核心组件，也是 SQL 的重要组成部分，DDL 的正确性和稳定性是整个 SQL 运行的重要基础。面对同一个需求，不同的开发人员创建出来的数据库和数据表可能千差万别，那么在设计数据库的时候，究竟什么是好的原则？我们在创建数据表的时候需要注意什么？</p>
-<p>今天的内容，你可以从以下几个角度来学习：</p>
-<ol>
-<li>了解 DDL 的基础语法，它如何定义数据库和数据表；</li>
-<li>使用 DDL 定义数据表时，都有哪些约束性；</li>
-<li>使用 DDL 设计数据库时，都有哪些重要原则。</li>
-</ol>
-<h3 id="DDL-的基础语法及设计工具"><a href="#DDL-的基础语法及设计工具" class="headerlink" title="DDL 的基础语法及设计工具"></a>DDL 的基础语法及设计工具</h3><p>DDL 的英文全称是 Data Definition Language，中文是数据定义语言。它定义了数据库的结构和数据表的结构。</p>
-<p>在 DDL 中，我们常用的功能是增删改，分别对应的命令是 CREATE、DROP 和 ALTER。需要注意的是，在执行 DDL 的时候，不需要 COMMIT，就可以完成执行任务。</p>
-<h4 id="1-对数据库进行定义"><a href="#1-对数据库进行定义" class="headerlink" title="1.对数据库进行定义"></a>1.对数据库进行定义</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CREATE DATABASE nba; // 创建一个名为 nba 的数据库</span><br><span class="line">DROP DATABASE nba; // 删除一个名为 nba 的数据库</span><br></pre></td></tr></table></figure>
-
-<h4 id="2-对数据表进行定义"><a href="#2-对数据表进行定义" class="headerlink" title="2.对数据表进行定义"></a>2.对数据表进行定义</h4><p>创建表结构的语法是这样的：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE table_name</span><br></pre></td></tr></table></figure>
-
-<h3 id="创建表结构"><a href="#创建表结构" class="headerlink" title="创建表结构"></a>创建表结构</h3><p>比如我们想创建一个球员表，表名为 player，里面有两个字段，一个是 player_id，它是 int 类型，另一个 player_name 字段是varchar(255)类型。这两个字段都不为空，且 player_id 是递增的。</p>
-<p>那么创建的时候就可以写为：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE player  (</span><br><span class="line">  player_id int(<span class="number">11</span>) NOT NULL AUTO_INCREMENT,</span><br><span class="line">  player_name varchar(<span class="number">255</span>) NOT NULL</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-
-<p>需要注意的是，语句最后以分号（;）作为结束符，最后一个字段的定义结束后没有逗号。数据类型中 int(11) 代表整数类型，显示长度为 11 位，括号中的参数 11 代表的是最大有效显示长度，与类型包含的数值范围大小无关。varchar(255)代表的是最大长度为 255 的可变字符串类型。NOT NULL表明整个字段不能是空值，是一种数据约束。AUTO_INCREMENT代表主键自动增长。</p>
-<p>实际上，我们通常很少自己写 DDL 语句，可以使用一些可视化工具来创建和操作数据库和数据表。在这里我推荐使用 Navicat，它是一个数据库管理和设计工具，跨平台，支持很多种数据库管理软件，比如 MySQL、Oracle、MariaDB 等。基本上专栏讲到的数据库软件都可以使用 Navicat 来管理。</p>
-<p>假如还是针对 player 这张表，我们想设计以下的字段：</p>
-<table>
-<thead>
-<tr>
-<th align="left">字段</th>
-<th align="left">含义</th>
-<th align="left">类型</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">player_id</td>
-<td align="left">球员ID</td>
-<td align="left">int整数类型,最大显示长度11</td>
-</tr>
-<tr>
-<td align="left">team_id</td>
-<td align="left">球队ID</td>
-<td align="left">int整数类型,最大显示长度11</td>
-</tr>
-<tr>
-<td align="left">player_name</td>
-<td align="left">球员姓名</td>
-<td align="left">varchar字符串类型,最大长度255</td>
-</tr>
-<tr>
-<td align="left">height</td>
-<td align="left">身高</td>
-<td align="left">float浮点类型,一共存储3个有效数字,其中小数点长度为2.</td>
-</tr>
-</tbody></table>
-<p>其中 player_id 是数据表 player 的主键，且自动增长，也就是 player_id 会从 1 开始，然后每次加 1。player_id、team_id、player_name 这三个字段均不为空，height 字段可以为空。</p>
-<p>按照上面的设计需求，我们可以使用 Navicat 软件进行设计.<br>然后，我们还可以对 player_name 字段进行索引，索引类型为Unique。<br>这样一张 player 表就通过可视化工具设计好了。我们可以把这张表导出来，可以看看这张表对应的 SQL 语句是怎样的。方法是在 Navicat 左侧用右键选中 player 这张表，然后选择“转储 SQL 文件”→“仅结构”，这样就可以看到导出的 SQL 文件了，代码如下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">DROP TABLE IF EXISTS `player`;</span><br><span class="line">CREATE TABLE `player`  (</span><br><span class="line">  `player_id` int(<span class="number">11</span>) NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `team_id` int(<span class="number">11</span>) NOT NULL,</span><br><span class="line">  `player_name` varchar(<span class="number">255</span>) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,</span><br><span class="line">  `height` float(<span class="number">3</span>, <span class="number">2</span>) NULL DEFAULT <span class="number">0.00</span>,</span><br><span class="line">  PRIMARY KEY (`player_id`) USING BTREE,</span><br><span class="line">  UNIQUE INDEX `player_name`(`player_name`) USING BTREE</span><br><span class="line">) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;</span><br></pre></td></tr></table></figure>
-
-<p>你能看到整个 SQL 文件中的 DDL 处理，首先先删除 player 表（如果数据库中存在该表的话），然后再创建 player 表，里面的数据表和字段都使用了反引号，这是为了避免它们的名称与 MySQL 保留字段相同，对数据表和字段名称都加上了反引号。</p>
-<p>其中 player_name 字段的字符集是 utf8，排序规则是utf8_general_ci，代表对大小写不敏感，如果设置为utf8_bin，代表对大小写敏感，还有许多其他排序规则这里不进行介绍。</p>
-<p>因为 player_id 设置为了主键，因此在 DDL 中使用PRIMARY KEY进行规定，同时索引方法采用 BTREE。</p>
-<p>因为我们对 player_name 字段进行索引，在设置字段索引时，我们可以设置为UNIQUE INDEX（唯一索引），也可以设置为其他索引方式，比如NORMAL INDEX（普通索引），这里我们采用UNIQUE INDEX。唯一索引和普通索引的区别在于它对字段进行了唯一性的约束。在索引方式上，你可以选择BTREE或者HASH，这里采用了BTREE方法进行索引。我会在后面介绍BTREE和HASH索引方式的区别。</p>
-<p>整个数据表的存储规则采用 InnoDB。之前我们简单介绍过 InnoDB，它是 MySQL5.5 版本之后默认的存储引擎。同时，我们将字符集设置为 utf8，排序规则为utf8_general_ci，行格式为Dynamic，就可以定义数据表的最后约定了：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;</span><br></pre></td></tr></table></figure>
-
-<p>你能看出可视化工具还是非常方便的，它能直接帮我们将数据库的结构定义转化成 SQL 语言，方便数据库和数据表结构的导出和导入。不过在使用可视化工具前，你首先需要了解对于 DDL 的基础语法，至少能清晰地看出来不同字段的定义规则、索引方法，以及主键和外键的定义。</p>
-<h3 id="修改表结构"><a href="#修改表结构" class="headerlink" title="修改表结构"></a>修改表结构</h3><p>在创建表结构之后，我们还可以对表结构进行修改，虽然直接使用 Navicat 可以保证重新导出的数据表就是最新的，但你也有必要了解，如何使用 DDL 命令来完成表结构的修改。</p>
-<ol>
-<li>添加字段，比如我在数据表中添加一个 age 字段，类型为int(11)</li>
-</ol>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE player ADD (age int(<span class="number">11</span>));</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>修改字段名，将 age 字段改成player_age</li>
-</ol>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE player RENAME COLUMN age to player_age</span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>修改字段的数据类型，将player_age的数据类型设置为float(3,1)</li>
-</ol>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE player MODIFY (player_age float(<span class="number">3</span>,<span class="number">1</span>));</span><br></pre></td></tr></table></figure>
-
-<ol start="4">
-<li>删除字段, 删除刚才添加的player_age字段</li>
-</ol>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE player DROP COLUMN player_age;</span><br></pre></td></tr></table></figure>
-
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">### 数据表的常见约束</span></span><br><span class="line">当我们创建数据表的时候，还会对字段进行约束，约束的目的在于保证 RDBMS 里面数据的准确性和一致性。下面，我们来看下常见的约束有哪些。</span><br><span class="line"></span><br><span class="line">首先是主键约束。</span><br><span class="line"></span><br><span class="line">主键起的作用是唯一标识一条记录，不能重复，不能为空，即 UNIQUE+NOT NULL。一个数据表的主键只能有一个。主键可以是一个字段，也可以由多个字段复合组成。在上面的例子中，我们就把 player_id 设置为了主键。</span><br><span class="line"></span><br><span class="line">其次还有外键约束。</span><br><span class="line"></span><br><span class="line">外键确保了表与表之间引用的完整性。一个表中的外键对应另一张表的主键。外键可以是重复的，也可以为空。比如 player_id 在 player 表中是主键，如果你想设置一个球员比分表即 player_score，就可以在 player_score 中设置 player_id 为外键，关联到 player 表中。</span><br><span class="line"></span><br><span class="line">除了对键进行约束外，还有字段约束。</span><br><span class="line"></span><br><span class="line">唯一性约束。</span><br><span class="line"></span><br><span class="line">唯一性约束表明了字段在表中的数值是唯一的，即使我们已经有了主键，还可以对其他字段进行唯一性约束。比如我们在 player 表中给 player_name 设置唯一性约束，就表明任何两个球员的姓名不能相同。需要注意的是，唯一性约束和普通索引（NORMAL INDEX）之间是有区别的。唯一性约束相当于创建了一个约束和普通索引，目的是保证字段的正确性，而普通索引只是提升数据检索的速度，并不对字段的唯一性进行约束。</span><br><span class="line"></span><br><span class="line">NOT NULL 约束。对字段定义了 NOT NULL，即表明该字段不应为空，必须有取值。</span><br><span class="line"></span><br><span class="line">DEFAULT，表明了字段的默认值。如果在插入数据的时候，这个字段没有取值，就设置为默认值。比如我们将身高 height 字段的取值默认设置为 <span class="number">0.00</span>，即DEFAULT <span class="number">0.00</span>。</span><br><span class="line"></span><br><span class="line">CHECK 约束，用来检查特定字段取值范围的有效性，CHECK 约束的结果不能为 FALSE，比如我们可以对身高 height 的数值进行 CHECK 约束，必须≥<span class="number">0</span>，且＜<span class="number">3</span>，即CHECK(height&gt;=<span class="number">0</span> AND height&lt;<span class="number">3</span>)。</span><br><span class="line"></span><br><span class="line"><span class="comment">### 设计数据表的原则</span></span><br><span class="line">我们在设计数据表的时候，经常会考虑到各种问题，比如：用户都需要什么数据？需要在数据表中保存哪些数据？哪些数据是经常访问的数据？如何提升检索效率？</span><br><span class="line"></span><br><span class="line">如何保证数据表中数据的正确性，当插入、删除、更新的时候该进行怎样的约束检查？</span><br><span class="line"></span><br><span class="line">如何降低数据表的数据冗余度，保证数据表不会因为用户量的增长而迅速扩张？</span><br><span class="line"></span><br><span class="line">如何让负责数据库维护的人员更方便地使用数据库？</span><br><span class="line"></span><br><span class="line">除此以外，我们使用数据库的应用场景也各不相同，可以说针对不同的情况，设计出来的数据表可能千差万别。那么有没有一种设计原则可以让我们来借鉴呢？这里我整理了一个“三少一多”原则：</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="number">1.</span>数据表的个数越少越好</span><br><span class="line"></span><br><span class="line">RDBMS 的核心在于对实体和联系的定义，也就是 E-R 图（Entity Relationship Diagram），数据表越少，证明实体和联系设计得越简洁，既方便理解又方便操作。</span><br><span class="line"></span><br><span class="line"><span class="number">2.</span>数据表中的字段个数越少越好</span><br><span class="line"></span><br><span class="line">字段个数越多，数据冗余的可能性越大。设置字段个数少的前提是各个字段相互独立，而不是某个字段的取值可以由其他字段计算出来。当然字段个数少是相对的，我们通常会在数据冗余和检索效率中进行平衡。</span><br><span class="line"></span><br><span class="line"><span class="number">3.</span>数据表中联合主键的字段个数越少越好</span><br><span class="line"></span><br><span class="line">设置主键是为了确定唯一性，当一个字段无法确定唯一性的时候，就需要采用联合主键的方式（也就是用多个字段来定义一个主键）。联合主键中的字段越多，占用的索引空间越大，不仅会加大理解难度，还会增加运行时间和索引空间，因此联合主键的字段个数越少越好。</span><br><span class="line"></span><br><span class="line"><span class="number">4.</span>使用主键和外键越多越好</span><br><span class="line"></span><br><span class="line">数据库的设计实际上就是定义各种表，以及各种字段之间的关系。这些关系越多，证明这些实体之间的冗余度越低，利用度越高。这样做的好处在于不仅保证了数据表之间的独立性，还能提升相互之间的关联使用率。</span><br><span class="line"></span><br><span class="line">你应该能看出来“三少一多”原则的核心就是简单可复用。简单指的是用更少的表、更少的字段、更少的联合主键字段来完成数据表的设计。可复用则是通过主键、外键的使用来增强数据表之间的复用率。因为一个主键可以理解是一张表的代表。键设计得越多，证明它们之间的利用率越高。</span><br><span class="line"></span><br><span class="line"><span class="comment">### 总结</span></span><br><span class="line">今天我们学习了 DDL 的基础语法，比如如何对数据库和数据库表进行定义，也了解了使用 Navicat 可视化管理工具来辅助我们完成数据表的设计，省去了手写 SQL 的工作量。</span><br><span class="line"></span><br><span class="line">在创建数据表的时候，除了对字段名及数据类型进行定义以外，我们考虑最多的就是关于字段的约束，我介绍了 <span class="number">7</span> 种常见的约束，它们都是数据表设计中会用到的约束：主键、外键、唯一性、NOT NULL、DEFAULT、CHECK 约束等。</span><br><span class="line"></span><br><span class="line">当然，了解了如何操作创建数据表之后，你还需要动脑思考，怎样才能设计出一个好的数据表？设计的原则都有哪些？针对这个，我整理出了“三少一多”原则，在实际使用过程中，你需要灵活掌握，因为这个原则并不是绝对的，有时候我们需要牺牲数据的冗余度来换取数据处理的效率。</span><br></pre></td></tr></table></figure>
-
-<h3 id="我们在创建数据表的时候，会对数据表设置主键、外键和索引。你能说下这三者的作用和区别吗？"><a href="#我们在创建数据表的时候，会对数据表设置主键、外键和索引。你能说下这三者的作用和区别吗？" class="headerlink" title="我们在创建数据表的时候，会对数据表设置主键、外键和索引。你能说下这三者的作用和区别吗？"></a>我们在创建数据表的时候，会对数据表设置主键、外键和索引。你能说下这三者的作用和区别吗？</h3><p>主键：唯一标识一条记录，不能重复，不能为空。<br>外键：确保了表于表之间引用的完整性，可以重复，可以为空<br>索引：提升数据检索速度<br>区别：主键是索引的一种，而且是唯一索引的一种。而并非在是索引，是两表之间的链接</p>
-<h3 id="外键多了会有很多维护问题吧？"><a href="#外键多了会有很多维护问题吧？" class="headerlink" title="外键多了会有很多维护问题吧？"></a>外键多了会有很多维护问题吧？</h3><p>作者回复: 是否使用外键确实会有一些争议。我来解释下关于外键的使用：<br>首先，外键本身是为了实现强一致性，所以如果需要正确性&gt;性能的话，还是建议使用外键，它可以让我们在数据库的层面保证数据的完整性和一致性。<br>当然不用外键，你也可以在业务层进行实现。不过，这样做也同样存在一定的风险，因为这样，就会让业务逻辑会与数据具备一定的耦合性。也就是业务逻辑和数据必须同时修改。而且在工作中，业务层可能会经常发生变化。</p>
-<p>当然，很多互联网的公司，尤其是超大型的数据应用场景，大量的插入，更新和删除在外键的约束下会降低性能，同时数据库在水平拆分和分库的情况下，数据库端也做不到执行外键约束。另外，在高并发的情况下，外键的存在也会造成额外的开销。因为每次更新数据，都需要检查另外一张表的数据，也容易造成死锁。<br>所以在这种情况下，尤其是大型项目中后期，可以采用业务层来实现，取消外键提高效率。<br>不过在SQL学习之初，包括在系统最初设计的时候，还是建议你采用规范的数据库设计，也就是采用外键来对数据表进行约束。因为这样可以建立一个强一致性，可靠性高的数据库结构，也不需要在业务层来实现过多的检查。<br>当然在项目后期，业务量增大的情况下，你需要更多考虑到数据库性能问题，可以取消外键的约束，转移到业务层来实现。而且在大型互联网项目中，考虑到分库分表的情况，也会降低外键的使用。<br>不过在SQL学习，以及项目早期，还是建议你使用外键。在项目后期，你可以分析有哪些外键造成了过多的性能消耗。一般遵循2/8原则，会有20%的外键造成80%的资源效率，你可以只把这20%的外键进行开放，采用业务层逻辑来进行实现，当然你需要保证业务层的实现没有错误。不同阶段，考虑的问题不同。当用户和业务量增大的时候，对于大型互联网应用，也会通过减少外键的使用，来减低死锁发生的概率，提高并发处理能力。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2602,7 +2576,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">72</span>
+                  <span class="site-state-item-count">73</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
