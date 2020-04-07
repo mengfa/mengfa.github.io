@@ -258,6 +258,213 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/31/21%E4%B8%A8%E8%8C%83%E5%BC%8F%E8%AE%BE%E8%AE%A1%EF%BC%9A%E6%95%B0%E6%8D%AE%E8%A1%A8%E7%9A%84%E8%8C%83%E5%BC%8F%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%8C3NF%E6%8C%87%E7%9A%84%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/31/21%E4%B8%A8%E8%8C%83%E5%BC%8F%E8%AE%BE%E8%AE%A1%EF%BC%9A%E6%95%B0%E6%8D%AE%E8%A1%A8%E7%9A%84%E8%8C%83%E5%BC%8F%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%8C3NF%E6%8C%87%E7%9A%84%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F/" itemprop="url">21丨范式设计：数据表的范式有哪些，3NF指的是什么？</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-31T19:49:01+08:00">
+                2020-03-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" itemprop="url" rel="index">
+                    <span itemprop="name">SQL必知必会</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/31/21%E4%B8%A8%E8%8C%83%E5%BC%8F%E8%AE%BE%E8%AE%A1%EF%BC%9A%E6%95%B0%E6%8D%AE%E8%A1%A8%E7%9A%84%E8%8C%83%E5%BC%8F%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%8C3NF%E6%8C%87%E7%9A%84%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/03/31/21%E4%B8%A8%E8%8C%83%E5%BC%8F%E8%AE%BE%E8%AE%A1%EF%BC%9A%E6%95%B0%E6%8D%AE%E8%A1%A8%E7%9A%84%E8%8C%83%E5%BC%8F%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%8C3NF%E6%8C%87%E7%9A%84%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在日常工作中，我们都需要遵守一定的规范，比如签到打卡、审批流程等，这些规范虽然有一定的约束感，却是非常有必要的，这样可以保证正确性和严谨性，但有些情况下，约束反而会带来效率的下降，比如一个可以直接操作的任务，却需要通过重重审批才能执行。</p>
+<p>实际上，数据表的设计和工作流程的设计很像，我们既需要规范性，也要考虑到执行时的方便性。</p>
+<p>今天，我来讲解一下数据表的设计范式。范式是数据表设计的基本原则，又很容易被忽略。很多时候，当数据库运行了一段时间之后，我们才发现数据表设计得有问题。重新调整数据表的结构，就需要做数据迁移，还有可能影响程序的业务逻辑，以及网站正常的访问。所以在开始设置数据库的时候，我们就需要重视数据表的设计。</p>
+<p>今天的课程你需要掌握以下几个方面的内容：</p>
+<ol>
+<li>数据库的设计范式都有哪些？</li>
+<li>数据表的键都有哪些？</li>
+<li>1NF、2NF 和 3NF 指的是什么？<h3 id="数据库的设计范式都包括哪些"><a href="#数据库的设计范式都包括哪些" class="headerlink" title="数据库的设计范式都包括哪些"></a>数据库的设计范式都包括哪些</h3>我们在设计关系型数据库模型的时候，需要对关系内部各个属性之间联系的合理化程度进行定义，这就有了不同等级的规范要求，这些规范要求被称为范式（NF）。你可以把范式理解为，一张数据表的设计结构需要满足的某种设计标准的级别。</li>
+</ol>
+<p>目前关系型数据库一共有 6 种范式，按照范式级别，从低到高分别是：1NF（第一范式）、2NF（第二范式）、3NF（第三范式）、BCNF（巴斯 - 科德范式）、4NF（第四范式）和 5NF（第五范式，又叫做完美范式）。</p>
+<p>数据库的范式设计越高阶，冗余度就越低，同时高阶的范式一定符合低阶范式的要求，比如满足 2NF 的一定满足 1NF，满足 3NF 的一定满足 2NF，依次类推。</p>
+<p>你可能会问，这么多范式是不是都要掌握呢？</p>
+<p>一般来说数据表的设计应尽量满足 3NF。但也不绝对，有时候为了提高某些查询性能，我们还需要破坏范式规则，也就是反规范化。</p>
+<h3 id="数据表中的那些键"><a href="#数据表中的那些键" class="headerlink" title="数据表中的那些键"></a>数据表中的那些键</h3><p>范式的定义会使用到主键和候选键（因为主键和候选键可以唯一标识元组），数据库中的键（Key）由一个或者多个属性组成。我总结了下数据表中常用的几种键和属性的定义：</p>
+<ul>
+<li>超键：能唯一标识元组的属性集叫做超键。</li>
+<li>候选键：如果超键不包括多余的属性，那么这个超键就是候选键。</li>
+<li>主键：用户可以从候选键中选择一个作为主键。</li>
+<li>外键：如果数据表 R1 中的某属性集不是 R1 的主键，而是另一个数据表 R2 的主键，那么这个属性集就是数据表 R1 的外键。</li>
+<li>主属性：包含在任一候选键中的属性称为主属性。</li>
+<li>非主属性：与主属性相对，指的是不包含在任何一个候选键中的属性。<br>通常，我们也将候选键称之为“码”，把主键也称为“主码”。因为键可能是由多个属性组成的，针对单个属性，我们还可以用主属性和非主属性来进行区分。</li>
+</ul>
+<p>看到上面的描述你可能还是有点懵，我举个简单的例子。</p>
+<p>我们之前用过 NBA 的球员表（player）和球队表（team）。这里我可以把球员表定义为包含球员编号、姓名、身份证号、年龄和球队编号；球队表包含球队编号、主教练和球队所在地。</p>
+<p>对于球员表来说，超键就是包括球员编号或者身份证号的任意组合，比如（球员编号）（球员编号，姓名）（身份证号，年龄）等。</p>
+<p>候选键就是最小的超键，对于球员表来说，候选键就是（球员编号）或者（身份证号）。</p>
+<p>主键是我们自己选定，也就是从候选键中选择一个，比如（球员编号）。</p>
+<p>外键就是球员表中的球队编号。</p>
+<p>在 player 表中，主属性是（球员编号）（身份证号），其他的属性（姓名）（年龄）（球队编号）都是非主属性。</p>
+<h3 id="从-1NF-到-3NF"><a href="#从-1NF-到-3NF" class="headerlink" title="从 1NF 到 3NF"></a>从 1NF 到 3NF</h3><p>了解了数据表中的 4 种键之后，我们再来看下 1NF、2NF 和 3NF，BCNF 我们放在后面讲。</p>
+<p><strong>1NF 指的是数据库表中的任何属性都是原子性的，不可再分。</strong>这很好理解，我们在设计某个字段的时候，对于字段 X 来说，就不能把字段 X 拆分成字段 X-1 和字段 X-2。事实上，任何的 DBMS 都会满足第一范式的要求，不会将字段进行拆分。</p>
+<p><strong>2NF 指的数据表里的非主属性都要和这个数据表的候选键有完全依赖关系。</strong>所谓完全依赖不同于部分依赖，也就是不能仅依赖候选键的一部分属性，而必须依赖全部属性。</p>
+<p>这里我举一个没有满足 2NF 的例子，比如说我们设计一张球员比赛表 player_game，里面包含球员编号、姓名、年龄、比赛编号、比赛时间和比赛场地等属性，这里候选键和主键都为（球员编号，比赛编号），我们可以通过候选键来决定如下的关系：</p>
+<p>(球员编号, 比赛编号) → (姓名, 年龄, 比赛时间, 比赛场地，得分)</p>
+<p>上面这个关系说明球员编号和比赛编号的组合决定了球员的姓名、年龄、比赛时间、比赛地点和该比赛的得分数据。</p>
+<p>但是这个数据表不满足第二范式，因为数据表中的字段之间还存在着如下的对应关系：</p>
+<p>(球员编号) → (姓名，年龄)</p>
+<p>(比赛编号) → (比赛时间, 比赛场地)</p>
+<p>也就是说候选键中的某个字段决定了非主属性。你也可以理解为，对于非主属性来说，并非完全依赖候选键。这样会产生怎样的问题呢？</p>
+<ol>
+<li>数据冗余：如果一个球员可以参加 m 场比赛，那么球员的姓名和年龄就重复了 m-1 次。一个比赛也可能会有 n 个球员参加，比赛的时间和地点就重复了 n-1 次。</li>
+<li>插入异常：如果我们想要添加一场新的比赛，但是这时还没有确定参加的球员都有谁，那么就没法插入。</li>
+<li>删除异常：如果我要删除某个球员编号，如果没有单独保存比赛表的话，就会同时把比赛信息删除掉。</li>
+<li>更新异常：如果我们调整了某个比赛的时间，那么数据表中所有这个比赛的时间都需要进行调整，否则就会出现一场比赛时间不同的情况。<br>为了避免出现上述的情况，我们可以把球员比赛表设计为下面的三张表。</li>
+</ol>
+<p>球员 player 表包含球员编号、姓名和年龄等属性；比赛 game 表包含比赛编号、比赛时间和比赛场地等属性；球员比赛关系 player_game 表包含球员编号、比赛编号和得分等属性。</p>
+<p>这样的话，每张数据表都符合第二范式，也就避免了异常情况的发生。某种程度上 2NF 是对 1NF 原子性的升级。1NF 告诉我们字段属性需要是原子性的，而 2NF 告诉我们一张表就是一个独立的对象，也就是说一张表只表达一个意思。</p>
+<p><strong>3NF 在满足 2NF 的同时，对任何非主属性都不传递依赖于候选键。</strong> 也就是说不能存在非主属性 A 依赖于非主属性 B，非主属性 B 依赖于候选键的情况。</p>
+<p>我们用球员 player 表举例子，这张表包含的属性包括球员编号、姓名、球队名称和球队主教练。现在，我们把属性之间的依赖关系画出来，如下图所示：</p>
+<p>你能看到球员编号决定了球队名称，同时球队名称决定了球队主教练，非主属性球队主教练就会传递依赖于球员编号，因此不符合 3NF 的要求。</p>
+<p>如果要达到 3NF 的要求，需要把数据表拆成下面这样：</p>
+<p>球员表的属性包括球员编号、姓名和球队名称；球队表的属性包括球队名称、球队主教练。</p>
+<p>我再总结一下，1NF 需要保证表中每个属性都保持原子性；2NF 需要保证表中的非主属性与候选键完全依赖；3NF 需要保证表中的非主属性与候选键不存在传递依赖。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>我们今天讲解了数据表设计的三种范式。关系型数据库的设计都是基于关系模型的，在关系模型中存在着 4 种键，这些键的核心作用就是标识。</p>
+<p>在这些概念的基础上，我又讲了 1NF，2NF 和 3NF。我们经常会与这三种范式打交道，利用它们建立冗余度小、结构合理的数据库。</p>
+<p>有一点需要注意的是，这些范式只是提出了设计的标准，实际上设计数据表时，未必要符合这些原则。一方面是因为这些范式本身存在一些问题，可能会带来插入，更新，删除等的异常情况（这些会在下一讲举例说明），另一方面，它们也可能降低会查询的效率。这是为什么呢？因为范式等级越高，设计出来的数据表就越多，进行数据查询的时候就可能需要关联多张表，从而影响查询效率。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/31/20%E4%B8%A8%E5%BD%93%E6%88%91%E4%BB%AC%E6%80%9D%E8%80%83%E6%95%B0%E6%8D%AE%E5%BA%93%E8%B0%83%E4%BC%98%E7%9A%84%E6%97%B6%E5%80%99%EF%BC%8C%E9%83%BD%E6%9C%89%E5%93%AA%E4%BA%9B%E7%BB%B4%E5%BA%A6%E5%8F%AF%E4%BB%A5%E9%80%89%E6%8B%A9%EF%BC%9F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2202,261 +2409,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/25/11%E4%B8%A8SQL99%E6%98%AF%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E8%BF%9E%E6%8E%A5%E7%9A%84%EF%BC%8C%E4%B8%8ESQL92%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LvYang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LvYang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/25/11%E4%B8%A8SQL99%E6%98%AF%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E8%BF%9E%E6%8E%A5%E7%9A%84%EF%BC%8C%E4%B8%8ESQL92%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F/" itemprop="url">11丨SQL99是如何使用连接的，与SQL92的区别是什么？</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-25T21:13:01+08:00">
-                2020-03-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" itemprop="url" rel="index">
-                    <span itemprop="name">SQL必知必会</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/03/25/11%E4%B8%A8SQL99%E6%98%AF%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E8%BF%9E%E6%8E%A5%E7%9A%84%EF%BC%8C%E4%B8%8ESQL92%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/03/25/11%E4%B8%A8SQL99%E6%98%AF%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E8%BF%9E%E6%8E%A5%E7%9A%84%EF%BC%8C%E4%B8%8ESQL92%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>上节课我们讲解了 SQL92 标准，在它之后又提出了 SQL99 标准。现在各大 DBMS 中对 SQL99 标准的支持度更好。你一定听说过 LEFT JOIN、RIGHT JOIN 这样的操作符，这实际上就是 SQL99 的标准，在 SQL92 中它们是用（+）代替的。SQL92 和 SQL99 标准原理类似，只是 SQL99 标准的可读性更强。</p>
-<p>今天我就来讲解一下 SQL99 标准中的连接查询，在今天的课程中你需要重点掌握以下几方面的内容：</p>
-<ol>
-<li>SQL99 标准下的连接查询是如何操作的？</li>
-<li>SQL99 与 SQL92 的区别是什么？</li>
-<li>在不同的 DBMS 中，使用连接需要注意什么？<h3 id="SQL99-标准中的连接查询"><a href="#SQL99-标准中的连接查询" class="headerlink" title="SQL99 标准中的连接查询"></a>SQL99 标准中的连接查询</h3>上一篇文章中，我用 NBA 球员的数据表进行了举例，包括了三张数据表 player、team 和 height_grades。</li>
-</ol>
-<p>其中 player 表为球员表，一共有 37 个球员.<br>team 表为球队表，一共有 3 支球队<br>height_grades 表为身高等级表<br>接下来我们看下在 SQL99 标准中，是如何进行连接查询的？</p>
-<h3 id="交叉连接"><a href="#交叉连接" class="headerlink" title="交叉连接"></a>交叉连接</h3><p>交叉连接实际上就是 SQL92 中的笛卡尔乘积，只是这里我们采用的是 CROSS JOIN。</p>
-<p>我们可以通过下面这行代码得到 player 和 team 这两张表的笛卡尔积的结果：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL: SELECT * FROM player CROSS JOIN team</span><br></pre></td></tr></table></figure>
-<p>如果多张表进行交叉连接，比如表 t1，表 t2，表 t3 进行交叉连接，可以写成下面这样：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL: SELECT * FROM t1 CROSS JOIN t2 CROSS JOIN t3</span><br></pre></td></tr></table></figure>
-<h3 id="自然连接"><a href="#自然连接" class="headerlink" title="自然连接"></a>自然连接</h3><p>你可以把自然连接理解为 SQL92 中的等值连接。它会帮你自动查询两张连接表中所有相同的字段，然后进行等值连接。</p>
-<p>如果我们想把 player 表和 team 表进行等值连接，相同的字段是 team_id。还记得在 SQL92 标准中，是如何编写的么？</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT player_id, a.team_id, player_name, height, team_name FROM player as a, team as b WHERE a.team_id = b.team_id</span><br></pre></td></tr></table></figure>
-<p>在 SQL99 中你可以写成：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT player_id, team_id, player_name, height, team_name FROM player NATURAL JOIN team</span><br></pre></td></tr></table></figure>
-<p>实际上，在 SQL99 中用 NATURAL JOIN 替代了 WHERE player.team_id = team.team_id。</p>
-<h3 id="ON-连接"><a href="#ON-连接" class="headerlink" title="ON 连接"></a>ON 连接</h3><p>ON 连接用来指定我们想要的连接条件，针对上面的例子，它同样可以帮助我们实现自然连接的功能：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT player_id, player.team_id, player_name, height, team_name FROM player JOIN team ON player.team_id = team.team_id</span><br></pre></td></tr></table></figure>
-<p>这里我们指定了连接条件是ON player.team_id = team.team_id，相当于是用 ON 进行了 team_id 字段的等值连接。</p>
-<p>当然你也可以 ON 连接进行非等值连接，比如我们想要查询球员的身高等级，需要用 player 和 height_grades 两张表：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SQL99：SELECT p.player_name, p.height, h.height_level</span><br><span class="line">FROM player as p JOIN height_grades as h</span><br><span class="line">ON height BETWEEN h.height_lowest AND h.height_highest</span><br></pre></td></tr></table></figure>
-<p>这个语句的运行结果和我们之前采用 SQL92 标准的查询结果一样。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SQL92：SELECT p.player_name, p.height, h.height_level</span><br><span class="line">FROM player AS p, height_grades AS h</span><br><span class="line">WHERE p.height BETWEEN h.height_lowest AND h.height_highest</span><br></pre></td></tr></table></figure>
-<p>一般来说在 SQL99 中，我们需要连接的表会采用 JOIN 进行连接，ON 指定了连接条件，后面可以是等值连接，也可以采用非等值连接。</p>
-<h3 id="USING-连接"><a href="#USING-连接" class="headerlink" title="USING 连接"></a>USING 连接</h3><p>当我们进行连接的时候，可以用 USING 指定数据表里的同名字段进行等值连接。比如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT player_id, team_id, player_name, height, team_name FROM player JOIN team USING(team_id)</span><br></pre></td></tr></table></figure>
-<p>你能看出与自然连接 NATURAL JOIN 不同的是，USING 指定了具体的相同的字段名称，你需要在 USING 的括号 () 中填入要指定的同名字段。同时使用 JOIN USING 可以简化 JOIN ON 的等值连接，它与下面的 SQL 查询结果是相同的：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT player_id, player.team_id, player_name, height, team_name FROM player JOIN team ON player.team_id = team.team_id</span><br></pre></td></tr></table></figure>
-<h3 id="外连接"><a href="#外连接" class="headerlink" title="外连接"></a>外连接</h3><p>SQL99 的外连接包括了三种形式：</p>
-<ol>
-<li><p>左外连接：LEFT JOIN 或 LEFT OUTER JOIN</p>
-</li>
-<li><p>右外连接：RIGHT JOIN 或 RIGHT OUTER JOIN</p>
-</li>
-<li><p>全外连接：FULL JOIN 或 FULL OUTER JOIN<br>我们在 SQL92 中讲解了左外连接、右外连接，在 SQL99 中还有全外连接。全外连接实际上就是左外连接和右外连接的结合。在这三种外连接中，我们一般省略 OUTER 不写。</p>
-</li>
-<li><p>左外连接</p>
-</li>
-</ol>
-<p>SQL92</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM player, team where player.team_id = team.team_id(+)</span><br></pre></td></tr></table></figure>
-<p>SQL99</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM player LEFT JOIN team ON player.team_id = team.team_id</span><br></pre></td></tr></table></figure>
-<ol start="2">
-<li>右外连接</li>
-</ol>
-<p>SQL92</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM player, team where player.team_id(+) = team.team_id</span><br></pre></td></tr></table></figure>
-<p>SQL99</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM player RIGHT JOIN team ON player.team_id = team.team_id</span><br></pre></td></tr></table></figure>
-<ol start="3">
-<li>全外连接<br>SQL99<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM player FULL JOIN team ON player.team_id = team.team_id</span><br></pre></td></tr></table></figure>
-需要注意的是 MySQL 不支持全外连接，否则的话全外连接会返回左表和右表中的所有行。当表之间有匹配的行，会显示内连接的结果。当某行在另一个表中没有匹配时，那么会把另一个表中选择的列显示为空值。</li>
-</ol>
-<p>也就是说，全外连接的结果 = 左右表匹配的数据 + 左表没有匹配到的数据 + 右表没有匹配到的数据。</p>
-<h3 id="自连接"><a href="#自连接" class="headerlink" title="自连接"></a>自连接</h3><p>自连接的原理在 SQL92 和 SQL99 中都是一样的，只是表述方式不同。</p>
-<p>比如我们想要查看比布雷克·格里芬身高高的球员都有哪些，在两个 SQL 标准下的查询如下。</p>
-<p>SQL92</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT b.player_name, b.height FROM player as a , player as b WHERE a.player_name = &apos;布雷克-格里芬&apos; and a.height &lt; b.height</span><br></pre></td></tr></table></figure>
-<p>SQL99</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT b.player_name, b.height FROM player as a JOIN player as b ON a.player_name = &apos;布雷克-格里芬&apos; and a.height &lt; b.height</span><br></pre></td></tr></table></figure>
-<h3 id="SQL99-和-SQL92-的区别"><a href="#SQL99-和-SQL92-的区别" class="headerlink" title="SQL99 和 SQL92 的区别"></a>SQL99 和 SQL92 的区别</h3><p>至此我们讲解完了 SQL92 和 SQL99 标准下的连接查询，它们都对连接进行了定义，只是操作的方式略有不同。我们再来回顾下，这些连接操作基本上可以分成三种情况：</p>
-<p>内连接：将多个表之间满足连接条件的数据行查询出来。它包括了等值连接、非等值连接和自连接。<br>外连接：会返回一个表中的所有记录，以及另一个表中匹配的行。它包括了左外连接、右外连接和全连接。<br>交叉连接：也称为笛卡尔积，返回左表中每一行与右表中每一行的组合。在 SQL99 中使用的 CROSS JOIN。<br>不过 SQL92 在这三种连接操作中，和 SQL99 还存在着明显的区别。</p>
-<p>首先我们看下 SQL92 中的 WHERE 和 SQL99 中的 JOIN。</p>
-<p>你能看出在 SQL92 中进行查询时，会把所有需要连接的表都放到 FROM 之后，然后在 WHERE 中写明连接的条件。而 SQL99 在这方面更灵活，它不需要一次性把所有需要连接的表都放到 FROM 之后，而是采用 JOIN 的方式，每次连接一张表，可以多次使用 JOIN 进行连接。</p>
-<p>另外，我建议多表连接使用 SQL99 标准，因为层次性更强，可读性更强，比如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT ...</span><br><span class="line">FROM table1</span><br><span class="line">    JOIN table2 ON table1 和 table2 的连接条件</span><br><span class="line">        JOIN table3 ON table2 和 table3 的连接条件</span><br></pre></td></tr></table></figure>
-<p>它的嵌套逻辑类似我们使用的 FOR 循环：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">for t1 in table1:</span><br><span class="line">    for t2 in table2:</span><br><span class="line">       if condition1:</span><br><span class="line">           for t3 in table3:</span><br><span class="line">              if condition2:</span><br><span class="line">                  output t1 + t2 + t3</span><br></pre></td></tr></table></figure>
-<p>SQL99 采用的这种嵌套结构非常清爽，即使再多的表进行连接也都清晰可见。如果你采用 SQL92，可读性就会大打折扣。</p>
-<p>最后一点就是，SQL99 在 SQL92 的基础上提供了一些特殊语法，比如 NATURAL JOIN 和 JOIN USING。它们在实际中是比较常用的，省略了 ON 后面的等值条件判断，让 SQL 语句更加简洁。</p>
-<h3 id="不同-DBMS-中使用连接需要注意的地方"><a href="#不同-DBMS-中使用连接需要注意的地方" class="headerlink" title="不同 DBMS 中使用连接需要注意的地方"></a>不同 DBMS 中使用连接需要注意的地方</h3><p>SQL 连接具有通用性，但是不同的 DBMS 在使用规范上会存在差异，在标准支持上也存在不同。在实际工作中，你需要参考你正在使用的 DBMS 文档，这里我整理了一些需要注意的常见的问题。</p>
-<ol>
-<li>不是所有的 DBMS 都支持全外连接</li>
-</ol>
-<p>虽然 SQL99 标准提供了全外连接，但不是所有的 DBMS 都支持。不仅 MySQL 不支持，Access、SQLite、MariaDB 等数据库软件也不支持。不过在 Oracle、DB2、SQL Server 中是支持的。</p>
-<ol start="2">
-<li>Oracle 没有表别名 AS</li>
-</ol>
-<p>为了让 SQL 查询语句更简洁，我们经常会使用表别名 AS，不过在 Oracle 中是不存在 AS 的，使用表别名的时候，直接在表名后面写上表别名即可，比如 player p，而不是 player AS p。</p>
-<ol start="3">
-<li>SQLite 的外连接只有左连接</li>
-</ol>
-<p>SQLite 是一款轻量级的数据库软件，在外连接上只支持左连接，不支持右连接，不过如果你想使用右连接的方式，比如table1 RIGHT JOIN table2，在 SQLite 你可以写成table2 LEFT JOIN table1，这样就可以得到相同的效果。</p>
-<p>除了一些常见的语法问题，还有一些关于连接的性能问题需要你注意：</p>
-<ol>
-<li>控制连接表的数量</li>
-</ol>
-<p>多表连接就相当于嵌套 for 循环一样，非常消耗资源，会让 SQL 查询性能下降得很严重，因此不要连接不必要的表。在许多 DBMS 中，也都会有最大连接表的限制。</p>
-<ol start="2">
-<li>在连接时不要忘记 WHERE 语句</li>
-</ol>
-<p>多表连接的目的不是为了做笛卡尔积，而是筛选符合条件的数据行，因此在多表连接的时候不要忘记了 WHERE 语句，这样可以过滤掉不必要的数据行返回。</p>
-<ol start="3">
-<li>使用自连接而不是子查询</li>
-</ol>
-<p>我们在查看比布雷克·格里芬高的球员都有谁的时候，可以使用子查询，也可以使用自连接。一般情况建议你使用自连接，因为在许多 DBMS 的处理过程中，对于自连接的处理速度要比子查询快得多。你可以这样理解：子查询实际上是通过未知表进行查询后的条件判断，而自连接是通过已知的自身数据表进行条件判断，因此在大部分 DBMS 中都对自连接处理进行了优化。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>连接可以说是 SQL 中的核心操作，通过两篇文章的学习，你已经从多个维度对连接进行了了解。同时，我们对 SQL 的两个重要标准 SQL92 和 SQL99 进行了学习，在我们需要进行外连接的时候，建议采用 SQL99 标准，这样更适合阅读。</p>
-<p>此外我还想强调一下，我们在进行连接的时候，使用的关系型数据库管理系统，之所以存在关系是因为各种数据表之间存在关联，它们并不是孤立存在的。在实际工作中，尤其是做业务报表的时候，我们会用到 SQL 中的连接操作（JOIN），因此我们需要理解和熟练掌握 SQL 标准中连接的使用，以及不同 DBMS 中对连接的语法规范。剩下要做的，就是通过做练习和实战来增强你的经验了，做的练习多了，也就自然有感觉了。</p>
-<p>我今天讲解了 SQL99 的连接操作，不妨请你做一个小练习。请你编写 SQL 查询语句，查询不同身高级别（对应 height_grades 表）对应的球员数量（对应 player 表）。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT  count(*), h.height_level</span><br><span class="line">FROM player AS p, height_grades AS h</span><br><span class="line">WHERE p.height BETWEEN h.height_lowest AND h.height_highest group by h.height_level</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2507,7 +2459,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-count">70</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

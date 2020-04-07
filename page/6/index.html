@@ -258,6 +258,233 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/13/22%20%7C%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8BAsyncio/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/13/22%20%7C%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8BAsyncio/" itemprop="url">22 | 并发编程之Asyncio</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-13T21:10:07+08:00">
+                2019-12-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
+                    <span itemprop="name">python核心技术与实战</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/12/13/22%20%7C%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8BAsyncio/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/12/13/22%20%7C%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8BAsyncio/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>上节课，我们一起学习了 Python 并发编程的一种实现——多线程。今天这节课，我们继续学习 Python 并发编程的另一种实现方式——Asyncio。不同于协程那章，这节课我们更注重原理的理解。</p>
+<p>通过上节课的学习，我们知道，在处理 I/O 操作时，使用多线程与普通的单线程相比，效率得到了极大的提高。你可能会想，既然这样，为什么还需要 Asyncio？</p>
+<p>诚然，多线程有诸多优点且应用广泛，但也存在一定的局限性：</p>
+<ul>
+<li>比如，多线程运行过程容易被打断，因此有可能出现 race condition 的情况；</li>
+<li>再如，线程切换本身存在一定的损耗，线程数不能无限增加，因此，如果你的 I/O 操作非常 heavy，多线程很有可能满足不了高效率、高质量的需求。<br>正是为了解决这些问题，Asyncio 应运而生。</li>
+</ul>
+<h3 id="什么是-Asyncio"><a href="#什么是-Asyncio" class="headerlink" title="什么是 Asyncio"></a>什么是 Asyncio</h3><h3 id="Sync-VS-Async"><a href="#Sync-VS-Async" class="headerlink" title="Sync VS Async"></a>Sync VS Async</h3><p>我们首先来区分一下 Sync（同步）和 Async（异步）的概念。</p>
+<ul>
+<li>所谓 Sync，是指操作一个接一个地执行，下一个操作必须等上一个操作完成后才能执行。</li>
+<li>而 Async 是指不同操作间可以相互交替执行，如果其中的某个操作被 block 了，程序并不会等待，而是会找出可执行的操作继续执行。</li>
+</ul>
+<p>举个简单的例子，你的老板让你做一份这个季度的报表，并且邮件发给他。</p>
+<ul>
+<li>如果按照 Sync 的方式，你会先向软件输入这个季度的各项数据，接下来等待 5min，等报表明细生成后，再写邮件发给他。</li>
+<li>但如果按照 Async 的方式，再你输完这个季度的各项数据后，便会开始写邮件。等报表明细生成后，你会暂停邮件，先去查看报表，确认后继续写邮件直到发送完毕。</li>
+</ul>
+<h3 id="Asyncio-工作原理"><a href="#Asyncio-工作原理" class="headerlink" title="Asyncio 工作原理"></a>Asyncio 工作原理</h3><p>明白了 Sync 和 Async，回到我们今天的主题，到底什么是 Asyncio 呢？</p>
+<p>事实上，Asyncio 和其他 Python 程序一样，是单线程的，它只有一个主线程，但是可以进行多个不同的任务（task），这里的任务，就是特殊的 future 对象。这些不同的任务，被一个叫做 event loop 的对象所控制。你可以把这里的任务，类比成多线程版本里的多个线程。</p>
+<p>为了简化讲解这个问题，我们可以假设任务只有两个状态：一是预备状态；二是等待状态。所谓的预备状态，是指任务目前空闲，但随时待命准备运行。而等待状态，是指任务已经运行，但正在等待外部的操作完成，比如 I/O 操作。</p>
+<p>在这种情况下，event loop 会维护两个任务列表，分别对应这两种状态；并且选取预备状态的一个任务（具体选取哪个任务，和其等待的时间长短、占用的资源等等相关），使其运行，一直到这个任务把控制权交还给 event loop 为止。</p>
+<p>当任务把控制权交还给 event loop 时，event loop 会根据其是否完成，把任务放到预备或等待状态的列表，然后遍历等待状态列表的任务，查看他们是否完成。</p>
+<ul>
+<li>如果完成，则将其放到预备状态的列表；</li>
+<li>如果未完成，则继续放在等待状态的列表。<br>而原先在预备状态列表的任务位置仍旧不变，因为它们还未运行。</li>
+</ul>
+<p>这样，当所有任务被重新放置在合适的列表后，新一轮的循环又开始了：event loop 继续从预备状态的列表中选取一个任务使其执行…如此周而复始，直到所有任务完成。</p>
+<p>值得一提的是，对于 Asyncio 来说，它的任务在运行时不会被外部的一些因素打断，因此 Asyncio 内的操作不会出现 race condition 的情况，这样你就不需要担心线程安全的问题了。</p>
+<h3 id="Asyncio-用法"><a href="#Asyncio-用法" class="headerlink" title="Asyncio 用法"></a>Asyncio 用法</h3><p>讲完了 Asyncio 的原理，我们结合具体的代码来看一下它的用法。还是以上节课下载网站内容为例，用 Asyncio 的写法我放在了下面代码中（省略了异常处理的一些操作），接下来我们一起来看：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">import</span> aiohttp</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"> </span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">download_one</span><span class="params">(url)</span>:</span></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> aiohttp.ClientSession() <span class="keyword">as</span> session:</span><br><span class="line">        <span class="keyword">async</span> <span class="keyword">with</span> session.get(url) <span class="keyword">as</span> resp:</span><br><span class="line">            print(<span class="string">'Read &#123;&#125; from &#123;&#125;'</span>.format(resp.content_length, url))</span><br><span class="line"> </span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">download_all</span><span class="params">(sites)</span>:</span></span><br><span class="line">    tasks = [asyncio.create_task(download_one(site)) <span class="keyword">for</span> site <span class="keyword">in</span> sites]</span><br><span class="line">    <span class="keyword">await</span> asyncio.gather(*tasks)</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    sites = [</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Arts'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:History'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Society'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Biography'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Mathematics'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Technology'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Geography'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Portal:Science'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Computer_science'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Python_(programming_language)'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Java_(programming_language)'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/PHP'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Node.js'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/The_C_Programming_Language'</span>,</span><br><span class="line">        <span class="string">'https://en.wikipedia.org/wiki/Go_(programming_language)'</span></span><br><span class="line">    ]</span><br><span class="line">    start_time = time.perf_counter()</span><br><span class="line">    asyncio.run(download_all(sites))</span><br><span class="line">    end_time = time.perf_counter()</span><br><span class="line">    print(<span class="string">'Download &#123;&#125; sites in &#123;&#125; seconds'</span>.format(len(sites), end_time - start_time))</span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+
+<pre><code>---------------------------------------------------------------------------
+
+ModuleNotFoundError                       Traceback (most recent call last)
+
+&lt;ipython-input-1-1c8dff975abc&gt; in &lt;module&gt;
+      1 import asyncio
+----&gt; 2 import aiohttp
+      3 import time
+      4 
+      5 async def download_one(url):
+
+
+ModuleNotFoundError: No module named &apos;aiohttp&apos;</code></pre><p>这里的 Async 和 await 关键字是 Asyncio 的最新写法，表示这个语句 / 函数是 non-block 的，正好对应前面所讲的 event loop 的概念。如果任务执行的过程需要等待，则将其放入等待状态的列表中，然后继续执行预备状态列表里的任务。</p>
+<p>主函数里的 asyncio.run(coro) 是 Asyncio 的 root call，表示拿到 event loop，运行输入的 coro，直到它结束，最后关闭这个 event loop。事实上，asyncio.run() 是 Python3.7+ 才引入的，相当于老版本的以下语句：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">loop = asyncio.get_event_loop()</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    loop.run_until_complete(coro)</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    loop.close()</span><br></pre></td></tr></table></figure>
+
+<p>至于 Asyncio 版本的函数 download_all()，和之前多线程版本有很大的区别：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tasks = [asyncio.create_task(download_one(site)) <span class="keyword">for</span> site <span class="keyword">in</span> sites]</span><br><span class="line"><span class="keyword">await</span> asyncio.gather(*task)</span><br></pre></td></tr></table></figure>
+
+<p>这里的asyncio.create_task(coro)，表示对输入的协程 coro 创建一个任务，安排它的执行，并返回此任务对象。这个函数也是 Python 3.7+ 新增的，如果是之前的版本，你可以用asyncio.ensure_future(coro)等效替代。可以看到，这里我们对每一个网站的下载，都创建了一个对应的任务。</p>
+<p>再往下看，asyncio.gather(*aws, loop=None, return_exception=False)，则表示在 event loop 中运行aws序列的所有任务。当然，除了例子中用到的这几个函数，Asyncio 还提供了很多其他的用法，你可以查看 相应文档 进行了解。</p>
+<p>最后，我们再来看一下最后的输出结果——用时只有 0.06s，效率比起之前的多线程版本，可以说是更上一层楼，充分体现其优势。</p>
+<h3 id="Asyncio-有缺陷吗？"><a href="#Asyncio-有缺陷吗？" class="headerlink" title="Asyncio 有缺陷吗？"></a>Asyncio 有缺陷吗？</h3><p>学了这么多内容，我们认识到了 Asyncio 的强大，但你要清楚，任何一种方案都不是完美的，都存在一定的局限性，Asyncio 同样如此。</p>
+<p>实际工作中，想用好 Asyncio，特别是发挥其强大的功能，很多情况下必须得有相应的 Python 库支持。你可能注意到了，上节课的多线程编程中，我们使用的是 requests 库，但今天我们并没有使用，而是用了 aiohttp 库，原因就是 requests 库并不兼容 Asyncio，但是 aiohttp 库兼容。</p>
+<p>Asyncio 软件库的兼容性问题，在 Python3 的早期一直是个大问题，但是随着技术的发展，这个问题正逐步得到解决。</p>
+<p>另外，使用 Asyncio 时，因为你在任务的调度方面有了更大的自主权，写代码时就得更加注意，不然很容易出错。</p>
+<p>举个例子，如果你需要 await 一系列的操作，就得使用 asyncio.gather()；如果只是单个的 future，或许只用 asyncio.wait() 就可以了。那么，对于你的 future，你是想要让它 run_until_complete() 还是 run_forever() 呢？诸如此类，都是你在面对具体问题时需要考虑的。</p>
+<h3 id="多线程还是-Asyncio"><a href="#多线程还是-Asyncio" class="headerlink" title="多线程还是 Asyncio"></a>多线程还是 Asyncio</h3><p>不知不觉，我们已经把并发编程的两种方式都给学习完了。不过，遇到实际问题时，多线程和 Asyncio 到底如何选择呢？</p>
+<p>总的来说，你可以遵循以下伪代码的规范：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> io_bound:</span><br><span class="line">    <span class="keyword">if</span> io_slow:</span><br><span class="line">        print(<span class="string">'Use Asyncio'</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        print(<span class="string">'Use multi-threading'</span>)</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> cpu_bound:</span><br><span class="line">    print(<span class="string">'Use multi-processing'</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果是 I/O bound，并且 I/O 操作很慢，需要很多任务 / 线程协同实现，那么使用 Asyncio 更合适。</li>
+<li>如果是 I/O bound，但是 I/O 操作很快，只需要有限数量的任务 / 线程，那么使用多线程就可以了。</li>
+<li>如果是 CPU bound，则需要使用多进程来提高程序运行效率。</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>今天这节课，我们一起学习了 Asyncio 的原理和用法，并比较了 Asyncio 和多线程各自的优缺点。</p>
+<p>不同于多线程，Asyncio 是单线程的，但其内部 event loop 的机制，可以让它并发地运行多个不同的任务，并且比多线程享有更大的自主控制权。</p>
+<p>Asyncio 中的任务，在运行过程中不会被打断，因此不会出现 race condition 的情况。尤其是在 I/O 操作 heavy 的场景下，Asyncio 比多线程的运行效率更高。因为 Asyncio 内部任务切换的损耗，远比线程切换的损耗要小；并且 Asyncio 可以开启的任务数量，也比多线程中的线程数量多得多。</p>
+<p>但需要注意的是，很多情况下，使用 Asyncio 需要特定第三方库的支持，比如前面示例中的 aiohttp。而如果 I/O 操作很快，并不 heavy，那么运用多线程，也能很有效地解决问题。</p>
+<h3 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h3><p>这两节课，我们学习了并发编程的两种实现方式，也多次提到了并行编程（multi-processing），其适用于 CPU heavy 的场景。</p>
+<p>现在有这么一个需求：输入一个列表，对于列表中的每个元素，我想计算 0 到这个元素的所有整数的平方和。</p>
+<p>我把常规版本的写法放在了下面，你能通过查阅资料，写出它的多进程版本，并且比较程序的耗时吗？</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cpu_bound</span><span class="params">(number)</span>:</span></span><br><span class="line">    print(sum(i * i <span class="keyword">for</span> i <span class="keyword">in</span> range(number)))</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">calculate_sums</span><span class="params">(numbers)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> number <span class="keyword">in</span> numbers:</span><br><span class="line">        cpu_bound(number)</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    start_time = time.perf_counter()  </span><br><span class="line">    numbers = [<span class="number">10000000</span> + x <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">20</span>)]</span><br><span class="line">    calculate_sums(numbers)</span><br><span class="line">    end_time = time.perf_counter()</span><br><span class="line">    print(<span class="string">'Calculation takes &#123;&#125; seconds'</span>.format(end_time - start_time))</span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/13/21%20%7C%20Python%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8BFutures/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2521,253 +2748,6 @@ RecursionError: maximum recursion depth exceeded in comparison</code></pre><p>�
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/10/11%20%7C%20%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%EF%BC%88%E4%B8%8A%EF%BC%89%EF%BC%9A%E4%BB%8E%E7%94%9F%E6%B4%BB%E4%B8%AD%E7%9A%84%E7%B1%BB%E6%AF%94%E8%AF%B4%E8%B5%B7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LvYang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LvYang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/10/11%20%7C%20%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%EF%BC%88%E4%B8%8A%EF%BC%89%EF%BC%9A%E4%BB%8E%E7%94%9F%E6%B4%BB%E4%B8%AD%E7%9A%84%E7%B1%BB%E6%AF%94%E8%AF%B4%E8%B5%B7/" itemprop="url">11 | 面向对象（上）：从生活中的类比说起</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-10T19:13:07+08:00">
-                2019-12-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
-                    <span itemprop="name">python核心技术与实战</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/12/10/11%20%7C%20%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%EF%BC%88%E4%B8%8A%EF%BC%89%EF%BC%9A%E4%BB%8E%E7%94%9F%E6%B4%BB%E4%B8%AD%E7%9A%84%E7%B1%BB%E6%AF%94%E8%AF%B4%E8%B5%B7/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/12/10/11%20%7C%20%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%EF%BC%88%E4%B8%8A%EF%BC%89%EF%BC%9A%E4%BB%8E%E7%94%9F%E6%B4%BB%E4%B8%AD%E7%9A%84%E7%B1%BB%E6%AF%94%E8%AF%B4%E8%B5%B7/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="对象，你找到了吗？"><a href="#对象，你找到了吗？" class="headerlink" title="对象，你找到了吗？"></a>对象，你找到了吗？</h3><p>我们先来看一段最基本的 Python 面向对象的应用代码，不要被它的长度吓到，你无需立刻看懂所有代码，跟着节奏来，我会一点点为你剖析。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Document</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, title, author, context)</span>:</span></span><br><span class="line">        print(<span class="string">'init function called'</span>)</span><br><span class="line">        self.title = title</span><br><span class="line">        self.author = author</span><br><span class="line">        self.__context = context <span class="comment"># __ 开头的属性是私有属性</span></span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_context_length</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> len(self.__context)</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">intercept_context</span><span class="params">(self, length)</span>:</span></span><br><span class="line">        self.__context = self.__context[:length]</span><br><span class="line"> </span><br><span class="line">harry_potter_book = Document(<span class="string">'Harry Potter'</span>, <span class="string">'J. K. Rowling'</span>, <span class="string">'... Forever Do not believe any thing is capable of thinking independently ...'</span>)</span><br><span class="line"> </span><br><span class="line">print(harry_potter_book.title)</span><br><span class="line">print(harry_potter_book.author)</span><br><span class="line">print(harry_potter_book.get_context_length())</span><br><span class="line"> </span><br><span class="line">harry_potter_book.intercept_context(<span class="number">10</span>)</span><br><span class="line"> </span><br><span class="line">print(harry_potter_book.get_context_length())</span><br><span class="line"> </span><br><span class="line">print(harry_potter_book.__context)</span><br></pre></td></tr></table></figure>
-
-<pre><code>init function called
-Harry Potter
-J. K. Rowling
-77
-10
-
-
-
----------------------------------------------------------------------------
-
-AttributeError                            Traceback (most recent call last)
-
-&lt;ipython-input-1-1a6ee7c15513&gt; in &lt;module&gt;
-     22 print(harry_potter_book.get_context_length())
-     23 
----&gt; 24 print(harry_potter_book.__context)
-
-
-AttributeError: &apos;Document&apos; object has no attribute &apos;__context&apos;</code></pre><p>参照着这段代码，我先来简单解释几个概念。</p>
-<ul>
-<li>类：一群有着相似性的事物的集合，这里对应 Python 的 class。</li>
-<li>对象：集合中的一个事物，这里对应由 class 生成的某一个 object，比如代码中的 harry_potter_book。</li>
-<li>属性：对象的某个静态特征，比如上述代码中的 title、author 和 **__context。</li>
-<li>函数：对象的某个动态能力，比如上述代码中的 intercept_context () 函数。</li>
-</ul>
-<p>当然，这样的说法既不严谨，也不充分，但如果你对面向对象编程完全不了解，它们可以让你迅速有一个直观的了解。</p>
-<p>这里我想多说两句。回想起当年参加数学竞赛时，我曾和一个大佬交流数学的学习，我清楚记得我们对数学有着相似的观点：很多数学概念非常抽象，如果纯粹从数理逻辑而不是更高的角度去解题，很容易陷入僵局；而具体、直观的想象和类比，才是迅速打开数学大门的钥匙。虽然这些想象和类比不严谨也不充分，很多时候甚至是错误或者异想天开的，但它们确实能帮我们快速找到正确的大门。</p>
-<p>就像很多人都有过的一个疑惑，“学霸是怎样想到这个答案的？”。德国数学家克莱因曾说过，“推进数学的，主要是那些有卓越直觉的人，而不是以严格的证明方法见长的人。”编程世界同样如此，如果你不满足于只做一个 CRUD“码农”，而是想成为一个优秀的工程师，那就一定要积极锻炼直觉思考和快速类比的能力，尤其是在找不到 bug 的时候。这才是编程学习中能给人最快进步的方法和路径。</p>
-<p>言归正传，继续回到我们的主题，还是通过刚刚那段代码，我想再给类下一个更为严谨的定义。</p>
-<p><strong>类，一群有着相同属性和函数的对象的集合。</strong></p>
-<p>可以看到，class Document 定义了 Document 类，再往下能看到它有三个函数，这三个函数即为 Document 类的三个函数。</p>
-<p>其中，init 表示构造函数，意即一个对象生成时会被自动调用的函数。我们能看到， harry_potter_book = Document(…)这一行代码被执行的时候，’init function called’字符串会被打印出来。而 get_context_length() 和 intercept_context() 则为类的普通函数，我们调用它们来对对象的属性做一些事情。</p>
-<p>class Document 还有三个属性，title、author 和 __context 分别表示标题、作者和内容，通过构造函数传入。这里代码很直观，我们可以看到， intercept_context 能修改对象 harry_potter_book 的 __context 属性。</p>
-<p>这里唯一需要强调的一点是，如果一个属性以 __ （注意，此处有两个 _） 开头，我们就默认这个属性是私有属性。私有属性，是指不希望在类的函数之外的地方被访问和修改的属性。所以，你可以看到，title 和 author 能够很自由地被打印出来，但是 print(harry_potter_book.__context)就会报错。</p>
-<h3 id="老师，能不能再给力点？"><a href="#老师，能不能再给力点？" class="headerlink" title="老师，能不能再给力点？"></a>老师，能不能再给力点？</h3><p>掌握了最基础的概念，其实我们已经能做很多很多的事情了。不过，在工程实践中，随着复杂度继续提升，你可能会想到一些问题：</p>
-<ul>
-<li>如何在一个类中定义一些常量，每个对象都可以方便访问这些常量而不用重新构造？</li>
-<li>如果一个函数不涉及到访问修改这个类的属性，而放到类外面有点不恰当，怎么做才能更优雅呢？</li>
-<li>既然类是一群相似的对象的集合，那么可不可以是一群相似的类的集合呢？</li>
-</ul>
-<p>前两个问题很好解决，不过，它们涉及到一些常用的代码规范，这里我放了一段代码示例。同样的，你无需一口气读完这段代码，跟着我的节奏慢慢学习即可。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Document</span><span class="params">()</span>:</span></span><br><span class="line">    </span><br><span class="line">    WELCOME_STR = <span class="string">'Welcome! The context for this book is &#123;&#125;.'</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, title, author, context)</span>:</span></span><br><span class="line">        print(<span class="string">'init function called'</span>)</span><br><span class="line">        self.title = title</span><br><span class="line">        self.author = author</span><br><span class="line">        self.__context = context</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 类函数</span></span><br><span class="line"><span class="meta">    @classmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">create_empty_book</span><span class="params">(cls, title, author)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> cls(title=title, author=author, context=<span class="string">'nothing'</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 成员函数</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_context_length</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> len(self.__context)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 静态函数</span></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_welcome</span><span class="params">(context)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> Document.WELCOME_STR.format(context)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">empty_book = Document.create_empty_book(<span class="string">'What Every Man Thinks About Apart from Sex'</span>, <span class="string">'Professor Sheridan Simove'</span>)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">print(empty_book.get_context_length())</span><br><span class="line">print(empty_book.get_welcome(<span class="string">'indeed nothing'</span>))</span><br></pre></td></tr></table></figure>
-
-<pre><code>init function called
-7
-Welcome! The context for this book is indeed nothing.</code></pre><p>第一个问题，在 Python 的类里，你只需要和函数并列地声明并赋值，就可以实现这一点，例如这段代码中的 WELCOME_STR。一种很常规的做法，是用全大写来表示常量，因此我们可以在类中使用 self.WELCOME_STR ，或者在类外使用 Entity.WELCOME_STR ，来表达这个字符串。</p>
-<p>而针对第二个问题，我们提出了类函数、成员函数和静态函数三个概念。它们其实很好理解，前两者产生的影响是动态的，能够访问或者修改对象的属性；而静态函数则与类没有什么关联，最明显的特征便是，静态函数的第一个参数没有任何特殊性。</p>
-<p>具体来看这几种函数。一般而言，静态函数可以用来做一些简单独立的任务，既方便测试，也能优化代码结构。静态函数还可以通过在函数前一行加上 @staticmethod 来表示，代码中也有相应的示例。这其实使用了装饰器的概念，我们会在后面的章节中详细讲解。</p>
-<p>而类函数的第一个参数一般为 cls，表示必须传一个类进来。类函数最常用的功能是实现不同的 init 构造函数，比如上文代码中，我们使用 create_empty_book 类函数，来创造新的书籍对象，其 context 一定为 ‘nothing’。这样的代码，就比你直接构造要清晰一些。类似的，类函数需要装饰器 @classmethod 来声明。</p>
-<p>成员函数则是我们最正常的类的函数，它不需要任何装饰器声明，第一个参数 self 代表当前对象的引用，可以通过此函数，来实现想要的查询 / 修改类的属性等功能。</p>
-<h3 id="继承，是每个富二代的梦想"><a href="#继承，是每个富二代的梦想" class="headerlink" title="继承，是每个富二代的梦想"></a>继承，是每个富二代的梦想</h3><p>接下来，我们来看第三个问题，既然类是一群相似的对象的集合，那么可不可以是一群相似的类的集合呢？</p>
-<p>答案是，当然可以。只要抽象得好，类可以描述成任何事物的集合。当然你要小心、严谨地去定义它，不然一不小心就会引起第三次数学危机 XD。</p>
-<p>类的继承，顾名思义，指的是一个类既拥有另一个类的特征，也拥有不同于另一个类的独特特征。在这里的第一个类叫做子类，另一个叫做父类，特征其实就是类的属性和函数。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Entity</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, object_type)</span>:</span></span><br><span class="line">        print(<span class="string">'parent class init called'</span>)</span><br><span class="line">        self.object_type = object_type</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_context_length</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">raise</span> Exception(<span class="string">'get_context_length not implemented'</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">print_title</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(self.title)</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Document</span><span class="params">(Entity)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, title, author, context)</span>:</span></span><br><span class="line">        print(<span class="string">'Document class init called'</span>)</span><br><span class="line">        Entity.__init__(self, <span class="string">'document'</span>)</span><br><span class="line">        self.title = title</span><br><span class="line">        self.author = author</span><br><span class="line">        self.__context = context</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_context_length</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> len(self.__context)</span><br><span class="line">    </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Video</span><span class="params">(Entity)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, title, author, video_length)</span>:</span></span><br><span class="line">        print(<span class="string">'Video class init called'</span>)</span><br><span class="line">        Entity.__init__(self, <span class="string">'video'</span>)</span><br><span class="line">        self.title = title</span><br><span class="line">        self.author = author</span><br><span class="line">        self.__video_length = video_length</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_context_length</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.__video_length</span><br><span class="line"> </span><br><span class="line">harry_potter_book = Document(<span class="string">'Harry Potter(Book)'</span>, <span class="string">'J. K. Rowling'</span>, <span class="string">'... Forever Do not believe any thing is capable of thinking independently ...'</span>)</span><br><span class="line">harry_potter_movie = Video(<span class="string">'Harry Potter(Movie)'</span>, <span class="string">'J. K. Rowling'</span>, <span class="number">120</span>)</span><br><span class="line"> </span><br><span class="line">print(harry_potter_book.object_type)</span><br><span class="line">print(harry_potter_movie.object_type)</span><br><span class="line"> </span><br><span class="line">harry_potter_book.print_title()</span><br><span class="line">harry_potter_movie.print_title()</span><br><span class="line"> </span><br><span class="line">print(harry_potter_book.get_context_length())</span><br><span class="line">print(harry_potter_movie.get_context_length())</span><br></pre></td></tr></table></figure>
-
-<pre><code>Document class init called
-parent class init called
-Video class init called
-parent class init called
-document
-video
-Harry Potter(Book)
-Harry Potter(Movie)
-77
-120</code></pre><p>我们同样结合代码来学习这些概念。在这段代码中，Document 和 Video 它们有相似的地方，都有相应的标题、作者和内容等属性。我们可以从中抽象出一个叫做 Entity 的类，来作为它俩的父类。</p>
-<p>首先需要注意的是构造函数。每个类都有构造函数，继承类在生成对象的时候，是不会自动调用父类的构造函数的，因此你必须在 init() 函数中显式调用父类的构造函数。它们的执行顺序是 子类的构造函数 -&gt; 父类的构造函数。</p>
-<p>其次需要注意父类 get_context_length() 函数。如果使用 Entity 直接生成对象，调用 get_context_length() 函数，就会 raise error 中断程序的执行。这其实是一种很好的写法，叫做函数重写，可以使子类必须重新写一遍 get_context_length() 函数，来覆盖掉原有函数。</p>
-<p>最后需要注意到 print_title() 函数，这个函数定义在父类中，但是子类的对象可以毫无阻力地使用它来打印 title，这也就体现了继承的优势：减少重复的代码，降低系统的熵值（即复杂度）。</p>
-<p>到这里，你对继承就有了比较详细的了解了，面向对象编程也可以说已经入门了。当然，如果你想达到更高的层次，大量练习编程，学习更多的细节知识，都是必不可少的。</p>
-<p>最后，我想再为你扩展一下抽象函数和抽象类，我同样会用一段代码来辅助讲解。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> abc <span class="keyword">import</span> ABCMeta, abstractmethod</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Entity</span><span class="params">(metaclass=ABCMeta)</span>:</span></span><br><span class="line"><span class="meta">    @abstractmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_title</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">    @abstractmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">set_title</span><span class="params">(self, title)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Document</span><span class="params">(Entity)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_title</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.title</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">set_title</span><span class="params">(self, title)</span>:</span></span><br><span class="line">        self.title = title</span><br><span class="line"> </span><br><span class="line">document = Document()</span><br><span class="line">document.set_title(<span class="string">'Harry Potter'</span>)</span><br><span class="line">print(document.get_title())</span><br><span class="line"> </span><br><span class="line">entity = Entity()</span><br></pre></td></tr></table></figure>
-
-<p>你应该发现了，Entity 本身是没有什么用的，只需拿来定义 Document 和 Video 的一些基本元素就够了。不过，万一你不小心生成 Entity 的对象该怎么办呢？为了防止这样的手误，必须要介绍一下抽象类。</p>
-<p>抽象类是一种特殊的类，它生下来就是作为父类存在的，一旦对象化就会报错。同样，抽象函数定义在抽象类之中，子类必须重写该函数才能使用。相应的抽象函数，则是使用装饰器 @abstractmethod 来表示。</p>
-<p>我们可以看到，代码中entity = Entity()直接报错，只有通过 Document 继承 Entity 才能正常使用。</p>
-<p>这其实正是软件工程中一个很重要的概念，定义接口。大型工程往往需要很多人合作开发，比如在 Facebook 中，在 idea 提出之后，开发组和产品组首先会召开产品设计会，PM（Product Manager，产品经理） 写出产品需求文档，然后迭代；TL（Team Leader，项目经理）编写开发文档，开发文档中会定义不同模块的大致功能和接口、每个模块之间如何协作、单元测试和集成测试、线上灰度测试、监测和日志等等一系列开发流程。</p>
-<p>抽象类就是这么一种存在，它是一种自上而下的设计风范，你只需要用少量的代码描述清楚要做的事情，定义好接口，然后就可以交给不同开发人员去开发和对接。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>到目前为止，我们一直在强调一件事情：面向对象编程是软件工程中重要的思想。正如动态规划是算法中的重要思想一样，它不是某一种非常具体的技术，而是一种综合能力的体现，是将大型工程解耦化、模块化的重要方法。在实践中要多想，尤其是抽象地想，才能更快掌握这个技巧。</p>
-<p>回顾一下今天的内容，我希望你能自己回答下面两个问题，作为今天内容的总结，写在留言区里。</p>
-<p>第一个问题，面向对象编程四要素是什么？它们的关系又是什么？</p>
-<p>第二个问题，讲了这么久的继承，继承究竟是什么呢？你能用三个字表达出来吗？</p>
-<blockquote>
-<p>这里不开玩笑，Facebook 很多 Launch Doc （上线文档）中要求用五个单词总结你的文档，因为你的文档不仅仅是你的团队要看，往上走甚至会到 VP 或者 CTO 那里，你需要言简意赅，让他们快速理解你想要表达的意思。</p>
-</blockquote>
-<h3 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h3><p>最后，再给你留一道思考题。既然你能通过继承一个类，来获得父类的函数和属性，那么你能继承两个吗？答案自是能的，这就叫做多重继承。那么问题来了。</p>
-<p>我们使用单一继承的时候，构造函数的执行顺序很好确定，即子类 -&gt; 父类 -&gt; 爷类 -&gt;… 的链式关系。不过，多重继承的时候呢？比如下面这个例子。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> ---&gt;B---</span><br><span class="line">A-      --&gt;D</span><br><span class="line"> ---&gt;C---</span><br></pre></td></tr></table></figure>
-
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">这种继承方式，叫做菱形继承，BC 继承了 A，然后 D 继承了 BC，创造一个 D 的对象。那么，构造函数调用顺序又是怎样的呢？</span><br></pre></td></tr></table></figure>
-
-<p>Python面向对象中super用法与MRO机制 —<a href="https://www.cnblogs.com/chenhuabin/p/10058594.html" target="_blank" rel="noopener">https://www.cnblogs.com/chenhuabin/p/10058594.html</a></p>
-<p>TODO: 类函数, 静态函数区别.</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2818,7 +2798,7 @@ Harry Potter(Movie)
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-count">70</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
