@@ -258,6 +258,216 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/01/24%E4%B8%A8%E7%B4%A2%E5%BC%95%E7%9A%84%E5%8E%9F%E7%90%86%EF%BC%9A%E6%88%91%E4%BB%AC%E4%B8%BA%E4%BB%80%E4%B9%88%E7%94%A8B+%E6%A0%91%E6%9D%A5%E5%81%9A%E7%B4%A2%E5%BC%95%EF%BC%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/04/01/24%E4%B8%A8%E7%B4%A2%E5%BC%95%E7%9A%84%E5%8E%9F%E7%90%86%EF%BC%9A%E6%88%91%E4%BB%AC%E4%B8%BA%E4%BB%80%E4%B9%88%E7%94%A8B+%E6%A0%91%E6%9D%A5%E5%81%9A%E7%B4%A2%E5%BC%95%EF%BC%9F/" itemprop="url">24丨索引的原理：我们为什么用B+树来做索引？</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-01T19:44:01+08:00">
+                2020-04-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" itemprop="url" rel="index">
+                    <span itemprop="name">SQL必知必会</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/04/01/24%E4%B8%A8%E7%B4%A2%E5%BC%95%E7%9A%84%E5%8E%9F%E7%90%86%EF%BC%9A%E6%88%91%E4%BB%AC%E4%B8%BA%E4%BB%80%E4%B9%88%E7%94%A8B+%E6%A0%91%E6%9D%A5%E5%81%9A%E7%B4%A2%E5%BC%95%EF%BC%9F/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/04/01/24%E4%B8%A8%E7%B4%A2%E5%BC%95%E7%9A%84%E5%8E%9F%E7%90%86%EF%BC%9A%E6%88%91%E4%BB%AC%E4%B8%BA%E4%BB%80%E4%B9%88%E7%94%A8B+%E6%A0%91%E6%9D%A5%E5%81%9A%E7%B4%A2%E5%BC%95%EF%BC%9F/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>上节课我讲到了索引的作用，是否需要建立索引，以及建立什么样的索引，需要我们根据实际情况进行选择。我之前说过，索引其实就是一种数据结构，那么今天我们就来看下，索引的数据结构究竟是怎样的？对索引底层的数据结构有了更深入的了解后，就会更了解索引的使用原则。</p>
+<p>今天的文章内容主要包括下面几个部分：</p>
+<ol>
+<li>为什么索引要存放到硬盘上？如何评价索引的数据结构设计的好坏？</li>
+<li>使用平衡二叉树作为索引的数据结构有哪些不足？</li>
+<li>B 树和 B+ 树的结构是怎样的？为什么我们常用 B+ 树作为索引的数据结构？<h3 id="如何评价索引的数据结构设计好坏"><a href="#如何评价索引的数据结构设计好坏" class="headerlink" title="如何评价索引的数据结构设计好坏"></a>如何评价索引的数据结构设计好坏</h3>数据库服务器有两种存储介质，分别为硬盘和内存。内存属于临时存储，容量有限，而且当发生意外时（比如断电或者发生故障重启）会造成数据丢失；硬盘相当于永久存储介质，这也是为什么我们需要把数据保存到硬盘上。</li>
+</ol>
+<p>虽然内存的读取速度很快，但我们还是需要将索引存放到硬盘上，这样的话，当我们在硬盘上进行查询时，也就产生了硬盘的 I/O 操作。相比于内存的存取来说，硬盘的 I/O 存取消耗的时间要高很多。我们通过索引来查找某行数据的时候，需要计算产生的磁盘 I/O 次数，当磁盘 I/O 次数越多，所消耗的时间也就越大。如果我们能让索引的数据结构尽量减少硬盘的 I/O 操作，所消耗的时间也就越小。</p>
+<h3 id="二叉树的局限性"><a href="#二叉树的局限性" class="headerlink" title="二叉树的局限性"></a>二叉树的局限性</h3><p>二分查找法是一种高效的数据检索方式，时间复杂度为 O(log2n)，是不是采用二叉树就适合作为索引的数据结构呢？</p>
+<p>我们先来看下最基础的二叉搜索树（Binary Search Tree），搜索某个节点和插入节点的规则一样，我们假设搜索插入的数值为 key：</p>
+<ol>
+<li>如果 key 大于根节点，则在右子树中进行查找；</li>
+<li>如果 key 小于根节点，则在左子树中进行查找；</li>
+<li>如果 key 等于根节点，也就是找到了这个节点，返回根节点即可。<br>举个例子，我们对数列（34，22，89，5，23，77，91）创造出来的二分查找树如下图所示：</li>
+</ol>
+<p>但是存在特殊的情况，就是有时候二叉树的深度非常大。比如我们给出的数据顺序是 (5, 22, 23, 34, 77, 89, 91)，创造出来的二分搜索树如下图所示：</p>
+<p>你能看出来第一个树的深度是 3，也就是说最多只需 3 次比较，就可以找到节点，而第二个树的深度是 7，最多需要 7 次比较才能找到节点。</p>
+<p>第二棵树也属于二分查找树，但是性能上已经退化成了一条链表，查找数据的时间复杂度变成了 O(n)。为了解决这个问题，人们提出了平衡二叉搜索树（AVL 树），它在二分搜索树的基础上增加了约束，每个节点的左子树和右子树的高度差不能超过 1，也就是说节点的左子树和右子树仍然为平衡二叉树。</p>
+<p>这里说一下，常见的平衡二叉树有很多种，包括了平衡二叉搜索树、红黑树、数堆、伸展树。平衡二叉搜索树是最早提出来的自平衡二叉搜索树，当我们提到平衡二叉树时一般指的就是平衡二叉搜索树。事实上，第一棵树就属于平衡二叉搜索树，搜索时间复杂度就是 O(log2n)。</p>
+<p>我刚才提到过，数据查询的时间主要依赖于磁盘 I/O 的次数，如果我们采用二叉树的形式，即使通过平衡二叉搜索树进行了改进，树的深度也是 O(log2n)，当 n 比较大时，深度也是比较高的，比如下图的情况：</p>
+<p>每访问一次节点就需要进行一次磁盘 I/O 操作，对于上面的树来说，我们需要进行 5 次 I/O 操作。虽然平衡二叉树比较的效率高，但是树的深度也同样高，这就意味着磁盘 I/O 操作次数多，会影响整体数据查询的效率。</p>
+<p>针对同样的数据，如果我们把二叉树改成 M 叉树（M&gt;2）呢？当 M=3 时，同样的 31 个节点可以由下面的三叉树来进行存储：</p>
+<p>你能看到此时树的高度降低了，当数据量 N 大的时候，以及树的分叉数 M 大的时候，M 叉树的高度会远小于二叉树的高度。</p>
+<h3 id="什么是-B-树"><a href="#什么是-B-树" class="headerlink" title="什么是 B 树"></a>什么是 B 树</h3><p>如果用二叉树作为索引的实现结构，会让树变得很高，增加硬盘的 I/O 次数，影响数据查询的时间。因此一个节点就不能只有 2 个子节点，而应该允许有 M 个子节点 (M&gt;2)。</p>
+<p>B 树的出现就是为了解决这个问题，B 树的英文是 Balance Tree，也就是平衡的多路搜索树，它的高度远小于平衡二叉树的高度。在文件系统和数据库系统中的索引结构经常采用 B 树来实现。</p>
+<p>B 树的结构如下图所示：</p>
+<p>B 树作为平衡的多路搜索树，它的每一个节点最多可以包括 M 个子节点，M 称为 B 树的阶。同时你能看到，每个磁盘块中包括了关键字和子节点的指针。如果一个磁盘块中包括了 x 个关键字，那么指针数就是 x+1。对于一个 100 阶的 B 树来说，如果有 3 层的话最多可以存储约 100 万的索引数据。对于大量的索引数据来说，采用 B 树的结构是非常适合的，因为树的高度要远小于二叉树的高度。</p>
+<p>一个 M 阶的 B 树（M&gt;2）有以下的特性：</p>
+<ol>
+<li>根节点的儿子数的范围是 [2,M]。</li>
+<li>每个中间节点包含 k-1 个关键字和 k 个孩子，孩子的数量 = 关键字的数量 +1，k 的取值范围为 [ceil(M/2), M]。</li>
+<li>叶子节点包括 k-1 个关键字（叶子节点没有孩子），k 的取值范围为 [ceil(M/2), M]。</li>
+<li>假设中间节点节点的关键字为：Key[1], Key[2], …, Key[k-1]，且关键字按照升序排序，即 Key[i]&lt;Key[i+1]。此时 k-1 个关键字相当于划分了 k 个范围，也就是对应着 k 个指针，即为：P[1], P[2], …, P[k]，其中 P[1] 指向关键字小于 Key[1] 的子树，P[i] 指向关键字属于 (Key[i-1], Key[i]) 的子树，P[k] 指向关键字大于 Key[k-1] 的子树。</li>
+<li>所有叶子节点位于同一层。<br>上面那张图所表示的 B 树就是一棵 3 阶的 B 树。我们可以看下磁盘块 2，里面的关键字为（8，12），它有 3 个孩子 (3，5)，(9，10) 和 (13，15)，你能看到 (3，5) 小于 8，(9，10) 在 8 和 12 之间，而 (13，15) 大于 12，刚好符合刚才我们给出的特征。</li>
+</ol>
+<p>然后我们来看下如何用 B 树进行查找。假设我们想要查找的关键字是 9，那么步骤可以分为以下几步：</p>
+<ol>
+<li>我们与根节点的关键字 (17，35）进行比较，9 小于 17 那么得到指针 P1；</li>
+<li>按照指针 P1 找到磁盘块 2，关键字为（8，12），因为 9 在 8 和 12 之间，所以我们得到指针 P2；</li>
+<li>按照指针 P2 找到磁盘块 6，关键字为（9，10），然后我们找到了关键字 9。<br>你能看出来在 B 树的搜索过程中，我们比较的次数并不少，但如果把数据读取出来然后在内存中进行比较，这个时间就是可以忽略不计的。而读取磁盘块本身需要进行 I/O 操作，消耗的时间比在内存中进行比较所需要的时间要多，是数据查找用时的重要因素，B 树相比于平衡二叉树来说磁盘 I/O 操作要少，在数据查询中比平衡二叉树效率要高。</li>
+</ol>
+<h3 id="什么是-B-树-1"><a href="#什么是-B-树-1" class="headerlink" title="什么是 B+ 树"></a>什么是 B+ 树</h3><p>B+ 树基于 B 树做出了改进，主流的 DBMS 都支持 B+ 树的索引方式，比如 MySQL。B+ 树和 B 树的差异在于以下几点：</p>
+<ol>
+<li>有 k 个孩子的节点就有 k 个关键字。也就是孩子数量 = 关键字数，而 B 树中，孩子数量 = 关键字数 +1。</li>
+<li>非叶子节点的关键字也会同时存在在子节点中，并且是在子节点中所有关键字的最大（或最小）。</li>
+<li>非叶子节点仅用于索引，不保存数据记录，跟记录有关的信息都放在叶子节点中。而 B 树中，非叶子节点既保存索引，也保存数据记录。</li>
+<li>所有关键字都在叶子节点出现，叶子节点构成一个有序链表，而且叶子节点本身按照关键字的大小从小到大顺序链接。<br>下图就是一棵 B+ 树，阶数为 3，根节点中的关键字 1、18、35 分别是子节点（1，8，14），（18，24，31）和（35，41，53）中的最小值。每一层父节点的关键字都会出现在下一层的子节点的关键字中，因此在叶子节点中包括了所有的关键字信息，并且每一个叶子节点都有一个指向下一个节点的指针，这样就形成了一个链表。</li>
+</ol>
+<p>比如，我们想要查找关键字 16，B+ 树会自顶向下逐层进行查找：</p>
+<ol>
+<li>与根节点的关键字 (1，18，35) 进行比较，16 在 1 和 18 之间，得到指针 P1（指向磁盘块 2）</li>
+<li>找到磁盘块 2，关键字为（1，8，14），因为 16 大于 14，所以得到指针 P3（指向磁盘块 7）</li>
+<li>找到磁盘块 7，关键字为（14，16，17），然后我们找到了关键字 16，所以可以找到关键字 16 所对应的数据。<br>整个过程一共进行了 3 次 I/O 操作，看起来 B+ 树和 B 树的查询过程差不多，但是 B+ 树和 B 树有个根本的差异在于，B+ 树的中间节点并不直接存储数据。这样的好处都有什么呢？</li>
+</ol>
+<p>首先，B+ 树查询效率更稳定。因为 B+ 树每次只有访问到叶子节点才能找到对应的数据，而在 B 树中，非叶子节点也会存储数据，这样就会造成查询效率不稳定的情况，有时候访问到了非叶子节点就可以找到关键字，而有时需要访问到叶子节点才能找到关键字。</p>
+<p>其次，B+ 树的查询效率更高，这是因为通常 B+ 树比 B 树更矮胖（阶数更大，深度更低），查询所需要的磁盘 I/O 也会更少。同样的磁盘页大小，B+ 树可以存储更多的节点关键字。</p>
+<p>不仅是对单个关键字的查询上，在查询范围上，B+ 树的效率也比 B 树高。这是因为所有关键字都出现在 B+ 树的叶子节点中，并通过有序链表进行了链接。而在 B 树中则需要通过中序遍历才能完成查询范围的查找，效率要低很多。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>磁盘的 I/O 操作次数对索引的使用效率至关重要。虽然传统的二叉树数据结构查找数据的效率高，但很容易增加磁盘 I/O 操作的次数，影响索引使用的效率。因此在构造索引的时候，我们更倾向于采用“矮胖”的数据结构。</p>
+<p>B 树和 B+ 树都可以作为索引的数据结构，在 MySQL 中采用的是 B+ 树，B+ 树在查询性能上更稳定，在磁盘页大小相同的情况下，树的构造更加矮胖，所需要进行的磁盘 I/O 次数更少，更适合进行关键字的范围查询。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/31/22%E4%B8%A8%E5%8F%8D%E8%8C%83%E5%BC%8F%E8%AE%BE%E8%AE%A1%EF%BC%9A3NF%E6%9C%89%E4%BB%80%E4%B9%88%E4%B8%8D%E8%B6%B3%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%89%E6%97%B6%E5%80%99%E9%9C%80%E8%A6%81%E5%8F%8D%E8%8C%83%E5%BC%8F%E8%AE%BE%E8%AE%A1%EF%BC%9F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2211,210 +2421,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/26/13%E4%B8%A8%E4%BB%80%E4%B9%88%E6%98%AF%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%EF%BC%8C%E5%9C%A8%E5%AE%9E%E9%99%85%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%94%A8%E5%BE%97%E5%A4%9A%E4%B9%88%EF%BC%9F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LvYang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LvYang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/26/13%E4%B8%A8%E4%BB%80%E4%B9%88%E6%98%AF%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%EF%BC%8C%E5%9C%A8%E5%AE%9E%E9%99%85%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%94%A8%E5%BE%97%E5%A4%9A%E4%B9%88%EF%BC%9F/" itemprop="url">13丨什么是存储过程，在实际项目中用得多么？</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-26T20:09:01+08:00">
-                2020-03-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" itemprop="url" rel="index">
-                    <span itemprop="name">SQL必知必会</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/03/26/13%E4%B8%A8%E4%BB%80%E4%B9%88%E6%98%AF%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%EF%BC%8C%E5%9C%A8%E5%AE%9E%E9%99%85%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%94%A8%E5%BE%97%E5%A4%9A%E4%B9%88%EF%BC%9F/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/03/26/13%E4%B8%A8%E4%BB%80%E4%B9%88%E6%98%AF%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%EF%BC%8C%E5%9C%A8%E5%AE%9E%E9%99%85%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%94%A8%E5%BE%97%E5%A4%9A%E4%B9%88%EF%BC%9F/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>上一节我介绍了视图，它是 SQL 中的一个重要应用，使用视图对 SQL 查询进行封装，可以让 SQL 的代码结构更清晰，让用户权限管理更安全。</p>
-<p>今天我来讲一下 SQL 的存储过程，它是 SQL 中另一个重要应用，和视图一样，都是对 SQL 代码进行封装，可以反复利用。它和视图有着同样的优点，清晰、安全，还可以减少网络传输量。不过它和视图不同，视图是虚拟表，通常不对底层数据表直接操作，而存储过程是程序化的 SQL，可以直接操作底层数据表，相比于面向集合的操作方式，能够实现一些更复杂的数据处理。存储过程可以说是由 SQL 语句和流控制语句构成的语句集合，它和我们之前学到的函数一样，可以接收输入参数，也可以返回输出参数给调用者，返回计算结果。</p>
-<p>今天有关存储过程的内容，你将重点掌握以下几个部分：</p>
-<ol>
-<li>什么是存储过程，如何创建一个存储过程？</li>
-<li>流控制语句都有哪些，如何使用它们？</li>
-<li>各大公司是如何看待存储过程的？在实际工作中，我们该如何使用存储过程？<h3 id="什么是存储过程，如何创建一个存储过程"><a href="#什么是存储过程，如何创建一个存储过程" class="headerlink" title="什么是存储过程，如何创建一个存储过程"></a>什么是存储过程，如何创建一个存储过程</h3>存储过程的英文是 Stored Procedure。它的思想很简单，就是 SQL 语句的封装。一旦存储过程被创建出来，使用它就像使用函数一样简单，我们直接通过调用存储过程名即可。我在前面讲过，存储过程实际上由 SQL 语句和流控制语句共同组成。流控制语句都有哪些呢？这个我稍后讲解。</li>
-</ol>
-<p>我们先来看下如何定义一个存储过程：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CREATE PROCEDURE 存储过程名称 ([参数列表])</span><br><span class="line">BEGIN</span><br><span class="line">    需要执行的语句</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
-<p>在这里，我们使用 CREATE PROCEDURE 创建一个存储过程，后面是存储过程的名称，以及过程所带的参数，可以包括输入参数和输出参数。最后由 BEGIN 和 END 来定义我们所要执行的语句块。</p>
-<p>和视图一样，我们可以删除已经创建的存储过程，使用的是 DROP PROCEDURE。如果要更新存储过程，我们需要使用 ALTER PROCEDURE。</p>
-<p>讲完了如何创建，更新和删除一个存储过程，下面我们来看下如何实现一个简单的存储过程。比如我想做一个累加运算，计算 1+2+…+n 等于多少，我们可以通过参数 n 来表示想要累加的个数，那么如何用存储过程实现这一目的呢？这里我做一个 add_num 的存储过程，具体的代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">CREATE PROCEDURE `add_num`(IN n INT)</span><br><span class="line">BEGIN</span><br><span class="line">       DECLARE i INT;</span><br><span class="line">       DECLARE sum INT;</span><br><span class="line">       </span><br><span class="line">       SET i = 1;</span><br><span class="line">       SET sum = 0;</span><br><span class="line">       WHILE i &lt;= n DO</span><br><span class="line">              SET sum = sum + i;</span><br><span class="line">              SET i = i +1;</span><br><span class="line">       END WHILE;</span><br><span class="line">       SELECT sum;</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
-<p>当我们需要再次使用这个存储过程的时候，直接使用 CALL add_num(50);即可。这里我传入的参数为 50，也就是统计 1+2+…+50 的积累之和，查询结果为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SUM</span><br><span class="line">1275</span><br></pre></td></tr></table></figure>
-
-<p>这就是一个简单的存储过程，除了理解 1+2+…+n 的实现过程，还有两点你需要理解，一个是 DELIMITER 定义语句的结束符，另一个是存储过程的三种参数类型。</p>
-<p>我们先来看下 DELIMITER 的作用。如果你使用 Navicat 这个工具来管理 MySQL 执行存储过程，那么直接执行上面这段代码就可以了。如果用的是 MySQL，你还需要用 DELIMITER 来临时定义新的结束符。因为默认情况下 SQL 采用（；）作为结束符，这样当存储过程中的每一句 SQL 结束之后，采用（；）作为结束符，就相当于告诉 SQL 可以执行这一句了。但是存储过程是一个整体，我们不希望 SQL 逐条执行，而是采用存储过程整段执行的方式，因此我们就需要临时定义新的 DELIMITER，新的结束符可以用（//）或者（$$）。如果你用的是 MySQL，那么上面这段代码，应该写成下面这样：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER //</span><br><span class="line">CREATE PROCEDURE `add_num`(IN n INT)</span><br><span class="line">BEGIN</span><br><span class="line">       DECLARE i INT;</span><br><span class="line">       DECLARE sum INT;</span><br><span class="line">       </span><br><span class="line">       SET i = 1;</span><br><span class="line">       SET sum = 0;</span><br><span class="line">       WHILE i &lt;= n DO</span><br><span class="line">              SET sum = sum + i;</span><br><span class="line">              SET i = i +1;</span><br><span class="line">       END WHILE;</span><br><span class="line">       SELECT sum;</span><br><span class="line">END //</span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
-<p>首先我用（//）作为结束符，又在整个存储过程结束后采用了（//）作为结束符号，告诉 SQL 可以执行了，然后再将结束符还原成默认的（;）。</p>
-<p>需要注意的是，如果你用的是 Navicat 工具，那么在编写存储过程的时候，Navicat 会自动设置 DELIMITER 为其他符号，我们不需要再进行 DELIMITER 的操作。</p>
-<p>我们再来看下存储过程的 3 种参数类型。在刚才的存储过程中，我们使用了 IN 类型的参数，另外还有 OUT 类型和 INOUT 类型，作用如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">参数类型  是否返回         作用</span><br><span class="line">IN       否              向存储过程传入参数,存储过程中修改该参数的值,不能被返回.</span><br><span class="line">OUT      是              把存储过程计算的结果放到该参数中, 调用者可以得到返回值.</span><br><span class="line">INOUT    是              IN和OUT的结合,既用于存储过程的传入参数,同时又可以把计算结果放入参数中,调用者可以得到返回参数.</span><br></pre></td></tr></table></figure>
-<p>IN 和 OUT 的结合，既用于存储过程的传入参数，同时又可以把计算结果放到参数中，调用者可以得到返回值。</p>
-<p>你能看到，IN 参数必须在调用存储过程时指定，而在存储过程中修改该参数的值不能被返回。而 OUT 参数和 INOUT 参数可以在存储过程中被改变，并可返回。</p>
-<p>举个例子，这里会用到我们之前讲过的王者荣耀的英雄数据表 heros。假设我想创建一个存储类型 get_hero_scores，用来查询某一类型英雄中的最大的最大生命值，最小的最大魔法值，以及平均最大攻击值，那么该怎么写呢？</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">CREATE PROCEDURE `get_hero_scores`(</span><br><span class="line">       OUT max_max_hp FLOAT,</span><br><span class="line">       OUT min_max_mp FLOAT,</span><br><span class="line">       OUT avg_max_attack FLOAT,  </span><br><span class="line">       s VARCHAR(255)</span><br><span class="line">       )</span><br><span class="line">BEGIN</span><br><span class="line">       SELECT MAX(hp_max), MIN(mp_max), AVG(attack_max) FROM heros WHERE role_main = s INTO max_max_hp, min_max_mp, avg_max_attack;</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
-<p>你能看到我定义了 4 个参数类型，其中 3 个为 OUT 类型，分别为 max_max_hp、min_max_mp 和 avg_max_attack，另一个参数 s 为 IN 类型。<br>这里我们从 heros 数据表中筛选主要英雄定位为 s 的英雄数据，即筛选条件为 role_main=s，提取这些数据中的最大的最大生命值，最小的最大魔法值，以及平均最大攻击值，分别赋值给变量 max_max_hp、min_max_mp 和 avg_max_attack。<br>然后我们就可以调用存储过程，使用下面这段代码即可：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ALL get_hero_scores(@max_max_hp, @min_max_mp, @avg_max_attack, &apos;战士&apos;);</span><br><span class="line">SELECT @max_max_hp, @min_max_mp, @avg_max_attack;</span><br></pre></td></tr></table></figure>
-<p>流控制语句<br>流控制语句是用来做流程控制的，我刚才讲了两个简单的存储过程的例子，一个是 1+2+…+n 的结果计算，一个是王者荣耀的数据查询，你能看到这两个例子中，我用到了下面的流控制语句：</p>
-<ol>
-<li>BEGIN…END：BEGIN…END 中间包含了多个语句，每个语句都以（;）号为结束符。</li>
-<li>DECLARE：DECLARE 用来声明变量，使用的位置在于 BEGIN…END 语句中间，而且需要在其他语句使用之前进行变量的声明。</li>
-<li>SET：赋值语句，用于对变量进行赋值。</li>
-<li>SELECT…INTO：把从数据表中查询的结果存放到变量中，也就是为变量赋值。<br>除了上面这些用到的流控制语句以外，还有一些常用的流控制语句：</li>
-</ol>
-<p>1.IF…THEN…ENDIF：条件判断语句，我们还可以在 IF…THEN…ENDIF 中使用 ELSE 和 ELSEIF 来进行条件判断。<br>2.CASE：CASE 语句用于多条件的分支判断，使用的语法是下面这样的。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CASE </span><br><span class="line">	WHEN expression1 THEN ...</span><br><span class="line">	WHEN expression2 THEN ...</span><br><span class="line">	...</span><br><span class="line">    ELSE </span><br><span class="line">    --ELSE 语句可以加，也可以不加。加的话代表的所有条件都不满足时采用的方式。</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
-<p>3.LOOP、LEAVE 和 ITERATE：LOOP 是循环语句，使用 LEAVE 可以跳出循环，使用 ITERATE 则可以进入下一次循环。如果你有面向过程的编程语言的使用经验，你可以把 LEAVE 理解为 BREAK，把 ITERATE 理解为 CONTINUE。<br>4.REPEAT…UNTIL…END REPEAT：这是一个循环语句，首先会执行一次循环，然后在 UNTIL 中进行表达式的判断，如果满足条件就退出，即 END REPEAT；如果条件不满足，则会就继续执行循环，直到满足退出条件为止。<br>5.WHILE…DO…END WHILE：这也是循环语句，和 REPEAT 循环不同的是，这个语句需要先进行条件判断，如果满足条件就进行循环，如果不满足条件就退出循环。</p>
-<p>我们之前说过 SQL 是声明型语言，使用 SQL 就像在使用英语，简单直接。今天讲的存储过程，尤其是在存储过程中使用到的流控制语句，属于过程性语言，类似于 C++ 语言中函数，这些语句可以帮我们解决复杂的业务逻辑。</p>
-<h3 id="关于存储过程使用的争议"><a href="#关于存储过程使用的争议" class="headerlink" title="关于存储过程使用的争议"></a>关于存储过程使用的争议</h3><p>尽管存储过程有诸多优点，但是对于存储过程的使用，一直都存在着很多争议，比如有些公司对于大型项目要求使用存储过程，而有些公司在手册中明确禁止使用存储过程，为什么这些公司对存储过程的使用需求差别这么大呢？</p>
-<p>我们得从存储过程的特点来找答案。</p>
-<p>你能看到存储过程有很多好处。</p>
-<p>首先存储过程可以一次编译多次使用。存储过程只在创造时进行编译，之后的使用都不需要重新编译，这就提升了 SQL 的执行效率。其次它可以减少开发工作量。将代码封装成模块，实际上是编程的核心思想之一，这样可以把复杂的问题拆解成不同的模块，然后模块之间可以重复使用，在减少开发工作量的同时，还能保证代码的结构清晰。还有一点，存储过程的安全性强，我们在设定存储过程的时候可以设置对用户的使用权限，这样就和视图一样具有较强的安全性。最后它可以减少网络传输量，因为代码封装到存储过程中，每次使用只需要调用存储过程即可，这样就减少了网络传输量。同时在进行相对复杂的数据库操作时，原本需要使用一条一条的 SQL 语句，可能要连接多次数据库才能完成的操作，现在变成了一次存储过程，只需要连接一次即可。</p>
-<p>基于上面这些优点，不少大公司都要求大型项目使用存储过程，比如微软、IBM 等公司。但是国内的阿里并不推荐开发人员使用存储过程，这是为什么呢？</p>
-<p>存储过程虽然有诸如上面的好处，但缺点也是很明显的。</p>
-<p>它的可移植性差，存储过程不能跨数据库移植，比如在 MySQL、Oracle 和 SQL Server 里编写的存储过程，在换成其他数据库时都需要重新编写。</p>
-<p>其次调试困难，只有少数 DBMS 支持存储过程的调试。对于复杂的存储过程来说，开发和维护都不容易。</p>
-<p>此外，存储过程的版本管理也很困难，比如数据表索引发生变化了，可能会导致存储过程失效。我们在开发软件的时候往往需要进行版本管理，但是存储过程本身没有版本控制，版本迭代更新的时候很麻烦。</p>
-<p>最后它不适合高并发的场景，高并发的场景需要减少数据库的压力，有时数据库会采用分库分表的方式，而且对可扩展性要求很高，在这种情况下，存储过程会变得难以维护，增加数据库的压力，显然就不适用了。</p>
-<p>了解了存储过程的优缺点之后，我想说的是，存储过程既方便，又有局限性。尽管不同的公司对存储过程的态度不一，但是对于我们开发人员来说，不论怎样，掌握存储过程都是必备的技能之一。</p>
-<p>最后我们做一个小练习吧。针对王者荣耀的英雄数据表 heros 表，请编写存储过程 get_sum_score，用来得到某一类型英雄（主要定位为某一类型即可）的最大生命值的总和。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2465,7 +2471,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">71</span>
+                  <span class="site-state-item-count">72</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
