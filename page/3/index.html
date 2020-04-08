@@ -258,6 +258,236 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/27/15%E4%B8%A8%E5%88%9D%E8%AF%86%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%EF%BC%9A%E9%9A%94%E7%A6%BB%E7%9A%84%E7%BA%A7%E5%88%AB%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%8C%E5%AE%83%E4%BB%AC%E9%83%BD%E8%A7%A3%E5%86%B3%E4%BA%86%E5%93%AA%E4%BA%9B%E5%BC%82%E5%B8%B8%E9%97%AE%E9%A2%98%EF%BC%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/27/15%E4%B8%A8%E5%88%9D%E8%AF%86%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%EF%BC%9A%E9%9A%94%E7%A6%BB%E7%9A%84%E7%BA%A7%E5%88%AB%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%8C%E5%AE%83%E4%BB%AC%E9%83%BD%E8%A7%A3%E5%86%B3%E4%BA%86%E5%93%AA%E4%BA%9B%E5%BC%82%E5%B8%B8%E9%97%AE%E9%A2%98%EF%BC%9F/" itemprop="url">15丨初识事务隔离：隔离的级别有哪些，它们都解决了哪些异常问题？</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-27T19:39:01+08:00">
+                2020-03-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" itemprop="url" rel="index">
+                    <span itemprop="name">SQL必知必会</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/27/15%E4%B8%A8%E5%88%9D%E8%AF%86%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%EF%BC%9A%E9%9A%94%E7%A6%BB%E7%9A%84%E7%BA%A7%E5%88%AB%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%8C%E5%AE%83%E4%BB%AC%E9%83%BD%E8%A7%A3%E5%86%B3%E4%BA%86%E5%93%AA%E4%BA%9B%E5%BC%82%E5%B8%B8%E9%97%AE%E9%A2%98%EF%BC%9F/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/03/27/15%E4%B8%A8%E5%88%9D%E8%AF%86%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%EF%BC%9A%E9%9A%94%E7%A6%BB%E7%9A%84%E7%BA%A7%E5%88%AB%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%8C%E5%AE%83%E4%BB%AC%E9%83%BD%E8%A7%A3%E5%86%B3%E4%BA%86%E5%93%AA%E4%BA%9B%E5%BC%82%E5%B8%B8%E9%97%AE%E9%A2%98%EF%BC%9F/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>上一篇文章中，我们讲到了事务的四大特性 ACID，分别是原子性、一致性、隔离性和持久性，其中隔离性是事务的基本特性之一，它可以防止数据库在并发处理时出现数据不一致的情况。最严格的情况下，我们可以采用串行化的方式来执行每一个事务，这就意味着事务之间是相互独立的，不存在并发的情况。然而在实际生产环境下，考虑到随着用户量的增多，会存在大规模并发访问的情况，这就要求数据库有更高的吞吐能力，这个时候串行化的方式就无法满足数据库高并发访问的需求，我们还需要降低数据库的隔离标准，来换取事务之间的并发能力。</p>
+<p>有时候我们需要牺牲一定的正确性来换取效率的提升，也就是说，我们需要通过设置不同的隔离等级，以便在正确性和效率之间进行平衡。同时，随着 RDBMS 种类和应用场景的增多，数据库的设计者需要统一对数据库隔离级别进行定义，说明这些隔离标准都解决了哪些问题。</p>
+<p>我们今天主要讲解事务的异常以及隔离级别都有哪些，如果你已经对它们有所了解，可以跳过本次章节，当然你也可以通过今天的课程快速复习一遍：</p>
+<ol>
+<li>事务并发处理可能存在的三种异常有哪些？什么是脏读、不可重复读和幻读？</li>
+<li>针对可能存在的异常情况，四种事务隔离的级别分别是什么？</li>
+<li>如何使用 MySQL 客户端来模拟脏读、不可重复读和幻读？<h3 id="事务并发处理可能存在的异常都有哪些？"><a href="#事务并发处理可能存在的异常都有哪些？" class="headerlink" title="事务并发处理可能存在的异常都有哪些？"></a>事务并发处理可能存在的异常都有哪些？</h3>在了解数据库隔离级别之前，我们需要了解设定事务的隔离级别都要解决哪些可能存在的问题，也就是事务并发处理时会存在哪些异常情况。实际上，SQL-92 标准中已经对 3 种异常情况进行了定义，这些异常情况级别分别为脏读（Dirty Read）、不可重复读（Nnrepeatable Read）和幻读（Phantom Read）。</li>
+</ol>
+<p>脏读、不可重复读和幻读都代表了什么，我用一个例子来给你讲解下。比如说我们有个英雄表 heros_temp，如下所示：</p>
+<p>这张英雄表，我们会记录很多英雄的姓名，假设我们不对事务进行隔离操作，那么数据库在进行事务的并发处理时会出现怎样的情况？</p>
+<p>第一天，小张访问数据库，正在进行事务操作，往里面写入一个新的英雄“吕布”：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; BEGIN;</span><br><span class="line">SQL&gt; INSERT INTO heros_temp values(4, &apos;吕布&apos;);</span><br></pre></td></tr></table></figure>
+<p>当小张还没有提交该事务的时候，小李又对数据表进行了访问，他想看下这张英雄表里都有哪些英雄：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; SELECT * FROM heros_temp;</span><br></pre></td></tr></table></figure>
+<p>这时，小李看到的结果如下：</p>
+<p>你有没有发现什么异常？这个时候小张还没有提交事务，但是小李却读到了小张还没有提交的数据，这种现象我们称之为“脏读”。</p>
+<p>那么什么是不可重复读呢？</p>
+<p>第二天，小张想查看 id=1 的英雄是谁，于是他进行了 SQL 查询：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; SELECT name FROM heros_temp WHERE id = 1;</span><br></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<p>然而此时，小李开始了一个事务操作，他对 id=1 的英雄姓名进行了修改，把原来的“张飞”改成了“张翼德”：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; BEGIN;</span><br><span class="line">SQL&gt; UPDATE heros_temp SET name = &apos;张翼德&apos; WHERE id = 1;</span><br></pre></td></tr></table></figure>
+<p>然后小张再一次进行查询，同样也是查看 id=1 的英雄是谁：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; SELECT name FROM heros_temp WHERE id = 1;</span><br></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<p>这个时候你会发现，两次查询的结果并不一样。小张会想这是怎么回事呢？他明明刚执行了一次查询，马上又进行了一次查询，结果两次的查询结果不同。实际上小张遇到的情况我们称之为“不可重复读”，也就是同一条记录，两次读取的结果不同。</p>
+<p>什么是幻读？</p>
+<p>第三天，小张想要看下数据表里都有哪些英雄，他开始执行下面这条语句：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; SELECT * FROM heros_temp;</span><br></pre></td></tr></table></figure>
+<p>这时当小张执行完之后，小李又开始了一个事务，往数据库里插入一个新的英雄“吕布”：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; BEGIN;</span><br><span class="line">SQL&gt; INSERT INTO heros_temp values(4, &apos;吕布&apos;);</span><br></pre></td></tr></table></figure>
+<p>不巧的是，小张这时忘记了英雄都有哪些，又重新执行了一遍查询：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; SELECT * FROM heros_temp;</span><br></pre></td></tr></table></figure>
+<p>他发现这一次查询多了一个英雄，原来只有 3 个，现在变成了 4 个。这种异常情况我们称之为“幻读”。</p>
+<p>我来总结下这三种异常情况的特点：</p>
+<ol>
+<li>脏读：读到了其他事务还没有提交的数据。</li>
+<li>不可重复读：对某数据进行读取，发现两次读取的结果不同，也就是说没有读到相同的内容。这是因为有其他事务对这个数据同时进行了修改或删除。</li>
+<li>幻读：事务 A 根据条件查询得到了 N 条数据，但此时事务 B 更改或者增加了 M 条符合事务 A 查询条件的数据，这样当事务 A 再次进行查询的时候发现会有 N+M 条数据，产生了幻读。<h3 id="事务隔离的级别有哪些？"><a href="#事务隔离的级别有哪些？" class="headerlink" title="事务隔离的级别有哪些？"></a>事务隔离的级别有哪些？</h3>脏读、不可重复读和幻读这三种异常情况，是在 SQL-92 标准中定义的，同时 SQL-92 标准还定义了 4 种隔离级别来解决这些异常情况。</li>
+</ol>
+<p>解决异常数量从少到多的顺序（比如读未提交可能存在 3 种异常，可串行化则不会存在这些异常）决定了隔离级别的高低，这四种隔离级别从低到高分别是：读未提交（READ UNCOMMITTED ）、读已提交（READ COMMITTED）、可重复读（REPEATABLE READ）和可串行化（SERIALIZABLE）。这些隔离级别能解决的异常情况如下表所示：</p>
+<p>你能看到可串行化能避免所有的异常情况，而读未提交则允许异常情况发生。</p>
+<p>关于这四种级别，我来简单讲解下。</p>
+<p>读未提交，也就是允许读到未提交的数据，这种情况下查询是不会使用锁的，可能会产生脏读、不可重复读、幻读等情况。</p>
+<p>读已提交就是只能读到已经提交的内容，可以避免脏读的产生，属于 RDBMS 中常见的默认隔离级别（比如说 Oracle 和 SQL Server），但如果想要避免不可重复读或者幻读，就需要我们在 SQL 查询的时候编写带加锁的 SQL 语句（我会在进阶篇里讲加锁）。</p>
+<p>可重复读，保证一个事务在相同查询条件下两次查询得到的数据结果是一致的，可以避免不可重复读和脏读，但无法避免幻读。MySQL 默认的隔离级别就是可重复读。</p>
+<p>可串行化，将事务进行串行化，也就是在一个队列中按照顺序执行，可串行化是最高级别的隔离等级，可以解决事务读取中所有可能出现的异常情况，但是它牺牲了系统的并发性。</p>
+<h3 id="使用-MySQL-客户端来模拟三种异常"><a href="#使用-MySQL-客户端来模拟三种异常" class="headerlink" title="使用 MySQL 客户端来模拟三种异常"></a>使用 MySQL 客户端来模拟三种异常</h3><p>我在讲解这三种异常的时候举了一个英雄数据表查询的例子，你还可以自己写 SQL 来模拟一下这三种异常。</p>
+<p>首先我们需要一个英雄数据表 heros_temp，具体表结构和数据，你可以从GitHub上下载 heros_temp.sql 文件。</p>
+<p>你也可以执行下面的 SQL 文件，来完成 heros_temp 数据表的创建。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">-- ----------------------------</span><br><span class="line">-- Table structure for heros_temp</span><br><span class="line">-- ----------------------------</span><br><span class="line">DROP TABLE IF EXISTS `heros_temp`;</span><br><span class="line">CREATE TABLE `heros_temp`  (</span><br><span class="line">  `id` int(11) NOT NULL,</span><br><span class="line">  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,</span><br><span class="line">  PRIMARY KEY (`id`) USING BTREE</span><br><span class="line">) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;</span><br><span class="line"> </span><br><span class="line">-- ----------------------------</span><br><span class="line">-- Records of heros_temp</span><br><span class="line">-- ----------------------------</span><br><span class="line">INSERT INTO `heros_temp` VALUES (1, &apos;张飞&apos;);</span><br><span class="line">INSERT INTO `heros_temp` VALUES (2, &apos;关羽&apos;);</span><br><span class="line">INSERT INTO `heros_temp` VALUES (3, &apos;刘备&apos;);</span><br></pre></td></tr></table></figure>
+<p>模拟的时候我们需要开两个 MySQL 客户端，分别是客户端 1 和客户端 2。</p>
+<p>在客户端 1 中，我们先来查看下当前会话的隔离级别，使用命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SHOW VARIABLES LIKE &apos;transaction_isolation&apos;;</span><br></pre></td></tr></table></figure>
+<p>然后你能看到当前的隔离级别是 REPEATABLE-READ，也就是可重复读。</p>
+<p>现在我们把隔离级别降到最低，设置为 READ UNCOMMITTED（读未提交）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;</span><br></pre></td></tr></table></figure>
+<p>然后再查看下当前会话（SESSION）下的隔离级别，结果如下：</p>
+<p>因为 MySQL 默认是事务自动提交，这里我们还需要将 autocommit 参数设置为 0，命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SET autocommit = 0;</span><br></pre></td></tr></table></figure>
+<p>然后我们再来查看 SESSION 中的 autocommit 取值，结果如下：</p>
+<p>接着我们以同样的操作启动客户端 2，也就是将隔离级别设置为 READ UNCOMMITTED（读未提交），autocommit 设置为 0。</p>
+<p>模拟“脏读”<br>我们在客户端 2 中开启一个事务，在 heros_temp 表中写入一个新的英雄“吕布”，注意这个时候不要提交。</p>
+<p>然后我们在客户端 1 中，查看当前的英雄表：</p>
+<p>你能发现客户端 1 中读取了客户端 2 未提交的新英雄“吕布”，实际上客户端 2 可能马上回滚，从而造成了“脏读”。</p>
+<h3 id="模拟“不可重复读”"><a href="#模拟“不可重复读”" class="headerlink" title="模拟“不可重复读”"></a>模拟“不可重复读”</h3><p>我们用客户端 1 来查看 id=1 的英雄：</p>
+<p>然后用客户端 2 对 id=1 的英雄姓名进行修改：</p>
+<p>这时用客户端 1 再次进行查询：</p>
+<p>你能发现对于客户端 1 来说，同一条查询语句出现了“不可重复读”。</p>
+<h3 id="模拟“幻读”"><a href="#模拟“幻读”" class="headerlink" title="模拟“幻读”"></a>模拟“幻读”</h3><p>我们先用客户端 1 查询数据表中的所有英雄：</p>
+<p>然后用客户端 2，开始插入新的英雄“吕布”：</p>
+<p>这时，我们再用客户端 1 重新进行查看：</p>
+<p>你会发现数据表多出一条数据。</p>
+<p>如果你是初学者，那么你可以采用 heros_temp 数据表简单模拟一下以上的过程，加深对脏读、不可重复读以及幻读的理解。对应的，你也会更了解不同的隔离级别解决的异常问题。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>我们今天只是简单讲解了 4 种隔离级别，以及对应的要解决的三种异常问题。我会在优化篇这一模块里继续讲解隔离级别以及锁的使用。</p>
+<p>你能看到，标准的价值在于，即使是不同的 RDBMS 都需要达成对异常问题和隔离级别定义的共识。这就意味着一个隔离级别的实现满足了下面的两个条件：</p>
+<p>正确性：只要能满足某一个隔离级别，一定能解决这个隔离级别对应的异常问题。<br>与实现无关：实际上 RDBMS 种类很多，这就意味着有多少种 RDBMS，就有多少种锁的实现方式，因此它们实现隔离级别的原理可能不同，然而一个好的标准不应该限制其实现的方式。<br>隔离级别越低，意味着系统吞吐量（并发程度）越大，但同时也意味着出现异常问题的可能性会更大。在实际使用过程中我们往往需要在性能和正确性上进行权衡和取舍，没有完美的解决方案，只有适合与否。</p>
+<p>今天的内容到这里就结束了，你能思考一下为什么隔离级别越高，就越影响系统的并发性能吗？以及不可重复读和幻读的区别是什么？</p>
+<p>欢迎你在评论区写下你的思考，也欢迎把这篇文章分享给你的朋友或者同事。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/26/14%E4%B8%A8%E4%BB%80%E4%B9%88%E6%98%AF%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86%EF%BC%8C%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8COMMIT%E5%92%8CROLLBACK%E8%BF%9B%E8%A1%8C%E6%93%8D%E4%BD%9C%EF%BC%9F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2263,269 +2493,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/24/05%E4%B8%A8%E6%A3%80%E7%B4%A2%E6%95%B0%E6%8D%AE%EF%BC%9A%E4%BD%A0%E8%BF%98%E5%9C%A8SELECT%20*%20%E4%B9%88%EF%BC%9F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LvYang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LvYang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/24/05%E4%B8%A8%E6%A3%80%E7%B4%A2%E6%95%B0%E6%8D%AE%EF%BC%9A%E4%BD%A0%E8%BF%98%E5%9C%A8SELECT%20*%20%E4%B9%88%EF%BC%9F/" itemprop="url">05丨检索数据：你还在SELECT * 么？</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-24T20:39:07+08:00">
-                2020-03-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" itemprop="url" rel="index">
-                    <span itemprop="name">SQL必知必会</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/03/24/05%E4%B8%A8%E6%A3%80%E7%B4%A2%E6%95%B0%E6%8D%AE%EF%BC%9A%E4%BD%A0%E8%BF%98%E5%9C%A8SELECT%20*%20%E4%B9%88%EF%BC%9F/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2020/03/24/05%E4%B8%A8%E6%A3%80%E7%B4%A2%E6%95%B0%E6%8D%AE%EF%BC%9A%E4%BD%A0%E8%BF%98%E5%9C%A8SELECT%20*%20%E4%B9%88%EF%BC%9F/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>今天我们主要学习如何使用 SQL 检索数据。如果你已经有了一定的 SQL 基础，这节课可以跳过，也可以把它当做是个快速的复习。</p>
-<p>SELECT 可以说是 SQL 中最常用的语句了。你可以把 SQL 语句看作是英语语句，SELECT 就是 SQL 中的关键字之一，除了 SELECT 之外，还有 INSERT、DELETE、UPDATE 等关键字，这些关键字是 SQL 的保留字，这样可以很方便地帮助我们分析理解 SQL 语句。我们在定义数据库表名、字段名和变量名时，要尽量避免使用这些保留字。</p>
-<p>SELECT 的作用是从一个表或多个表中检索出想要的数据行。今天我主要讲解 SELECT 的基础查询，后面我会讲解如何通过多个表的连接操作进行复杂的查询。</p>
-<p>在这篇文章中，你需要重点掌握以下几方面的内容：</p>
-<ol>
-<li>SELECT 查询的基础语法；</li>
-<li>如何排序检索数据；</li>
-<li>什么情况下用SELECT*，如何提升 SELECT 查询效率？<h3 id="SELECT-查询的基础语法"><a href="#SELECT-查询的基础语法" class="headerlink" title="SELECT 查询的基础语法"></a>SELECT 查询的基础语法</h3>SELECT 可以帮助我们从一个表或多个表中进行数据查询。我们知道一个数据表是由列（字段名）和行（数据行）组成的，我们要返回满足条件的数据行，就需要在 SELECT 后面加上我们想要查询的列名，可以是一列，也可以是多个列。如果你不知道所有列名都有什么，也可以检索所有列。</li>
-</ol>
-<p>我创建了一个王者荣耀英雄数据表，这张表里一共有 69 个英雄，23 个属性值（不包括英雄名 name）。</p>
-<h3 id="查询列"><a href="#查询列" class="headerlink" title="查询列"></a>查询列</h3><p>如果我们想要对数据表中的某一列进行检索，在 SELECT 后面加上这个列的字段名即可。比如我们想要检索数据表中都有哪些英雄。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL：SELECT name FROM heros</span><br></pre></td></tr></table></figure>
-<p>运行结果（69 条记录）见下图，你可以看到这样就等于单独输出了 name 这一列。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">name</span><br><span class="line">夏侯惇</span><br><span class="line">钟无艳</span><br><span class="line">...</span><br><span class="line">刘禅</span><br><span class="line">百里守约</span><br></pre></td></tr></table></figure>
-
-
-<p>我们也可以对多个列进行检索，在列名之间用逗号 (,) 分割即可。比如我们想要检索有哪些英雄，他们的最大生命、最大法力、最大物攻和最大物防分别是多少。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL：SELECT name, hp_max, mp_max, attack_max, defense_max FROM heros</span><br></pre></td></tr></table></figure>
-<p>运行结果（69 条记录）：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">name  hp_max mp_max attack_max defense_max</span><br><span class="line">夏侯惇	7350	1746	321	397</span><br><span class="line">钟无艳	7000	1760	318	409</span><br><span class="line">张飞	8341	100	301	504</span><br><span class="line">牛魔	8476	1926	273	394</span><br><span class="line">吕布	7344	0	343	390</span><br><span class="line">亚瑟	8050	0	346	400</span><br><span class="line">芈月	6164	100	289	361</span><br><span class="line">程咬金	8611	0	316	504</span><br><span class="line">廉颇	9328	1708	286	514</span><br></pre></td></tr></table></figure>
-
-<p>这个表中一共有 25 个字段，除了 id 和英雄名 name 以外，还存在 23 个属性值，如果我们记不住所有的字段名称，可以使用 SELECT * 帮我们检索出所有的列：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL：SELECT * FROM heros</span><br></pre></td></tr></table></figure>
-<p>运行结果（69 条记录）：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">10000	夏侯惇	7350	288.8	3307	1746	94	430	321	11.57	159	397	21.14	101	98	3.357	51	37	1.571	15	0	近战	坦克	战士	2016-07-19</span><br><span class="line">10001	钟无艳	7000	275	3150	1760	95	430	318	11	164	409	22.07	100	92	3.143	48	37	1.571	15	0	近战	战士	坦克	</span><br><span class="line">10002	张飞	8341	329.4	3450	100	0	100	301	10.57	153	504	27.07	125	115	4.143	57	5	0	5	0	近战	坦克	辅助	</span><br><span class="line">10003	牛魔	8476	352.8	3537	1926	104	470	273	8.357	156	394	20.36	109	117	4.214	58	42	1.786	17	0	近战	坦克	辅助	2015-11-24</span><br><span class="line">10004	吕布	7344	270	3564	0	0	0	343	12.36	170	390	20.79	99	97	3.071	54	0	0	0	0	近战	战士	坦克	2015-12-22</span><br><span class="line">10005	亚瑟	8050	316.3	3622	0	0	0	346	13	164	400	21.57	98	106	3.643	55	0	0	0	0	近战	战士	坦克	</span><br><span class="line">10006	芈月	6164	281.5	3105	100	0	100	289	9.786	152	361	19.5	88	77	2.357	44	0	0	0	0	远程	法师	坦克	2015-12-08</span><br><span class="line">10007	程咬金	8611	369.6	3437	0	0	0	316	11.07	161	504	27.07	125	119	4.429	57	0	0	0	0	近战	坦克	战士</span><br></pre></td></tr></table></figure>
-<p>我们在做数据探索的时候，SELECT <em>还是很有用的，这样我们就不需要写很长的 SELECT 语句了。但是在生产环境时要尽量避免使用SELECT</em>，具体原因我会在后面讲。</p>
-<h3 id="起别名"><a href="#起别名" class="headerlink" title="起别名"></a>起别名</h3><p>我们在使用 SELECT 查询的时候，还有一些技巧可以使用，比如你可以给列名起别名。我们在进行检索的时候，可以给英雄名、最大生命、最大法力、最大物攻和最大物防等取别名：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL：SELECT name AS n, hp_max AS hm, mp_max AS mm, attack_max AS am, defense_max AS dm FROM heros</span><br></pre></td></tr></table></figure>
-
-<p>运行结果和上面多列检索的运行结果是一样的，只是将列名改成了 n、hm、mm、am 和 dm。当然这里的列别名只是举例，一般来说起别名的作用是对原有名称进行简化，从而让 SQL 语句看起来更精简。同样我们也可以对表名称起别名，这个在多表连接查询的时候会用到。</p>
-<p>查询常数<br>SELECT 查询还可以对常数进行查询。对的，就是在 SELECT 查询结果中增加一列固定的常数列。这列的取值是我们指定的，而不是从数据表中动态取出的。你可能会问为什么我们还要对常数进行查询呢？SQL 中的 SELECT 语法的确提供了这个功能，一般来说我们只从一个表中查询数据，通常不需要增加一个固定的常数列，但如果我们想整合不同的数据源，用常数列作为这个表的标记，就需要查询常数。</p>
-<p>比如说，我们想对 heros 数据表中的英雄名进行查询，同时增加一列字段platform，这个字段固定值为“王者荣耀”，可以这样写：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL：SELECT &apos;王者荣耀&apos; as platform, name FROM heros</span><br></pre></td></tr></table></figure>
-
-<p>运行结果：（69 条记录）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">platform   name</span><br><span class="line">王者荣耀	夏侯惇</span><br><span class="line">王者荣耀	钟无艳</span><br><span class="line">王者荣耀	张飞</span><br><span class="line">王者荣耀	牛魔</span><br><span class="line">王者荣耀	吕布</span><br><span class="line">王者荣耀	亚瑟</span><br><span class="line">王者荣耀	芈月</span><br><span class="line">王者荣耀	程咬金</span><br></pre></td></tr></table></figure>
-
-<p>在这个 SQL 语句中，我们虚构了一个platform字段，并且把它设置为固定值“王者荣耀”。</p>
-<p>需要说明的是，如果常数是个字符串，那么使用单引号（‘’）就非常重要了，比如‘王者荣耀’。单引号说明引号中的字符串是个常数，否则 SQL 会把王者荣耀当成列名进行查询，但实际上数据表里没有这个列名，就会引起错误。如果常数是英文字母，比如’WZRY’也需要加引号。如果常数是个数字，就可以直接写数字，不需要单引号，比如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL：SELECT 123 as platform, name FROM heros</span><br></pre></td></tr></table></figure>
-<p>运行结果：（69 条记录）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">platorm  name</span><br><span class="line">123	夏侯惇</span><br><span class="line">123	钟无艳</span><br><span class="line">123	张飞</span><br><span class="line">123	牛魔</span><br><span class="line">123	吕布</span><br><span class="line">123	亚瑟</span><br><span class="line">123	芈月</span><br></pre></td></tr></table></figure>
-
-<h3 id="去除重复行"><a href="#去除重复行" class="headerlink" title="去除重复行"></a>去除重复行</h3><p>关于单个表的 SELECT 查询，还有一个非常实用的操作，就是从结果中去掉重复的行。使用的关键字是 DISTINCT。比如我们想要看下 heros 表中关于攻击范围的取值都有哪些：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL：SELECT DISTINCT attack_range FROM heros</span><br></pre></td></tr></table></figure>
-
-<p>这是运行结果（2 条记录），这样我们就能直观地看到攻击范围其实只有两个值，那就是近战和远程。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">attack_range</span><br><span class="line">近战</span><br><span class="line">远程</span><br></pre></td></tr></table></figure>
-<p>如果我们带上英雄名称，会是怎样呢：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL：SELECT DISTINCT attack_range, name FROM heros</span><br></pre></td></tr></table></figure>
-<p>运行结果（69 条记录）：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">近战	夏侯惇</span><br><span class="line">近战	钟无艳</span><br><span class="line">近战	张飞</span><br><span class="line">近战	牛魔</span><br><span class="line">近战	吕布</span><br><span class="line">近战	亚瑟</span><br><span class="line">远程	芈月</span><br><span class="line">近战	程咬金</span><br><span class="line">近战	廉颇</span><br><span class="line">近战	东皇太一</span><br><span class="line">近战	庄周</span><br><span class="line">近战	太乙真人</span><br><span class="line">近战	白起</span><br><span class="line">近战	雅典娜</span><br><span class="line">近战	刘邦</span><br><span class="line">近战	刘禅</span><br><span class="line">近战	墨子</span><br><span class="line">近战	项羽</span><br><span class="line">近战	关羽</span><br><span class="line">远程	后羿</span><br><span class="line">远程	马可波罗</span><br><span class="line">远程	鲁班七号</span><br></pre></td></tr></table></figure>
-
-<p>这里有两点需要注意：</p>
-<ol>
-<li><p>DISTINCT 需要放到所有列名的前面，如果写成SELECT name, DISTINCT attack_range FROM heros会报错。</p>
-</li>
-<li><p>DISTINCT 其实是对后面所有列名的组合进行去重，你能看到最后的结果是 69 条，因为这 69 个英雄名称不同，都有攻击范围（attack_range）这个属性值。如果你想要看都有哪些不同的攻击范围（attack_range），只需要写DISTINCT attack_range即可，后面不需要再加其他的列名了。</p>
-<h3 id="如何排序检索数据"><a href="#如何排序检索数据" class="headerlink" title="如何排序检索数据"></a>如何排序检索数据</h3><p>当我们检索数据的时候，有时候需要按照某种顺序进行结果的返回，比如我们想要查询所有的英雄，按照最大生命从高到底的顺序进行排列，就需要使用 ORDER BY 子句。使用 ORDER BY 子句有以下几个点需要掌握：</p>
-</li>
-<li><p>排序的列名：ORDER BY 后面可以有一个或多个列名，如果是多个列名进行排序，会按照后面第一个列先进行排序，当第一列的值相同的时候，再按照第二列进行排序，以此类推。</p>
-</li>
-<li><p>排序的顺序：ORDER BY 后面可以注明排序规则，ASC 代表递增排序，DESC 代表递减排序。如果没有注明排序规则，默认情况下是按照 ASC 递增排序。我们很容易理解 ORDER BY 对数值类型字段的排序规则，但如果排序字段类型为文本数据，就需要参考数据库的设置方式了，这样才能判断 A 是在 B 之前，还是在 B 之后。比如使用 MySQL 在创建字段的时候设置为 BINARY 属性，就代表区分大小写。</p>
-</li>
-<li><p>非选择列排序：ORDER BY 可以使用非选择列进行排序，所以即使在 SELECT 后面没有这个列名，你同样可以放到 ORDER BY 后面进行排序。</p>
-</li>
-<li><p>ORDER BY 的位置：ORDER BY 通常位于 SELECT 语句的最后一条子句，否则会报错。<br>在了解了 ORDER BY 的使用语法之后，我们来看下如何对 heros 数据表进行排序。</p>
-</li>
-</ol>
-<p>假设我们想要显示英雄名称及最大生命值，按照最大生命值从高到低的方式进行排序：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL：SELECT name, hp_max FROM heros ORDER BY hp_max DESC</span><br></pre></td></tr></table></figure>
-<p>运行结果（69 条记录）：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">name hp_max</span><br><span class="line">廉颇	9328</span><br><span class="line">白起	8638</span><br><span class="line">程咬金	8611</span><br><span class="line">刘禅	8581</span><br><span class="line">牛魔	8476</span><br><span class="line">张飞	8341</span><br><span class="line">庄周	8149</span><br></pre></td></tr></table></figure>
-
-<p>如果想要显示英雄名称及最大生命值，按照第一排序最大法力从低到高，当最大法力值相等的时候则按照第二排序进行，即最大生命值从高到低的方式进行排序：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL：SELECT name, hp_max FROM heros ORDER BY mp_max, hp_max DESC</span><br></pre></td></tr></table></figure>
-<p>运行结果：（69 条记录）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">程咬金	8611</span><br><span class="line">亚瑟	8050</span><br><span class="line">曹操	7473</span><br><span class="line">吕布	7344</span><br><span class="line">橘石京	7000</span><br><span class="line">宫本武藏	6210</span><br><span class="line">阿轲	5968</span><br><span class="line">老夫子	7155</span><br><span class="line">关羽	7107</span><br><span class="line">张飞	8341</span><br><span class="line">芈月	6164</span><br><span class="line">花木兰	5397</span><br></pre></td></tr></table></figure>
-<h3 id="约束返回结果的数量"><a href="#约束返回结果的数量" class="headerlink" title="约束返回结果的数量"></a>约束返回结果的数量</h3><p>另外在查询过程中，我们可以约束返回结果的数量，使用 LIMIT 关键字。比如我们想返回英雄名称及最大生命值，按照最大生命值从高到低排序，返回 5 条记录即可。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL：SELECT name, hp_max FROM heros ORDER BY hp_max DESC LIMIT 5</span><br></pre></td></tr></table></figure>
-<p>运行结果（5 条记录）：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">name hp_max</span><br><span class="line">廉颇	9328</span><br><span class="line">白起	8638</span><br><span class="line">程咬金	8611</span><br><span class="line">刘禅	8581</span><br><span class="line">牛魔	8476</span><br></pre></td></tr></table></figure>
-
-<p>有一点需要注意，约束返回结果的数量，在不同的 DBMS 中使用的关键字可能不同。在 MySQL、PostgreSQL、MariaDB 和 SQLite 中使用 LIMIT 关键字，而且需要放到 SELECT 语句的最后面。如果是 SQL Server 和 Access，需要使用 TOP 关键字，比如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SQL：SELECT TOP 5 name, hp_max FROM heros ORDER BY hp_max DESC</span><br></pre></td></tr></table></figure>
-<p>约束返回结果的数量可以减少数据表的网络传输量，也可以提升查询效率。如果我们知道返回结果只有 1 条，就可以使用LIMIT 1，告诉 SELECT 语句只需要返回一条记录即可。这样的好处就是 SELECT 不需要扫描完整的表，只需要检索到一条符合条件的记录即可返回。</p>
-<h3 id="SELECT-的执行顺序"><a href="#SELECT-的执行顺序" class="headerlink" title="SELECT 的执行顺序"></a>SELECT 的执行顺序</h3><p>查询是 RDBMS 中最频繁的操作。我们在理解 SELECT 语法的时候，还需要了解 SELECT 执行时的底层原理。只有这样，才能让我们对 SQL 有更深刻的认识。</p>
-<p>其中你需要记住 SELECT 查询时的两个顺序：</p>
-<ol>
-<li>关键字的顺序是不能颠倒的：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT ... FROM ... WHERE ... GROUP BY ... HAVING ... ORDER BY ...</span><br></pre></td></tr></table></figure></li>
-<li>SELECT 语句的执行顺序（在 MySQL 和 Oracle 中，SELECT 执行顺序基本相同）：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FROM &gt; WHERE &gt; GROUP BY &gt; HAVING &gt; SELECT 的字段 &gt; DISTINCT &gt; ORDER BY &gt; LIMIT</span><br></pre></td></tr></table></figure>
-比如你写了一个 SQL 语句，那么它的关键字顺序和执行顺序是下面这样的：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SELECT DISTINCT player_id, player_name, count(*) as num # 顺序 5</span><br><span class="line">FROM player JOIN team ON player.team_id = team.team_id # 顺序 1</span><br><span class="line">WHERE height &gt; 1.80 # 顺序 2</span><br><span class="line">GROUP BY player.team_id # 顺序 3</span><br><span class="line">HAVING num &gt; 2 # 顺序 4</span><br><span class="line">ORDER BY num DESC # 顺序 6</span><br><span class="line">LIMIT 2 # 顺序 7</span><br></pre></td></tr></table></figure>
-在 SELECT 语句执行这些步骤的时候，每个步骤都会产生一个虚拟表，然后将这个虚拟表传入下一个步骤中作为输入。需要注意的是，这些步骤隐含在 SQL 的执行过程中，对于我们来说是不可见的。</li>
-</ol>
-<p>我来详细解释一下 SQL 的执行原理。</p>
-<p>首先，你可以注意到，SELECT 是先执行 FROM 这一步的。在这个阶段，如果是多张表联查，还会经历下面的几个步骤：</p>
-<p>首先先通过 CROSS JOIN 求笛卡尔积，相当于得到虚拟表 vt（virtual table）1-1；<br>通过 ON 进行筛选，在虚拟表 vt1-1 的基础上进行筛选，得到虚拟表 vt1-2；<br>添加外部行。如果我们使用的是左连接、右链接或者全连接，就会涉及到外部行，也就是在虚拟表 vt1-2 的基础上增加外部行，得到虚拟表 vt1-3。<br>当然如果我们操作的是两张以上的表，还会重复上面的步骤，直到所有表都被处理完为止。这个过程得到是我们的原始数据。</p>
-<p>当我们拿到了查询数据表的原始数据，也就是最终的虚拟表 vt1，就可以在此基础上再进行 WHERE 阶段。在这个阶段中，会根据 vt1 表的结果进行筛选过滤，得到虚拟表 vt2。</p>
-<p>然后进入第三步和第四步，也就是 GROUP 和 HAVING 阶段。在这个阶段中，实际上是在虚拟表 vt2 的基础上进行分组和分组过滤，得到中间的虚拟表 vt3 和 vt4。</p>
-<p>当我们完成了条件筛选部分之后，就可以筛选表中提取的字段，也就是进入到 SELECT 和 DISTINCT 阶段。</p>
-<p>首先在 SELECT 阶段会提取想要的字段，然后在 DISTINCT 阶段过滤掉重复的行，分别得到中间的虚拟表 vt5-1 和 vt5-2。</p>
-<p>当我们提取了想要的字段数据之后，就可以按照指定的字段进行排序，也就是 ORDER BY 阶段，得到虚拟表 vt6。</p>
-<p>最后在 vt6 的基础上，取出指定行的记录，也就是 LIMIT 阶段，得到最终的结果，对应的是虚拟表 vt7。</p>
-<p>当然我们在写 SELECT 语句的时候，不一定存在所有的关键字，相应的阶段就会省略。</p>
-<p>同时因为 SQL 是一门类似英语的结构化查询语言，所以我们在写 SELECT 语句的时候，还要注意相应的关键字顺序，所谓底层运行的原理，就是我们刚才讲到的执行顺序。</p>
-<p>什么情况下用 SELECT*，如何提升 SELECT 查询效率？<br>当我们初学 SELECT 语法的时候，经常会使用SELECT *，因为使用方便。实际上这样也增加了数据库的负担。所以如果我们不需要把所有列都检索出来，还是先指定出所需的列名，因为写清列名，可以减少数据表查询的网络传输量，而且考虑到在实际的工作中，我们往往不需要全部的列名，因此你需要养成良好的习惯，写出所需的列名。</p>
-<p>如果我们只是练习，或者对数据表进行探索，那么是可以使用SELECT *的。它的查询效率和把所有列名都写出来再进行查询的效率相差并不大。这样可以方便你对数据表有个整体的认知。但是在生产环境下，不推荐你直接使用SELECT *进行查询。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>今天我对 SELECT 的基础语法进行了讲解，SELECT 是 SQL 的基础。但不同阶段看 SELECT 都会有新的体会。当你第一次学习的时候，关注的往往是如何使用它，或者语法是否正确。再看的时候，可能就会更关注 SELECT 的查询效率，以及不同 DBMS 之间的差别。<br>在我们的日常工作中，很多人都可以写出 SELECT 语句，但是执行的效率却相差很大。产生这种情况的原因主要有两个，一个是习惯的培养，比如大部分初学者会经常使用SELECT *，而好的习惯则是只查询所需要的列；另一个对 SQL 查询的执行顺序及查询效率的关注，比如当你知道只有 1 条记录的时候，就可以使用LIMIT 1来进行约束，从而提升查询效率。</p>
-<p>最后留两道思考题吧，我今天对单表的 SELECT 查询进行了讲解，你之前可能也有学习使用的经验，可以说下你对 SELECT 使用的理解吗？另外，我今天使用 heros 数据表进行了举例，请你编写 SQL 语句，对英雄名称和最大法力进行查询，按照最大生命从高到低排序，只返回 5 条记录即可。你可以说明下使用的 DBMS 及相应的 SQL 语句。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT name, mp_max FROM heros ORDER BY hp_max DESC LIMIT 5</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">廉颇	1708</span><br><span class="line">白起	1666</span><br><span class="line">程咬金	0</span><br><span class="line">刘禅	1694</span><br><span class="line">牛魔	1926</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2576,7 +2543,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">73</span>
+                  <span class="site-state-item-count">74</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
