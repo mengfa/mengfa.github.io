@@ -258,6 +258,311 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/36%20%7C%20Pandas%20&%20Numpy%E7%AD%96%E7%95%A5%E4%B8%8E%E5%9B%9E%E6%B5%8B%E7%B3%BB%E7%BB%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LvYang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LvYang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/06/36%20%7C%20Pandas%20&%20Numpy%E7%AD%96%E7%95%A5%E4%B8%8E%E5%9B%9E%E6%B5%8B%E7%B3%BB%E7%BB%9F/" itemprop="url">36 | Pandas & Numpy策略与回测系统</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-06T20:10:07+08:00">
+                2020-01-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
+                    <span itemprop="name">python核心技术与实战</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/01/06/36%20%7C%20Pandas%20&%20Numpy%E7%AD%96%E7%95%A5%E4%B8%8E%E5%9B%9E%E6%B5%8B%E7%B3%BB%E7%BB%9F/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/01/06/36%20%7C%20Pandas%20&%20Numpy%E7%AD%96%E7%95%A5%E4%B8%8E%E5%9B%9E%E6%B5%8B%E7%B3%BB%E7%BB%9F/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>上节课，我们介绍了交易所的数据抓取，特别是 orderbook 和 tick 数据的抓取。今天这节课，我们考虑的是，怎么在这些历史数据上测试一个交易策略。</p>
+<p>首先我们要明确，对于很多策略来说，我们上节课抓取的密集的 orderbook 和 tick 数据，并不能简单地直接使用。因为数据量太密集，包含了太多细节；而且长时间连接时，网络随机出现的不稳定，会导致丢失部分 tick 数据。因此，我们还需要进行合适的清洗、聚合等操作。</p>
+<p>此外，为了进行回测，我们需要一个交易策略，还需要一个测试框架。目前已存在很多成熟的回测框架，但是为了 Python 学习，我决定带你搭建一个简单的回测框架，并且从中简单一窥 Pandas 的优势。</p>
+<h3 id="OHLCV-数据"><a href="#OHLCV-数据" class="headerlink" title="OHLCV 数据"></a>OHLCV 数据</h3><p>了解过一些股票交易的同学，可能知道 K 线这种东西。K 线又称“蜡烛线”，是一种反映价格走势的图线。它的特色在于，一个线段内记录了多项讯息，相当易读易懂且实用有效，因此被广泛用于股票、期货、贵金属、数字货币等行情的技术分析。下面便是一个 K 线示意图。</p>
+<p>其中，每一个小蜡烛，都代表着当天的开盘价（Open）、最高价（High）、最低价（Low）和收盘价（Close），也就是我画的第二张图表示的这样。</p>
+<p>类似的，除了日 K 线之外，还有周 K 线、小时 K 线、分钟 K 线等等。那么这个 K 线是怎么计算来的呢？</p>
+<p>我们以小时 K 线图为例，还记得我们当时抓取的 tick 数据吗？也就是每一笔交易的价格和数量。那么，如果从上午 10:00 开始，我们开始积累 tick 的交易数据，以 10:00 开始的第一个交易作为 Open 数据，11:00 前的最后一笔交易作为 Close 值，并把这一个小时最低和最高的成交价格分别作为 High 和 Low 的值，我们就可以绘制出这一个小时对应的“小蜡烛”形状了。</p>
+<p>如果再加上这一个小时总的成交量（Volumn），就得到了 OHLCV 数据。</p>
+<p>所以，如果我们一直抓取着 tick 底层原始数据，我们就能在上层聚合出 1 分钟 K 线、小时 K 线以及日、周 k 线等等。如果你对这一部分操作有兴趣，可以把此作为今天的课后作业来实践。</p>
+<p>接下来，我们将使用 Gemini 从 2015 年到 2019 年 7 月这个时间内，BTC 对 USD 每个小时的 OHLCV 数据，作为策略和回测的输入。你可以在这里下载数据。</p>
+<p>数据下载完成后，我们可以利用 Pandas 读取，比如下面这段代码。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">assert_msg</span><span class="params">(condition, msg)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> condition:</span><br><span class="line">        <span class="keyword">raise</span> Exception(msg)</span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">read_file</span><span class="params">(filename)</span>:</span></span><br><span class="line">    <span class="comment"># 获得文件绝对路径</span></span><br><span class="line">    filepath = path.join(path.dirname(__file__), filename)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 判定文件是否存在</span></span><br><span class="line">    assert_msg(path.exists(filepath), <span class="string">" 文件不存在 "</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 读取 CSV 文件并返回</span></span><br><span class="line">    <span class="keyword">return</span> pd.read_csv(filepath,</span><br><span class="line">                       index_col=<span class="number">0</span>, </span><br><span class="line">                       parse_dates=<span class="literal">True</span>,</span><br><span class="line">                       infer_datetime_format=<span class="literal">True</span>)</span><br><span class="line"> </span><br><span class="line">BTCUSD = read_file(<span class="string">'BTCUSD_GEMINI.csv'</span>)</span><br><span class="line">assert_msg(BTCUSD.__len__() &gt; <span class="number">0</span>, <span class="string">'读取失败'</span>)</span><br><span class="line">print(BTCUSD.head())</span><br></pre></td></tr></table></figure>
+
+
+<pre><code>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-1-de519e90fcc7&gt; in &lt;module&gt;
+     16                        infer_datetime_format=True)
+     17 
+---&gt; 18 BTCUSD = read_file(&apos;BTCUSD_GEMINI.csv&apos;)
+     19 assert_msg(BTCUSD.__len__() &gt; 0, &apos;读取失败&apos;)
+     20 print(BTCUSD.head())
+
+
+&lt;ipython-input-1-de519e90fcc7&gt; in read_file(filename)
+      5 def read_file(filename):
+      6     # 获得文件绝对路径
+----&gt; 7     filepath = path.join(path.dirname(__file__), filename)
+      8 
+      9     # 判定文件是否存在
+
+
+NameError: name &apos;path&apos; is not defined</code></pre><p>这段代码提供了两个工具函数。</p>
+<ul>
+<li>一个是 read_file，它的作用是，用 pandas 读取 csv 文件。</li>
+<li>另一个是 assert_msg，它的作用类似于 assert，如果传入的条件（contidtion）为否，就会抛出异常。不过，你需要提供一个参数，用于指定要抛出的异常信息。</li>
+</ul>
+<h3 id="回测框架"><a href="#回测框架" class="headerlink" title="回测框架"></a>回测框架</h3><p>说完了数据，我们接着来看回测数据。常见的回测框架有两类。一类是向量化回测框架，它通常基于 Pandas+Numpy 来自己搭建计算核心；后端则是用 MySQL 或者 MongoDB 作为源。这种框架通过 Pandas+Numpy 对 OHLC 数组进行向量运算，可以在较长的历史数据上进行回测。不过，因为这类框架一般只用 OHLC，所以模拟会比较粗糙。</p>
+<p>另一类则是事件驱动型回测框架。这类框架，本质上是针对每一个 tick 的变动或者 orderbook 的变动生成事件；然后，再把一个个事件交给策略进行执行。因此，虽然它的拓展性很强，可以允许更加灵活的策略，但回测速度是很慢的。</p>
+<p>我们想要学习量化交易，使用大型成熟的回测框架，自然是第一选择。</p>
+<ul>
+<li>比如 Zipline，就是一个热门的事件驱动型回测框架，背后有大型社区和文档的支持。</li>
+<li>PyAlgoTrade 也是事件驱动的回测框架，文档相对完整，整合了知名的技术分析（Techique Analysis）库 TA-Lib。在速度和灵活方面，它比 Zipline 强。不过，它的一大硬伤是不支持 Pandas 的模块和对象。</li>
+</ul>
+<p>显然，对于我们 Python 学习者来说，第一类也就是向量型回测框架，才是最适合我们练手的项目了。那么，我们就开始吧。</p>
+<p>首先，我先为你梳理下回测流程，也就是下面五步：</p>
+<ol>
+<li>读取 OHLC 数据；</li>
+<li>对 OHLC 进行指标运算；</li>
+<li>策略根据指标向量决定买卖；</li>
+<li>发给模拟的”交易所“进行交易；</li>
+<li>最后，统计结果。</li>
+</ol>
+<p>对此，使用之前学到的面向对象思维方式，我们可以大致抽取三个类：</p>
+<ul>
+<li>交易所类（ ExchangeAPI）：负责维护账户的资金和仓位，以及进行模拟的买卖；</li>
+<li>策略类（Strategy）：负责根据市场信息生成指标，根据指标决定买卖；</li>
+<li>回测类框架（Backtest）：包含一个策略类和一个交易所类，负责迭代地对每个数据点调用策略执行。</li>
+</ul>
+<p>接下来，我们先从最外层的大框架开始。这样的好处在于，我们是从上到下、从外往内地思考，虽然还没有开始设计依赖项（Backtest 的依赖项是 ExchangeAPI 和 Strategy），但我们可以推测出它们应有的接口形式。推测接口的本质，其实就是推测程序的输入。</p>
+<p>这也是我在一开始提到过的，对于程序这个“黑箱”，你在一开始设计的时候，就要想好输入和输出。</p>
+<p>回到最外层 Backtest 类。我们需要知道，输出是最后的收益，那么显然，输入应该是初始输入的资金数量（cash）。</p>
+<p>此外，为了模拟得更加真实，我们还要考虑交易所的手续费（commission）。手续费的多少取决于券商（broker）或者交易所，比如我们买卖股票的券商手续费可能是万七，那么就是 0.0007。但是在比特币交易领域，手续费通常会稍微高一点，可能是千分之二左右。当然，无论怎么多，一般也不会超过 5 %。否则我们大家交易几次就破产了，也就不会有人去交易了。</p>
+<p>这里说一句题外话，不知道你有没有发现，无论数字货币的价格是涨还是跌，总有一方永远不亏，那就是交易所。因为只要有人交易，他们就有白花花的银子进账。</p>
+<p>回到正题，至此，我们就确定了 Backtest 的输入和输出。</p>
+<p>它的输入是：</p>
+<ul>
+<li>OHLC 数据；</li>
+<li>初始资金；</li>
+<li>手续费率；</li>
+<li>交易所类；</li>
+<li>策略类。</li>
+</ul>
+<p>输出则是：</p>
+<ul>
+<li>最后剩余市值。</li>
+</ul>
+<p>对此，你可以参考下面这段代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Backtest</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Backtest 回测类，用于读取历史行情数据、执行策略、模拟交易并估计</span></span><br><span class="line"><span class="string">    收益。</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">    初始化的时候调用 Backtest.run 来时回测</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">    instance, or `backtesting.backtesting.Backtest.optimize` to</span></span><br><span class="line"><span class="string">    optimize it.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,</span></span></span><br><span class="line"><span class="function"><span class="params">                 data: pd.DataFrame,</span></span></span><br><span class="line"><span class="function"><span class="params">                 strategy_type: type<span class="params">(Strategy)</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">                 broker_type: type<span class="params">(ExchangeAPI)</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">                 cash: float = <span class="number">10000</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">                 commission: float = <span class="number">.0</span>)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        构造回测对象。需要的参数包括：历史数据，策略对象，初始资金数量，手续费率等。</span></span><br><span class="line"><span class="string">        初始化过程包括检测输入类型，填充数据空值等。</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">        参数：</span></span><br><span class="line"><span class="string">        :param data:            pd.DataFrame        pandas Dataframe 格式的历史 OHLCV 数据</span></span><br><span class="line"><span class="string">        :param broker_type:     type(ExchangeAPI)   交易所 API 类型，负责执行买卖操作以及账户状态的维护</span></span><br><span class="line"><span class="string">        :param strategy_type:   type(Strategy)      策略类型</span></span><br><span class="line"><span class="string">        :param cash:            float               初始资金数量</span></span><br><span class="line"><span class="string">        :param commission:       float               每次交易手续费率。如 2% 的手续费此处为 0.02</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line"> </span><br><span class="line">        assert_msg(issubclass(strategy_type, Strategy), <span class="string">'strategy_type 不是一个 Strategy 类型'</span>)</span><br><span class="line">        assert_msg(issubclass(broker_type, ExchangeAPI), <span class="string">'strategy_type 不是一个 Strategy 类型'</span>)</span><br><span class="line">        assert_msg(isinstance(commission, Number), <span class="string">'commission 不是浮点数值类型'</span>)</span><br><span class="line"> </span><br><span class="line">        data = data.copy(<span class="literal">False</span>)</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># 如果没有 Volumn 列，填充 NaN</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">'Volume'</span> <span class="keyword">not</span> <span class="keyword">in</span> data:</span><br><span class="line">            data[<span class="string">'Volume'</span>] = np.nan</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># 验证 OHLC 数据格式</span></span><br><span class="line">        assert_msg(len(data.columns &amp; &#123;<span class="string">'Open'</span>, <span class="string">'High'</span>, <span class="string">'Low'</span>, <span class="string">'Close'</span>, <span class="string">'Volume'</span>&#125;) == <span class="number">5</span>,</span><br><span class="line">                   (<span class="string">" 输入的`data`格式不正确，至少需要包含这些列："</span></span><br><span class="line">                    <span class="string">"'Open', 'High', 'Low', 'Close'"</span>))</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># 检查缺失值</span></span><br><span class="line">        assert_msg(<span class="keyword">not</span> data[[<span class="string">'Open'</span>, <span class="string">'High'</span>, <span class="string">'Low'</span>, <span class="string">'Close'</span>]].max().isnull().any(),</span><br><span class="line">            (<span class="string">'部分 OHLC 包含缺失值，请去掉那些行或者通过差值填充. '</span>))</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># 如果行情数据没有按照时间排序，重新排序一下</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> data.index.is_monotonic_increasing:</span><br><span class="line">            data = data.sort_index()</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># 利用数据，初始化交易所对象和策略对象。</span></span><br><span class="line">        self._data = data  <span class="comment"># type: pd.DataFrame</span></span><br><span class="line">        self._broker = broker_type(data, cash, commission)</span><br><span class="line">        self._strategy = strategy_type(self._broker, self._data)</span><br><span class="line">        self._results = <span class="literal">None</span></span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        运行回测，迭代历史数据，执行模拟交易并返回回测结果。</span></span><br><span class="line"><span class="string">        Run the backtest. Returns `pd.Series` with results and statistics.</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">        Keyword arguments are interpreted as strategy parameters.</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        strategy = self._strategy</span><br><span class="line">        broker = self._broker</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># 策略初始化</span></span><br><span class="line">        strategy.init()</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># 设定回测开始和结束位置</span></span><br><span class="line">        start = <span class="number">100</span></span><br><span class="line">        end = len(self._data)</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># 回测主循环，更新市场状态，然后执行策略</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(start, end):</span><br><span class="line">            <span class="comment"># 注意要先把市场状态移动到第 i 时刻，然后再执行策略。</span></span><br><span class="line">            broker.next(i)</span><br><span class="line">            strategy.next(i)</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># 完成策略执行之后，计算结果并返回</span></span><br><span class="line">        self._results = self._compute_result(broker)</span><br><span class="line">        <span class="keyword">return</span> self._results</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_compute_result</span><span class="params">(self, broker)</span>:</span></span><br><span class="line">        s = pd.Series()</span><br><span class="line">        s[<span class="string">'初始市值'</span>] = broker.initial_cash</span><br><span class="line">        s[<span class="string">'结束市值'</span>] = broker.market_value</span><br><span class="line">        s[<span class="string">'收益'</span>] = broker.market_value - broker.initial_cash</span><br><span class="line">        <span class="keyword">return</span> s</span><br></pre></td></tr></table></figure>
+
+<p>这段代码有点长，但是核心其实就两部分。</p>
+<ul>
+<li>初始化函数（init）：传入必要参数，对 OHLC 数据进行简单清洗、排序和验证。我们从不同地方下载的数据，可能格式不一样；而排序的方式也可能是从前往后。所以，这里我们把数据统一设置为按照时间从之前往现在的排序。</li>
+<li>执行函数（run）：这是回测框架的主要循环部分，核心是更新市场还有更新策略的时间。迭代完成所有的历史数据后，它会计算收益并返回。</li>
+</ul>
+<p>你应该注意到了，此时，我们还没有定义策略和交易所 API 的结构。不过，通过回测的执行函数，我们可以确定这两个类的接口形式。</p>
+<p>策略类（Strategy）的接口形式为：</p>
+<ul>
+<li>初始化函数 init()，根据历史数据进行指标（Indicator）计算。</li>
+<li>步进函数 next()，根据当前时间和指标，决定买卖操作，并发给交易所类执行。</li>
+</ul>
+<p>交易所类（ExchangeAPI）的接口形式为：</p>
+<ul>
+<li>步进函数 next()，根据当前时间，更新最新的价格；</li>
+<li>买入操作 buy()，买入资产；</li>
+<li>卖出操作 sell()，卖出资产。</li>
+</ul>
+<h3 id="交易策略"><a href="#交易策略" class="headerlink" title="交易策略"></a>交易策略</h3><p>接下来我们来看交易策略。交易策略的开发是一个非常复杂的学问。为了达到学习的目的，我们来想一个简单的策略——移动均值交叉策略。</p>
+<p>为了了解这个策略，我们先了解一下，什么叫做简单移动均值（Simple Moving Average，简称为 SMA，以下皆用 SMA 表示简单移动均值）。我们知道，N 个数的序列 x[0]、x[1] .…… x[N] 的均值，就是这 N 个数的和除以 N。</p>
+<p>现在，我假设一个比较小的数 K，比 N 小很多。我们用一个 K 大小的滑动窗口，在原始的数组上滑动。通过对每次框住的 K 个元素求均值，我们就可以得到，原始数组的窗口大小为 K 的 SMA 了。</p>
+<p>SMA，实质上就是对原始数组进行了一个简单平滑处理。比如，某支股票的价格波动很大，那么，我们用 SMA 平滑之后，就会得到下面这张图的效果。</p>
+<p>你可以看出，如果窗口大小越大，那么 SMA 应该越平滑，变化越慢；反之，如果 SMA 比较小，那么短期的变化也会越快地反映在 SMA 上。</p>
+<p>于是，我们想到，能不能对投资品的价格设置两个指标呢？这俩指标，一个是小窗口的 SMA，一个是大窗口的 SMA。</p>
+<ul>
+<li>如果小窗口的 SMA 曲线从下面刺破或者穿过大窗口 SMA，那么说明，这个投资品的价格在短期内快速上涨，同时这个趋势很强烈，可能是一个买入的信号；</li>
+<li>反之，如果大窗口的 SMA 从下方突破小窗口 SMA，那么说明，投资品的价格在短期内快速下跌，我们应该考虑卖出。<br>下面这幅图，就展示了这两种情况。</li>
+</ul>
+<p>明白了这里的概念和原理后，接下来的操作就不难了。利用 Pandas，我们可以非常简单地计算 SMA 和 SMA 交叉。比如，你可以引入下面两个工具函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">SMA</span><span class="params">(values, n)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    返回简单滑动平均</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">return</span> pd.Series(values).rolling(n).mean()</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">crossover</span><span class="params">(series1, series2)</span> -&gt; bool:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    检查两个序列是否在结尾交叉</span></span><br><span class="line"><span class="string">    :param series1:  序列 1</span></span><br><span class="line"><span class="string">    :param series2:  序列 2</span></span><br><span class="line"><span class="string">    :return:         如果交叉返回 True，反之 False</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">return</span> series1[<span class="number">-2</span>] &lt; series2[<span class="number">-2</span>] <span class="keyword">and</span> series1[<span class="number">-1</span>] &gt; series2[<span class="number">-1</span>]</span><br></pre></td></tr></table></figure>
+
+<p>如代码所示，对于输入的一个数组，Pandas 的 rolling(k) 函数，可以方便地计算窗内口大小为 K 的 SMA 数组；而想要检查某个时刻两个 SMA 是否交叉，你只需要查看两个数组末尾的两个元素即可。</p>
+<p>那么，基于此，我们就可以开发出一个简单的策略了。下面这段代码表示策略的核心思想，我做了详细的注释，你理解起来应该没有问题：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">next</span><span class="params">(self, tick)</span>:</span></span><br><span class="line">        <span class="comment"># 如果此时快线刚好越过慢线，买入全部</span></span><br><span class="line">        <span class="keyword">if</span> crossover(self.sma1[:tick], self.sma2[:tick]):</span><br><span class="line">            self.buy()</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># 如果是慢线刚好越过快线，卖出全部</span></span><br><span class="line">        <span class="keyword">elif</span> crossover(self.sma2[:tick], self.sma1[:tick]):</span><br><span class="line">            self.sell()</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># 否则，这个时刻不执行任何操作。</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+<p>说完策略的核心思想，我们开始搭建策略类的框子。</p>
+<p>首先，我们要考虑到，策略类 Strategy 应该是一个可以被继承的类，同时应该包含一些固定的接口。这样，回测器才能方便地调用。</p>
+<p>于是，我们可以定义一个 Strategy 抽象类，包含两个接口方法 init 和 next，分别对应我们前面说的指标计算和步进函数。不过注意，抽象类是不能被实例化的。所以，我们必须定义一个具体的子类，同时实现了 init 和 next 方法才可以。</p>
+<p>这个类的定义，你可以参考下面代码的实现：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> abc</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> Callable</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Strategy</span><span class="params">(metaclass=abc.ABCMeta)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    抽象策略类，用于定义交易策略。</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">    如果要定义自己的策略类，需要继承这个基类，并实现两个抽象方法：</span></span><br><span class="line"><span class="string">    Strategy.init</span></span><br><span class="line"><span class="string">    Strategy.next</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, broker, data)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        构造策略对象。</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">        @params broker:  ExchangeAPI    交易 API 接口，用于模拟交易</span></span><br><span class="line"><span class="string">        @params data:    list           行情数据数据</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        self._indicators = []</span><br><span class="line">        self._broker = broker  <span class="comment"># type: _Broker</span></span><br><span class="line">        self._data = data  <span class="comment"># type: _Data</span></span><br><span class="line">        self._tick = <span class="number">0</span></span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">I</span><span class="params">(self, func: Callable, *args)</span> -&gt; np.ndarray:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        计算买卖指标向量。买卖指标向量是一个数组，长度和历史数据对应；</span></span><br><span class="line"><span class="string">        用于判定这个时间点上需要进行 " 买 " 还是 " 卖 "。</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">        例如计算滑动平均：</span></span><br><span class="line"><span class="string">        def init():</span></span><br><span class="line"><span class="string">            self.sma = self.I(utils.SMA, self.data.Close, N)</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        value = func(*args)</span><br><span class="line">        value = np.asarray(value)</span><br><span class="line">        assert_msg(value.shape[<span class="number">-1</span>] == len(self._data.Close), <span class="string">'指示器长度必须和 data 长度相同'</span>)</span><br><span class="line"> </span><br><span class="line">        self._indicators.append(value)</span><br><span class="line">        <span class="keyword">return</span> value</span><br><span class="line"> </span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">tick</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self._tick</span><br><span class="line"> </span><br><span class="line"><span class="meta">    @abc.abstractmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">init</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        初始化策略。在策略回测 / 执行过程中调用一次，用于初始化策略内部状态。</span></span><br><span class="line"><span class="string">        这里也可以预计算策略的辅助参数。比如根据历史行情数据：</span></span><br><span class="line"><span class="string">        计算买卖的指示器向量；</span></span><br><span class="line"><span class="string">        训练模型 / 初始化模型参数</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">    @abc.abstractmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">next</span><span class="params">(self, tick)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        步进函数，执行第 tick 步的策略。tick 代表当前的 " 时间 "。比如 data[tick] 用于访问当前的市场价格。</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">buy</span><span class="params">(self)</span>:</span></span><br><span class="line">        self._broker.buy()</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">sell</span><span class="params">(self)</span>:</span></span><br><span class="line">        self._broker.sell()</span><br><span class="line"> </span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">data</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self._data</span><br></pre></td></tr></table></figure>
+
+<p>为了方便访问成员，我们还定义了一些 Python property。同时，我们的买卖请求是由策略类发出、由交易所 API 来执行的，所以我们的策略类里依赖于 ExchangeAPI 类。</p>
+<p>现在，有了这个框架，我们实现移动均线交叉策略就很简单了。你只需要在 init 函数中，定义计算大小窗口 SMA 的逻辑；同时，在 next 函数中完成交叉检测和买卖调用就行了。具体实现，你可以参考下面这段代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> utils <span class="keyword">import</span> assert_msg, crossover, SMA</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SmaCross</span><span class="params">(Strategy)</span>:</span></span><br><span class="line">    <span class="comment"># 小窗口 SMA 的窗口大小，用于计算 SMA 快线</span></span><br><span class="line">    fast = <span class="number">10</span></span><br><span class="line"> </span><br><span class="line">    <span class="comment"># 大窗口 SMA 的窗口大小，用于计算 SMA 慢线</span></span><br><span class="line">    slow = <span class="number">20</span></span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">init</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="comment"># 计算历史上每个时刻的快线和慢线</span></span><br><span class="line">        self.sma1 = self.I(SMA, self.data.Close, self.fast)</span><br><span class="line">        self.sma2 = self.I(SMA, self.data.Close, self.slow)</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">next</span><span class="params">(self, tick)</span>:</span></span><br><span class="line">        <span class="comment"># 如果此时快线刚好越过慢线，买入全部</span></span><br><span class="line">        <span class="keyword">if</span> crossover(self.sma1[:tick], self.sma2[:tick]):</span><br><span class="line">            self.buy()</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># 如果是慢线刚好越过快线，卖出全部</span></span><br><span class="line">        <span class="keyword">elif</span> crossover(self.sma2[:tick], self.sma1[:tick]):</span><br><span class="line">            self.sell()</span><br><span class="line"> </span><br><span class="line">        <span class="comment"># 否则，这个时刻不执行任何操作。</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="模拟交易"><a href="#模拟交易" class="headerlink" title="模拟交易"></a>模拟交易</h3><p>到这里，我们的回测就只差最后一块儿了。胜利就在眼前，我们继续加油。</p>
+<p>我们前面提到过，交易所类负责模拟交易，而模拟的基础，就是需要当前市场的价格。这里，我们可以用 OHLC 中的 Close，作为那个时刻的价格。</p>
+<p>此外，为了简化设计，我们假设买卖操作都利用的是当前账户的所有资金、仓位，且市场容量足够大。这样，我们的下单请求就能够马上完全执行。</p>
+<p>也别忘了手续费这个大头。考虑到有手续费的情况，此时，我们最核心的买卖函数应该怎么来写呢？</p>
+<p>我们一起来想这个问题。假设，我们现在有 1000.0 元，此时 BTC 的价格是 100.00 元（当然没有这么好的事情啊，这里只是假设），并且交易手续费为 1%。那么，我们能买到多少 BTC 呢？</p>
+<p>我们可以采用这种算法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">买到的数量 = 投入的资金 * (1.0 - 手续费) / 价格</span><br></pre></td></tr></table></figure>
+<p>那么此时，你就能收到 9.9 个 BTC。</p>
+<p>类似的，卖出的时候结算方式如下，也不难理解：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">卖出的收益 = 持有的数量 * 价格 *  (1.0 - 手续费)</span><br></pre></td></tr></table></figure>
+<p>所以，最终模拟交易所类的实现，你可以参考下面这段代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> utils <span class="keyword">import</span> read_file, assert_msg, crossover, SMA</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ExchangeAPI</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, data, cash, commission)</span>:</span></span><br><span class="line">        assert_msg(<span class="number">0</span> &lt; cash, <span class="string">" 初始现金数量大于 0，输入的现金数量：&#123;&#125;"</span>.format(cash))</span><br><span class="line">        assert_msg(<span class="number">0</span> &lt;= commission &lt;= <span class="number">0.05</span>, <span class="string">" 合理的手续费率一般不会超过 5%，输入的费率：&#123;&#125;"</span>.format(commission))</span><br><span class="line">        self._inital_cash = cash</span><br><span class="line">        self._data = data</span><br><span class="line">        self._commission = commission</span><br><span class="line">        self._position = <span class="number">0</span></span><br><span class="line">        self._cash = cash</span><br><span class="line">        self._i = <span class="number">0</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">cash</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :return: 返回当前账户现金数量</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">return</span> self._cash</span><br><span class="line"> </span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">position</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :return: 返回当前账户仓位</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">return</span> self._position</span><br><span class="line"> </span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">initial_cash</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :return: 返回初始现金数量</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">return</span> self._inital_cash</span><br><span class="line"> </span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">market_value</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :return: 返回当前市值</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">return</span> self._cash + self._position * self.current_price</span><br><span class="line"> </span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">current_price</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :return: 返回当前市场价格</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">return</span> self._data.Close[self._i]</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">buy</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        用当前账户剩余资金，按照市场价格全部买入</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        self._position = float(self._cash / (self.current_price * (<span class="number">1</span> + self._commission)))</span><br><span class="line">        self._cash = <span class="number">0.0</span></span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">sell</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        卖出当前账户剩余持仓</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        self._cash += float(self._position * self.current_price * (<span class="number">1</span> - self._commission))</span><br><span class="line">        self._position = <span class="number">0.0</span></span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">next</span><span class="params">(self, tick)</span>:</span></span><br><span class="line">        self._i = tick</span><br></pre></td></tr></table></figure>
+
+<p>其中的 current_price（当前价格），可以方便地获得模拟交易所当前时刻的商品价格；而 market_value，则可以获得当前总市值。在初始化函数的时候，我们检查手续费率和输入的现金数量，是不是在一个合理的范围。</p>
+<p>有了所有的这些部分，我们就可以来模拟回测啦！</p>
+<p>首先，我们设置初始资金量为 10000.00 美元，交易所手续费率为 0。这里你可以猜一下，如果我们从 2015 年到现在，都按照 SMA 来买卖，现在应该有多少钱呢？</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    BTCUSD = read_file(<span class="string">'BTCUSD_GEMINI.csv'</span>)</span><br><span class="line">    ret = Backtest(BTCUSD, SmaCross, ExchangeAPI, <span class="number">10000.0</span>, <span class="number">0.00</span>).run()</span><br><span class="line">    print(ret)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<p>铛铛铛，答案揭晓，程序将输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">初始市值     10000.000000</span><br><span class="line">结束市值     576361.772884</span><br><span class="line">收益         566361.772884</span><br></pre></td></tr></table></figure>
+
+<p>哇，结束时，我们将有 57 万美元，翻了整整 57 倍啊！简直不要太爽。不过，等等，这个手续费率为 0，实在是有点碍眼，因为根本不可能啊。我们现在来设一个比较真实的值吧，大概千分之三，然后再来试试：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">初始市值    10000.000000</span><br><span class="line">结束市值     2036.562001</span><br><span class="line">收益      -7963.437999</span><br></pre></td></tr></table></figure>
+<p>什么鬼？我们变成赔钱了，只剩下 2000 美元了！这是真的吗？</p>
+<p>这是真的，也是假的。</p>
+<p>我说的“真”是指，如果你真的用 SMA 交叉这种简单的方法去交易，那么手续费摩擦和滑点等因素，确实可能让你的高频策略赔钱。</p>
+<p>而我说是“假”是指，这种模拟交易的方式非常粗糙。真实的市场情况，并非这么理想——比如买卖请求永远马上执行；再比如，我们在市场中进行交易的同时不会影响市场价格等，这些理想情况都是不可能的。所以，很多时候，回测永远赚钱，但实盘马上赔钱。</p>
+<p>总结<br>这节课，我们继承上一节，介绍了回测框架的分类、数据的格式，并且带你从头开始写了一个简单的回测系统。你可以把今天的代码片段“拼”起来，这样就会得到一个简化的回测系统样例。同时，我们实现了一个简单的交易策略，并且在真实的历史数据上运行了回测结果。我们观察到，在加入手续费后，策略的收益情况发生了显著的变化。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/04/35%20%7C%20RESTful%20&%20Socket%E8%A1%8C%E6%83%85%E6%95%B0%E6%8D%AE%E5%AF%B9%E6%8E%A5%E5%92%8C%E6%8A%93%E5%8F%96/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2428,270 +2733,6 @@ int64
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/17/24%20%7C%20%E5%B8%A6%E4%BD%A0%E8%A7%A3%E6%9E%90%20Python%20%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LvYang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="LvYang">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/17/24%20%7C%20%E5%B8%A6%E4%BD%A0%E8%A7%A3%E6%9E%90%20Python%20%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/" itemprop="url">24 | 带你解析 Python 垃圾回收机制</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-17T20:10:07+08:00">
-                2019-12-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
-                    <span itemprop="name">python核心技术与实战</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/12/17/24%20%7C%20%E5%B8%A6%E4%BD%A0%E8%A7%A3%E6%9E%90%20Python%20%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/12/17/24%20%7C%20%E5%B8%A6%E4%BD%A0%E8%A7%A3%E6%9E%90%20Python%20%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>众所周知，我们当代的计算机都是图灵机架构。图灵机架构的本质，就是一条无限长的纸带，对应着我们今天的存储器。在工程学的演化中，逐渐出现了寄存器、易失性存储器（内存）和永久性存储器（硬盘）等产品。其实，这本身来自一个矛盾：速度越快的存储器，单位价格也越昂贵。因此，妥善利用好每一寸高速存储器的空间，永远是系统设计的一个核心。</p>
-<p>回到 Python 应用层。</p>
-<p>我们知道，Python 程序在运行的时候，需要在内存中开辟出一块空间，用于存放运行时产生的临时变量；计算完成后，再将结果输出到永久性存储器中。如果数据量过大，内存空间管理不善就很容易出现 OOM（out of memory），俗称爆内存，程序可能被操作系统中止。</p>
-<p>而对于服务器，这种设计为永不中断的系统来说，内存管理则显得更为重要，不然很容易引发内存泄漏。什么是内存泄漏呢？</p>
-<ul>
-<li>这里的泄漏，并不是说你的内存出现了信息安全问题，被恶意程序利用了，而是指程序本身没有设计好，导致程序未能释放已不再使用的内存。</li>
-<li>内存泄漏也不是指你的内存在物理上消失了，而是意味着代码在分配了某段内存后，因为设计错误，失去了对这段内存的控制，从而造成了内存的浪费。<br>那么，Python 又是怎么解决这些问题的？换句话说，对于不会再用到的内存空间，Python 是通过什么机制来回收这些空间的呢？</li>
-</ul>
-<h3 id="计数引用"><a href="#计数引用" class="headerlink" title="计数引用"></a>计数引用</h3><p>我们反复提过好几次， Python 中一切皆对象。因此，你所看到的一切变量，本质上都是对象的一个指针。</p>
-<p>那么，怎么知道一个对象，是否永远都不能被调用了呢？</p>
-<p>我们上节课提到过的，也是非常直观的一个想法，就是当这个对象的引用计数（指针数）为 0 的时候，说明这个对象永不可达，自然它也就成为了垃圾，需要被回收。</p>
-<p>我们来看一个例子：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> psutil</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 显示当前 python 程序占用的内存大小</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show_memory_info</span><span class="params">(hint)</span>:</span></span><br><span class="line">    pid = os.getpid()</span><br><span class="line">    p = psutil.Process(pid)</span><br><span class="line">    </span><br><span class="line">    info = p.memory_full_info()</span><br><span class="line">    memory = info.uss / <span class="number">1024.</span> / <span class="number">1024</span></span><br><span class="line">    print(<span class="string">'&#123;&#125; memory used: &#123;&#125; MB'</span>.format(hint, memory))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">()</span>:</span></span><br><span class="line">    show_memory_info(<span class="string">'initial'</span>)</span><br><span class="line">    a = [i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10000000</span>)]</span><br><span class="line">    show_memory_info(<span class="string">'after a created'</span>)</span><br><span class="line"> </span><br><span class="line">func()</span><br><span class="line">show_memory_info(<span class="string">'finished'</span>)</span><br></pre></td></tr></table></figure>
-
-<pre><code>initial memory used: 34.12890625 MB
-after a created memory used: 425.38671875 MB
-finished memory used: 38.30859375 MB</code></pre><p>通过这个示例，你可以看到，调用函数 func()，在列表 a 被创建之后，内存占用迅速增加到了 433 MB：而在函数调用结束后，内存则返回正常。</p>
-<p>这是因为，函数内部声明的列表 a 是局部变量，在函数返回后，局部变量的引用会注销掉；此时，列表 a 所指代对象的引用数为 0，Python 便会执行垃圾回收，因此之前占用的大量内存就又回来了。</p>
-<p>明白了这个原理后，我们稍微修改一下代码：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">()</span>:</span></span><br><span class="line">    show_memory_info(<span class="string">'initial'</span>)</span><br><span class="line">    <span class="keyword">global</span> a</span><br><span class="line">    a = [i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10000000</span>)]</span><br><span class="line">    show_memory_info(<span class="string">'after a created'</span>)</span><br><span class="line"> </span><br><span class="line">func()</span><br><span class="line">show_memory_info(<span class="string">'finished'</span>)</span><br></pre></td></tr></table></figure>
-
-<pre><code>initial memory used: 38.06640625 MB
-after a created memory used: 424.90625 MB
-finished memory used: 424.91015625 MB</code></pre><p>新的这段代码中，global a 表示将 a 声明为全局变量。那么，即使函数返回后，列表的引用依然存在，于是对象就不会被垃圾回收掉，依然占用大量内存。</p>
-<p>同样，如果我们把生成的列表返回，然后在主程序中接收，那么引用依然存在，垃圾回收就不会被触发，大量内存仍然被占用着：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">()</span>:</span></span><br><span class="line">    show_memory_info(<span class="string">'initial'</span>)</span><br><span class="line">    a = [i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10000000</span>)]</span><br><span class="line">    show_memory_info(<span class="string">'after a created'</span>)</span><br><span class="line">    <span class="keyword">return</span> a</span><br><span class="line"> </span><br><span class="line">a = func()</span><br><span class="line">show_memory_info(<span class="string">'finished'</span>)</span><br></pre></td></tr></table></figure>
-
-<pre><code>initial memory used: 425.5390625 MB
-after a created memory used: 812.56640625 MB
-finished memory used: 425.96875 MB</code></pre><p>这是最常见的几种情况。由表及里，下面，我们深入看一下 Python 内部的引用计数机制。老规矩，先来看代码：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"> </span><br><span class="line">a = []</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 两次引用，一次来自 a，一次来自 getrefcount</span></span><br><span class="line">print(sys.getrefcount(a))</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(a)</span>:</span></span><br><span class="line">    <span class="comment"># 四次引用，a，python 的函数调用栈，函数参数，和 getrefcount</span></span><br><span class="line">    print(sys.getrefcount(a))</span><br><span class="line"> </span><br><span class="line">func(a)</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 两次引用，一次来自 a，一次来自 getrefcount，函数 func 调用已经不存在</span></span><br><span class="line">print(sys.getrefcount(a))</span><br></pre></td></tr></table></figure>
-
-<pre><code>2
-4
-2</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"> </span><br><span class="line">a = []</span><br><span class="line"> </span><br><span class="line">print(sys.getrefcount(a)) <span class="comment"># 两次</span></span><br><span class="line"> </span><br><span class="line">b = a</span><br><span class="line"> </span><br><span class="line">print(sys.getrefcount(a)) <span class="comment"># 三次</span></span><br><span class="line"> </span><br><span class="line">c = b</span><br><span class="line">d = b</span><br><span class="line">e = c</span><br><span class="line">f = e</span><br><span class="line">g = d</span><br><span class="line"> </span><br><span class="line">print(sys.getrefcount(a)) <span class="comment"># 八次</span></span><br><span class="line">print(sys.getrefcount(b)) <span class="comment"># 八次</span></span><br></pre></td></tr></table></figure>
-
-<pre><code>2
-3
-8
-8</code></pre><p>看到这段代码，需要你稍微注意一下，a、b、c、d、e、f、g 这些变量全部指代的是同一个对象，而 sys.getrefcount() 函数并不是统计一个指针，而是要统计一个对象被引用的次数，所以最后一共会有八次引用。</p>
-<p>理解引用这个概念后，引用释放是一种非常自然和清晰的思想。相比 C 语言里，你需要使用 free 去手动释放内存，Python 的垃圾回收在这里可以说是省心省力了。</p>
-<p>不过，我想还是会有人问，如果我偏偏想手动释放内存，应该怎么做呢？</p>
-<p>方法同样很简单。你只需要先调用 del a 来删除一个对象；然后强制调用 gc.collect()，即可手动启动垃圾回收。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gc</span><br><span class="line"> </span><br><span class="line">show_memory_info(<span class="string">'initial'</span>)</span><br><span class="line"> </span><br><span class="line">a = [i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10000000</span>)]</span><br><span class="line"> </span><br><span class="line">show_memory_info(<span class="string">'after a created'</span>)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">del</span> a</span><br><span class="line">gc.collect()</span><br><span class="line"> </span><br><span class="line">show_memory_info(<span class="string">'finish'</span>)</span><br><span class="line">print(a)</span><br></pre></td></tr></table></figure>
-
-<pre><code>initial memory used: 34.25390625 MB
-after a created memory used: 421.50390625 MB
-finish memory used: 36.76953125 MB
-
-
-
----------------------------------------------------------------------------
-
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-10-d0af83fbc251&gt; in &lt;module&gt;
-     11 
-     12 show_memory_info(&apos;finish&apos;)
----&gt; 13 print(a)
-
-
-NameError: name &apos;a&apos; is not defined</code></pre><p>到这里，是不是觉得垃圾回收非常简单呀？</p>
-<p>我想，肯定有人觉得自己都懂了，那么，如果此时有面试官问：引用次数为 0 是垃圾回收启动的充要条件吗？还有没有其他可能性呢？</p>
-<p>这个问题，你能回答的上来吗？</p>
-<h3 id="循环引用"><a href="#循环引用" class="headerlink" title="循环引用"></a>循环引用</h3><p>如果你也被困住了，别急。我们不妨小步设问，先来思考这么一个问题：如果有两个对象，它们互相引用，并且不再被别的对象所引用，那么它们应该被垃圾回收吗？</p>
-<p>请仔细观察下面这段代码：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">()</span>:</span></span><br><span class="line">    show_memory_info(<span class="string">'initial'</span>)</span><br><span class="line">    a = [i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10000000</span>)]</span><br><span class="line">    b = [i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10000000</span>)]</span><br><span class="line">    show_memory_info(<span class="string">'after a, b created'</span>)</span><br><span class="line">    a.append(b)</span><br><span class="line">    b.append(a)</span><br><span class="line"> </span><br><span class="line">func()</span><br><span class="line">show_memory_info(<span class="string">'finished'</span>)</span><br></pre></td></tr></table></figure>
-
-<pre><code>initial memory used: 30.015625 MB
-after a, b created memory used: 566.953125 MB
-finished memory used: 566.95703125 MB</code></pre><p>这里，a 和 b 互相引用，并且，作为局部变量，在函数 func 调用结束后，a 和 b 这两个指针从程序意义上已经不存在了。但是，很明显，依然有内存占用！为什么呢？因为互相引用，导致它们的引用数都不为 0。</p>
-<p>试想一下，如果这段代码出现在生产环境中，哪怕 a 和 b 一开始占用的空间不是很大，但经过长时间运行后，Python 所占用的内存一定会变得越来越大，最终撑爆服务器，后果不堪设想。</p>
-<p>当然，有人可能会说，互相引用还是很容易被发现的呀，问题不大。可是，更隐蔽的情况是出现一个引用环，在工程代码比较复杂的情况下，引用环还真不一定能被轻易发现。</p>
-<p>那么，我们应该怎么做呢？</p>
-<p>事实上，Python 本身能够处理这种情况，我们刚刚讲过的，可以显式调用 gc.collect() ，来启动垃圾回收。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gc</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">()</span>:</span></span><br><span class="line">    show_memory_info(<span class="string">'initial'</span>)</span><br><span class="line">    a = [i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10000000</span>)]</span><br><span class="line">    b = [i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10000000</span>)]</span><br><span class="line">    show_memory_info(<span class="string">'after a, b created'</span>)</span><br><span class="line">    a.append(b)</span><br><span class="line">    b.append(a)</span><br><span class="line"> </span><br><span class="line">func()</span><br><span class="line">gc.collect()</span><br><span class="line">show_memory_info(<span class="string">'finished'</span>)</span><br></pre></td></tr></table></figure>
-
-<pre><code>initial memory used: 792.0390625 MB
-after a, b created memory used: 1547.546875 MB
-finished memory used: 36.73046875 MB</code></pre><p>所以你看，Python 的垃圾回收机制并没有那么弱。</p>
-<p>Python 使用标记清除（mark-sweep）算法和分代收集（generational），来启用针对循环引用的自动垃圾回收。你可能不太熟悉这两个词，这里我简单介绍一下。</p>
-<p>先来看标记清除算法。我们先用图论来理解不可达的概念。对于一个有向图，如果从一个节点出发进行遍历，并标记其经过的所有节点；那么，在遍历结束后，所有没有被标记的节点，我们就称之为不可达节点。显而易见，这些节点的存在是没有任何意义的，自然的，我们就需要对它们进行垃圾回收。</p>
-<p>当然，每次都遍历全图，对于 Python 而言是一种巨大的性能浪费。所以，在 Python 的垃圾回收实现中，mark-sweep 使用双向链表维护了一个数据结构，并且只考虑容器类的对象（只有容器类对象才有可能产生循环引用）。具体算法这里我就不再多讲了，毕竟我们的重点是关注应用。</p>
-<p>而分代收集算法，则是另一个优化手段。</p>
-<p>Python 将所有对象分为三代。刚刚创立的对象是第 0 代；经过一次垃圾回收后，依然存在的对象，便会依次从上一代挪到下一代。而每一代启动自动垃圾回收的阈值，则是可以单独指定的。当垃圾回收器中新增对象减去删除对象达到相应的阈值时，就会对这一代对象启动垃圾回收。</p>
-<p>事实上，分代收集基于的思想是，新生的对象更有可能被垃圾回收，而存活更久的对象也有更高的概率继续存活。因此，通过这种做法，可以节约不少计算量，从而提高 Python 的性能。</p>
-<p>学了这么多，刚刚面试官的问题，你应该能回答得上来了吧！没错，引用计数是其中最简单的实现，不过切记，引用计数并非充要条件，它只能算作充分非必要条件；至于其他的可能性，我们所讲的循环引用正是其中一种。</p>
-<h3 id="调试内存泄漏"><a href="#调试内存泄漏" class="headerlink" title="调试内存泄漏"></a>调试内存泄漏</h3><p>不过，虽然有了自动回收机制，但这也不是万能的，难免还是会有漏网之鱼。内存泄漏是我们不想见到的，而且还会严重影响性能。有没有什么好的调试手段呢？</p>
-<p>答案当然是肯定的，接下来我就为你介绍一个“得力助手”。</p>
-<p>它就是 objgraph，一个非常好用的可视化引用关系的包。在这个包中，我主要推荐两个函数，第一个是 show_refs()，它可以生成清晰的引用关系图。</p>
-<p>通过下面这段代码和生成的引用调用图，你能非常直观地发现，有两个 list 互相引用，说明这里极有可能引起内存泄露。这样一来，再去代码层排查就容易多了。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> objgraph</span><br><span class="line"> </span><br><span class="line">a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">b = [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]</span><br><span class="line"> </span><br><span class="line">a.append(b)</span><br><span class="line">b.append(a)</span><br><span class="line"> </span><br><span class="line">objgraph.show_refs([a])</span><br></pre></td></tr></table></figure>
-
-
-
-
-<p><img src="/2019/12/17/24%20%7C%20%E5%B8%A6%E4%BD%A0%E8%A7%A3%E6%9E%90%20Python%20%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/24%20%7C%20%E5%B8%A6%E4%BD%A0%E8%A7%A3%E6%9E%90%20Python%20%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6_17_0.svg" alt="svg"></p>
-<p>而另一个非常有用的函数，是 show_backrefs()。下面同样为示例代码和生成图，你可以自己先阅读一下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> objgraph</span><br><span class="line"> </span><br><span class="line">a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">b = [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]</span><br><span class="line"> </span><br><span class="line">a.append(b)</span><br><span class="line">b.append(a)</span><br><span class="line"> </span><br><span class="line">objgraph.show_backrefs([a])</span><br></pre></td></tr></table></figure>
-
-
-
-
-<p><img src="/2019/12/17/24%20%7C%20%E5%B8%A6%E4%BD%A0%E8%A7%A3%E6%9E%90%20Python%20%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/24%20%7C%20%E5%B8%A6%E4%BD%A0%E8%A7%A3%E6%9E%90%20Python%20%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6_19_0.svg" alt="svg"></p>
-<p>相比刚才的引用调用图，这张图显得稍微复杂一些。不过，我仍旧推荐你掌握它，因为这个 API 有很多有用的参数，比如层数限制（max_depth）、宽度限制（too_many）、输出格式控制（filename output）、节点过滤（filter, extra_ignore）等。所以，建议你使用之前，先认真看一下文档。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>最后，带你来总结一下。今天这节课，我们深入了解了 Python 的垃圾回收机制，我主要强调下面这几点：</p>
-<ol>
-<li>垃圾回收是 Python 自带的机制，用于自动释放不会再用到的内存空间；</li>
-<li>引用计数是其中最简单的实现，不过切记，这只是充分非必要条件，因为循环引用需要通过不可达判定，来确定是否可以回收；</li>
-<li>Python 的自动回收算法包括标记清除和分代收集，主要针对的是循环引用的垃圾收集；</li>
-<li>调试内存泄漏方面， objgraph 是很好的可视化分析工具。</li>
-</ol>
-<h3 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h3><p>最后给你留一道思考题。你能否自己实现一个垃圾回收判定算法呢？我的要求很简单，输入是一个有向图，给定起点，表示程序入口点；给定有向边，输出不可达节点。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2742,7 +2783,7 @@ finished memory used: 36.73046875 MB</code></pre><p>所以你看，Python 的垃
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-count">76</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
